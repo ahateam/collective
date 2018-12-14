@@ -1,9 +1,9 @@
 import axios from 'axios'
 import CryptoJS from 'crypto-js'
 
-// const hosturl = "http://47.99.212.32/api/zero"
+const hosturl = "http://47.99.212.32/api/zero"
 
-const hosturl = "http://192.168.1.127:8080/zero"
+// const hosturl = "http://192.168.1.127:8080/zero"
 
 
 

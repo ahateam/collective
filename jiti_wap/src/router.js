@@ -24,6 +24,7 @@ import meetMoreVoteAdd from './views/meet/meetMoreVoteAdd'
 import meetVoteOptionAdd from './views/meet/meetVoteOptionAdd'
 
 import choose from './views/home/choose'
+import page from './views/home/page'
 //一版展示性数据
 import list from './views/list/list'
 import listBonus from './views/list/listBonus'
@@ -45,6 +46,11 @@ export default new Router({
             path: '/',
             name: 'login',
             component: login
+        },
+        {
+          path:'/page',
+          nameL:'page',
+          component:page
         },
         {
           path:'/test',

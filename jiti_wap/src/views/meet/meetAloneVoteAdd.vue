@@ -95,6 +95,7 @@
                 this.$router.push('/meetChoose')
             },
             btn(){
+                let that = this
                 if(this.voteTitle == '' || this.voteText == '' ||  this.failData == '' || this.passData == ''){
                     Toast.fail('信息不完整')
                 }else{
@@ -110,10 +111,21 @@
                     }
 
                  this.$util.call('/vote/addVote',cnt,function (res) {
-                     console.log(res)
+                     if(res.data.rc == that.$util.RC.SUCCESS){
+                          let vote = JSON.parse(localStorage.getItem('vote'))
+                          let obj = {
+                              voteId:JSON.parse(res.data.c).id
+                          }
+                          Object.assign(vote,obj)
+                         localStorage.setItem('vote',JSON.stringify(vote))
+                         that.$router.push('/meetVoteOptionAdd')
+                     }else{
+                         Toast.fail('创建失败')
+                         that.$router.push('/meetAloneVoteAdd')
+                     }
                  })
 
-                    // this.$router.push('/meetVoteOptionAdd')
+
                 }
 
             },

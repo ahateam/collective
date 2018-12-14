@@ -5,17 +5,13 @@
 
             <div class="box" v-for="(item,index) in optionList" :key="index">
                 <div class="box-title">
-                    {{item}}
+                    {{item.title}}
                 </div>
                 <div class="box-btn">
-                    <i class="iconfont icon-qianbi" style="float: left;color: #36a3f7;"  @click="edit(item,index)"></i>
-                    <i class="iconfont icon-19icon" style="float: right;color: rgb(244, 81, 108);"  @click="del(item)"></i>
+                    <i class="iconfont icon-qianbi" style="float: left;color: #36a3f7;"  @click="edit(item,item.id,index)"></i>
+                    <i class="iconfont icon-19icon" style="float: right;color: rgb(244, 81, 108);"  @click="del(item.id,index)"></i>
                 </div>
             </div>
-
-
-
-
             <div class="box1" @click="add">
                 +
             </div>
@@ -56,6 +52,8 @@
 
 <script>
     import HeaderBox from '@/components/head/headerBox'
+    import { Toast } from 'vant'
+
     import { Dialog } from 'vant';
     export default {
         name: "meetVoteOptionAdd",
@@ -70,33 +68,86 @@
                 optionList:[],
                 title:'',
                 editShow:false,        //修改弹窗
-                editData:'',            //修改值的原值
                 editInput:'',            //修改输入框
-                editKey:'',
+                editId:'',                //修改选项id
+                editKey :'',               //修改选项的数组下标
                 addShow:false,          //新增选项弹窗
                 addInput:'',            //新增输入框
+
+                meetId:'',              //会议id
+                voteId:'',              //表决id
             }
         },
         methods: {
-            edit(item,index){
+            refOption(that){
+                let that1 = that
+                let cnt = {
+                    voteId:that1.voteId
+                }
+                that1.$util.call('/vote/getVoteOptions',cnt,function (res) {
+                    that1.optionList = JSON.parse(res.data.c)
+                    console.log(that1.optionList)
+                })
+            },
+            edit(item,id,index){
                 this.editShow = true
-                this.editInput = item
-                this.editData = item
+                this.editInput = item.title
+                this.editId = id
                 this.editKey = index
             },
             editBtn(){
+                if(this.editInput == ''){
+                    Toast({
+                        duration:300,
+                        message:'请输入修改值'
+                    });
+                }else{
+                    let that = this
+                    let cnt = {
+                        projectId: this.meetId,
+                        optionId: this.editId,
+                        title: this.editInput,
+                        remark: '无',
+                        ext: '无',
+                    };
+                    console.log(cnt)
+                    this.$util.call('/vote/editVoteOption',cnt,function (res) {
+                        if(res.data.rc == that.$util.RC.SUCCESS){
+                            Toast({
+                                duration:500,
+                                message:'修改成功'
+                            });
+                            that.$router.push('/page')
+                        }
 
-                // this.optionList.splice(this.editKey,1,this.editInput)
-                this.$set(this.optionList,0,'asdasd')
-                console.log(this.optionList)
+                    })
+                }
+
+
             },
 
-            del(id){
+            del(id,index){
+                let that =this
                 Dialog.alert({
                     title: '删除选项',
                     message: '是否确认删除该选项'
                 }).then(() => {
+                    let cnt = {
+                        projectId:this.meetId,
+                        optionId:id
+                    }
                     console.log(id)
+                    console.log(index)
+                    console.log(this.optionList)
+                    this.$util.call('/vote/delVoteOption',cnt,function (res) {
+                        if(res.data.rc == that.$util.RC.SUCCESS){
+                            Toast({
+                                duration:300,
+                                message:'删除成功'
+                            });
+                            that.optionList.splice(index,1)
+                        }
+                    })
                 });
             },
 
@@ -104,8 +155,22 @@
                 this.addShow = true
             },
             addBtn(){
-                this.optionList.push(this.addInput)
-                this.addInput = ''
+
+                let that = this
+                let cnt ={
+                    projectId:this.meetId,
+                    voteId:this.voteId,
+                    title:this.addInput,
+                    remark:'无',
+                    ext:'无'
+                }
+                this.$util.call('/vote/addVoteOption',cnt,function (res) {
+                        if(res.data.rc == that.$util.RC.SUCCESS){
+                            that.addInput = ''
+                            that.addShow = false
+                            that.$options.methods.refOption(that)
+                        }
+                })
             },
 
 
@@ -113,9 +178,26 @@
                 this.$router.push('/meetChoose')
             },
             btn(){
-                this.$router.push('/meetVoteOptionAdd')
+                this.$router.push('/meet')
             }
         },
+        mounted(){
+            let that = this
+            this.meetId  =  JSON.parse(localStorage.getItem('vote')).meetId
+            this.voteId  = JSON.parse(localStorage.getItem('vote')).voteId
+            if(this.meetId == '' || this.voteId == ''){
+                this.$router.push('/meet')
+                Toast.fail('重新选择会议')
+            }
+            let cnt = {
+                voteId:this.voteId
+            }
+            this.$util.call('/vote/getVoteOptions',cnt,function (res) {
+                that.optionList = JSON.parse(res.data.c)
+                console.log(that.optionList)
+            })
+
+        }
     }
 </script>
 

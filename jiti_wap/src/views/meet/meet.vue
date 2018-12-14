@@ -86,6 +86,8 @@
         },
         mounted(){
             localStorage.setItem('voteInfo','')
+
+
         }
     }
 </script>
