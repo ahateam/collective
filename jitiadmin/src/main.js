@@ -18,11 +18,12 @@ Vue.config.productionTip = false
 axios.defaults.baseURL = 'http://47.99.212.32/api/jiti'
 Vue.prototype.$http = axios
 Vue.prototype.$util = util
-
 Vue.prototype.$constData = constData
 
+
+
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

@@ -4,9 +4,7 @@
   </div>
 </template>
 
-<script>
 
-</script>
 <style lang="scss">
   a{
     text-decoration:none;
