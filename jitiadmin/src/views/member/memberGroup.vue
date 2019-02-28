@@ -4,7 +4,7 @@
             <el-col :span="8"   style="overflow: hidden">
                 <template>
                     <el-col :span="24">
-                        <div style="width:auto;height: 30px;padding: 1rem;border-left: 4px solid #63a35c;font-size: 1.6rem; ">全部分组</div>
+                        <div style="width:auto;height: 30px;padding: 1rem;border-left: 4px solid #63a35c;font-size: 1.6rem; cursor: pointer;" @click="allUser" >全部分组</div>
                     </el-col>
                     <el-col :span="24" >
                         <el-col :span="24">
@@ -47,7 +47,7 @@
             <el-col :span="16" style="border-left: 1px solid #ddd">
                 <el-row>
                     <p>
-                        当前分组：<span v-if="nowNode==''">{{orgName}}</span> <span v-if="nowNode != ''">{{nowNode.label}}</span>
+                        当前分组：<span v-if="nowNode==''">{{orgName}}</span> <span v-if="nowNode != ''">{{nowNode.keyword}}</span>
                     </p>
                 </el-row>
                 <el-row>
@@ -477,15 +477,12 @@
             //上一页下一页
             changePage(key) {
                 let that = this
-
                 if (key == 0) {   //上一页
                     this.page = this.page - 1
                 } else {          //下一页
                     this.page = this.page + 1
                 }
                 let offset = (this.page - 1) * this.count
-
-                console.log(this.nowNode)
                 if(this.nowNode == ''){
                     let cnt1 = {
                         orgId: localStorage.getItem('orgId'),
@@ -500,47 +497,23 @@
                             that.pageOver = false
                         }
                     })
+                }else {
+                    let group = [this.nowNode.groupId]
+                    let cnt = {
+                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        groups:group, // Array <选填> 角色分组,JSONArray格式
+                        count: this.count, // Integer
+                        offset: offset, // Integer
+                    }
+                    this.$api.getORGUsersByGroups(cnt,function (res) {
+                        that.tableData = JSON.parse(res.data.c)
+                        if (that.tableData.length < that.count) {
+                            that.pageOver = true
+                        } else {
+                            that.pageOver = false
+                        }
+                    })
                 }
-
-                //请求所有的用户的分页
-
-                // if (this.roleActive != '') {
-                //
-                //     let roles = [this.roleActive.roleId]
-                //
-                //     let cnt = {
-                //         orgId: localStorage.getItem('orgId'), // Long 组织编号
-                //         roles: roles, // JSONArray <选填> 角色权限列表,JSONArray格式
-                //         count: this.count, // Integer
-                //         offset: offset, // Integer
-                //     };
-                //
-                //     console.log(cnt);
-                //     //请求对应的角色列表
-                //     this.$api.getORGUserByRole(cnt, function (res) {
-                //         that.tableData = JSON.parse(res.data.c)
-                //         if (that.tableData.length < that.count) {
-                //             that.pageOver = true
-                //         } else {
-                //             that.pageOver = false
-                //         }
-                //     })
-                // } else {
-                //     let cnt = {
-                //         orgId: localStorage.getItem('orgId'),
-                //         offset: offset,
-                //         count: this.count
-                //     }
-                //     this.$api.getORGUsers(cnt, function (res) {
-                //         that.tableData = JSON.parse(res.data.c)
-                //
-                //         if (that.tableData.length < that.count) {
-                //             that.pageOver = true
-                //         } else {
-                //             that.pageOver = false
-                //         }
-                //     })
-                // }
             },
 
             //修改组织用户的职位信息
@@ -632,10 +605,11 @@
                 this.parentId = this.grandId
             },
             handleNodeClick(data,node) {
+                let that = this
                 this.offset = 0
-                this.nowNode = node;
-                console.log(node)
-                console.log(data)
+                this.page = 1
+                this.nowNode = data;
+
                 let group = [data.groupId]
 
                 let cnt = {
@@ -644,9 +618,14 @@
                     count: this.count, // Integer
                     offset: this.offset, // Integer
                 }
+
                 this.$api.getORGUsersByGroups(cnt,function (res) {
-                    console.log(res)
-                    console.log(JSON.parse(res.data.c))
+                    that.tableData = JSON.parse(res.data.c)
+                    if (that.tableData.length < that.count) {
+                        that.pageOver = true
+                    } else {
+                        that.pageOver = false
+                    }
                 })
 
 
@@ -697,9 +676,30 @@
             },
             filterMethod(query, item) {
                 return item.realName.indexOf(query) > -1;
+            },
+
+            //请求所有分组用户
+            allUser(){
+                let that = this
+                this.nowNode = ''
+                this.offset = 0
+                this.page = 1
+                //请求所有组织用户
+                let cnt1 = {
+                    orgId: localStorage.getItem('orgId'),
+                    count: this.count,
+                    offset: this.offset
+                }
+                this.$api.getORGUsers(cnt1, function (res2) {
+                    that.tableData = JSON.parse(res2.data.c)
+
+                    if (that.tableData.length < that.count) {
+                        that.pageOver = true
+                    } else {
+                        that.pageOver = false
+                    }
+                })
             }
-
-
 
         },
         mounted(){

@@ -12,10 +12,27 @@
                 </div>
                 <div class="admin-pwd">
                     <div class="admin-label">
+                        真实姓名:
+                    </div>
+                    <div class="admin-text">
+                        <el-input type="text" v-model="realName" placeholder="请输入用户真实姓名"></el-input>
+                    </div>
+                </div>
+                <div class="admin-pwd">
+                    <div class="admin-label">
                         手机号码:
                     </div>
                     <div class="admin-text">
                         <el-input type="text" v-model="mobile" placeholder="请输入11位联系手机号码"></el-input>
+                    </div>
+                </div>
+
+                <div class="admin-pwd">
+                    <div class="admin-label">
+                        身份证号:
+                    </div>
+                    <div class="admin-text">
+                        <el-input type="text" v-model="idNumber" placeholder="请输入用户身份证号"></el-input>
                     </div>
                 </div>
                 <div class="admin-pwd">
@@ -55,13 +72,15 @@
             return {
                 mobile:'',
                 pwd:'',
-                pwd1:''
+                pwd1:'',
+                realName:'',
+                idNumber:''
             }
         },
         methods: {
             registerBtn() {
                 let that = this
-                if (this.mobile == '' || this.pwd == '') {
+                if (this.mobile == '' || this.pwd == ''|| this.idNumber == '' || this.realName == '') {
                     this.$message({
                         showClose: true,
                         message: '请输入完整的账号密码',
@@ -77,6 +96,8 @@
 
                     let cnt = {
                         mobile: this.mobile,
+                        realName:this.realName,
+                        idNumber:this.idNumber,
                         pwd: this.pwd,
                     }
                     this.$api.registeUser(cnt,function (res) {
@@ -87,7 +108,7 @@
                                 type: 'success'
                             });
                         }else{
-                            that.$message.error('，注册失败,手机号出错');
+                            that.$message.error('，注册失败,信息有误');
                         }
                     })
                     this.$router.push('/login')
