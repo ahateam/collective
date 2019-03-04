@@ -38,7 +38,7 @@ import article from './views/article/artice'
 import tagList from './views/article/tagList'
 import articleAdd from './views/article/articleAdd'
 
-
+import asset from './views/assets/asset'
 
 
 Vue.use(Router)
@@ -195,6 +195,11 @@ export default new Router({
                     name:'articleAdd',
                     component:articleAdd
                 },
+                {
+                    path:'/asset',
+                    name:'asset',
+                    component:asset
+                }
             ]
         },
         {

@@ -7,9 +7,9 @@
                     <img src="../../assets/image/headImage.png" alt="">
                 </div>
                 <div class="img-title">
-                    <div class="icon-title">
-                        {{userPost}}
-                    </div>
+                    <!--<div class="icon-title">-->
+                        <!--{{userPost}}-->
+                    <!--</div>-->
                     <div class="name">
                         {{name}}
                     </div>
@@ -23,6 +23,14 @@
                     </div>
                     <div class="item-text">
                         {{name}}
+                    </div>
+                </div>
+                <div class="user-item">
+                    <div class="item-title">
+                        用户职务
+                    </div>
+                    <div class="item-text">
+                        {{userPost}}
                     </div>
                 </div>
                 <div class="user-item">
@@ -102,28 +110,29 @@
             this.idNumber = this.userInfo.idNumber
             this.weight = this.userInfo.weight
             this.shareAmount = this.userInfo.shareAmount
-            if (this.userInfo.visor == this.$constData.visor.VISOR_CHAIRMAN) {
-                this.userPost = '监事长'
-            } else if (this.userInfo.duty ==this.$constData.duty.DUTY_CHAIRMAN) {
-                this.userPost = '董事长'
-            } else if (this.userInfo.visor == this.$constData.visor.VISOR_VICE_SUPERVISOR) {
-                this.userPost = '副监事长'
-            } else if (this.userInfo.duty == this.$constData.duty.DUTY_VICE_CHAIRMAN) {
-                this.userPost = '副董事长'
-            } else if (this.userInfo.visor == this.$constData.visor.VISOR_SUPERVISOR) {
-                this.userPost = '监事'
-            } else if (this.userInfo.duty == this.$constData.duty.DUTY_DIRECTOR) {
-                this.userPost = '董事'
-            } else if (this.userInfo.share == this.$constData.share.SHARE_REPRESENTATIVE) {
-                this.userPost = '股东代表'
-            } else if (this.userInfo.share == this.$constData.share.SHARE_SHAREHOLDER) {
-                this.userPost = '股东'
-            } else {
-                this.userPost = '暂无职务'
-            }
+            console.log(this.userInfo )
+
+           let orgRoles = this.userInfo.orgRoles
+            // this.userPost
+            let that = this
+            let cnt = {}
+            this.$api.getSysORGUserRoles(cnt,function (res) {
+                console.log(JSON.parse(res.data.c))
+                let arr = JSON.parse(res.data.c)
+                for(let i=0;i<orgRoles.length;i++){
+                    let role = '';
+                    for(let j=0;j<arr.length;j++){
+                        if(orgRoles[i] ==arr[j].roleId ){
+                            role = arr[j].name
+                        }
+                    }
+                    that.userPost = that.userPost + role+'  '
+                }
+            })
 
 
-            console.log(localStorage.getItem('user'))
+
+            // console.log(localStorage.getItem('user'))
         }
     }
 </script>
@@ -139,7 +148,7 @@
     .img-title {
         width: 100%;
         height: 3rem;
-        margin-top: 2rem;
+        margin-top: 1.5rem;
         line-height: 2rem;
         font-size: 1.4rem;
         color: #333;
@@ -182,13 +191,16 @@
     }
 
     .name {
-        float: left;
-        margin-left:2rem;
-        width: 10rem;
-        height: 2rem;
-        text-align: left;
-        line-height: 2rem;
+        /*float: left;*/
+        /*margin-left:2rem;*/
+        /*width: 10rem;*/
+        /*height: 2rem;*/
+        /*text-align: center;*/
+        /*line-height: 2rem;*/
+        /*color: #fff;*/
+        text-align: center;
         color: #fff;
+        line-height: 2rem;
     }
 
     .user-item {

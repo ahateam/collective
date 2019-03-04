@@ -1,19 +1,17 @@
 <template>
     <div>
-        <header-box title="财务分红信息"></header-box>
+        <header-box title="我的分红"></header-box>
         <div class="main-box">
-            <div class="box" v-for="(item,index) in list" :key="index" @click="infoBtn(item)">
-                <div class="box-img">
-                    <div class="img-title">
-                        <i class="iconfont icon-biaoge"></i>
-                    </div>
-                </div>
-                <div class="box-text">
-                    {{item.textName}}
-                </div>
 
+            <div class="money-box">
+                <div class="money-img">
+                    <img src="../../assets/image/money.png" alt="">
+                </div>
+                <div class="money-title">
+                    我的分红总额
+                </div>
+                <div class="money">￥{{money}}.00</div>
             </div>
-
             <div class="btn">
                 <router-link to="/home">
                     <div class="create-btn" >返回首页</div>
@@ -25,10 +23,6 @@
 
 <script>
     import HeaderBox from '@/components/head/headerBox'
-    import { Toast } from 'vant';
-    import ossAuth from '@/assets/api/oss/ossAuth'
-
-    let client = ossAuth.client
     export default {
         name: "jiti2",
         components: {
@@ -36,52 +30,28 @@
         },
         data() {
             return {
-                list: '',
-            }
-        },
-        methods: {
-            infoBtn(info) {
-                this.$router.push({
-                    path:'/bonusInfo',
-                    name:'bonusInfo',
-                    params:{
-                        info:info
-                    }
-                })
+                money:0,
+                info:'',
 
             }
         },
+        methods: {
+
+        },
         mounted() {
             let orgId = JSON.parse(localStorage.getItem('user')).orgId
+            let shareAmount = JSON.parse(localStorage.getItem('user')).shareAmount
             let that = this
-            async function list(){
-                let prefix = 'fenhong/' + orgId + '/'       //请求的前缀
-                try {
-                    let result = await client.list({
-                        prefix: prefix
-                    });
-                    let arr = result.objects
-                        if (arr.length != 0) {
-                                let listData = []
-                                for (let i = 0; i < arr.length; i++) {
-                                    let obj = {
-                                        name: arr[i].name,
-                                        url:arr[i].url,
-                                        textName: decodeURIComponent(arr[i].name.replace(prefix, ''))
-                                    }
-                                    listData.push(obj)
-                                }
-                                that.list = listData
-                            }
-                } catch (e) {
-                    console.log(e)
-                       Toast.fail({
-                        duration:500,
-                        message:'请求出错啦'
-                    })
-                }
+            let cnt = {
+                orgId:orgId
             }
-            list();
+            this.$api.getORGById(cnt,function (res) {
+                if(res.data.rc == that.$util.RC.SUCCESS){
+                    that.info = JSON.parse(res.data.c)
+                    that.money = parseInt(that.info.bonus)*parseInt(shareAmount)
+                }
+            })
+
         }
     }
 </script>
@@ -185,6 +155,43 @@
         height: 4rem;
         margin-top: 2rem;
         line-height: 4rem;
+        text-align: center;
+    }
+    .money-box{
+        position: relative;
+        margin-left: 50%;
+        margin-top: 50%;
+        left: -7.5rem;
+        top: -10rem;
+        width: 15rem;
+        height: 20rem;
+
+    }
+    .money-img{
+        width: 10rem;
+        height: 10rem;
+        margin-left: 2.5rem;
+        overflow: hidden;
+    }
+    .money-img img{
+        width: 10rem;
+        height: 10rem;
+        overflow: hidden;
+    }
+    .money{
+        color: #333;
+        font-size: 3rem;
+        width: 15rem;
+        height: 5rem;
+        line-height: 5rem;
+        text-align: center;
+        letter-spacing:3px;
+    }
+    .money-title{
+        margin-top: 1rem;
+        height: 2rem;
+        color: #666;
+        font-size: 1.4rem;
         text-align: center;
     }
 

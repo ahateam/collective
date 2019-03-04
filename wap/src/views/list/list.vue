@@ -3,28 +3,36 @@
         <header-box title="集体资产"></header-box>
         <div class="main-box">
 
-                <van-tabs  swipeable @change="changeTab">
-                    <van-tab title="全部" >
-                        <div  v-if="listData.length != 0">
-                            <div class="box" v-for="(item,index) in listData" :key="index" >
-                                <div class="item-btn-box">
-                                    <div class="btn-del" v-if="root == true" @click="delBtn(item)">
-                                        <i class="iconfont icon-19icon"></i>
-                                    </div>
-                                    <div class="btn-box" @click="infoBtn(item)" >
-                                            详情
-                                    </div>
-                                </div>
-                                <div class="item-info-box" @click="infoBtn(item)">
-                                    <div class="item-info-name">
-                                        {{item.name}}
-                                    </div>
-                                    <div class="item-info-address">
-                                        {{item.location}}
-                                    </div>
-                                </div>
+                <van-tabs  swipeable @change="changeTab" v-model="activeTab" >
 
-                            </div>
+                    <van-tab :title="item.keyword"  v-for="(item,index) in groups" :key="index">
+                        <div  v-if="listData.length != 0">
+                            <van-list
+                                    v-model="loading"
+                                    :finished="finished"
+                                    finished-text="没有更多了"
+                                    @load="onLoad"
+                            >
+                                <div class="box" v-for="(item,index) in listData" :key="index" >
+                                    <div class="item-btn-box">
+                                        <div class="btn-del" v-if="root == true" @click="delBtn(item)">
+                                            <i class="iconfont icon-19icon"></i>
+                                        </div>
+                                        <div class="btn-box" @click="infoBtn(item)" >
+                                            详情
+                                        </div>
+                                    </div>
+                                    <div class="item-info-box" @click="infoBtn(item)">
+                                        <div class="item-info-name">
+                                            {{item.name}}
+                                        </div>
+                                        <div class="item-info-address">
+                                            {{item.location}}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </van-list>
                         </div>
                         <div class="box" v-if="listData.length == 0">
                            <span class="text-info">
@@ -32,68 +40,7 @@
                            </span>
                         </div>
                     </van-tab>
-                    <van-tab title="动产" >
-                        <div  v-if="listData.length != 0">
-                            <div  v-for="(item,index) in listData" :key="index" >
-                                <div v-if="item.assetType == '动产'">
-                                    <div class="box">
-                                        <div class="item-btn-box">
-                                            <div class="btn-del" v-if="root == true" @click="delBtn(item)">
-                                                <i class="iconfont icon-19icon"></i>
-                                            </div>
-                                            <div class="btn-box" @click="infoBtn(item)" >
-                                                详情
-                                            </div>
-                                        </div>
-                                        <div class="item-info-box" @click="infoBtn(item)">
-                                            <div class="item-info-name">
-                                                {{item.name}}
-                                            </div>
-                                            <div class="item-info-address">
-                                                {{item.location}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="box" v-if="isMsg == true">
-                           <span class="text-info">
-                                暂无动产集体资产，请管理员上传
-                           </span>
-                        </div>
-                    </van-tab>
-                    <van-tab title="不动产" >
-                        <div  v-if="listData.length != 0">
-                            <div  v-for="(item,index) in listData" :key="index" >
-                                <div v-if="item.assetType == '不动产'">
-                                    <div class="box">
-                                        <div class="item-btn-box">
-                                            <div class="btn-del" v-if="root == true" @click="delBtn(item)">
-                                                <i class="iconfont icon-19icon"></i>
-                                            </div>
-                                            <div class="btn-box" @click="infoBtn(item)" >
-                                                详情
-                                            </div>
-                                        </div>
-                                        <div class="item-info-box" @click="infoBtn(item)">
-                                            <div class="item-info-name">
-                                                {{item.name}}
-                                            </div>
-                                            <div class="item-info-address">
-                                                {{item.location}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="box" v-if="isMsg == true">
-                           <span class="text-info">
-                                暂无不动产集体资产，请管理员上传
-                           </span>
-                        </div>
-                    </van-tab>
+
                 </van-tabs>
 
 
@@ -118,22 +65,122 @@
         },
         data(){
           return{
-              listData:[],
+              listData:[],      //全部数据
               root:false,
-              isMsg:true
+              isMsg:true,
+              offset:0,
+              count: 10,
+              groups:[],
+
+
+
+              groupDataList:[],     //分组数据
+
+              //分页加载
+              groupId:'',
+              list: [],
+              loading: false,
+              finished: false,
+
+              activeTab:'',
+
           }
         },
         methods:{
+            onLoad() {          //分页加载
+                let that = this
+                // 异步更新数据
+                    this.offset = this.offset+this.count
+                    let orgId = JSON.parse(localStorage.getItem('user')).orgId
+                    if(this.groupId == ''){
+                        let cnt = {
+                            orgId:orgId,
+                            count:this.count,
+                            offset:this.offset
+                        }
+                        this.$api.queryAssets(cnt,function (res) {
+                            let  arr = JSON.parse(res.data.c)
+                            console.log(arr)
+                            setTimeout(() => {
+                                for (let i = 0; i < arr.length; i++) {
+                                    that.listData.push(arr[i]);
+                                }
+                                // 加载状态结束
+                                that.loading = false;
+
+                                // 数据全部加载完成
+                                if (arr.length< that.count) {
+                                    that.finished = true;
+                                }
+                            }, 500);
+                        })
+                    }else{
+                        let cnt = {
+                            orgId: orgId, // Long 组织编号
+                            groups: [this.groupId], // JSONArray <选填> 分组,JSONArray格式
+                            count: this.count, // Integer
+                            offset: this.offset, // Integer
+                        }
+                        this.$api.getAssetsByGroups(cnt,function (res) {
+                            let  arr = JSON.parse(res.data.c)
+                            setTimeout(() => {
+                                for (let i = 0; i < arr.length; i++) {
+                                    that.listData.push(arr[i]);
+                                }
+                                // 加载状态结束
+                                that.loading = false;
+                                // 数据全部加载完成
+                                if (arr.length< that.count) {
+                                    that.finished = true;
+                                }
+                            }, 500);
+                        })
+                    }
+
+
+
+
+
+
+            },
+
             changeTab(index,value){
-               if(index != 0){
-                   let msg = true
-                   this.listData.map(function (val,key) {
-                       if(val.assetType == value){
-                           msg = false
-                       }
-                   })
-                   this.isMsg = msg
-               }
+                let that = this
+                let orgId = JSON.parse(localStorage.getItem('user')).orgId
+                this.offset = 0
+                this.finished = false
+                if(index == 0){         //全部
+                    this.groupId =''
+                    let cnt = {
+                        orgId:orgId,
+                        count:this.count,
+                        offset:this.offset
+                    }
+                    this.$api.queryAssets(cnt,function (res) {
+                        that.listData = JSON.parse(res.data.c)
+                    })
+                }else{              //其他tab
+                    for(let i = 0 ;i<this.groups.length;i++){
+                        if(value == this.groups[i].keyword){
+                            this.groupId = this.groups[i].groupId
+                        }
+                    }
+                    let cnt = {
+                        orgId: orgId, // Long 组织编号
+                        groups: [this.groupId], // JSONArray <选填> 分组,JSONArray格式
+                        count: this.count, // Integer
+                        offset: this.offset, // Integer
+                    }
+                    console.log(cnt)
+                    this.$api.getAssetsByGroups(cnt,function (res) {
+
+                        that.listData = JSON.parse(res.data.c)
+                        console.log(  that.listData)
+                    })
+                }
+
+
+
             },
             infoBtn(info){
                 this.$router.push({
@@ -175,19 +222,32 @@
         },
         mounted(){
             let that = this
-            let count = 200
-            let offset = 0
             let orgId = JSON.parse(localStorage.getItem('user')).orgId
             let cnt = {
                 orgId:orgId,
-                count:count,
-                offset:offset
+                count:this.count,
+                offset:this.offset
             }
 
-            this.$api.getAssets(cnt,function (res) {
+            this.$api.queryAssets(cnt,function (res) {
                 that.listData = JSON.parse(res.data.c)
-                console.log(that.listData)
             })
+
+            //请求机构内 第一层的组织分组
+            let cnt1 = {
+                orgId:orgId,
+                groupId:100
+            }
+            this.$api.getTagGroupTree(cnt1,function (res) {
+                that.groups = JSON.parse(res.data.c)
+
+                let obj={
+                    keyword: "全部"
+                }
+                that.groups.unshift(obj)
+            })
+
+
 
 
             if( JSON.parse(localStorage.getItem('user')).realName == 'root'){

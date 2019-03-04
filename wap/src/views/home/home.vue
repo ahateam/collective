@@ -20,22 +20,22 @@
                     </div>
 
                 </div>
-                <div class="nav-lable-box">
-                    <div class="nav-item-box"  @click="userBtn">
-                        <div class="nav-item-title">机构职务</div>
-                        <div class="nav-item-content">{{userPost}}</div>
-                    </div>
-                    <div class="nav-item-box"  @click="userBtn">
-                        <div class="nav-item-title">股份数</div>
-                        <div class="nav-item-content">{{shareAmount}}</div>
-                    </div>
-                    <router-link to="/voteMeet">
-                        <div class="nav-item-box">
-                            <div class="nav-item-title">进行中会议</div>
-                            <div class="nav-item-content">{{startedNums}}</div>
-                        </div>
-                    </router-link>
-                </div>
+                <!--<div class="nav-lable-box">-->
+                    <!--<div class="nav-item-box"  @click="userBtn">-->
+                        <!--<div class="nav-item-title">机构职务</div>-->
+                        <!--<div class="nav-item-content">{{userPost}}</div>-->
+                    <!--</div>-->
+                    <!--<div class="nav-item-box"  @click="userBtn">-->
+                        <!--<div class="nav-item-title">股份数</div>-->
+                        <!--<div class="nav-item-content">{{shareAmount}}</div>-->
+                    <!--</div>-->
+                    <!--<router-link to="/voteMeet">-->
+                        <!--<div class="nav-item-box">-->
+                            <!--<div class="nav-item-title">进行中会议</div>-->
+                            <!--<div class="nav-item-content">{{startedNums}}</div>-->
+                        <!--</div>-->
+                    <!--</router-link>-->
+                <!--</div>-->
             </div>
             <div class="item">
                 <!--<router-link to="/voteMeet">-->
@@ -93,13 +93,13 @@
                 <router-link to="/listBonus">
                     <div class="item-box">
                         <div class="img-box1">
-                            <div class="i-box" style="background: rgb(244, 81, 108)">
+                            <div class="i-box" style="background: #ff976a">
                                 <van-icon name="idcard"/>
                             </div>
                         </div>
                         <div class="text-box">
                             <div class="item-text">
-                                财务分红
+                                我的分红
                             </div>
                             <div class="item-next">
                                 <van-icon name="arrow"/>
@@ -125,23 +125,23 @@
                         </div>
                     </div>
                 </router-link>
-                <router-link to="/article">
-                    <div class="item-box">
-                        <div class="img-box1">
-                            <div class="i-box" style="background: rgb(244, 81, 108)">
-                                <van-icon name="idcard"/>
-                            </div>
-                        </div>
-                        <div class="text-box">
-                            <div class="item-text">
-                                通知公告
-                            </div>
-                            <div class="item-next">
-                                <van-icon name="arrow"/>
-                            </div>
-                        </div>
-                    </div>
-                </router-link>
+                <!--<router-link to="/article">-->
+                    <!--<div class="item-box">-->
+                        <!--<div class="img-box1">-->
+                            <!--<div class="i-box" style="background: rgb(244, 81, 108)">-->
+                                <!--<van-icon name="idcard"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="text-box">-->
+                            <!--<div class="item-text">-->
+                                <!--通知公告-->
+                            <!--</div>-->
+                            <!--<div class="item-next">-->
+                                <!--<van-icon name="arrow"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</router-link>-->
 
                <div v-if="root == true">
                    <router-link to="/meet">
@@ -303,7 +303,7 @@
 
     .nav-box {
            width: 100%;
-           height: 16rem;
+           height: 14rem;
            background-image: url("../../assets/image/banner.jpg");
            background-position: center;
            background-size: cover;
@@ -311,7 +311,7 @@
     .nav-img-box{
         width: auto;
         height: 8rem;
-        padding: 2rem 1rem 1rem 1rem;
+        padding:2rem 1rem 1rem 1rem;
         cursor: pointer;
     }
     .nav-user-img{

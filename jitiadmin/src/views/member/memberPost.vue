@@ -116,7 +116,7 @@
             </span>
         </el-dialog>
         <!--新增成员-->
-        <el-dialog title="新增成员" :visible.sync="addMemberModal">
+        <el-dialog title="新增成员" :visible.sync="addMemberModal" width="60%">
             <el-form>
                 <el-form-item label="成员名称" label-width="100px">
                     <el-input v-model="name" autocomplete="off"></el-input>
@@ -127,11 +127,30 @@
                 <el-form-item label="联系电话" label-width="100px">
                     <el-input v-model="mobile" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="表决权重" label-width="100px">
+                <el-form-item label="用户地址" label-width="100px">
+                    <el-input v-model="address" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="股权证书编号" label-width="100px">
+                    <el-input v-model="shareCerNo" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="是否持证人" label-width="100px">
+                    <template>
+                        <el-radio v-model="shareCerHolder" :label="true"   >是</el-radio>
+                        <el-radio v-model="shareCerHolder" :label="false"  >否</el-radio>
+                    </template>
+                </el-form-item>
+                <el-form-item label="股份数" label-width="100px">
+                    <el-input v-model="shareAmount" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="投票权重" label-width="100px">
                     <el-input v-model="weight" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="股份数量" label-width="100px">
-                    <el-input v-model="shareAmount" autocomplete="off"></el-input>
+                <el-form-item label="职务角色" label-width="100px">
+                    <template>
+                        <el-checkbox-group v-model="roles">
+                            <el-checkbox  v-for="(item,index) in roleList" :key="index" :label="item.roleId" >{{item.name}}</el-checkbox>
+                        </el-checkbox-group>
+                    </template>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -236,10 +255,15 @@
                 name:'',
                 idNumber:'',
                 mobile:'',
-                weight:'',
+                pwd:'',
+                address:'',
+                shareCerNo:'',
+                shareCerHolder:'',
                 shareAmount:'',
-
-
+                weight:'',
+                roles:[],
+                groups:[],
+                groupsList:[],
 
 
                 //职务角色列表
@@ -265,6 +289,8 @@
                 weightInfo:'',                  //选举权重
                 rolesInfo:[],                       //用户角色id 列表
                 tagsInfo:[],                    //用户标签/分组信息
+                groupsInfo:'',
+
             }
         },
         methods: {
@@ -371,7 +397,40 @@
 
             //新增用户
             addMemberBtn() {
-                console.log('111')
+                let that = this
+                if(this.name == '' || this.idNumber == '' || this.mobile == '' ){
+                    this.$message.error('请输入完整的用户基础信息')
+                }else{
+                    let groups = [102]
+                    let tags = {
+                        tags:['无']
+                    }
+                    let cnt = {
+                        orgId:localStorage.getItem('orgId'),
+                        mobile: this.mobile, // String 手机号
+                        realName: this.name, // String 姓名（实名）
+                        idNumber: this.idNumber, // String 身份证号
+                        address:this.address,
+                        shareCerNo:this.shareCerNo,
+                        shareCerImg:'无',
+                        shareCerHolder:this.shareCerHolder,
+                        shareAmount:this.shareAmount,
+                        weight:this.weight,
+                        roles:this.roles,
+                        groups:JSON.stringify(groups),
+                        tags:JSON.stringify(tags),
+                    }
+                    this.$api.createORGUser(cnt,function (res) {
+                        console.log(res)
+                        if(res.data.rc == that.$util.RC.SUCCESS){
+                            that.$message.success('新增用户成功')
+                        }else{
+                            that.$message.error('新增失败')
+                        }
+                        that.$router.push('/page')
+                    })
+
+                }
 
             },
 
@@ -482,6 +541,7 @@
 
             //修改组织用户的职位信息
             infoPostBtn(info){
+                console.log(info)
                 this.memberInfo = info
                 this.userIdInfo = this.memberInfo.user.id
                 this.editMember = false
@@ -494,7 +554,7 @@
                 this.rolesInfo = JSON.parse(this.memberInfo.orgUser.roles)
                 this.tagsInfo = this.memberInfo.orgUser.tags
                 this.memberPostInfoModal = true
-
+                this.groupsInfo  = this.memberInfo.orgUser.groups
             },
 
 
@@ -508,6 +568,7 @@
                 this.mobileInfo = this.memberInfo.user.mobile
                 this.userIdInfo = this.memberInfo.user.id
                 this.editMember =false
+
             },
             //修改用户基本信息
             editUserBtn(){
@@ -544,6 +605,7 @@
                         shareAmount: this.shareAmountInfo, // Integer 股份数
                         weight: this.weightInfo, // Integer 选举权重
                         roles: this.rolesInfo, // JSONArray 角色（股东，董事长，经理等）
+                        groups:this.groupsInfo,
                         tags: this.tagsInfo, // JSONObject 标签，包含groups,tags,以及其它自定义分组标签列表
                     }
                     this.$api.editORGUser(cnt,function (res) {
@@ -581,6 +643,8 @@
                     that.pageOver = false
                 }
             })
+
+            //请求所有的用户的分组
 
 
         }

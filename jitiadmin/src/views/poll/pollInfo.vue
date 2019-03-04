@@ -282,8 +282,8 @@
                     this.failureRatio = '67'
                     this.effectiveRatio = '67'
                 } else {
-                    this.failureRatio = '100'
-                    this.effectiveRatio = '100'
+                    this.failureRatio = '67'
+                    this.effectiveRatio = '67'
                 }
             },
             //默认的最大选项数-单选=1

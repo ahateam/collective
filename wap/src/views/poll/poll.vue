@@ -3,7 +3,7 @@
         <header-box title="我的投票"></header-box>
         <div class="main-box">
             <van-tabs  swipeable>
-                <van-tab title="等待参与">
+                <van-tab title="我的投票">
                     <div v-if="voteList.length>0">
                         <div v-for="(item,index) in voteList" :key="index">
                             <div class="vote-item-box">

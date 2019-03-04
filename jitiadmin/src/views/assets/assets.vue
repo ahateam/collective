@@ -26,6 +26,9 @@
                     </div>
                 </el-col>
             </el-row>
+
+
+
             <el-col :span="24">
                 <template>
                     <el-table

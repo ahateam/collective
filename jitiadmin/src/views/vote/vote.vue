@@ -9,7 +9,8 @@
         </el-row>
         <el-row class="row-box1">
             <el-col :span="24">
-                <template>
+
+                    <template>
                     <el-table
                             :data="tableData"
                             border
@@ -110,6 +111,8 @@
         name: "vote",
         data(){
             return{
+
+
                 showDialog:false,
 
                 delId:'',
@@ -124,9 +127,11 @@
                 count:10,
                 page:1
 
+
             }
         },
        methods:{
+
            del(row){
                this.delId = row.voteId
                this.dialogVisible = true
@@ -253,6 +258,9 @@
 </script>
 
 <style scoped lang="scss">
+
+
+
     .row-box{
         background: #fff;
         padding: 15px;
