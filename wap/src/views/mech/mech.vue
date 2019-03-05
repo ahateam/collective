@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-box title="会议管理"></header-box>
+        <header-box title="我的机构"></header-box>
         <div class="main-box">
 
             <router-link to="/mechInfo">
