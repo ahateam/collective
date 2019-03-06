@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-box title="会议管理"></header-box>
+        <header-box title="组织信息"></header-box>
         <div class="main-box">
             <van-cell-group>
                 <van-field

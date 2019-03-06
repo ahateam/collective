@@ -220,6 +220,8 @@
                 url:'',         //文件的线上地址
                 num:0,          //上传进度
                 multipleSelection:[],
+                address:'',     //导入地址
+
 
 
                 //用户列表
@@ -615,6 +617,8 @@
         mounted(){
             let that = this
             this.orgName = localStorage.getItem('orgName')
+            let orgId = localStorage.getItem('orgId')
+            this.address = 'asset/'+orgId+'/'
             let cnt ={}
             //分组列表
             this.$api.getORGUserSysTagGroups(cnt,function (res) {

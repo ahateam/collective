@@ -249,7 +249,7 @@
                 tableData:[],
                 page:1,
                 pageOver:false,
-
+                importAddress:'',       //导入地址
 
                 //新增成员
                 name:'',
@@ -343,7 +343,7 @@
                 let file = files
                 this.size = file[0].size
                 let tmpName = encodeURIComponent(file[0].name)
-                tmpName = this.address + tmpName
+                tmpName = this.importAddress + tmpName
 
                 console.log(tmpName)
 
@@ -623,7 +623,10 @@
             }
         },
         mounted(){
+
             let that = this
+            let orgId = localStorage.getItem('orgId')
+            this.importAddress = 'user/'+orgId+'/'
             let cnt ={}
             // 请求职位列表
             this.$api.getSysORGUserRoles(cnt, function (res3) {

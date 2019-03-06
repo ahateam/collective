@@ -275,7 +275,7 @@
                 url:'',         //文件的线上地址
                 num:0,          //上传进度
                 multipleSelection:[],
-
+                address:'',
 
                 //用户列表
                 offset:0,
@@ -735,6 +735,9 @@
         },
         mounted(){
             let that = this
+            let orgId = localStorage.getItem('orgId')
+            this.address = 'user/'+orgId+'/'
+
             this.orgName = localStorage.getItem('orgName')
             let cnt ={}
             // 请求职位列表
