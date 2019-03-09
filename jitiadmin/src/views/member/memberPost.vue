@@ -112,7 +112,7 @@
             </span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="importUserModal = false">取 消</el-button>
-                <el-button type="primary"   @click="doUpload">确认导入数据</el-button>
+                <el-button type="primary"   @click="doUpload" v-loading.fullscreen.lock="loadData" element-loading-text="正在努力上传，五千以上数据大约等待1分钟...">确认导入数据</el-button>
             </span>
         </el-dialog>
         <!--新增成员-->
@@ -130,6 +130,13 @@
                 <el-form-item label="用户地址" label-width="100px">
                     <el-input v-model="address" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="户序号" label-width="100px">
+                    <el-input v-model="familyNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="户主姓名" label-width="100px">
+                    <el-input v-model="familyMaster" autocomplete="off"></el-input>
+                </el-form-item>
+
                 <el-form-item label="股权证书编号" label-width="100px">
                     <el-input v-model="shareCerNo" autocomplete="off"></el-input>
                 </el-form-item>
@@ -189,6 +196,13 @@
             </el-row>
             <el-row>
                 <el-form>
+
+                    <el-form-item label="户序号" label-width="100px">
+                        <el-input v-model="familyNumberInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                    </el-form-item>
+                    <el-form-item label="户主姓名" label-width="100px">
+                        <el-input v-model="familyMasterInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                    </el-form-item>
                     <el-form-item label="用户住址" label-width="100px">
                         <el-input v-model="addressInfo" autocomplete="off" :disabled="editMember==false"></el-input>
                     </el-form-item>
@@ -234,6 +248,7 @@
         name: "memberMail",
         data(){
             return {
+                loadData:false,
                 addMemberModal:false, //新增用户弹窗
                 importUserModal:false,  //导入用户弹出框
                 fileName:'',    //文件上传
@@ -264,6 +279,8 @@
                 roles:[],
                 groups:[],
                 groupsList:[],
+                familyNumber:'',
+                familyMaster:'',
 
 
                 //职务角色列表
@@ -290,7 +307,8 @@
                 rolesInfo:[],                       //用户角色id 列表
                 tagsInfo:[],                    //用户标签/分组信息
                 groupsInfo:'',
-
+                familyNumberInfo:'',            //户序号
+                familyMasterInfo:'',            //户主姓名
             }
         },
         methods: {
@@ -315,17 +333,14 @@
                         url: this.url
                     }
                     this.$api.importORGUsers(cnt, function (res) {
-                        if (res.data.rc == that.$util.RC.SUCCESS) {
-                            that.$message({
-                                message: '导入成功',
-                                type: 'success'
-                            });
-                            that.$router.push('/page')
-                        } else {
-                            that.$message.error('导入失败，文件有误');
-                            that.$router.push('/page')
-                        }
+                        that.loadData = false
+                        that.$message({
+                            message: '导入完成，稍后刷新',
+                            type: 'success'
+                        });
+                        that.$router.push('/page')
                     })
+
 
                 }
             },
@@ -335,6 +350,7 @@
             },
             //开始导入到oss
             doUpload() {
+                this.loadData = true
                 let files = []
                 files[0] = this.fileData[0]
 
@@ -367,8 +383,16 @@
                         }
                     }).then(res => {
                         //导入用户
-                        _this.url = res.res.requestUrls[0]
-                        _this.importUsers()
+                        let address = res.res.requestUrls[0]
+                        let _index =address.indexOf('?')
+                        console.log(_index)
+                        if(_index == -1){
+                            _this.url = address
+                            _this.importUsers()
+                        }else{
+                            _this.url = address.substring(0,_index)
+                            _this.importUsers()
+                        }
 
                     }).catch(err => {
                         console.log(result)
@@ -419,6 +443,8 @@
                         roles:this.roles,
                         groups:JSON.stringify(groups),
                         tags:JSON.stringify(tags),
+                        familyNumber:this.familyNumber,
+                        familyMaster:this.familyMaster
                     }
                     this.$api.createORGUser(cnt,function (res) {
                         console.log(res)
@@ -555,6 +581,9 @@
                 this.tagsInfo = this.memberInfo.orgUser.tags
                 this.memberPostInfoModal = true
                 this.groupsInfo  = this.memberInfo.orgUser.groups
+                this.familyNumberInfo = this.memberInfo.orgUser.familyNumber
+                this.familyMasterInfo = this.memberInfo.orgUser.familyMaster
+
             },
 
 
@@ -607,6 +636,8 @@
                         roles: this.rolesInfo, // JSONArray 角色（股东，董事长，经理等）
                         groups:this.groupsInfo,
                         tags: this.tagsInfo, // JSONObject 标签，包含groups,tags,以及其它自定义分组标签列表
+                        familyNumber:this.familyNumberInfo,
+                        familyMaster:this.familyMasterInfo
                     }
                     this.$api.editORGUser(cnt,function (res) {
                        if(res.data.rc == that.$util.RC.SUCCESS){

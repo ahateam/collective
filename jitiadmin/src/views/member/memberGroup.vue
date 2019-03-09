@@ -145,7 +145,7 @@
             </span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="importUserModal = false">取 消</el-button>
-                <el-button type="primary"   @click="doUpload">确认导入数据</el-button>
+                <el-button type="primary"   @click="doUpload"  v-loading.fullscreen.lock="loadData" element-loading-text="正在努力上传，五千以上数据大约等待1分钟...">确认导入数据</el-button>
             </span>
         </el-dialog>
         <!--新增成员-->
@@ -208,12 +208,23 @@
             </el-row>
             <el-row>
                 <el-form>
+
+
+                    <el-form-item label="户序号" label-width="100px">
+                        <el-input v-model="familyNumberInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                    </el-form-item>
+                    <el-form-item label="户主姓名" label-width="100px">
+                        <el-input v-model="familyMasterInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                    </el-form-item>
                     <el-form-item label="用户住址" label-width="100px">
                         <el-input v-model="addressInfo" autocomplete="off" :disabled="editMember==false"></el-input>
                     </el-form-item>
+
+
                     <el-form-item label="证书编号" label-width="100px">
                         <el-input v-model="shareCerNoInfo" autocomplete="off" :disabled="editMember==false"></el-input>
                     </el-form-item>
+
                     <el-form-item label="是否持证人" label-width="100px">
                         <template>
                             <el-radio v-model="shareCerHolderInfo" :label="true"   :disabled="editMember==false">是</el-radio>
@@ -266,6 +277,8 @@
         name: "memberMail",
         data(){
             return {
+                loadData:false,
+
                 orgName:'',     //机构名称
 
 
@@ -331,6 +344,8 @@
                 tagsInfo:[],                    //用户标签/分组信息
                 nowNode:'',                     //当前选中的分组
                 groupsInfo:[],
+                familyNumberInfo:'',            //户序号
+                familyMasterInfo:'',            //户主名
 
                 //分组操作-穿梭框相关
                 addMemberModal:false, //穿梭框弹窗
@@ -353,6 +368,7 @@
             },
             //讲已经导入到oss的文件传递给服务端进行数据库导入
             importUsers() {
+
                 let that = this
                 if (that.url != '' || that.url != undefined) {
                     let cnt = {
@@ -360,17 +376,15 @@
                         url: this.url
                     }
                     this.$api.importORGUsers(cnt, function (res) {
-                        if (res.data.rc == that.$util.RC.SUCCESS) {
-                            that.$message({
-                                message: '导入成功',
-                                type: 'success'
-                            });
-                            that.$router.push('/page')
-                        } else {
-                            that.$message.error('导入失败，文件有误');
-                            that.$router.push('/page')
-                        }
+                        that.loadData = false
+                        that.$message({
+                            message: '导入完成，稍后刷新',
+                            type: 'success'
+                        });
+                        that.$router.push('/page')
                     })
+
+
 
                 }
             },
@@ -380,6 +394,7 @@
             },
             //开始导入到oss
             doUpload() {
+                this.loadData = true
                 let files = []
                 files[0] = this.fileData[0]
 
@@ -412,8 +427,18 @@
                         }
                     }).then(res => {
                         //导入用户
-                        _this.url = res.res.requestUrls[0]
-                        _this.importUsers()
+                        let address = res.res.requestUrls[0]
+                        console.log(address)
+                        let _index =address.indexOf('?')
+                        console.log(_index)
+                        if(_index == -1){
+                            _this.url = address
+                            _this.importUsers()
+                        }else{
+                            _this.url = address.substring(0,_index)
+                            _this.importUsers()
+                        }
+
 
                     }).catch(err => {
                         console.log(result)
@@ -552,6 +577,8 @@
                 this.tagsInfo = this.memberInfo.orgUser.tags
                 this.memberPostInfoModal = true
                 this.groupsInfo = this.memberInfo.orgUser.groups
+                this.familyNumberInfo = this.memberInfo.orgUser.familyNumber
+                this.familyMasterInfo = this.memberInfo.orgUser.familyMaster
             },
 
 
@@ -603,8 +630,12 @@
                         roles: this.rolesInfo, // Array 角色（股东，董事长，经理等）
                         groups:this.groupsInfo,
                         tags: this.tagsInfo, // JSONObject 标签，包含groups,tags,以及其它自定义分组标签列表
+                        familyNumber:this.familyNumberInfo,
+                        familyMaster:this.familyMasterInfo
                     }
+                    console.log(cnt)
                     this.$api.editORGUser(cnt,function (res) {
+                        console.log(res)
                         if(res.data.rc == that.$util.RC.SUCCESS){
                             that.$message.success('修改成功')
                         }else{

@@ -153,7 +153,7 @@
             </span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="importModal = false">取 消</el-button>
-                <el-button type="primary"   @click="doUpload">确认导入数据</el-button>
+                <el-button type="primary"   @click="doUpload" v-loading.fullscreen.lock="loadData" element-loading-text="正在努力上传，五千以上数据大约等待1分钟...">确认导入数据</el-button>
             </span>
         </el-dialog>
         <!--新增成员-->
@@ -211,6 +211,7 @@
         name: "memberMail",
         data(){
             return {
+                loadData:false,
                 orgName:'',     //机构名称
 
 
@@ -284,18 +285,14 @@
                         url:this.url
                     }
                     this.$api.importAssets(cnt,function (res) {
-                        console.log(res)
-                        if(res.data.rc == that.$util.RC.SUCCESS ){
-                            that.$message({
-                                message: '导入成功',
-                                type: 'success'
-                            });
-                            that.$router.push('/page')
-                        }else{
-                            that.$message.error('导入失败，文件有误');
-                            that.$router.push('/page')
-                        }
+                        that.loadData = false
+                        that.$message({
+                            message: '导入完成，稍后刷新',
+                            type: 'success'
+                        });
+                        that.$router.push('/page')
                     })
+
 
                 }
             },
@@ -305,18 +302,14 @@
             },
             //开始导入到oss
             doUpload() {
+                this.loadData = true
                 let files = []
                 files[0] = this.fileData[0]
-
-                // this.$emit('getProgress', 0)
                 this.getProgress(0)
                 let file =files
                 this.size = file[0].size
                 let tmpName = encodeURIComponent(file[0].name)
                 tmpName =this.address+ tmpName
-
-                console.log(tmpName)
-
                 this.multipartUpload(tmpName, file[0])
             },
             //分片上传
@@ -337,8 +330,18 @@
                         }
                     }).then(res => {
                         //导入用户
-                        _this.url = res.res.requestUrls[0]
-                        _this.importAssets()
+                        let address = res.res.requestUrls[0]
+                        let _index =address.indexOf('?')
+                        console.log(_index)
+                        if(_index == -1){
+                            _this.url = address
+                            _this.importAssets()
+                        }else{
+                            _this.url = address.substring(0,_index)
+                            _this.importAssets()
+                        }
+
+
 
                     }).catch(err => {
                         console.log(result)
