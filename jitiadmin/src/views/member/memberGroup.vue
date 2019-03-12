@@ -54,6 +54,7 @@
                         <el-button type="primary" size="mini"  @click="loadExcl">用户表模板下载</el-button>
                         <el-button type="primary" size="mini" @click="importUserModal =true">批量导入</el-button>
                         <el-button type="warning" size="mini" @click="delMore">移除职位</el-button>
+
                     </p>
                 </el-row>
                 <el-row>
