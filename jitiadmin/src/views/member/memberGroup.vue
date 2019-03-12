@@ -380,7 +380,6 @@
             }
         },
         methods: {
-<<<<<<< HEAD
             searchBtn(){
               if(this.searchData == ''){
                   this.$message.error('请输入查找的用户姓名')
@@ -404,39 +403,6 @@
                   })
               }
             },
-
-=======
-            //姓名搜索事件
-            searchBtn(){
-                console.log(this.searchData)
-                let that = this
-                if(this.searchData == ''){
-                    this.$message.error('请输入搜索的用户名称')
-                }else {
-                    this.nowNode = ''
-                    let cnt = {
-                        orgId: localStorage.getItem('orgId'),
-                        realName: this.searchData,
-                        count: this.count,
-                        offset: this.offset,
-                    };
-                    this.$api.getORGUsersLikeRealName(cnt,function (res) {
-                        // console.log(JSON.parse(res.data.c))
-                        console.log(res)
-                        that.tableData = JSON.parse(res.data.c)
-                        console.log(that.tableData)
-                        // if (that.tableData.length < that.count) {
-                        //     that.pageOver = true
-                        // } else {
-                        //     that.pageOver = false
-                        // }
-                    })
-
-                }
-
-            },
-            //下载表格模板
->>>>>>> master
             loadExcl() {
                 window.location.href = "/用户模板.xlsx"
             },
@@ -636,7 +602,6 @@
                         };
                         this.$api.getORGUsersLikeRealName(cnt,function (res) {
                             that.tableData = JSON.parse(res.data.c)
-
                             if (that.tableData.length < that.count) {
                                 that.pageOver = true
                             } else {
