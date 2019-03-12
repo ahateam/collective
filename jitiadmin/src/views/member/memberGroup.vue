@@ -28,10 +28,10 @@
                                             <i class="el-icon-plus" ></i>
                                         </el-button>
                                         <!--<el-button-->
-                                                <!--type="text"-->
-                                                <!--size="mini"-->
-                                                <!--@click="() => remove(node, data)">-->
-                                            <!--<i class="el-icon-minus" style="color: #f60;"></i>-->
+                                        <!--type="text"-->
+                                        <!--size="mini"-->
+                                        <!--@click="() => remove(node, data)">-->
+                                        <!--<i class="el-icon-minus" style="color: #f60;"></i>-->
                                         <!--</el-button>-->
                                     </div>
                                 </div>
@@ -51,6 +51,7 @@
                 <el-row>
                     <el-col :span="12">
                         <el-button type="primary" size="mini" @click="addModal" style="margin-top: 6px">移入成员</el-button>
+<<<<<<< HEAD
                         <el-button type="primary" size="mini"  @click="loadExcl"  style="margin-top: 6px">用户表模板下载</el-button>
                         <el-button type="primary" size="mini" @click="importUserModal =true"  style="margin-top: 6px">批量导入</el-button>
                         <el-button type="warning" size="mini" @click="delMore"  style="margin-top: 6px">移除职位</el-button>
@@ -61,6 +62,17 @@
                         </el-input>
                     </el-col>
 
+=======
+                        <el-button type="primary" size="mini"  @click="loadExcl" style="margin-top: 6px">用户表模板下载</el-button>
+                        <el-button type="primary" size="mini" @click="importUserModal =true" style="margin-top: 6px">批量导入</el-button>
+                        <el-button type="warning" size="mini" @click="delMore" style="margin-top: 6px">移除职位</el-button>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-input placeholder="请输入用户姓名" v-model="searchData" >
+                            <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+                        </el-input>
+                    </el-col>
+>>>>>>> master
                 </el-row>
                 <el-row>
                     <el-col :span="24" >
@@ -74,6 +86,10 @@
                                 <el-table-column
                                         type="selection"
                                         width="55">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="orgUser.familyNumber"
+                                        label="户序号">
                                 </el-table-column>
                                 <el-table-column
                                         prop="user.realName"
@@ -364,6 +380,7 @@
             }
         },
         methods: {
+<<<<<<< HEAD
             searchBtn(){
               if(this.searchData == ''){
                   this.$message.error('请输入查找的用户姓名')
@@ -388,6 +405,38 @@
               }
             },
 
+=======
+            //姓名搜索事件
+            searchBtn(){
+                console.log(this.searchData)
+                let that = this
+                if(this.searchData == ''){
+                    this.$message.error('请输入搜索的用户名称')
+                }else {
+                    this.nowNode = ''
+                    let cnt = {
+                        orgId: localStorage.getItem('orgId'),
+                        realName: this.searchData,
+                        count: this.count,
+                        offset: this.offset,
+                    };
+                    this.$api.getORGUsersLikeRealName(cnt,function (res) {
+                        // console.log(JSON.parse(res.data.c))
+                        console.log(res)
+                        that.tableData = JSON.parse(res.data.c)
+                        console.log(that.tableData)
+                        // if (that.tableData.length < that.count) {
+                        //     that.pageOver = true
+                        // } else {
+                        //     that.pageOver = false
+                        // }
+                    })
+
+                }
+
+            },
+            //下载表格模板
+>>>>>>> master
             loadExcl() {
                 window.location.href = "/用户模板.xlsx"
             },
@@ -516,12 +565,12 @@
                     console.log(cnt)
                     this.$api.batchEditORGUsersGroups(cnt,function (res) {
                         console.log(res)
-                       if(res.data.rc == that.$util.RC.SUCCESS){
-                           that.$message.success('移入成功')
-                       }else{
-                           that.$message.error('移入失败')
-                       }
-                       that.$router.push('/page')
+                        if(res.data.rc == that.$util.RC.SUCCESS){
+                            that.$message.success('移入成功')
+                        }else{
+                            that.$message.error('移入失败')
+                        }
+                        that.$router.push('/page')
                     })
                 }
 
@@ -836,7 +885,7 @@
             }
             this.$api.getORGUsers(cnt1, function (res2) {
                 that.tableData = JSON.parse(res2.data.c)
-
+                console.log(that.tableData)
                 if (that.tableData.length < that.count) {
                     that.pageOver = true
                 } else {
@@ -848,13 +897,10 @@
             this.$api.getORGUserSysTagGroups(cnt,function (res) {
                 let data = JSON.parse(res.data.c)
                 that.grandId = data[0].groupId
-                console.log('1111')
-                console.log(data)
                 let cnt2 = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
                     groupId:that.grandId, // Long 分组编号
                 };
-                console.log(cnt2)
                 that.$api.getTagGroupTree(cnt2,function (res) {
                     if (res.data.rc == that.$util.RC.SUCCESS) {
                         if (res.data.c == '{}') {
