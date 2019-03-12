@@ -49,13 +49,18 @@
                     </p>
                 </el-row>
                 <el-row>
-                    <p>
-                        <el-button type="primary" size="mini" @click="addModal">移入成员</el-button>
-                        <el-button type="primary" size="mini"  @click="loadExcl">用户表模板下载</el-button>
-                        <el-button type="primary" size="mini" @click="importUserModal =true">批量导入</el-button>
-                        <el-button type="warning" size="mini" @click="delMore">移除职位</el-button>
+                    <el-col :span="12">
+                        <el-button type="primary" size="mini" @click="addModal" style="margin-top: 6px">移入成员</el-button>
+                        <el-button type="primary" size="mini"  @click="loadExcl"  style="margin-top: 6px">用户表模板下载</el-button>
+                        <el-button type="primary" size="mini" @click="importUserModal =true"  style="margin-top: 6px">批量导入</el-button>
+                        <el-button type="warning" size="mini" @click="delMore"  style="margin-top: 6px">移除职位</el-button>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
+                            <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+                        </el-input>
+                    </el-col>
 
-                    </p>
                 </el-row>
                 <el-row>
                     <el-col :span="24" >
@@ -352,9 +357,37 @@
                 addMemberModal:false, //穿梭框弹窗
                 addUserList:[],
                 userData:[],
+
+                //搜索相关
+                searchData:'',
+
             }
         },
         methods: {
+            searchBtn(){
+              if(this.searchData == ''){
+                  this.$message.error('请输入查找的用户姓名')
+              }else{
+
+                  this.nowNode = ''
+                  let cnt = {
+                      orgId: localStorage.getItem('orgId'),
+                      realName: this.searchData,
+                      count: this.count, // Integer
+                      offset: this.offset, // Integer
+                  };
+                  this.$api.getORGUsersLikeRealName(cnt,function (res) {
+                      that.tableData = JSON.parse(res.data.c)
+
+                      if (that.tableData.length < that.count) {
+                          that.pageOver = true
+                      } else {
+                          that.pageOver = false
+                      }
+                  })
+              }
+            },
+
             loadExcl() {
                 window.location.href = "/用户模板.xlsx"
             },
@@ -530,20 +563,38 @@
                     this.page = this.page + 1
                 }
                 let offset = (this.page - 1) * this.count
-                if(this.nowNode == ''){
-                    let cnt1 = {
-                        orgId: localStorage.getItem('orgId'),
-                        count: this.count,
-                        offset: offset
-                    }
-                    this.$api.getORGUsers(cnt1, function (res2) {
-                        that.tableData = JSON.parse(res2.data.c)
-                        if (that.tableData.length < that.count) {
-                            that.pageOver = true
-                        } else {
-                            that.pageOver = false
+                if(this.nowNode == '' ){
+                    if(this.searchData == ''){
+                        let cnt1 = {
+                            orgId: localStorage.getItem('orgId'),
+                            count: this.count,
+                            offset: offset
                         }
-                    })
+                        this.$api.getORGUsers(cnt1, function (res2) {
+                            that.tableData = JSON.parse(res2.data.c)
+                            if (that.tableData.length < that.count) {
+                                that.pageOver = true
+                            } else {
+                                that.pageOver = false
+                            }
+                        })
+                    }else{
+                        let cnt = {
+                            orgId: localStorage.getItem('orgId'),
+                            realName: this.searchData,
+                            count: this.count, // Integer
+                            offset: offset, // Integer
+                        };
+                        this.$api.getORGUsersLikeRealName(cnt,function (res) {
+                            that.tableData = JSON.parse(res.data.c)
+
+                            if (that.tableData.length < that.count) {
+                                that.pageOver = true
+                            } else {
+                                that.pageOver = false
+                            }
+                        })
+                    }
                 }else {
                     let group = [this.nowNode.groupId]
                     let cnt = {
@@ -662,8 +713,8 @@
                 let that = this
                 this.offset = 0
                 this.page = 1
-                this.nowNode = data;
-
+                this.nowNode = data
+                this.searchData = ''
                 let group = [data.groupId]
 
 
