@@ -16,12 +16,19 @@
             </el-col>
             <el-col :span="19" style="border-left: 1px solid #ddd">
                 <el-row>
-                    <p>
-                        <el-button type="primary" size="mini" @click="addMemberModal = true">添加成员</el-button>
-                        <el-button type="primary" size="mini"  @click="loadExcl">用户表模板下载</el-button>
-                        <el-button type="primary" size="mini" @click="importUserModal =true">批量导入</el-button>
-                        <el-button type="warning" size="mini" @click="delMore">移除职位</el-button>
-                    </p>
+                  <el-col :span="12">
+                      <el-button type="primary" size="mini" @click="addMemberModal = true" style="margin-top: 6px">添加成员</el-button>
+                      <el-button type="primary" size="mini"  @click="loadExcl" style="margin-top: 6px">用户表模板下载</el-button>
+                      <el-button type="primary" size="mini" @click="importUserModal =true" style="margin-top: 6px">批量导入</el-button>
+                      <el-button type="warning" size="mini" @click="delMore" style="margin-top: 6px">移除职位</el-button>
+                  </el-col>
+
+                    <el-col :span="12">
+                        <el-input placeholder="请输入用户姓名" v-model="searchData" >
+                            <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+                        </el-input>
+                    </el-col>
+
                 </el-row>
                 <el-row>
                     <el-col :span="24" >
@@ -35,6 +42,10 @@
                                 <el-table-column
                                         type="selection"
                                         width="55">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="orgUser.familyNumber"
+                                        label="户序号">
                                 </el-table-column>
                                 <el-table-column
                                         prop="user.realName"
@@ -55,7 +66,6 @@
                                     <template slot-scope="scope">
                                         <el-button @click="infoBtn(scope.row)" type="text" size="small">基础信息</el-button>
                                         <el-button @click="infoPostBtn(scope.row)" type="text" size="small">职务信息</el-button>
-
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -309,9 +319,42 @@
                 groupsInfo:'',
                 familyNumberInfo:'',            //户序号
                 familyMasterInfo:'',            //户主姓名
+
+                //搜索相关
+                searchData:'',
+
             }
         },
         methods: {
+            //搜索用户
+            searchBtn(){
+                let that = this
+                if(this.searchData == ''){
+                    this.$message.error('请输入查找的用户姓名')
+                }else{
+                    this.offset = 0
+                    this.page = 1
+                    this.roleActive = ''
+                    let cnt = {
+                        orgId: localStorage.getItem('orgId'),
+                        realName: this.searchData,
+                        count: this.count, // Integer
+                        offset: this.offset, // Integer
+                    };
+                    this.$api.getORGUsersLikeRealName(cnt,function (res) {
+                        that.tableData = JSON.parse(res.data.c)
+                        console.log(that.tableData)
+                        if (that.tableData.length < that.count) {
+                            that.pageOver = true
+                        } else {
+                            that.pageOver = false
+                        }
+                    })
+                }
+            },
+
+
+
             loadExcl() {
                 window.location.href = "/用户模板.xlsx"
             },
@@ -488,20 +531,18 @@
             //更换职务请求用户列表
             roleChange(info) {
                 let that = this
+                this.searchData = ''
                 this.roleActive = info
                 this.count = 10
                 this.offset = 0
                 this.page = 1
                 let roles = [info.roleId]
-
-
                 let cnt = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
                     roles: roles, // JSONArray <选填> 角色权限列表,JSONArray格式
                     count: this.count, // Integer
                     offset: this.offset, // Integer
                 };
-
                 //请求对应的角色列表
                 console.log(cnt)
                 this.$api.getORGUserByRole(cnt, function (res) {
@@ -527,17 +568,13 @@
 
                 //请求所有的用户的分页
                 if (this.roleActive != '') {
-
                     let roles = [this.roleActive.roleId]
-
                     let cnt = {
                         orgId: localStorage.getItem('orgId'), // Long 组织编号
                         roles:roles, // JSONArray <选填> 角色权限列表,JSONArray格式
                         count: this.count, // Integer
                         offset: offset, // Integer
                     };
-
-                    console.log(cnt);
                     //请求对应的角色列表
                     this.$api.getORGUserByRole(cnt, function (res) {
                         that.tableData = JSON.parse(res.data.c)
@@ -548,21 +585,40 @@
                         }
                     })
                 } else {
-                    let cnt = {
-                        orgId: localStorage.getItem('orgId'),
-                        offset: offset,
-                        count: this.count
-                    }
-                    this.$api.getORGUsers(cnt, function (res) {
-                        that.tableData = JSON.parse(res.data.c)
+                        if(this.searchData == ''){
+                            let cnt = {
+                                orgId: localStorage.getItem('orgId'),
+                                offset: offset,
+                                count: this.count
+                            }
+                            this.$api.getORGUsers(cnt, function (res) {
+                                that.tableData = JSON.parse(res.data.c)
 
-                        if (that.tableData.length < that.count) {
-                            that.pageOver = true
-                        } else {
-                            that.pageOver = false
+                                if (that.tableData.length < that.count) {
+                                    that.pageOver = true
+                                } else {
+                                    that.pageOver = false
+                                }
+                            })
+                        }else{
+                            let cnt = {
+                                orgId: localStorage.getItem('orgId'),
+                                realName: this.searchData,
+                                count: this.count, // Integer
+                                offset:offset, // Integer
+                            };
+                            this.$api.getORGUsersLikeRealName(cnt,function (res) {
+                                that.tableData = JSON.parse(res.data.c)
+
+                                if (that.tableData.length < that.count) {
+                                    that.pageOver = true
+                                } else {
+                                    that.pageOver = false
+                                }
+                            })
                         }
-                    })
-                }
+                    }
+
             },
 
             //修改组织用户的职位信息
@@ -608,13 +664,13 @@
                     realName:this.realNameInfo,
                 }
                 this.$api.editUser(cnt,function (res) {
+                    console.log(res)
                    if(res.data.rc == that.$util.RC.SUCCESS){
                         that.$message.success('修改成功')
-                        that.$router.push('/page')
                    }else{
                        that.$message.error('修改失败')
-                       that.$router.push('/page')
                    }
+                    that.$router.push('/page')
                 })
             },
             //修改用户信息

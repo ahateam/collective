@@ -51,18 +51,6 @@
                 <el-row>
                     <el-col :span="12">
                         <el-button type="primary" size="mini" @click="addModal" style="margin-top: 6px">移入成员</el-button>
-<<<<<<< HEAD
-                        <el-button type="primary" size="mini"  @click="loadExcl"  style="margin-top: 6px">用户表模板下载</el-button>
-                        <el-button type="primary" size="mini" @click="importUserModal =true"  style="margin-top: 6px">批量导入</el-button>
-                        <el-button type="warning" size="mini" @click="delMore"  style="margin-top: 6px">移除职位</el-button>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                            <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
-                        </el-input>
-                    </el-col>
-
-=======
                         <el-button type="primary" size="mini"  @click="loadExcl" style="margin-top: 6px">用户表模板下载</el-button>
                         <el-button type="primary" size="mini" @click="importUserModal =true" style="margin-top: 6px">批量导入</el-button>
                         <el-button type="warning" size="mini" @click="delMore" style="margin-top: 6px">移除职位</el-button>
@@ -72,7 +60,6 @@
                             <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
                         </el-input>
                     </el-col>
->>>>>>> master
                 </el-row>
                 <el-row>
                     <el-col :span="24" >
@@ -381,10 +368,12 @@
         },
         methods: {
             searchBtn(){
+                let that = this
               if(this.searchData == ''){
                   this.$message.error('请输入查找的用户姓名')
               }else{
-
+                  this.offset = 0
+                  this.page = 1
                   this.nowNode = ''
                   let cnt = {
                       orgId: localStorage.getItem('orgId'),
