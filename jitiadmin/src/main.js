@@ -15,7 +15,6 @@ Vue.use(VDistpicker)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'http://47.99.212.32/api/jiti'
 Vue.prototype.$http = axios
 Vue.prototype.$util = util
 

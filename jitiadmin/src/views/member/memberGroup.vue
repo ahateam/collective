@@ -382,8 +382,8 @@
                       offset: this.offset, // Integer
                   };
                   this.$api.getORGUsersLikeRealName(cnt,function (res) {
-                      that.tableData = JSON.parse(res.data.c)
 
+                      that.tableData = JSON.parse(res.data.c)
                       if (that.tableData.length < that.count) {
                           that.pageOver = true
                       } else {

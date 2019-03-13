@@ -82,7 +82,9 @@
                     this.$api.loginByMobileAndPwd(cnt,function (res) {
 
                         if(res.data.rc == that.$util.RC.SUCCESS){
+
                             localStorage.setItem('userInfo',res.data.c)
+
                             Toast.success({
                                 durationL:500,
                                 message:'登录成功'

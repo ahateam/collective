@@ -181,19 +181,16 @@
                 <el-tag closable @close="delOption(item.id)">{{item.title}}</el-tag>
             </span>
             <el-row class="row-box1">
-                <el-input
-                        placeholder="请两位以上身份证号码"
-                        prefix-icon="el-icon-search"
-                        v-model="searchData"
-                        @change="searchBtn">
+                <el-input placeholder="请输入用户姓名" v-model="searchData"  @change="searchBtn">
+                    <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
                 </el-input>
 
                 <el-row>
                     <el-col :span="24">
-                        <div v-for="(item,index) in searchList" :key="index"   @click="addUser(item)" style="cursor: pointer;" >
+                        <div v-for="(item,index) in searchList" :key="index"   @click="addUser(item.user)" style="cursor: pointer;" >
                             <el-row style="margin-top: 1rem;border-bottom: 1px solid #ddd;padding: 1rem;">
-                                <el-col :span="5"  >{{item.realName}} </el-col>
-                                <el-col :span="19" > {{item.idNumber}}</el-col>
+                                <el-col :span="5"  >{{item.user.realName}} </el-col>
+                                <el-col :span="19" > {{item.user.idNumber}}</el-col>
                             </el-row>
                         </div>
 
@@ -403,8 +400,11 @@
 
             //普通投票-新增选项的输入框
             addOption() {
-                this.isWrite = true
-                console.log(this.voteInfo)
+                if(this.addOptionTitle != ''){
+                    this.addSubmit()
+                }else{
+                    this.isWrite = true
+                }
             },
 
             //普通投票-新增选项
@@ -440,20 +440,22 @@
             //选举选人搜索事件
             searchBtn(){
                 let that = this
-                let count = 10
-                let offset = 0
-                if(this.searchData.length >=2){
+                if(this.searchData == ''){
+                    this.$message.error('请输入用户姓名')
+                }else{
+                    let count = 10
+                    let offset = 0
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织编号
-                        idNumber: this.searchData,
+                        orgId: localStorage.getItem('orgId'),
+                        realName: this.searchData,
                         count: count, // Integer
                         offset: offset, // Integer
-                    }
-                    this.$api.getORGUsersLikeIDNumber(cnt,function (res) {
+                    };
+                    this.$api.getORGUsersLikeRealName(cnt,function (res) {
                         that.searchList = JSON.parse(res.data.c)
-                        console.log(that.searchList)
                     })
                 }
+
 
             },
             //选举选人
