@@ -189,67 +189,69 @@
         <!--成员基本信息-->
         <el-dialog title="成员基本信息" :visible.sync="memberInfoModal">
             <el-row style="margin-bottom: 20px">
-                <el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =true">编辑基本信息</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember = 1">编辑基本信息</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember = 2">修改身份证号</el-button>
             </el-row>
             <el-row>
                 <el-form>
                     <el-form-item label="用户姓名" label-width="100px">
-                        <el-input v-model="realNameInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                        <el-input v-model="realNameInfo" autocomplete="off" :disabled="editMember != 1"></el-input>
                     </el-form-item>
                     <el-form-item label="身份证号" label-width="100px">
-                        <el-input v-model="idNumberInfo" autocomplete="off" :disabled="true"></el-input>
+                        <el-input v-model="idNumberInfo" autocomplete="off" :disabled="editMember != 2"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号码" label-width="100px">
-                        <el-input v-model="mobileInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                        <el-input v-model="mobileInfo" autocomplete="off" :disabled="editMember!=1"></el-input>
                     </el-form-item>
                 </el-form>
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="memberInfoModal = false">取 消</el-button>
-                <el-button type="primary" @click="memberInfoModal=false" v-if="editMember ==false">返回列表</el-button>
-                <el-button type="primary" @click="editUserBtn" v-if="editMember ==true">确认修改</el-button>
+                <el-button type="primary" @click="memberInfoModal=false"  v-if="editMember ==0">返回列表</el-button>
+                <el-button type="primary" @click="editUserBtn" v-if="editMember ==1">确认修改</el-button>
+                <el-button type="primary" @click="editUserNumber" v-if="editMember ==2">确认修改</el-button>
             </div>
         </el-dialog>
         <!--成员职位信息-->
         <el-dialog title="成员职务信息" :visible.sync="memberPostInfoModal">
             <el-row style="margin-bottom: 20px">
-                <el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =true">编辑基本信息</el-button>
+                <el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =1">编辑基本信息</el-button>
             </el-row>
             <el-row>
                 <el-form>
 
 
                     <el-form-item label="户序号" label-width="100px">
-                        <el-input v-model="familyNumberInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                        <el-input v-model="familyNumberInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
                     </el-form-item>
                     <el-form-item label="户主姓名" label-width="100px">
-                        <el-input v-model="familyMasterInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                        <el-input v-model="familyMasterInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
                     </el-form-item>
                     <el-form-item label="用户住址" label-width="100px">
-                        <el-input v-model="addressInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                        <el-input v-model="addressInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
                     </el-form-item>
 
 
                     <el-form-item label="证书编号" label-width="100px">
-                        <el-input v-model="shareCerNoInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                        <el-input v-model="shareCerNoInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
                     </el-form-item>
 
                     <el-form-item label="是否持证人" label-width="100px">
                         <template>
-                            <el-radio v-model="shareCerHolderInfo" :label="true"   :disabled="editMember==false">是</el-radio>
-                            <el-radio v-model="shareCerHolderInfo" :label="false"   :disabled="editMember==false">否</el-radio>
+                            <el-radio v-model="shareCerHolderInfo" :label="true"   :disabled="editMember !=1">是</el-radio>
+                            <el-radio v-model="shareCerHolderInfo" :label="false"   :disabled="editMember !=1">否</el-radio>
                         </template>
                     </el-form-item>
                     <el-form-item label="股份数" label-width="100px">
-                        <el-input v-model="shareAmountInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                        <el-input v-model="shareAmountInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
                     </el-form-item>
                     <el-form-item label="选举权重" label-width="100px">
-                        <el-input v-model="weightInfo" autocomplete="off" :disabled="editMember==false"></el-input>
+                        <el-input v-model="weightInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
                     </el-form-item>
                     <el-form-item label="职务角色" label-width="100px">
                         <template>
                             <el-checkbox-group v-model="rolesInfo">
-                                <el-checkbox  v-for="(item,index) in roleList" :key="index" :label="item.roleId" :disabled="editMember ==false">{{item.name}}</el-checkbox>
+                                <el-checkbox  v-for="(item,index) in roleList" :key="index" :label="item.roleId" :disabled="editMember !=1">{{item.name}}</el-checkbox>
                             </el-checkbox-group>
                         </template>
                     </el-form-item>
@@ -257,8 +259,8 @@
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="memberPostInfoModal = false">取 消</el-button>
-                <el-button type="primary" @click="memberPostInfoModal=false" v-if="editMember ==false">返回列表</el-button>
-                <el-button type="primary" @click="editORGUserBtn" v-if="editMember ==true">确认修改</el-button>
+                <el-button type="primary" @click="memberPostInfoModal=false" v-if="editMember ==0">返回列表</el-button>
+                <el-button type="primary" @click="editORGUserBtn" v-if="editMember ==1">确认修改</el-button>
             </div>
         </el-dialog>
         <!--新增分组-->
@@ -335,7 +337,7 @@
                 //修改成员信息
                 memberInfoModal:false,          //基本信息弹窗
                 memberInfo:'' ,                 //成员详情
-                editMember:false,              //是否进行修改操作
+                editMember:0,              //是否进行修改操作 0：不修改 1：修改基本信息 2：修改手机号
                 realNameInfo:'',                    //姓名
                 idNumberInfo:'',                //身份证号
                 mobileInfo:'',                  //手机号
@@ -621,7 +623,7 @@
             infoPostBtn(info){
                 this.memberInfo = info
                 this.userIdInfo = this.memberInfo.user.id
-                this.editMember = false
+                this.editMember = 0
                 this.addressInfo = this.memberInfo.orgUser.address
                 this.shareCerNoInfo = this.memberInfo.orgUser.shareCerNo
                 this.shareCerImgInfo = this.memberInfo.orgUser.shareCerImg
@@ -646,7 +648,7 @@
                 this.idNumberInfo = this.memberInfo.user.idNumber
                 this.mobileInfo = this.memberInfo.user.mobile
                 this.userIdInfo = this.memberInfo.user.id
-                this.editMember =false
+                this.editMember =0
             },
             //修改用户基本信息
             editUserBtn(){
@@ -657,6 +659,24 @@
                     realName:this.realNameInfo,
                 }
                 this.$api.editUser(cnt,function (res) {
+                    if(res.data.rc == that.$util.RC.SUCCESS){
+                        that.$message.success('修改成功')
+                        that.$router.push('/page')
+                    }else{
+                        that.$message.error('修改失败')
+                        that.$router.push('/page')
+                    }
+                })
+            },
+            //修改用户身份证号
+            editUserNumber(){
+                let that = this
+                let cnt = {
+                    adminUsreId: localStorage.getItem('userId'),
+                    userId: this.userIdInfo,
+                    IdNumber: this.idNumberInfo,
+                };
+                this.$api.editUserIdNumber(cnt,function (res) {
                     if(res.data.rc == that.$util.RC.SUCCESS){
                         that.$message.success('修改成功')
                         that.$router.push('/page')
