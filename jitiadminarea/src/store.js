@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+      navDefaultActive : '0',     //默认选中的导航栏
   },
   mutations: {
 
