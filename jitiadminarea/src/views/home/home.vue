@@ -251,7 +251,7 @@
             console.log(localStorage.getItem('orgId'))
             console.log(localStorage.getItem('orgName'))
 
-
+            this.menuList = menu.areaMenu
             if(localStorage.getItem('userId') == '' || localStorage.getItem('userId') == null){
                 this.$message.error({
                     showClose: true,
@@ -260,11 +260,10 @@
                this.outLogin()
             }
             if(localStorage.getItem('orgId') == '' || localStorage.getItem('orgId') == null){
-                this.menuList = menu.lowMenu
                 this.showActive1 = true
             }else{
                 this.$router.push('/dashboard')
-                this.menuList = menu.menu
+                // this.menuList = menu.menu
                 this.orgName = localStorage.getItem('orgName')
                 this.showActive1 = false
             }

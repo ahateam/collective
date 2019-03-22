@@ -60,16 +60,17 @@
                         mobile:this.mobile,
                         pwd:this.pwd
                     }
-                    // this.$api.loginByMobileAndPwd(cnt,function (res) {
-                    //     if(res.data.rc == that.$util.RC.SUCCESS){
-                    //         localStorage.setItem('userId',JSON.parse(res.data.c).id)
-                    //         that.$router.push('/home')
-                    //     }else{
-                    //         alert('登录失败，账号密码输入错误')
-                    //         that.pwd = ''
-                    //         that.mobile = ''
-                    //     }
-                    // })
+                    this.$api.loginByMobileAndPwd(cnt,function (res) {
+
+                        if(res.data.rc == that.$util.RC.SUCCESS){
+                            localStorage.setItem('userId',JSON.parse(res.data.c).id)
+                            that.$router.push('/home')
+                        }else{
+                            alert('登录失败，账号密码输入错误')
+                            that.pwd = ''
+                            that.mobile = ''
+                        }
+                    })
                     that.$router.push('/home')
                 }
             }
