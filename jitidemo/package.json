@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "ahaapi": "^2.0.0",
+    "echarts": "^4.2.1",
     "element-ui": "^2.6.3",
     "sass": "^1.17.3",
     "v-charts": "^1.19.0",

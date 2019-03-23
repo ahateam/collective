@@ -1,29 +1,60 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div>
+      <div class="header-box">
+          <router-link to="/asset">
+            <span  class="header-text">
+            集体经济组织资产列表
+          </span>
+          </router-link>
+      </div>
+      <div class="main">
+        <router-view/>
+      </div>
     </div>
-    <router-view/>
+
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<style lang="scss" >
+  html{
+    width: 100%;
+    height: 100%;
+    font-size: 62.5%;
   }
-}
+  body{
+    width: 100%;
+    height: 100%;
+  }
+  *{
+    padding: 0 0;
+    margin: 0 0;
+  }
+  a{
+      text-decoration:none;
+      out-line: none
+  }
+  .header-box{
+    width: 100%;
+    background:#545c64;
+    text-align: center;
+    position: absolute;
+    top: 0;
+  }
+  .header-text{
+    color: #fff;
+    line-height: 60px;
+    font-size: 20px;
+    letter-spacing:3px;
+  }
+  .main{
+    margin-top: 60px;
+    min-height: 100vh;
+    width: 100%;
+    background-image: url("./assets/image/11.png");
+    background-size: cover;
+    background-position: center;
+
+
+  }
 </style>

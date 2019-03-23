@@ -1,25 +1,33 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-
+import asset from './views/asset/asset'
+import assetList from './views/asset/assetList'
+import assetInfo from './views/asset/assetInfo'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
+        {
+          path: '/',
+          name: 'asset',
+          component: asset
+        },
+        {
+          path: '/asset',
+          name: 'asset',
+          component: asset
+        },
+      {
+          path:'/assetList',
+          name:'assetList',
+          component:assetList
+      },
+      {
+          path:'/assetInfo',
+          name:'assetInfo',
+          component:assetInfo
+      }
   ]
 })
