@@ -144,6 +144,7 @@
 
             },
 
+
             changeTab(index,value){
                 let that = this
                 let orgId = JSON.parse(localStorage.getItem('user')).orgId
@@ -231,6 +232,7 @@
 
             this.$api.queryAssets(cnt,function (res) {
                 that.listData = JSON.parse(res.data.c)
+                console.log(that.listData)
             })
 
             //请求机构内 第一层的组织分组
@@ -240,11 +242,16 @@
             }
             this.$api.getTagGroupTree(cnt1,function (res) {
                 that.groups = JSON.parse(res.data.c)
-
-                let obj={
-                    keyword: "全部"
+                let obj1 = {
+                    keyword: "组织资产",
+                    groupId:102
                 }
+                let obj={
+                    keyword: "全部资产"
+                }
+                that.groups.unshift(obj1)
                 that.groups.unshift(obj)
+                console.log(that.groups)
             })
 
 

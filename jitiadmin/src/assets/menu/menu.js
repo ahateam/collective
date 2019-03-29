@@ -11,7 +11,18 @@ const  menu =[
         path:'/mechanism',
         title:'机构管理',
         icon:'icon-bangong-jigou',
-        child:[]
+        child:[
+            {
+                path:'/applyMech',
+                title:'机构申请列表',
+                icon:''
+            },
+            {
+                path:'/mechanism',
+                title:'机构管理',
+                icon:'',
+            }
+        ]
     },
     {
         path:'/memberList',
@@ -101,7 +112,18 @@ const  lowMenu=[
         path:'/mechanism',
         title:'机构管理',
         icon:'icon-bangong-jigou',
-        child:[]
+        child:[
+            {
+                path:'/applyMech',
+                title:'机构申请列表',
+                icon:''
+            },
+            {
+                path:'/mechanism',
+                title:'机构管理',
+                icon:'',
+            }
+        ]
     }
 ]
 

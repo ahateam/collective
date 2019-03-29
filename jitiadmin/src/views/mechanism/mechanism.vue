@@ -3,7 +3,7 @@
        <el-row class="row-box" >
             <el-col :span="24">
                <router-link to="/addMech">
-                   <el-button type="primary" class="nav-btn">新增机构</el-button>
+                   <el-button type="primary" class="nav-btn">申请机构</el-button>
                </router-link>
             </el-col>
        </el-row>

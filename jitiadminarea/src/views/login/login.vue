@@ -61,7 +61,6 @@
                         pwd:this.pwd
                     }
                     this.$api.loginByMobileAndPwd(cnt,function (res) {
-
                         if(res.data.rc == that.$util.RC.SUCCESS){
                             localStorage.setItem('userId',JSON.parse(res.data.c).id)
                             that.$router.push('/home')
@@ -70,14 +69,17 @@
                             that.pwd = ''
                             that.mobile = ''
                         }
+                        that.$router.push('/home')
                     })
-                    that.$router.push('/home')
+
                 }
             }
         },
         mounted(){
             this.pwd= ''
             this.mobile =''
+            localStorage.setItem('areaId','555555')
+            localStorage.setItem('userId','')
         }
     }
 </script>

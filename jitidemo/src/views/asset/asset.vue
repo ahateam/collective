@@ -1,11 +1,15 @@
 <template>
       <div class="box">
-            <div class="list-box">
-
-                <div class="item-box" @click="assetListBtn(item.groupId)" v-for="(item,index) in list"> {{item.keyword}}</div>
-
-            </div>
-
+          <el-row>
+              <div class="list-box">
+                  <div class="item-box" @click="assetListBtn(item.groupId)" v-for="(item,index) in list"> {{item.keyword}}</div>
+              </div>
+          </el-row>
+          <el-row>
+              <div class="pageBtn">
+                  <el-button type="primary" @click="page" style="float: right;margin-right: 10rem">上一页</el-button>
+              </div>
+          </el-row>
       </div>
 </template>
 
@@ -21,12 +25,23 @@
             assetListBtn(groupId){
                 localStorage.setItem('groupId',groupId)
                 this.$router.push('/assetList')
+            },
+            page(){
+                this.$router.push('/home')
             }
         },
         mounted(){
             let that = this
             this.$api.getGroup({},function (res) {
                 that.list = JSON.parse(res.data.c)
+                console.log(that.list)
+
+                let obj = {
+                    keyword:'组织资产',
+                    groupId:102
+                }
+                that.list.unshift(obj)
+
             })
 
             localStorage.setItem('groupId','')
@@ -69,5 +84,9 @@
             -ms-user-select:none;
             user-select:none;
         }
-
+        .pageBtn{
+            width: auto;
+            height: 5rem;
+            margin-top: 5rem;
+        }
 </style>

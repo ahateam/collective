@@ -47,6 +47,7 @@
                     groups:groups
                 }
                 this.$api.getAsset(cnt,function (res) {
+                    console.log(res)
                   that.assetlist = JSON.parse(res.data.c)
                 })
 

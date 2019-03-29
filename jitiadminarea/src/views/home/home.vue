@@ -33,7 +33,7 @@
             </el-aside>
             <el-container>
                 <el-header class="header-box">
-                    <div class="system-box">集体经济管理系统</div>
+                    <div class="system-box">集体经济区级管理系统</div>
                     <div class="system-mech">
                         <span v-if="tableData.length != 0">
                            <div class="system-center"> {{orgName}}</div>
@@ -120,7 +120,7 @@
         data() {
             return {
                 showActive: false,
-                showActive1: true,
+                showActive1: false,
                 tableData: [],
                 orgName: '',
                 isRouterActive: true,
@@ -248,10 +248,8 @@
 
         },
         mounted() {
-            console.log(localStorage.getItem('orgId'))
-            console.log(localStorage.getItem('orgName'))
-
             this.menuList = menu.areaMenu
+
             if(localStorage.getItem('userId') == '' || localStorage.getItem('userId') == null){
                 this.$message.error({
                     showClose: true,
@@ -259,39 +257,7 @@
                 });
                this.outLogin()
             }
-            if(localStorage.getItem('orgId') == '' || localStorage.getItem('orgId') == null){
-                this.showActive1 = true
-            }else{
-                this.$router.push('/dashboard')
-                // this.menuList = menu.menu
-                this.orgName = localStorage.getItem('orgName')
-                this.showActive1 = false
-            }
 
-
-
-
-            let that = this
-            let cnt = {
-                userId:localStorage.getItem('userId')
-            }
-            this.$api.getUserORGs(cnt, function (res) {
-                if (res.data.rc == that.$util.RC.SUCCESS) {
-                    that.tableData = JSON.parse(res.data.c)
-                } else {
-                    that.tableData = []
-                }
-                console.log(that.tableData)
-            })
-
-
-            // this.$ajax.api.getORGs(40, 0, function (res) {
-            //     if (res.data.rc == 'succ') {
-            //         that.tableData = JSON.parse(res.data.c)
-            //     }
-            //
-            // })
-            console.log(that.tableData)
         }
 
     }

@@ -5,6 +5,8 @@ import login from './views/login/login'
 import home from './views/home/home'
 import dashboard from './views/home/dashboard'
 import page from './views/home/page'
+import mech from './views/mech/mech'
+import asset from './views/asset/asset'
 
 Vue.use(Router)
 
@@ -27,7 +29,16 @@ export default new Router({
                     name:'page',
                     component:page
                 },
-
+                {
+                    path:'/mech',
+                    name:'mech',
+                    component:mech
+                },
+                {
+                    path:'/asset',
+                    name:'asset',
+                    component:asset
+                }
 
             ]
         },

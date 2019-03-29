@@ -39,7 +39,7 @@ import tagList from './views/article/tagList'
 import articleAdd from './views/article/articleAdd'
 
 import asset from './views/assets/asset'
-
+import applyMech from './views/mechanism/applyMech'
 
 Vue.use(Router)
 
@@ -114,6 +114,11 @@ export default new Router({
                     path:'/mechMoney',
                     name:'mechMoney',
                     component:mechMoney
+                },
+                {
+                    path:'/applyMech',
+                    name:'applyMech',
+                    component:applyMech
                 },
                 {
                     path:'/editMech',

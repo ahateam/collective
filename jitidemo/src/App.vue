@@ -2,9 +2,9 @@
   <div id="app">
     <div>
       <div class="header-box">
-          <router-link to="/asset">
+          <router-link to="/home">
             <span  class="header-text">
-            集体经济组织资产列表
+            集体经济组织网络服务平台演示系统
           </span>
           </router-link>
       </div>

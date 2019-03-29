@@ -113,6 +113,19 @@
          icon:'icon-shouye',
          child:[]
      },
+     {
+         path:'/mech',
+         title:'机构管理',
+         icon:'icon-shouye',
+         child:[]
+     },
+     {
+         path:'/asset',
+         title:'资产统计',
+         icon:'icon-shouye',
+         child:[]
+     }
+
  ]
 
 export default {

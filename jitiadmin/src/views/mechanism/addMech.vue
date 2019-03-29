@@ -2,7 +2,7 @@
     <div>
         <el-row class="row-box">
             <el-col :span="24">
-                新增经济组织机构
+                申请经济组织机构
             </el-col>
         </el-row>
         <el-row class="row-box1">
@@ -243,29 +243,28 @@
                         shareAmount: this.shareAmount,
                     };
 
-                    this.$api.createORG(cnt, function (res) {
-                        console.log()
+                    this.$api.createORGApply(cnt, function (res) {
+                        console.log(res)
                         if (res.data.rc == that.$util.RC.SUCCESS) {
                             console.log(res)
                             that.$message({
                                 showClose: true,
-                                message: '新增组织信息成功',
+                                message: '申请成功，等待审核',
                                 type: 'success'
                             });
-                            if(localStorage.getItem('orgId') == '' ||localStorage.getItem('orgId') == null ){
-                                localStorage.setItem('orgId',JSON.parse(res.data.c).org.id)
-                                localStorage.setItem('orgName',JSON.parse(res.data.c).org.name)
-                                that.$router.go(0)
-                            }else{
-                                that.$router.push('/mechanism')
-                            }
+                            that.$router.push('/applyMech')
 
-
-
+                            // if(localStorage.getItem('orgId') == '' ||localStorage.getItem('orgId') == null ){
+                            //     localStorage.setItem('orgId',JSON.parse(res.data.c).org.id)
+                            //     localStorage.setItem('orgName',JSON.parse(res.data.c).org.name)
+                            //     that.$router.go(0)
+                            // }else{
+                            //
+                            // }
                         }else{
                             that.$message({
                                 showClose: true,
-                                message: '新增组织信息失败',
+                                message: '申请失败',
                                 type: 'error'
                             });
                         }

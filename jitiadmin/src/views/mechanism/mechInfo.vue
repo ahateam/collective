@@ -6,6 +6,7 @@
             </el-col>
         </el-row>
         <el-row class="row-box1">
+
             <el-col :span="24">
                 <el-col :span="4">
                     <div class="title-box">集体经济组织名称:</div>
@@ -48,7 +49,7 @@
             </el-col>
             <el-col :span="24">
                 <el-col :span="4">
-                    <div class="title-box">组织机构代码:</div>
+                    <div class="title-box">机构总股份数:</div>
                 </el-col>
                 <el-col :span="18">
                     <div class="text-box">
@@ -93,13 +94,13 @@
         data() {
             return {
                 info: {},
-                mechId: ''
+                mechId: '',
+                isEdit:''
             }
         },
         mounted() {
             this.info = this.$route.params.info
             this.mechId = this.info.id
-            console.log(this.info)
 
         },
         methods: {
