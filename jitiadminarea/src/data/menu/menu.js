@@ -124,6 +124,21 @@
          title:'资产统计',
          icon:'icon-shouye',
          child:[]
+     },
+     {
+         path:'/vote',
+         title:'投票管理',
+         icon:'icon-shouye',
+         child:[
+             {
+                 path:'/vote',
+                 title:'投票统计',
+             },
+             {
+                 path:'/voteUser',
+                 title:'用户投票'
+             }
+         ]
      }
 
  ]

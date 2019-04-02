@@ -36,6 +36,7 @@
                         <div class="title-box">机构详细地址:</div>
                     </el-col>
                     <el-col :span="18">
+
                         <div class="text-box">
                             <el-input v-model="mechAddress" placeholder="请输入机构详细地址"></el-input>
                         </div>
@@ -72,11 +73,17 @@
                         <div class="title-box">集体经济代码证:</div>
                     </el-col>
                     <el-col :span="18">
-                        <div class="text-box" style="line-height: 3rem">
-                           <span style="font-size: 1.4rem;color: #f60;">
-                                目前只支持 .jpg 格式的文件上传
-                           </span>
-                            <input @change="getMechData($event)" type="file" class="upload"/>
+                        <div class="image-box">
+                            <img :src="mechCodeImgUrl" alt=""  v-if="mechCodeImgUrl != ''">
+                            <span v-if="mechCodeImgUrl == ''" style="font-size: 20px;color: #666;">暂无图片，请上传</span>
+                        </div>
+                        <div class="image-load">
+                            <div class="text-box">
+                               <span style="font-size: 1.4rem;color: #f60;">
+                                    目前只支持 .jpg 格式的文件上传
+                               </span>
+                                <input @change="getMechData($event)" type="file" class="upload"/>
+                            </div>
                         </div>
                     </el-col>
                 </div>
@@ -87,11 +94,17 @@
                         <div class="title-box">上传授权书:</div>
                     </el-col>
                     <el-col :span="18">
-                        <div class="text-box"  style="line-height: 3rem">
-                              <span style="font-size: 1.4rem;color: #f60;">
-                                目前只支持 .jpg 格式的文件上传
-                           </span>
-                            <input @change="getMechData1($event)" type="file" class="upload"/>
+                        <div class="image-box">
+                            <img :src="mechGrantImgUrl" alt=""  v-if="mechGrantImgUrl != ''">
+                            <span v-if="mechGrantImgUrl == ''" style="font-size: 20px;color: #666;">暂无图片，请上传</span>
+                        </div>
+                        <div class="image-load">
+                            <div class="text-box">
+                               <span style="font-size: 1.4rem;color: #f60;">
+                                    目前只支持 .jpg 格式的文件上传
+                               </span>
+                                <input @change="getMechData1($event)" type="file" class="upload"/>
+                            </div>
                         </div>
                     </el-col>
                 </div>
@@ -184,10 +197,26 @@
                         }
                     }).then(res => {
                         //取出存好的url
+
                             if(type == 'code'){
-                                _this.mechCodeImgUrl = res.res.requestUrls[0]
+
+                                let address = res.res.requestUrls[0]
+                                console.log(address)
+                                let _index =address.indexOf('?')
+                                console.log(_index)
+                                if(_index == -1){
+                                    _this.mechCodeImgUrl = address
+                                }else{
+                                    _this.mechCodeImgUrl = address.substring(0,_index)
+                                }
                             }else if(type == 'grant'){
-                                _this.mechGrantImgUrl = res.res.requestUrls[0]
+                                let address = res.res.requestUrls[0]
+                                let _index =address.indexOf('?')
+                                if(_index == -1){
+                                    _this.mechGrantImgUrl = address
+                                }else{
+                                    _this.mechGrantImgUrl = address.substring(0,_index)
+                                }
                             }
 
                     }).catch(err => {
@@ -218,7 +247,6 @@
             getMechData1(event) {
                 this.mechGrantImg = event.target.files[0]
                 this.doUpload(this.mechGrantImg,'grant')
-
             },
             submitBtn() {
                 if (this.mechName == '' || this.province == '' || this.mechAddress == '' || this.mechCode == '' || this.city == '' || this.district == '') {
@@ -316,4 +344,24 @@
         text-align: center;
         padding-bottom: 20px;
     }
+    .image-box {
+        margin-left: 50px;
+        width: 400px;
+        height: 300px;
+        overflow: hidden;
+        float: left;
+    }
+
+    .image-box img {
+        width: 400px;
+        height: 300px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .image-load{
+        float: left;
+        margin-left: 50px;
+        line-height: 150px;
+    }
+
 </style>

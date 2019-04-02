@@ -10,9 +10,12 @@ import constData from './assets/api/util/constData'
 import axios from 'axios'
 import util from 'ahaapi'
 import api from './assets/api/util/utils'
+import config from '../vue.config.js'
 
 Vue.use(VDistpicker)
 Vue.use(ElementUI)
+Vue.prototype.$baseURL = config.baseUrl
+
 Vue.config.productionTip = false
 
 Vue.prototype.$http = axios
@@ -20,7 +23,6 @@ Vue.prototype.$util = util
 
 Vue.prototype.$api = api
 Vue.prototype.$constData = constData
-
 
 
 new Vue({

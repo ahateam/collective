@@ -94,14 +94,10 @@
         data() {
             return {
                 info: {},
-                mechId: '',
-                isEdit:''
             }
         },
         mounted() {
             this.info = this.$route.params.info
-            this.mechId = this.info.id
-
         },
         methods: {
             edit() {
@@ -110,7 +106,7 @@
                     path: '/editMech',
                     name: 'editMech',
                     params: {
-                        mechId: this.mechId
+                        info: this.info
                     }
                 })
             }

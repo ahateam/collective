@@ -249,7 +249,8 @@
         },
         mounted() {
             this.menuList = menu.areaMenu
-
+            this.$router.push('/dashboard')
+            this.$store.state.navDefaultActive = '0'
             if(localStorage.getItem('userId') == '' || localStorage.getItem('userId') == null){
                 this.$message.error({
                     showClose: true,

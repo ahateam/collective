@@ -34,9 +34,9 @@
                     <el-table-column
                             label="操作">
                         <template slot-scope="scope">
-                            <el-button @click="info(scope.row,0)" type="text" size="small">详情</el-button>
+                            <el-button @click="info(scope.row)" type="text" size="small">详情</el-button>
 
-                            <el-button @click="info(scope.row,1)" type="text" size="small" v-if="scope.row.examine != 1">修改信息</el-button>
+                            <el-button @click="editMech(scope.row)" type="text" size="small" v-if="scope.row.examine != 1">修改信息</el-button>
 
                             <el-button @click="del(scope.row)" type="text" size="small" v-if="scope.row.examine != 1"><span style="color: #f44;">取消申请</span></el-button>
 
@@ -84,14 +84,23 @@
                 }
             },
             //详情跳转
-            info(row,isEdit){
+            info(row){
                 this.$router.push({
                     path:'/mechInfo',
                     name:'mechInfo',
-                    params:{info:row,isEdit:isEdit},
+                    params:{info:row},
                 })
-                console.log(row.id);
             },
+            //修改信息
+            editMech(row){
+                console.log('1111')
+                this.$router.push({
+                    path:'/editMech',
+                    name:'editMech',
+                    params:{info:row},
+                })
+            },
+
             //删除提示
             del(row){
                 this.delShow = true

@@ -115,12 +115,64 @@
             <el-row >
                 <el-col :span="22" style="margin-top: 20px;text-align: right">
                     <el-button  type="primary" @click="searchBtn">查询统计</el-button>
+                    <el-button  type="primary" @click="searchListBtn" >查询列表</el-button>
                 </el-col>
 
             </el-row>
 
-            <el-row>
+            <el-row v-if="isList == false">
                 <ve-histogram :data="chartData"></ve-histogram>
+            </el-row>
+            <el-row v-if="isList == true">
+                    <el-table
+                            ref="multipleTable"
+                            :data="tableData"
+                            tooltip-effect="dark"
+                            style="width: 100%"
+                         >
+                        <el-table-column
+                                prop="name"
+                                label="资产名称">
+                        </el-table-column>
+                        <el-table-column
+                                prop="buildTime"
+                                label="年份">
+                        </el-table-column>
+                        <el-table-column
+                                prop="sn"
+                                label="资产证件号">
+                        </el-table-column>
+                        <el-table-column
+                                prop="location"
+                                label="位置">
+                        </el-table-column>
+
+                        <el-table-column
+                                prop="originPrice"
+                                label="价值(万)"
+                        >
+
+                        </el-table-column>
+
+                        <el-table-column
+                                prop="yearlyIncome"
+                                label="年产值(万)"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                        >
+                            <template slot-scope="scope">
+                                <el-button @click="infoBtn(scope.row)" type="text" size="small">详细</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+
+                <p>
+                    当前第 {{page}} 页
+                    <el-button type="primary" size="mini"  :disabled="page==1"  @click="changePage(page-1)">上一页</el-button>
+                    <el-button type="primary" size="mini" :disabled="pageOver ==true"  @click="changePage(page+1)">下一页</el-button>
+                </p>
             </el-row>
 
         </el-row>
@@ -149,11 +201,99 @@
                 assetType:[],
                 businessMode:[],
 
+                //表格相关
+                isList:false,
+                offset:0,
+                count:10,
+                tableData:[],
+                page:1,
+                pageOver:false,
             }
         },
         methods:{
+            //查询列表
+            searchListBtn(){
+                let that =this
+                this.isList = true
+                this.page = 1
+                let cnt ={
+                    districtId: localStorage.getItem('areaId'), // Long 区id
+                    offset:this.offset,
+                    count:this.count
+                }
+                if(this.org.length >0){
+                    cnt.orgIds = this.org
+                }
+                if(this.year.length >0){
+                    cnt.buildTimes = this.year
+                }else{
+                    cnt.buildTimes = this.yearList
+                }
+                if(this.resType.length >0){
+                    cnt.resTypes = this.resType
+                }
+                if(this.assetType.length >0){
+                    cnt.assetTypes = this.assetType
+                }
+                if(this.businessMode.length>0){
+                    cnt.businessModes = this.businessMode
+                }
+
+                this.$api.getAssetListByTypes(cnt,function (res) {
+                    if(res.data.rc == that.$util.RC.SUCCESS){
+                        that.tableData = JSON.parse(res.data.c)
+                        if( that.tableData.length <that.count){
+                            that.pageOver = true
+                        }else{
+                            that.pageOver = false
+                        }
+                }
+                })
+
+
+            },
+            //表格分页
+            changePage(page){
+                this.page = page
+                let that = this
+                let cnt ={
+                    districtId: localStorage.getItem('areaId'), // Long 区id
+                    offset:(page-1)*this.count,
+                    count:this.count
+                }
+                if(this.org.length >0){
+                    cnt.orgIds = this.org
+                }
+                if(this.year.length >0){
+                    cnt.buildTimes = this.year
+                }else{
+                    cnt.buildTimes = this.yearList
+                }
+                if(this.resType.length >0){
+                    cnt.resTypes = this.resType
+                }
+                if(this.assetType.length >0){
+                    cnt.assetTypes = this.assetType
+                }
+                if(this.businessMode.length>0){
+                    cnt.businessModes = this.businessMode
+                }
+
+                this.$api.getAssetListByTypes(cnt,function (res) {
+                    if(res.data.rc == that.$util.RC.SUCCESS){
+                        that.tableData = JSON.parse(res.data.c)
+                        if(that.tableData.length < that.count){
+                            that.pageOver = true
+                        }else{
+                            that.pageOver = false
+                        }
+                    }
+                })
+            },
+            //查询统计图
             searchBtn(){
                 let that =this
+                this.isList = false
                 this.chartData.rows = []
                 let cnt ={
                     districtId: localStorage.getItem('areaId'), // Long 区id
@@ -196,6 +336,14 @@
                         }
                     }
                 })
+            },
+            //查看详情
+            infoBtn(info){
+                this.$router.push({
+                    path:'/assetsInfo',
+                    name:'assetsInfo',
+                    params:{info:info}
+                })
             }
         },
         mounted(){
@@ -205,11 +353,11 @@
                 districtId: localStorage.getItem('areaId'),
             }
             console.log(cnt)
+
+
             //初始化数据
             //org列表
             this.$api.getORGSByDistrictId(cnt,function (res) {
-                console.log('1111')
-                console.log(res)
                 that.orgList = JSON.parse(res.data.c)
                 console.log( that.orgList)
             })
@@ -217,7 +365,6 @@
             this.$api.getAssetType(cnt,function (res) {
                 that.assetTypeList = JSON.parse(res.data.c)
                 console.log()
-
             })
             //请求资源类型--列表
             this.$api.getResType(cnt,function (res) {

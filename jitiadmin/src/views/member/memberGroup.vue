@@ -395,7 +395,7 @@
               }
             },
             loadExcl() {
-                window.location.href = "/用户模板.xlsx"
+                window.location.href = this.$baseURL+"用户模板.xlsx"
             },
 
 
@@ -466,6 +466,7 @@
                             people: 'test'
                         }
                     }).then(res => {
+
                         //导入用户
                         let address = res.res.requestUrls[0]
                         console.log(address)
@@ -841,6 +842,7 @@
         },
         mounted(){
             let that = this
+            let that1 = this
             let orgId = localStorage.getItem('orgId')
             this.address = 'user/'+orgId+'/'
 
@@ -858,8 +860,10 @@
                 offset: this.offset
             }
             this.$api.getORGUsers(cnt1, function (res2) {
+
                 that.tableData = JSON.parse(res2.data.c)
-                console.log(that.tableData)
+                console.log(   that.tableData)
+
                 if (that.tableData.length < that.count) {
                     that.pageOver = true
                 } else {
@@ -870,19 +874,22 @@
             //分组列表
             this.$api.getORGUserSysTagGroups(cnt,function (res) {
                 let data = JSON.parse(res.data.c)
+
                 that.grandId = data[0].groupId
                 let cnt2 = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
                     groupId:that.grandId, // Long 分组编号
                 };
+
                 that.$api.getTagGroupTree(cnt2,function (res) {
-                    if (res.data.rc == that.$util.RC.SUCCESS) {
+                    if (res.data.rc == that1.$util.RC.SUCCESS) {
                         if (res.data.c == '{}') {
-                            that.groups = ''
+                            that1.groups = ''
                         } else {
-                            that.groups = JSON.parse(res.data.c)
+                            that1.groups = JSON.parse(res.data.c)
                         }
                     }
+
                 })
             })
             //请求所有组织用户数据（无分页/等修改）

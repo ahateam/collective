@@ -7,11 +7,17 @@ import dashboard from './views/home/dashboard'
 import page from './views/home/page'
 import mech from './views/mech/mech'
 import asset from './views/asset/asset'
+import assetsInfo from './views/asset/assetsInfo'
+import vote from './views/vote/vote'
+import voteInfo from './views/vote/voteInfo'
+import voteUser from './views/vote/voteUser'
+
+
 
 Vue.use(Router)
 
 export default new Router({
-    mode: 'history',
+    mode: 'hash',
     base: process.env.BASE_URL,
     routes: [
         {
@@ -38,8 +44,27 @@ export default new Router({
                     path:'/asset',
                     name:'asset',
                     component:asset
+                },
+                {
+                    path:'/assetsInfo',
+                    name:'assetsInfo',
+                    component:assetsInfo
+                },
+                {
+                    path:'/vote',
+                    name:'vote',
+                    component:vote
+                },
+                {
+                    path:'/voteInfo',
+                    name:'voteInfo',
+                    component:voteInfo
+                },
+                {
+                    path:'/voteUser',
+                    name:'voteUser',
+                    component:voteUser
                 }
-
             ]
         },
         {

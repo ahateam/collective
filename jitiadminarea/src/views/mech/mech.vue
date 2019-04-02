@@ -42,12 +42,13 @@
                             label="操作">
                         <template slot-scope="scope">
                             <el-button @click="infoBtn(scope.row)" type="text" size="small">详情</el-button>
-                            <el-button type="text" size="small">修改状态</el-button>
+                            <el-button type="text" size="small" @click="editStatusBtn(scope.row)">修改审核</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </template>
         </el-row>
+
         <el-dialog title="机构详情" :visible.sync="infoShow">
 
                 <el-col :span="24">
@@ -123,7 +124,7 @@
 
             <el-col :span="24" style="margin-top: 10px">
                 <el-col :span="6">
-                    <div class="title-box">更改状态:</div>
+                    <div class="title-box">更改审核:</div>
                 </el-col>
                 <el-col :span="18">
                     <div class="text-box">
@@ -145,6 +146,33 @@
                 <el-button type="primary" @click="Btn">确认审核</el-button>
             </div>
         </el-dialog>
+
+
+        <el-dialog title="修改审核" :visible.sync="statusShow">
+            <el-form >
+                <el-col :span="6">
+                    <div class="title-box">更改审核:</div>
+                </el-col>
+                <el-col :span="18">
+                    <div class="text-box">
+                        <el-select v-model="examine" placeholder="选择更改状态">
+                            <el-option
+                                    v-for="item in examineList"
+                                    :key="item.key"
+                                    :label="item.val"
+                                    :value="item.key">
+                            </el-option>
+                        </el-select>
+                    </div>
+
+                </el-col>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="statusShow = false">取 消</el-button>
+                <el-button type="primary" @click="Btn">确 定</el-button>
+            </div>
+        </el-dialog>
+
     </div>
 
 
@@ -166,7 +194,9 @@
                 examine:'',
                 examineList:[
                     {key:0,val:'正在申请'},{key:1,val:'申请通过'},{key:2,val:'申请失败'}
-                ]
+                ],
+                statusShow:false,
+
             }
         },
         methods:{
@@ -199,6 +229,11 @@
                 this.infoShow = true
                 this.examine = this.info.examine
             },
+            editStatusBtn(info){
+                this.info = info
+                this.statusShow = true
+                this.examine = this.info.examine
+            },
             //审核
             Btn(){
                 let that = this
@@ -225,17 +260,15 @@
                     }
                     that.$router.push('/page')
                 })
-            }
-
-
+            },
         },
         mounted(){
             let that = this
             let cnt = {
                 areaId: localStorage.getItem('areaId'),
                 examine:this.isActive,
-                count: this.count, // Integer
-                offset: this.offset, // Integer
+                count: this.count,
+                offset: this.offset,
             }
             this.$api.getORGExamine(cnt,function (res) {
                 that.tableData = JSON.parse(res.data.c)

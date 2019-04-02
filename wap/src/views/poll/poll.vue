@@ -148,8 +148,12 @@
                 offset: this.offset,
             }
             this.$api.getVotes(cnt,function (res) {
-                that.voteList = JSON.parse(res.data.c)
-                console.log(that.voteList)
+                if(res.data.rc == that.$util.RC.SUCCESS){
+                    that.voteList = JSON.parse(res.data.c)
+                    console.log(that.voteList)
+                }
+
+
             })
 
 
