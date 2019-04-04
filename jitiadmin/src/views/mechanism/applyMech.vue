@@ -75,12 +75,12 @@
         },
         methods:{
             statusFliter(row,col,value){
-                if(value == 0){
-                    return '正在申请'
-                }else if(value == 1){
-                    return '申请成功'
+                if(value == '0' ||value =='3'){
+                    return '等待审核'
+                }else if(value == '1'){
+                    return '审核成功'
                 }else{
-                    return '申请失败'
+                    return '审核失败'
                 }
             },
             //详情跳转

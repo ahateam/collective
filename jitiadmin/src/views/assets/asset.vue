@@ -265,7 +265,7 @@
         },
         methods: {
             loadExcl() {
-                window.location.href = "/固定资产表.xlsx"
+                window.location.href = this.$baseURL+"固定资产表.xlsx"
             },
 
 

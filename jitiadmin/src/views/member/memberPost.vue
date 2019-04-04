@@ -358,7 +358,7 @@
 
 
             loadExcl() {
-                window.location.href = this.$baseURL+"/用户模板.xlsx"
+                window.location.href = this.$baseURL+"用户模板.xlsx"
             },
 
 

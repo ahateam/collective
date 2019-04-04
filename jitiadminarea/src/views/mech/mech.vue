@@ -5,6 +5,8 @@
                 <div class="tab-box">
                     <el-tag style="cursor: pointer;" @click="activeBtn(0)" v-if="isActive == 0">正在申请</el-tag>
                     <el-tag style="cursor: pointer;" type="info" @click="activeBtn(0)" v-if="isActive != 0">正在申请</el-tag>
+                    <el-tag style="margin-left: 20px;cursor: pointer;" @click="activeBtn(3)" v-if="isActive == 3">再次申请</el-tag>
+                    <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click="activeBtn(3)" v-if="isActive != 3">再次申请</el-tag>
                     <el-tag style="margin-left: 20px;cursor: pointer;" @click="activeBtn(1)" v-if="isActive == 1">成功申请</el-tag>
                     <el-tag type="info" style="margin-left: 20px;cursor: pointer;" @click="activeBtn(1)" v-if="isActive != 1">成功申请</el-tag>
                     <el-tag style="margin-left: 20px;cursor: pointer;" @click="activeBtn(2)" v-if="isActive == 2">失败申请</el-tag>
@@ -47,6 +49,11 @@
                     </el-table-column>
                 </el-table>
             </template>
+            <p>
+                当前第 {{page}} 页
+                <el-button type="primary" size="mini"  :disabled="page==1"  @click="changePage(page-1)">上一页</el-button>
+                <el-button type="primary" size="mini" :disabled="pageOver ==true"  @click="changePage(page+1)">下一页</el-button>
+            </p>
         </el-row>
 
         <el-dialog title="机构详情" :visible.sync="infoShow">
@@ -185,6 +192,9 @@
         data() {
             return {
                 tableData:[],
+                page:1,
+                pageOver:false,
+
                 count:10,
                 offset:0,
 
@@ -193,16 +203,39 @@
                 info:'',
                 examine:'',
                 examineList:[
-                    {key:0,val:'正在申请'},{key:1,val:'申请通过'},{key:2,val:'申请失败'}
+                    {key:0,val:'正在申请'},{key:3,val:'再次申请'},{key:1,val:'申请通过'},{key:2,val:'申请失败'}
                 ],
                 statusShow:false,
+
+
 
             }
         },
         methods:{
+            changePage(page){
+                let that = this
+                this.page = page
+                let offset = (page-1)*this.count
+                let cnt = {
+                    areaId: localStorage.getItem('areaId'),
+                    examine:this.isActive,
+                    count: this.count, // Integer
+                    offset: offset, // Integer
+                }
+                this.$api.getORGExamine(cnt,function (res) {
+                    that.tableData = JSON.parse(res.data.c)
+                    if(that.tableData.length < that.count){
+                        that.pageOver = true
+                    }else{
+                        that.pageOver = false
+                    }
+                })
+            },
+
             activeBtn(index){
                 this.isActive= index
                 let that = this
+                this.page = 1
                 let cnt = {
                     areaId: localStorage.getItem('areaId'),
                     examine:this.isActive,
@@ -210,16 +243,23 @@
                     offset: this.offset, // Integer
                 }
                 this.$api.getORGExamine(cnt,function (res) {
+
                     that.tableData = JSON.parse(res.data.c)
-                    console.log(that.tableData)
+                    if(that.tableData.length < that.count){
+                        that.pageOver = true
+                    }else{
+                        that.pageOver = false
+                    }
                 })
             },
             statusFliter(row,col,value){
-                if(value == 0){
+                if(value == '0'){
                     return '正在申请'
-                }else if(value == 1){
+                }else if(value == '1'){
                     return '申请成功'
-                }else{
+                }else if(value == '3'){
+                    return '再次申请审核'
+                }else {
                     return '申请失败'
                 }
             },
@@ -272,7 +312,11 @@
             }
             this.$api.getORGExamine(cnt,function (res) {
                 that.tableData = JSON.parse(res.data.c)
-                console.log(that.tableData)
+                if(that.tableData.length < that.count){
+                    that.pageOver = true
+                }else{
+                    that.pageOver = false
+                }
             })
 
         }

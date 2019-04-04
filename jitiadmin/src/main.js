@@ -10,11 +10,13 @@ import constData from './assets/api/util/constData'
 import axios from 'axios'
 import util from 'ahaapi'
 import api from './assets/api/util/utils'
-import config from '../vue.config.js'
+
+import vueConfig from '../vue.config.js'
+
 
 Vue.use(VDistpicker)
 Vue.use(ElementUI)
-Vue.prototype.$baseURL = config.baseUrl
+Vue.prototype.$baseURL = vueConfig.baseUrl
 
 Vue.config.productionTip = false
 

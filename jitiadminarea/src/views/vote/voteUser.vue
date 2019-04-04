@@ -161,6 +161,7 @@
                 this.searchData = userInfo.realName
                 this.searchDataId = userInfo.id
                 let cnt = {
+                    orgId:this.org,
                     userId: this.searchDataId, // Long 用户编号
                     count: this.count, // Integer
                     offset: this.offset, // Integer

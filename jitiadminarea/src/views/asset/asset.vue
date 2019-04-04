@@ -44,8 +44,8 @@
                             <el-option
                                     v-for="(item,index) in resTypeList"
                                     :key="index"
-                                    :label="item"
-                                    :value="item">
+                                    :label="item.name"
+                                    :value="item.name">
                             </el-option>
                         </el-select>
                     </el-col>
@@ -64,8 +64,8 @@
                             <el-option
                                     v-for="(item,index) in assetTypeList"
                                     :key="index"
-                                    :label="item"
-                                    :value="item">
+                                    :label="item.name"
+                                    :value="item.name">
                             </el-option>
                         </el-select>
                     </el-col>
@@ -84,8 +84,8 @@
                             <el-option
                                     v-for="(item,index) in businessModeList"
                                     :key="index"
-                                    :label="item"
-                                    :value="item">
+                                    :label="item.name"
+                                    :value="item.name">
                             </el-option>
                         </el-select>
                     </el-col>
@@ -99,7 +99,7 @@
                     <el-col :span="18" style="line-height: 4rem">
                         <el-select v-model="year"
                                    multiple
-                                   placeholder="不选择默认为所有年份"
+                                   placeholder="不选择默认为近五年年份"
                                    style="margin-left: 20px; width: 100%;">
                             <el-option
                                     v-for="(item,index) in yearList"
@@ -196,6 +196,8 @@
                 yearList:[],                //年份列表
 
                 year:[],
+                defaultYear:[],              //默认近五年年份
+
                 org: [],
                 resType:[],
                 assetType:[],
@@ -301,11 +303,13 @@
                  if(this.org.length >0){
                     cnt.orgIds = this.org
                  }
+
                  if(this.year.length >0){
                      cnt.buildTimes = this.year
                  }else{
-                     cnt.buildTimes = this.yearList
+                     cnt.buildTimes = this.defaultYear
                  }
+
                  if(this.resType.length >0){
                      cnt.resTypes = this.resType
                  }
@@ -348,7 +352,25 @@
         },
         mounted(){
             let that = this
-            let that1 = this
+
+
+
+
+            let nowYear = new Date().getFullYear()
+
+            //年份取值默认为近20年
+            this.yearList = []
+            for(let i=19;i>=0;i--){
+                this.yearList.push(nowYear-i)
+            }
+
+            //默认近五年数据
+            let yearArr = []
+            for(let i=4;i>=0;i--){
+                yearArr.push(nowYear-i)
+            }
+            this.defaultYear = yearArr
+
             let cnt ={
                 districtId: localStorage.getItem('areaId'),
             }
@@ -371,33 +393,32 @@
                 that.resTypeList = JSON.parse(res.data.c)
             })
             //请求创建时间（年份） --列表
-            this.$api.getBuildTime(cnt,function (res) {
-                that.yearList = JSON.parse(res.data.c)
-                let cnt1 = {
-                    districtId: localStorage.getItem('areaId'),
-                    buildTimes:that.yearList
-                }
-                that.$api.districtCountByYears(cnt1,function (res) {
-                    that1.data = JSON.parse(res.data.c)
-                    for(let i=0;i<that1.data.length;i++){
-                        if(that1.data[i].build_time == undefined || that1.data[i].build_time == null) {
-                            let obj = {
-                                '年份':cnt1.buildTimes[i],
-                                '原值':0,
-                                '产值':0
-                            }
-                            that1.chartData.rows.push(obj)
-                        }else {
-                            let obj = {
-                                '年份':that1.data[i].build_time,
-                                '原值':that1.data[i].originPrice,
-                                '产值':that1.data[i].yearlyIncome
-                            }
-                            that1.chartData.rows.push(obj)
+            let cnt1 = {
+                districtId: localStorage.getItem('areaId'),
+                buildTimes:this.defaultYear
+            }
+            this.$api.districtCountByYears(cnt1,function (res) {
+                that.data = JSON.parse(res.data.c)
+                for(let i=0;i<that.data.length;i++){
+                    if(that.data[i].build_time == undefined || that.data[i].build_time == null) {
+                        let obj = {
+                            '年份':cnt1.buildTimes[i],
+                            '原值':0,
+                            '产值':0
                         }
+                        that.chartData.rows.push(obj)
+                    }else {
+                        let obj = {
+                            '年份':that.data[i].build_time,
+                            '原值':that.data[i].originPrice,
+                            '产值':that.data[i].yearlyIncome
+                        }
+                        that.chartData.rows.push(obj)
                     }
-                })
+                }
             })
+
+
             //请求经营方式--列表
             this.$api.getBusinessMode(cnt,function (res) {
                 that.businessModeList = JSON.parse(res.data.c)

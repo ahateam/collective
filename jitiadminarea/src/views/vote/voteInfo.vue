@@ -52,7 +52,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="showUserList = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">返回选项列表</el-button>
+                <el-button type="primary" @click="showUserList = false">返回选项列表</el-button>
             </span>
         </el-dialog>
 
@@ -98,6 +98,7 @@
                     }
 
                     if(that.userList.length>0){
+                        that.list = []
                         for(let i =0;i<that.userList.length;i++){
                             let info = {}
                             let cnt1 = {
@@ -109,7 +110,7 @@
                                     that1.list.push(info)
                                 }
                             })
-                            if(i < that1.count-1){
+                            if(i < that.count-1){
                                 that.pageOver = true
                             }else{
                                 that.pageOver = false
@@ -123,6 +124,7 @@
                 console.log(info)
                 let that = this
                 let that1 = this
+                this.page= 1
                 this.showUserList = true
                 this.optionId =  info.id
                 let cnt ={
@@ -137,6 +139,7 @@
                         }
 
                         if(that.userList.length>0){
+                            that.list = []
                             for(let i =0;i<that.userList.length;i++){
                                 let info = {}
                                 let cnt1 = {
@@ -151,7 +154,7 @@
 
                                     }
                                 })
-                                if(i < that1.count-1){
+                                if(i < that.count-1){
                                     that.pageOver = true
                                 }else{
                                     that.pageOver = false

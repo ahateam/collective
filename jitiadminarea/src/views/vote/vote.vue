@@ -108,7 +108,7 @@
             return{
                 isList:false,
                 chartData: {
-                    columns: ['是否参与', '人数'],
+                    columns: ['是否参与', '占比'],
                     rows: []
                 },
                 orgList: [],          //组织列表
@@ -195,10 +195,16 @@
                 }
                 this.$api.countVoteTurnout(cnt,function (res) {
                     if(res.data.rc == that.$util.RC.SUCCESS){
-                        let resData = JSON.parse(res.data.c)
+
+                        let resData = 0
+                        if(res.data.c == 'null' || res.data.c == null){
+                            resData = 0
+                        }else{
+                            resData = JSON.parse(res.data.c).toFixed(4)
+                        }
                         let rows  =  [
-                            { '是否参与': '已参与', '人数': resData.countTicket },
-                            { '是否参与': '未参与', '人数': parseInt( resData.countQuorum)-parseInt(resData.countTicket)},
+                            { '是否参与': '已参与', '占比': resData*100 },
+                            { '是否参与': '未参与', '占比': 100-resData*100},
                         ]
                         that.chartData.rows = rows
                     }
@@ -269,11 +275,16 @@
                 that.$api.countVoteTurnout(cnt1,function (res1) {
                     console.log(res1)
                     if(res1.data.rc == that1.$util.RC.SUCCESS){
-                        let resData = JSON.parse(res1.data.c)
+                        let resData = 0
+                        if(res.data.c == 'null' || res.data.c == null){
+                            resData = 0
+                        }else{
+                            resData = JSON.parse(res1.data.c).toFixed(4)
+                        }
 
                         let rows  =  [
-                            { '是否参与': '已参与', '人数': resData.countTicket },
-                            { '是否参与': '未参与', '人数':parseInt( resData.countQuorum)-parseInt(resData.countTicket)},
+                            { '是否参与': '已参与', '占比': resData*100 },
+                            { '是否参与': '未参与', '占比':100-resData*100},
                         ]
                         that1.chartData.rows = rows
                         console.log(rows)

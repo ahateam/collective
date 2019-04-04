@@ -79,7 +79,7 @@
             </el-col>
             <el-col :span="24" class="row-box2">
                 <el-button type="primary" @click="edit">修改机构信息</el-button>
-               <router-link to="/mechanism">
+               <router-link to="/applyMech">
                    <el-button style="margin-left: 50px">返回机构列表</el-button>
                </router-link>
             </el-col>
