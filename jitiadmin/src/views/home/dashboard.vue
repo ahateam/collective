@@ -65,6 +65,10 @@
                 lineChartData: lineChartData.newVisitis
             }
         },
+        mounted(){
+            const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
+            loading.close()
+        }
     }
 </script>
 

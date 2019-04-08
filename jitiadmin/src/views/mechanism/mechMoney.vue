@@ -112,6 +112,18 @@
           }
         },
         methods:{
+            //ajax请求封装层
+            editORGExt(cnt){
+                this.$api.editORGExt(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('修改成功')
+                        this.isEdit = false
+                    }else{
+                        this.$message.error('修改失败')
+                    }
+                })
+            },
+
             editShow(){
                 this.isEdit = true
             },
@@ -129,17 +141,7 @@
                   investment: this.investment, // Double <选填> 对外投资
                   valuation: this.valuation, // Double <选填> 估值
               }
-             this.$api.editORGExt(cnt,function (res) {
-                 if(res.data.rc == that.$util.RC.SUCCESS){
-                     that.$message({
-                         message: '修改成功',
-                         type: 'success'
-                     });
-                     that.isEdit = false
-                 }else{
-                     that.$message.error('修改失败');
-                 }
-             })
+              this.editORGExt(cnt)
             }
         },
         mounted(){
@@ -153,8 +155,6 @@
             this.financialBudget = this.info.financialBudget
             this.investment = this.info.investment
             this.valuation = this.info.valuation
-
-            console.log(this.info)
         }
 
     }

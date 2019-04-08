@@ -159,11 +159,24 @@
             VDistpicker
         },
         methods: {
+            //ajax事件请求层
+            oRGApplyAgain(cnt){
+                this.$api.oRGApplyAgain(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('修改成功，等待审核')
+                    }else{
+                        this.$message.error('操作失败')
+                    }
+                    this.$router.push('/applyMech')
+                })
+            },
+
+
+            //普通事件层
             //进度条
             getProgress(p){
                 this.num = p
             },
-
             //开始导入到oss
             doUpload(file,type) {
                 this.$emit('getProgress', 0)
@@ -171,9 +184,6 @@
                 this.size = file.size
                 let tmpName = date.getTime()+''+encodeURIComponent(file.name)
                 tmpName =this.ossAddress+ tmpName
-
-                console.log(tmpName)
-
                 this.multipartUpload(tmpName, file,type)
             },
             //分片上传
@@ -226,7 +236,6 @@
                     console.log(e)
                 }
             },
-
             // 获取文件名显示
             sel: function (data) {
                 this.province = data.province.value
@@ -235,19 +244,14 @@
             },
             getMechData(event) {
                 this.mechCodeImg = event.target.files[0]
-                console.log(this.mechCodeImg)
                 this.doUpload(this.mechCodeImg,'code')
             },
             getMechData1(event) {
                 this.mechGrantImg = event.target.files[0]
-                console.log(this.mechGrantImg)
                 this.doUpload(this.mechGrantImg,'grant')
             },
-
-
-
+            //修改组织信息
             submitBtn(){
-                let that = this
                 if(this.name =='' || this.province == '' || this.address == '' ||this.code == '' ){
                     this.$message({
                         showClose: true,
@@ -269,23 +273,13 @@
                         imgAuth: this.mechGrantImgUrl,
                         shareAmount: this.shareAmount,
                     };
-                    this.$api.oRGApplyAgain(cnt,function (res) {
-                        console.log(res)
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            that.$message.success('修改成功，等待审核')
-                        }else{
-                            that.$message.error('操作失败')
-                        }
-                        that.$router.push('/applyMech')
-                    })
+                    this.oRGApplyAgain(cnt)
 
                 }
             }
         },
         mounted(){
-            let that = this
             this.info = this.$route.params.info
-            console.log(this.info)
             this.name = this.info.name
             this.address = this.info.address
             this.code = this.info.code
@@ -296,7 +290,7 @@
             this.mechCodeImgUrl = this.info.imgOrg
             this.mechGrantImgUrl = this.info.imgAuth
 
-            console.log(this.mechGrantImgUrl)
+
             let date = new Date()
             let year =''+date.getFullYear()
             let month =''+date.getMonth()+1

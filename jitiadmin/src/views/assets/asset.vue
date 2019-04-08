@@ -213,8 +213,6 @@
             return {
                 loadData:false,
                 orgName:'',     //机构名称
-
-
                 importModal:false,  //导入资产弹出框
                 fileName:'',    //文件上传
                 fileData:[],
@@ -223,8 +221,6 @@
                 multipleSelection:[],
                 address:'',     //导入地址
 
-
-
                 //用户列表
                 offset:0,
                 count:10,
@@ -232,14 +228,12 @@
                 page:1,
                 pageOver:false,
 
-
                 //新增成员
                 name:'',
                 idNumber:'',
                 mobile:'',
                 weight:'',
                 shareAmount:'',
-
 
                 //分组列表
                 groups:[],
@@ -253,8 +247,6 @@
                     label: 'keyword'
                 },
 
-
-
                 nowNode:'',                     //当前选中的分组
 
                 //分组操作-穿梭框相关
@@ -264,11 +256,77 @@
             }
         },
         methods: {
-            loadExcl() {
-                window.location.href = this.$baseURL+"固定资产表.xlsx"
+            //ajax请求封装层
+            //导入资产列表
+            importAssets(cnt){
+                this.$api.importAssets(cnt,(res)=>{
+                    this.loadData = false
+                    this.$message({
+                        message: '导入完成，稍后刷新',
+                        type: 'success'
+                    });
+                    this.$router.push('/page')
+                })
+            },
+            //根据条件查询--对应资产列表
+            queryAssets(cnt){
+              this.$api.queryAssets(cnt,(res)=>{
+                  this.tableData = JSON.parse(res.data.c)
+                  if (this.tableData.length < this.count) {
+                      this.pageOver = true
+                  } else {
+                      this.pageOver = false
+                  }
+              })
+            },
+            //根据分组信息获取资产列表
+            getAssetsByGroups(cnt){
+              this.$api.getAssetsByGroups(cnt,(res)=>{
+                  this.tableData = JSON.parse(res.data.c)
+                  if (this.tableData.length < this.count) {
+                      this.pageOver = true
+                  } else {
+                      this.pageOver = false
+                  }
+              })
+            },
+            //新增分组
+            createORGUserTagGroup(cnt){
+                this.$api.createORGUserTagGroup(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$router.push('/page')
+                    }
+                })
+            },
+            //删除资产
+            delAsset(cnt){
+                this.$api.delAsset(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('删除成功!')
+                    }else{
+                        this.$message.error('删除出错!')
+                    }
+                    this.$router.push('/page')
+                })
+            },
+            //移入资产
+            batchEditAssetsGroups(cnt){
+                this.$api.batchEditAssetsGroups(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('移入成功')
+                    }else{
+                        this.$message.error('移入失败')
+                    }
+                    this.$router.push('/page')
+                })
             },
 
 
+            //普通事件层
+            //下载资产模板
+            loadExcl() {
+                window.location.href = this.$baseURL+"固定资产表.xlsx"
+            },
             //导入文件上传相关
             //关闭弹出框，重置上传的文件的相关变量
             closeBtn() {
@@ -277,23 +335,13 @@
                 this.url = ''
             },
             //讲已经导入到oss的文件传递给服务端进行数据库导入
-            importAssets(){
-                let that = this
-                if(that.url != '' || that.url != undefined){
+            importAssetsFile(){
+                if(this.url != '' || this.url != undefined){
                     let cnt = {
                         orgId:localStorage.getItem('orgId'),
                         url:this.url
                     }
-                    this.$api.importAssets(cnt,function (res) {
-                        that.loadData = false
-                        that.$message({
-                            message: '导入完成，稍后刷新',
-                            type: 'success'
-                        });
-                        that.$router.push('/page')
-                    })
-
-
+                    this.importAssets(cnt)
                 }
             },
             //进度条
@@ -329,20 +377,17 @@
                             people: 'test'
                         }
                     }).then(res => {
-                        //导入用户
+                        //导入资产
                         let address = res.res.requestUrls[0]
                         let _index =address.indexOf('?')
                         console.log(_index)
                         if(_index == -1){
                             _this.url = address
-                            _this.importAssets()
+                            _this.importAssetsFile()
                         }else{
                             _this.url = address.substring(0,_index)
-                            _this.importAssets()
+                            _this.importAssetsFile()
                         }
-
-
-
                     }).catch(err => {
                         console.log(result)
                         console.log(err)
@@ -364,65 +409,37 @@
             handleClose(done) {
                 done();
             },
-
             delMore() {
                 console.log(this.multipleSelection)
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-
-
-
-
             //上一页下一页
             changePage(key) {
-                let that = this
                 if (key == 0) {   //上一页
                     this.page = this.page - 1
                 } else {          //下一页
                     this.page = this.page + 1
                 }
-
                 let offset = (this.page - 1) * this.count
-
                 if(this.nowNode == ''){
-
                     //请求所有的资产列表
                     let cnt1 = {
                         orgId:localStorage.getItem('orgId'),
                         count:this.count,
                         offset:offset
                     }
-                    this.$api.queryAssets(cnt1,function (res) {
-
-                        that.tableData = JSON.parse(res.data.c)
-                        console.log(  that.tableData)
-                        if (that.tableData.length < that.count) {
-                            that.pageOver = true
-                        } else {
-                            that.pageOver = false
-                        }
-                    })
+                    this.queryAssets(cnt1)
                 }else {
-
                     let group = [this.nowNode.groupId]
-
                     let cnt = {
                         orgId: localStorage.getItem('orgId'), // Long 组织编号
                         groups:group, // Array <选填> 角色分组,JSONArray格式
                         count: this.count, // Integer
                         offset: offset, // Integer
                     }
-
-                    this.$api.getAssetsByGroups(cnt,function (res) {
-                        that.tableData = JSON.parse(res.data.c)
-                        if (that.tableData.length < that.count) {
-                            that.pageOver = true
-                        } else {
-                            that.pageOver = false
-                        }
-                    })
+                   this.getAssetsByGroups(cnt)
                 }
             },
 
@@ -440,33 +457,17 @@
 
             //根据不同分组请求资产列表
             handleNodeClick(data,node) {
-                let that = this
                 this.offset = 0
                 this.page = 1
                 this.nowNode = data;
-
                 let group = [data.groupId]
-
                 let cnt = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
                     groups:group, // Array <选填> 角色分组,JSONArray格式
                     count: this.count, // Integer
                     offset: this.offset, // Integer
                 }
-
-            console.log(cnt)
-                this.$api.getAssetsByGroups(cnt,function (res) {
-                    that.tableData = JSON.parse(res.data.c)
-                    if (that.tableData.length < that.count) {
-                        that.pageOver = true
-                    } else {
-                        that.pageOver = false
-                    }
-                })
-
-
-
-
+                this.getAssetsByGroups(cnt)
             },
             append( node,data) {
                 this.addgroupModal = true
@@ -483,11 +484,8 @@
                 const index = children.findIndex(d => d.id === data.id);
                 children.splice(index, 1);
             },
-
             //新增分组
-
             addGroupBtn(){
-                let that = this
                 if(this.keywordAdd == ''){
                     this.$message.error('请输入分组名')
                 }else{
@@ -498,25 +496,17 @@
                         keyword: this.keywordAdd, // String 分组关键字
                         remark: this.keywordAdd, // String
                     }
-                    this.$api.createORGUserTagGroup(cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            that.$router.push('/page')
-                        }
-                    })
+                    this.createORGUserTagGroup(cnt)
                 }
             },
-
-
             handleChange(value, direction, movedKeys) {
                 console.log(value, direction, movedKeys);
             },
             filterMethod(query, item) {
                 return item.name.indexOf(query) > -1;
             },
-
             //请求所有资产
             allAsset(){
-                let that = this
                 this.nowNode = ''
                 this.offset = 0
                 this.page = 1
@@ -526,15 +516,7 @@
                     count:this.count,
                     offset:this.offset
                 }
-                this.$api.queryAssets(cnt1,function (res) {
-                    that.tableData = JSON.parse(res.data.c)
-                    console.log(  that.tableData)
-                    if (that.tableData.length < that.count) {
-                        that.pageOver = true
-                    } else {
-                        that.pageOver = false
-                    }
-                })
+                this.queryAssets(cnt1)
             },
             //批量导入某一分组的用户列表
             addModal(){
@@ -556,22 +538,8 @@
                     let cnt = {
                         assetId:info.id
                     }
-                    this.$api.delAsset(cnt,function (res) {
-                        console.log(res)
-                        console.log(that.$util.RC.SUCCESS)
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            that.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                            });
-                        }else{
-                            that.$message({
-                                type: 'error',
-                                message: '删除出错!'
-                            });
-                        }
-                        that.$router.push('/page')
-                    })
+                    this.delAsset(cnt)
+
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -592,9 +560,6 @@
 
             //批量移入资产
             addBtn(){
-                console.log(this.assetData)
-                console.log(this.nowNode.groupId)
-                let that = this
                 if(this.assetData.length == 0){
                     this.$message.error('请至少选择一个用户引入该分组')
                 }else{
@@ -604,42 +569,32 @@
                         assetIds: this.assetData, // JSONArray 用户编号列表，JSONArray格式
                         groups: [groupId], // JSONArray 分组信息列表，JSONArray格式
                     }
-                    this.$api.batchEditAssetsGroups(cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            that.$message.success('移入成功')
-                        }else{
-                            that.$message.error('移入失败')
-                        }
-                        that.$router.push('/page')
-                    })
-
+                    this.batchEditAssetsGroups(cnt)
                 }
             },
 
         },
         mounted(){
+            const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let that = this
             this.orgName = localStorage.getItem('orgName')
             let orgId = localStorage.getItem('orgId')
             this.address = 'asset/'+orgId+'/'
             let cnt ={}
             //分组列表
-            this.$api.getORGUserSysTagGroups(cnt,function (res) {
+            this.$api.getORGUserSysTagGroups(cnt,(res)=>{
                 let data = JSON.parse(res.data.c)
                 that.grandId = data[0].groupId
-                console.log('1111')
-                console.log(data)
                 let cnt2 = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
-                    groupId:that.grandId, // Long 分组编号
+                    groupId:this.grandId, // Long 分组编号
                 };
-                console.log(cnt2)
-                that.$api.getTagGroupTree(cnt2,function (res) {
-                    if (res.data.rc == that.$util.RC.SUCCESS) {
-                        if (res.data.c == '{}') {
-                            that.groups = ''
+                this.$api.getTagGroupTree(cnt2,(res1)=>{
+                    if (res1.data.rc == this.$util.RC.SUCCESS) {
+                        if (res1.data.c == '{}') {
+                            this.groups = ''
                         } else {
-                            that.groups = JSON.parse(res.data.c)
+                            this.groups = JSON.parse(res1.data.c)
                         }
                     }
                 })
@@ -651,16 +606,8 @@
                 count:this.count,
                 offset:this.offset
             }
-            this.$api.queryAssets(cnt1,function (res) {
-
-                that.tableData = JSON.parse(res.data.c)
-                console.log(  that.tableData)
-                if (that.tableData.length < that.count) {
-                    that.pageOver = true
-                } else {
-                    that.pageOver = false
-                }
-            })
+            this.queryAssets(cnt1)
+            loading.close()
 
             //请求所有的资产列表（无分页/等修改）
             let cnt2={
@@ -670,7 +617,6 @@
             }
             this.$api.queryAssets(cnt2,function (res) {
                 that.assetList = JSON.parse(res.data.c)
-                console.log(that.assetList)
             })
         }
     }

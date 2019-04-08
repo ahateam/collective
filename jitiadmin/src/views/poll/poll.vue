@@ -64,7 +64,7 @@
                                     <el-button @click="editVoteBtn(scope.row)" type="text" size="small">编辑</el-button>
                                     <el-button @click="editStatus(scope.row)" type="text" size="small">更改状态</el-button>
                                     <!--<el-button @click="putRes(scope.row)" type="text" size="small">结论打印</el-button>-->
-                                    <el-button @click="delVote(scope.row)" type="text" size="small" style="color: #f44;">删除</el-button>
+                                    <el-button @click="delVoteModal(scope.row)" type="text" size="small" style="color: #f44;">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -121,14 +121,56 @@
             }
         },
         methods:{
+            //ajax请求层
+            //启用/禁用投票
+            setVoteActivation(cnt){
+                this.$api.setVoteActivation(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('禁用成功')
+                    }else{
+                        this.$message.error('操作失败')
+                    }
+                    this.$router.push('/page')
+                })
+            },
+            //删除投票的选项
+            delVote(cnt){
+                this.$api.delVote(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('删除表决成功！')
+                    }else{
+                        this.$message.error('删除表决失败！')
+                    }
+                    this.$router.push('/page')
+                })
+            },
+            //
+            getVotes(cnt){
+                this.$api.getVotes(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.tableData = JSON.parse(res.data.c)
+                    }else{
+                        this.tableData = []
+                    }
+                    if(this.tableData.length <this.count){
+                        this.pageOver = true
+                    }else{
+                        this.pageOver = false
+                    }
+                })
+            },
 
+
+
+
+
+            //数据过滤层
             //所有的议程
             timeFilter(row, col, value){
                 let timer = new Date(value)
                 let time = timer.toLocaleDateString()+ ' '+timer.toLocaleTimeString('chinese',{hour12:false})
                 return time
             },
-
             templateFilter(row, col, value) {
                 if (value == '0') {
                     return '选举投票'
@@ -151,7 +193,7 @@
                 }
             },
 
-
+            //普通事件层
             editStatus(info){
                 let that = this
                 if(info.status == 0){
@@ -161,21 +203,7 @@
                                 voteId: info.id, // Long 投票编号
                                 activation: false, // Boolean 启用/禁用
                             };
-                            this.$api.setVoteActivation(cnt,function (res) {
-                                console.log(res)
-                                if(res.data.rc == that.$util.RC.SUCCESS){
-                                    that.$message({
-                                        message: '禁用成功',
-                                        type: 'success'
-                                    });
-                                }else{
-                                    that.$message.error('操作失败');
-                                }
-                               that.$router.push('/page')
-
-
-                            })
-
+                            this.setVoteActivation(cnt)
                         })
                         .catch(_ => {});
 
@@ -186,45 +214,22 @@
                                 voteId: info.id, // Long 投票编号
                                 activation: true, // Boolean 启用/禁用
                             };
-                            this.$api.setVoteActivation(cnt,function (res) {
-                                if(res.data.rc == that.$util.RC.SUCCESS){
-                                    that.$message({
-                                        message: '启用成功',
-                                        type: 'success'
-                                    });
-                                }else{
-                                    that.$message.error('操作失败');
-                                }
-                                that.$router.push('/page')
-
-
-                            })
-
+                            this.setVoteActivation(cnt)
                         })
                         .catch(_ => {});
 
                 }
-                // console.log(info.isAbstain)
             },
 
-            delVote(info){
+            delVoteModal(info){
                 this.delId = info.id
                 this.dialogVisible = true
             },
-
             delBtn(){
-                let that = this
                 let cnt = {
                     voteId:this.delId
                 }
-                this.$api.delVote(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.$message.success('删除表决成功！')
-                    }else{
-                        that.$message.error('删除表决失败！')
-                    }
-                    that.$router.push('/page')
-                })
+                this.delVote(cnt)
             },
             editVoteBtn(info){
                 this.$router.push({
@@ -238,8 +243,6 @@
 
             //分页
             changePage(key){
-                let that = this
-
                 if(key == 0){   //上一页
                     this.page = this.page-1
                 }else{          //下一页
@@ -252,38 +255,20 @@
                     count: this.count,
                     offset: offset,
                 }
-                this.$api.getVotes(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.tableData = JSON.parse(res.data.c)
-                    }else{
-                        that.tableData = []
-                    }
-                    if(that.tableData.length <that.count){
-                        that.pageOver = true
-                    }else{
-                        that.pageOver = false
-                    }
-                })
+                this.getVotes(cnt)
             }
 
         },
         mounted(){
-            let that = this
+            const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let orgId = localStorage.getItem('orgId')
             let cnt = {
                 orgId: orgId,
                 count: 10,
                 offset: 0,
             };
-            this.$api.getVotes(cnt,function (res) {
-                // console.log(res)
-                that.tableData = JSON.parse(res.data.c)
-                if(that.tableData.length < that.count){
-                    that.pageOver = true
-                }
-            })
-
-
+            this.getVotes(cnt)
+            loading.close()
         }
 
     }

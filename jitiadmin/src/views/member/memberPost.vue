@@ -328,6 +328,92 @@
             }
         },
         methods: {
+            //ajax请求层
+            //根据姓名模糊搜索用户列表
+            getORGUsersLikeRealName(cnt){
+                this.tableData = JSON.parse(res.data.c)
+                if (this.tableData.length < this.count) {
+                    this.pageOver = this
+                } else {
+                    this.pageOver = false
+                }
+            },
+            //创建组织用户
+            createORGUser(cnt){
+              this.$api.createORGUser(cnt,(res)=>{
+                  if(res.data.rc == this.$util.RC.SUCCESS){
+                      this.$message.success('新增用户成功')
+                  }else{
+                      this.$message.error('新增失败')
+                  }
+                  this.$router.push('/page')
+              })
+            },
+            //获取组织成员列表
+            getORGUserByRole(cnt){
+              this.$api.getORGUserByRole(cnt,(res)=>{
+                  this.tableData = JSON.parse(res.data.c)
+                  if (this.tableData.length < this.count) {
+                      this.pageOver = true
+                  } else {
+                      this.pageOver = false
+                  }
+              })
+            },
+            //获取组织类所有的用户信息
+            getORGUsers(cnt){
+                this.$api.getORGUsers(cnt,(res)=>{
+                    this.tableData = JSON.parse(res.data.c)
+                    if (this.tableData.length < this.count) {
+                        this.pageOver = true
+                    } else {
+                        this.pageOver = false
+                    }
+                })
+            },
+            //修改用户基本信息
+            editUser(cnt){
+                this.$api.editUser(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('修改成功')
+                    }else{
+                        this.$message.error('修改失败')
+                    }
+                    this.$router.push('/page')
+                })
+            },
+            //修改组织用户信息-职务修改
+            editORGUser(cnt){
+                this.$api.editORGUser(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('修改成功')
+                    }else{
+                        this.$message.error('修改失败')
+                    }
+                    this.$router.push('/page')
+                })
+            },
+            //修改成员的身份证号码
+            editUserIdNumber(cnt){
+                this.$api.editUserIdNumber(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('修改成功')
+                        this.$router.push('/page')
+                    }else{
+                        this.$message.error('修改失败')
+                        this.$router.push('/page')
+                    }
+                })
+            },
+            //请求系统角色列表
+            getSysORGUserRoles(cnt){
+                this.$api.getSysORGUserRoles(cnt,(res)=>{
+                    this.roleList = JSON.parse(res.data.c)
+                })
+            },
+
+
+            //普通事件层
             //搜索用户
             searchBtn(){
                 let that = this
@@ -343,25 +429,13 @@
                         count: this.count, // Integer
                         offset: this.offset, // Integer
                     };
-                    this.$api.getORGUsersLikeRealName(cnt,function (res) {
-                        that.tableData = JSON.parse(res.data.c)
-                        console.log(that.tableData)
-                        if (that.tableData.length < that.count) {
-                            that.pageOver = true
-                        } else {
-                            that.pageOver = false
-                        }
-                    })
+                    this.getORGUsersLikeRealName(cnt)
+
                 }
             },
-
-
-
             loadExcl() {
                 window.location.href = this.$baseURL+"用户模板.xlsx"
             },
-
-
             //导入用户文件上传相关
             //关闭弹出框，重置上传的文件的相关变量
             closeBtn() {
@@ -371,19 +445,15 @@
             },
             //讲已经导入到oss的文件传递给服务端进行数据库导入
             importUsers() {
-                let that = this
-                if (that.url != '' || that.url != undefined) {
+                if (this.url != '' || this.url != undefined) {
                     let cnt = {
                         orgId: localStorage.getItem('orgId'),
                         url: this.url
                     }
-                    this.$api.importORGUsers(cnt, function (res) {
-                        that.loadData = false
-                        that.$message({
-                            message: '导入完成，稍后刷新',
-                            type: 'success'
-                        });
-                        that.$router.push('/page')
+                    this.$api.importORGUsers(cnt,  (res)=> {
+                        this.loadData = false
+                        this.$message.success('导入完成，稍后刷新')
+                        this.$router.push('/page')
                     })
 
 
@@ -466,7 +536,6 @@
 
             //新增用户
             addMemberBtn() {
-                let that = this
                 if(this.name == '' || this.idNumber == '' || this.mobile == '' ){
                     this.$message.error('请输入完整的用户基础信息')
                 }else{
@@ -491,16 +560,7 @@
                         familyNumber:this.familyNumber,
                         familyMaster:this.familyMaster
                     }
-                    this.$api.createORGUser(cnt,function (res) {
-                        console.log(res)
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            that.$message.success('新增用户成功')
-                        }else{
-                            that.$message.error('新增失败')
-                        }
-                        that.$router.push('/page')
-                    })
-
+                    this.createORGUser(cnt)
                 }
 
             },
@@ -546,15 +606,8 @@
                     offset: this.offset, // Integer
                 };
                 //请求对应的角色列表
-                console.log(cnt)
-                this.$api.getORGUserByRole(cnt, function (res) {
-                    that.tableData = JSON.parse(res.data.c)
-                    if (that.tableData.length < that.count) {
-                        that.pageOver = true
-                    } else {
-                        that.pageOver = false
-                    }
-                })
+                this.getORGUserByRole(cnt)
+
             },
             //上一页下一页
             changePage(key) {
@@ -578,14 +631,7 @@
                         offset: offset, // Integer
                     };
                     //请求对应的角色列表
-                    this.$api.getORGUserByRole(cnt, function (res) {
-                        that.tableData = JSON.parse(res.data.c)
-                        if (that.tableData.length < that.count) {
-                            that.pageOver = true
-                        } else {
-                            that.pageOver = false
-                        }
-                    })
+                    this.getORGUserByRole(cnt)
                 } else {
                         if(this.searchData == ''){
                             let cnt = {
@@ -593,15 +639,7 @@
                                 offset: offset,
                                 count: this.count
                             }
-                            this.$api.getORGUsers(cnt, function (res) {
-                                that.tableData = JSON.parse(res.data.c)
-
-                                if (that.tableData.length < that.count) {
-                                    that.pageOver = true
-                                } else {
-                                    that.pageOver = false
-                                }
-                            })
+                            this.getORGUsers(cnt)
                         }else{
                             let cnt = {
                                 orgId: localStorage.getItem('orgId'),
@@ -609,15 +647,7 @@
                                 count: this.count, // Integer
                                 offset:offset, // Integer
                             };
-                            this.$api.getORGUsersLikeRealName(cnt,function (res) {
-                                that.tableData = JSON.parse(res.data.c)
-
-                                if (that.tableData.length < that.count) {
-                                    that.pageOver = true
-                                } else {
-                                    that.pageOver = false
-                                }
-                            })
+                            this.getORGUsersLikeRealName(cnt)
                         }
                     }
 
@@ -665,15 +695,7 @@
                     mobile:this.mobileInfo,
                     realName:this.realNameInfo,
                 }
-                this.$api.editUser(cnt,function (res) {
-                    console.log(res)
-                   if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.$message.success('修改成功')
-                   }else{
-                       that.$message.error('修改失败')
-                   }
-                    that.$router.push('/page')
-                })
+                this.editUser(cnt)
             },
             //修改用户信息
             editORGUserBtn(){
@@ -697,14 +719,7 @@
                         familyNumber:this.familyNumberInfo,
                         familyMaster:this.familyMasterInfo
                     }
-                    this.$api.editORGUser(cnt,function (res) {
-                       if(res.data.rc == that.$util.RC.SUCCESS){
-                           that.$message.success('修改成功')
-                       }else{
-                           that.$message.error('修改失败')
-                       }
-                       that.$router.push('/page')
-                    })
+                    this.editORGUser(cnt)
                 }
             },
             //修改用户身份证号
@@ -715,45 +730,24 @@
                     userId: this.userIdInfo,
                     IdNumber: this.idNumberInfo,
                 };
-                this.$api.editUserIdNumber(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.$message.success('修改成功')
-                        that.$router.push('/page')
-                    }else{
-                        that.$message.error('修改失败')
-                        that.$router.push('/page')
-                    }
-                })
+                this.editUserIdNumber(cnt)
             },
         },
         mounted(){
-
-            let that = this
+            const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let orgId = localStorage.getItem('orgId')
             this.importAddress = 'user/'+orgId+'/'
             let cnt ={}
             // 请求职位列表
-            this.$api.getSysORGUserRoles(cnt, function (res3) {
-                that.roleList = JSON.parse(res3.data.c)
-            })
+            this.getSysORGUserRoles(cnt)
             //请求所有组织用户
             let cnt1 = {
                 orgId: localStorage.getItem('orgId'),
                 count: this.count,
                 offset: this.offset
             }
-            this.$api.getORGUsers(cnt1, function (res2) {
-                that.tableData = JSON.parse(res2.data.c)
-                if (that.tableData.length < that.count) {
-                    that.pageOver = true
-                } else {
-                    that.pageOver = false
-                }
-            })
-
-            //请求所有的用户的分组
-
-
+            this.getORGUsers(cnt1)
+            loading.close()
         }
     }
 </script>

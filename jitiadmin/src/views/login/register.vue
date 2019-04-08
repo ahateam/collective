@@ -79,7 +79,6 @@
         },
         methods: {
             registerBtn() {
-                let that = this
                 if (this.mobile == '' || this.pwd == ''|| this.idNumber == '' || this.realName == '') {
                     this.$message({
                         showClose: true,
@@ -93,22 +92,21 @@
                         type: 'error'
                     });
                 }else{
-
                     let cnt = {
                         mobile: this.mobile,
                         realName:this.realName,
                         idNumber:this.idNumber,
                         pwd: this.pwd,
                     }
-                    this.$api.registeUser(cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            that.$message({
+                    this.$api.registeUser(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.$message({
                                 showClose: true,
                                 message: '注册成功，前往登录',
                                 type: 'success'
                             });
                         }else{
-                            that.$message.error('，注册失败,信息有误');
+                            this.$message.error('注册失败,信息有误');
                         }
                     })
                     this.$router.push('/login')

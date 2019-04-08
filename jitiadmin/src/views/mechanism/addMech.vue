@@ -140,33 +140,41 @@
                 mechCodeImgUrl:'',
                 mechGrantImgUrl:'',
 
-                shareAmount: '',     //总股份数
+                shareAmount: '',        //总股份数
                 address:''              //oss地址
             }
-        },
-        mounted(){
-            let date = new Date()
-            let year =''+date.getFullYear()
-            let month =''+date.getMonth()+1
-            if(month.length<2){
-                month = '0'+month
-            }
-            let day = ''+date.getDate()
-            if(day.length<2){
-                day ='0'+ day
-            }
-            this.address = '/mechanism/'+year+month+day+'/'
-
         },
         components: {
             VDistpicker
         },
         methods: {
+            //ajax请求封装层
+            // 创建组织申请
+            createORGApply(cnt){
+                this.$api.createORGApply(cnt,(res)=>{
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        this.$message({
+                            showClose: true,
+                            message: '申请成功，等待审核',
+                            type: 'success'
+                        });
+                        this.$router.push('/applyMech')
+
+                    }else{
+                        this.$message({
+                            showClose: true,
+                            message: '申请失败',
+                            type: 'error'
+                        });
+                    }
+                })
+            },
+
+            //普通事件层
             //进度条
             getProgress(p){
                 this.num = p
             },
-
             //开始导入到oss
             doUpload(file,type) {
                 this.$emit('getProgress', 0)
@@ -232,8 +240,6 @@
                 }
             },
             // 获取文件名显示
-
-
             sel: function (data) {
                 this.province = data.province.value
                 this.city = data.city.value
@@ -243,11 +249,11 @@
                 this.mechCodeImg = event.target.files[0]
                 this.doUpload(this.mechCodeImg,'code')
             },
-
             getMechData1(event) {
                 this.mechGrantImg = event.target.files[0]
                 this.doUpload(this.mechGrantImg,'grant')
             },
+
             submitBtn() {
                 if (this.mechName == '' || this.province == '' || this.mechAddress == '' || this.mechCode == '' || this.city == '' || this.district == '') {
                     this.$message({
@@ -256,8 +262,6 @@
                         type: 'error'
                     })
                 } else {
-
-                    let that = this
                     let cnt = {
                         userId:localStorage.getItem('userId'),
                         name: this.mechName,
@@ -270,39 +274,26 @@
                         imgAuth: this.mechGrantImgUrl,
                         shareAmount: this.shareAmount,
                     };
-
-                    this.$api.createORGApply(cnt, function (res) {
-                        console.log(res)
-                        if (res.data.rc == that.$util.RC.SUCCESS) {
-                            console.log(res)
-                            that.$message({
-                                showClose: true,
-                                message: '申请成功，等待审核',
-                                type: 'success'
-                            });
-                            that.$router.push('/applyMech')
-
-                            // if(localStorage.getItem('orgId') == '' ||localStorage.getItem('orgId') == null ){
-                            //     localStorage.setItem('orgId',JSON.parse(res.data.c).org.id)
-                            //     localStorage.setItem('orgName',JSON.parse(res.data.c).org.name)
-                            //     that.$router.go(0)
-                            // }else{
-                            //
-                            // }
-                        }else{
-                            that.$message({
-                                showClose: true,
-                                message: '申请失败',
-                                type: 'error'
-                            });
-                        }
-                    })
-
-
-
+                    this.createORGApply(cnt)
                 }
             }
-        }
+        },
+        mounted(){
+
+            //拼接oss地址前缀
+            let date = new Date()
+            let year =''+date.getFullYear()
+            let month =''+date.getMonth()+1
+            if(month.length<2){
+                month = '0'+month
+            }
+            let day = ''+date.getDate()
+            if(day.length<2){
+                day ='0'+ day
+            }
+            this.address = '/mechanism/'+year+month+day+'/'
+
+        },
     }
 </script>
 

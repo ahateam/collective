@@ -272,7 +272,44 @@
             }
         },
         methods: {
+            //ajax请求层
+            //新增投票
+            createVote(cnt){
+              this.$api.createVote(cnt,(res)=>{
+                  if(res.data.rc == this.$util.RC.SUCCESS){
+                      this.$message.success('新增投票成功')
+                      this.voteInfo = JSON.parse(res.data.c)
+                      this.voteOption()
+                  }
+              })
+            },
+            //获取投票的选项列表
+            getVoteOptions(cnt){
+                this.$api.getVoteOptions(cnt,(res)=>{
+                    this.voteOptions = JSON.parse(res.data.c)
+                })
+            },
+            //
 
+
+
+            //数据过滤层
+            templateFilter(row, col, value) {
+                if (value == '0') {
+                    return '选举投票'
+                } else {
+                    return '普通投票'
+                }
+            },
+            typeFilter(row, col, value) {
+                if (value == '0') {
+                    return '单选'
+                } else {
+                    return '多选'
+                }
+            },
+
+            //普通事件层
             //下拉失败通过率的默认值设置
             templateBtn(val) {
                 if (val == '0') {
@@ -291,7 +328,6 @@
             },
             //新增投票
             addVote() {
-                let that = this
                 let crowd = {
                     roles:this.roles,
                     tags:{
@@ -318,37 +354,9 @@
                     startTime:this.startTime.getTime(),
                     expiryTime:this.expiryTime.getTime()
                 }
-                console.log(cnt)
-                this.$api.createVote(cnt,function (res) {
-                    console.log(res)
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.$message({
-                            message: '新增投票成功',
-                            type: 'success'
-                        })
-
-                        that.voteInfo = JSON.parse(res.data.c)
-                        that.voteOption()
-                        console.log('1111')
-                    }
-                })
+                this.createVote(cnt)
             },
 
-            //所有的投票
-            templateFilter(row, col, value) {
-                if (value == '0') {
-                    return '选举投票'
-                } else {
-                    return '普通投票'
-                }
-            },
-            typeFilter(row, col, value) {
-                if (value == '0') {
-                    return '单选'
-                } else {
-                    return '多选'
-                }
-            },
 
 
             //选项管理-弹窗/请求已有的选项列表
@@ -360,14 +368,11 @@
                     let cnt = {
                         voteId:  this.voteInfo.id
                     }
-                    this.$api.getVoteOptions(cnt, function (res) {
-                        that.voteOptions = JSON.parse(res.data.c)
-                    })
+                    this.getVoteOptions(cnt)
                     if (this.voteInfo.template == 0) {
                         this.dialogFormVisible1 = true
                         this.searchData = ''
                         this.searchList = []
-
                     } else {
                         this.dialogFormVisible = true
                     }
@@ -383,17 +388,14 @@
                     voteId: this.voteInfo.id,
                     optionId: optionId
                 }
-                this.$api.delVoteOption( cnt, function (res) {
+
+                this.$api.delVoteOption( cnt,  (res)=> {
                     let cnt = {
                         voteId: that.voteInfo.id
                     }
-                    that.$api.getVoteOptions(cnt, function (res) {
-
-                        that1.voteOptions = JSON.parse(res.data.c)
-                        console.log(that1.voteOptions)
-                    })
+                    this.getVoteOptions(cnt)
                 })
-                console.log(optionId)
+
             },
 
             //普通投票-新增选项的输入框
@@ -407,8 +409,6 @@
 
             //普通投票-新增选项
             addSubmit() {
-                let that = this
-                let that1 = this
                 let cnt = {
                     projectId: localStorage.getItem('orgId'),
                     voteId: this.voteInfo.id,
@@ -416,28 +416,23 @@
                     remark: '无',
                     ext: '无',
                 };
-                console.log(cnt)
-                this.$api.addVoteOption( cnt, function (res) {
-                    console.log(res)
-                    if (res.data.rc == that.$util.RC.SUCCESS) {
-                        that.$message.success('新增选项成功！')
-                        that.addOptionTitle = ''
-                        that.isWrite = false
+                this.$api.addVoteOption( cnt, (res)=> {
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        this.$message.success('新增选项成功！')
+                        this.addOptionTitle = ''
+                        this.isWrite = false
                         let cnt = {
-                            voteId: that.voteInfo.id
+                            voteId: this.voteInfo.id
                         }
-                        that.$api.getVoteOptions(cnt, function (res) {
-                            that1.voteOptions = JSON.parse(res.data.c)
-                        })
+                        this.getVoteOptions(cnt)
                     } else {
-                        that.$message.error('新增选项出错！')
+                        this.$message.error('新增选项出错！')
                     }
                 })
             },
 
             //选举选人搜索事件
             searchBtn(){
-                let that = this
                 if(this.searchData == ''){
                     this.$message.error('请输入用户姓名')
                 }else{
@@ -449,8 +444,8 @@
                         count: count, // Integer
                         offset: offset, // Integer
                     };
-                    this.$api.getORGUsersLikeRealName(cnt,function (res) {
-                        that.searchList = JSON.parse(res.data.c)
+                    this.$api.getORGUsersLikeRealName(cnt, (res)=> {
+                        this.searchList = JSON.parse(res.data.c)
                     })
                 }
 
@@ -458,10 +453,6 @@
             },
             //选举选人
             addUser(item){
-
-                console.log(item)
-                let that = this
-                let that1 = this
                 let ext = {
                     userId:item.userId,
                     idNumber:item.idNumber,
@@ -475,19 +466,17 @@
                     ext:JSON.stringify(ext)
                 }
 
-                this.$api.addVoteOption(cnt,function (res) {
-                    if (res.data.rc == that.$util.RC.SUCCESS) {
-                        that.$message.success('新增选项成功！')
-                        that.addOptionTitle = ''
-                        that.isWrite = false
+                this.$api.addVoteOption(cnt,(res)=> {
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        this.$message.success('新增选项成功！')
+                        this.addOptionTitle = ''
+                        this.isWrite = false
                         let cnt = {
-                            voteId: that.voteInfo.id
+                            voteId: this.voteInfo.id
                         }
-                        that.$api.getVoteOptions(cnt, function (res) {
-                            that1.voteOptions = JSON.parse(res.data.c)
-                        })
+                        this.getVoteOptions(cnt)
                     } else {
-                        that.$message.error('新增选项出错！')
+                        this.$message.error('新增选项出错！')
                     }
                 })
 
@@ -495,9 +484,6 @@
 
             //修改表决
             editVote(){
-                let that = this
-                console.log('11111')
-                console.log(this.voteInfo)
                 let crowd = {
                     roles:this.roles,
                     tags:{
@@ -523,18 +509,16 @@
                     startTime:this.startTime.getTime(),
                     expiryTime:this.expiryTime.getTime()
                 }
-                console.log(cnt)
-                this.$api.editVote(cnt,function (res) {
-                    console.log(res)
-                    if (res.data.rc == that.$util.RC.SUCCESS) {
-                        that.$message({
+                this.$api.editVote(cnt, (res)=>{
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        this.$message({
                             message: '修改投票成功',
                             type: 'success'
                         })
-                        that.isVote = 1
+                        this.isVote = 1
                     } else {
-                        that.$message.error('修改失败,输入有误')
-                        that.isVote = 2
+                        this.$message.error('修改失败,输入有误')
+                        this.isVote = 2
                     }
                 })
             },
@@ -545,23 +529,16 @@
         },
 
         mounted() {
-            let that = this
-
             let cnt ={}
             //所有的系统的角色列表
-            this.$api.getSysORGUserRoles(cnt,function (res) {
-                that.crowdList.roles = JSON.parse(res.data.c)
+            this.$api.getSysORGUserRoles(cnt, (res)=> {
+                this.crowdList.roles = JSON.parse(res.data.c)
             })
-
-
-
             let info = this.$route.params.info
-            console.log(info)
             if (info == '' || info == undefined) {
-                    this.isVote = 0
+                this.isVote = 0
             } else {
-                    this.isVote = 1
-
+                this.isVote = 1
                 this.roles = JSON.parse(info.crowd).roles
                 this.groups =JSON.parse(info.crowd).tags.groups
                 this.tags = JSON.parse(info.crowd).tags.tags

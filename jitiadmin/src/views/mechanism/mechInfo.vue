@@ -96,12 +96,8 @@
                 info: {},
             }
         },
-        mounted() {
-            this.info = this.$route.params.info
-        },
         methods: {
             edit() {
-
                 this.$router.push({
                     path: '/editMech',
                     name: 'editMech',
@@ -110,7 +106,10 @@
                     }
                 })
             }
-        }
+        },
+        mounted() {
+            this.info = this.$route.params.info
+        },
 
     }
 </script>

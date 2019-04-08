@@ -74,6 +74,30 @@
             }
         },
         methods:{
+            //ajax请求封装层
+            //获取申请的机构列表
+            getORGExamineByUser(cnt){
+                this.$api.getORGExamineByUser(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.tableData = JSON.parse(res.data.c)
+                    }else{
+                        this.tableData = []
+                    }
+                })
+            },
+            //取消申请机构--删除
+            delORGExamine(cnt){
+                this.$api.delORGExamine(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('操作成功')
+                    }else{
+                        this.$message.error('操作失败')
+                    }
+                    this.$router.push('/page')
+                })
+            },
+
+            //数据过滤层
             statusFliter(row,col,value){
                 if(value == '0' ||value =='3'){
                     return '等待审核'
@@ -83,6 +107,8 @@
                     return '审核失败'
                 }
             },
+
+            //普通事件层
             //详情跳转
             info(row){
                 this.$router.push({
@@ -93,50 +119,34 @@
             },
             //修改信息
             editMech(row){
-                console.log('1111')
                 this.$router.push({
                     path:'/editMech',
                     name:'editMech',
                     params:{info:row},
                 })
             },
-
             //删除提示
             del(row){
                 this.delShow = true
                 this.delId = row.id
             },
             delBtn(){
-                let that = this
                 let cnt = {
                     examineId:this.delId
                 }
-                this.$api.delORGExamine(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.$message.success('操作成功')
-                    }else{
-                        that.$message.error('操作失败')
-                    }
-                    that.$router.push('/page')
-                })
-
-
+               this.delORGExamine(cnt)
             }
-
-
 
         },
         mounted(){
-            let that =this
+            const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let cnt = {
                 userId:localStorage.getItem('userId'),
                 offset:this.offset,
                 count:this.count
             }
-            this.$api.getORGExamineByUser(cnt,function (res) {
-                that.tableData = JSON.parse(res.data.c)
-                console.log(JSON.parse(res.data.c))
-            })
+            this.getORGExamineByUser(cnt)
+            loading.close()
         }
     }
 </script>

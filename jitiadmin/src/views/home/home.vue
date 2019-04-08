@@ -26,9 +26,6 @@
                                 <el-menu-item :index="key+'-'+key1" v-for="(item1,key1) in item.child" @click="navActive1(key,item1,key1)">{{item1.title}}</el-menu-item>
                         </el-submenu>
                     </span>
-
-
-
                 </el-menu>
             </el-aside>
             <el-container>
@@ -48,7 +45,6 @@
 
                 </el-header>
                 <el-main style="background: #f0f2f5;height: 100vh;overflow-y: auto;padding-bottom:100px; ">
-
                     <router-view v-if="isRouterActive"></router-view>
                 </el-main>
             </el-container>
@@ -84,7 +80,7 @@
                    :before-close="handleClose"
                    :visible.sync="showActive1">
             <template>
-                    <el-button type="primary" style="margin-bottom: 2rem" @click="addMech">新增机构</el-button>
+                    <el-button type="primary" style="margin-bottom: 2rem" @click="addMech">申请机构</el-button>
 
                 <el-table
                         :data="tableData"
@@ -130,37 +126,39 @@
             }
         },
         methods: {
-            //一级菜单事件
+            //ajax请求封装层
+            //获取用户的所有组织列表
+            getUserORGs(cnt){
+                this.$api.getUserORGs(cnt,(res)=>{
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        this.tableData = JSON.parse(res.data.c)
+                    } else {
+                        this.tableData = []
+                    }
+                })
+            },
+
+            //事件层
+            //一级菜单选中事件
             navActive(item,key) {
                 this.$store.state.navDefaultActive = ''+key
                 this.$router.push(item.path)
             },
-            //二级菜单事件
+            //二级菜单选中事件
             navActive1(key,item1,key1) {
                 this.$store.state.navDefaultActive = key+'-'+key1
                 this.$router.push(item1.path)
             },
 
             show() {
-                let that = this
-
                 let cnt = {
                    userId:localStorage.getItem('userId')
                 }
-                this.$api.getUserORGs(cnt, function (res) {
-                    if (res.data.rc == that.$util.RC.SUCCESS) {
-                        that.tableData = JSON.parse(res.data.c)
-                    } else {
-                        that.tableData = []
-                    }
-                })
-
+                this.getUserORGs(cnt)
 
                 this.$router.push('/dashboard')
                 this.$store.state.navDefaultActive = '0'
                 this.showActive = true
-
-
 
             },
             addMech(){
@@ -233,7 +231,6 @@
 
 
             },
-
             outLogin(){
                 localStorage.setItem('orgId','')
                 localStorage.setItem('orgName', '')
@@ -241,16 +238,8 @@
                 this.$router.push('/login')
             }
         },
-        created() {
-
-
-
-
-        },
         mounted() {
-            console.log(localStorage.getItem('orgId'))
-            console.log(localStorage.getItem('orgName'))
-
+            const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
 
             if(localStorage.getItem('userId') == '' || localStorage.getItem('userId') == null){
                 this.$message.error({
@@ -268,31 +257,11 @@
                 this.orgName = localStorage.getItem('orgName')
                 this.showActive1 = false
             }
-
-
-
-
-            let that = this
             let cnt = {
                 userId:localStorage.getItem('userId')
             }
-            this.$api.getUserORGs(cnt, function (res) {
-                if (res.data.rc == that.$util.RC.SUCCESS) {
-                    that.tableData = JSON.parse(res.data.c)
-                } else {
-                    that.tableData = []
-                }
-                console.log(that.tableData)
-            })
-
-
-            // this.$ajax.api.getORGs(40, 0, function (res) {
-            //     if (res.data.rc == 'succ') {
-            //         that.tableData = JSON.parse(res.data.c)
-            //     }
-            //
-            // })
-            console.log(that.tableData)
+            this.getUserORGs(cnt)
+            loading.close()
         }
 
     }

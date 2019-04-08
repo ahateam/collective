@@ -146,19 +146,6 @@
             },
             load(info){
                 window.location.href = info.url
-               // let name = info.name
-               //  let textName = info.textName
-               //  console.log(textName)
-               //  async function get () {
-               //
-               //      try {
-               //          let result = await client.get(name, textName);
-               //          console.log(result);
-               //      } catch (e) {
-               //          console.log(e);
-               //      }
-               //  }
-               //  get()
             },
 
 
@@ -236,9 +223,7 @@
             this.address = 'fenhong/' + orgId + '/'
             let that = this
             async function list(){
-
                 let prefix = 'fenhong/' + orgId + '/'    //请求的前缀
-
                 try {
                     let result = await client.list({
                         prefix: prefix

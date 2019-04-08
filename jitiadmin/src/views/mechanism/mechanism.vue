@@ -50,6 +50,21 @@
             }
         },
         methods:{
+            //ajax请求封装层
+            //用户管理员账号的机构列表
+            getUserORGs(cnt){
+                this.$api.getUserORGs(cnt,(res)=>{
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        this.tableData = JSON.parse(res.data.c)
+                    } else {
+                        this.tableData = []
+                    }
+                })
+            },
+
+
+            //普通事件层
+            //详情跳转
             info(row){
                 this.$router.push({
                     path:'/mechInfo',
@@ -58,14 +73,6 @@
                 })
                 console.log(row.id);
             },
-            // edit(row){
-            //     this.$router.push({
-            //         path:'/editMech',
-            //         name:'editMech',
-            //         params:{mechId:row.id},
-            //     })
-            //     console.log(row.id);
-            // },
             infoMoney(info){
                 this.$router.push({
                     path:'/mechMoney',
@@ -75,26 +82,14 @@
                     }
                 })
             },
-            del(info){
-
-            }
-
-
         },
         mounted(){
-
+            const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let cnt = {
                 userId:localStorage.getItem('userId')
             }
-            let that = this
-            this.$api.getUserORGs(cnt, function (res) {
-                if (res.data.rc == that.$util.RC.SUCCESS) {
-                    that.tableData = JSON.parse(res.data.c)
-                } else {
-                    that.tableData = []
-                }
-                console.log(that.tableData)
-            })
+            this.getUserORGs(cnt)
+            loading.close()
         }
     }
 </script>
