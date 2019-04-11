@@ -61,7 +61,8 @@
                     }
                     this.$api.loginByMobileAndPwd(cnt,(res)=>{
                             if(res.data.rc == this.$util.RC.SUCCESS){
-                                localStorage.setItem('userId',JSON.parse(res.data.c).id)
+                                let data = this.$util.tryParseJson(res.data.c,{})
+                                localStorage.setItem('userId',data.id)
                                 this.$router.push('/home')
                             }else{
                                 this.$message.error('账号错误，重新输入')

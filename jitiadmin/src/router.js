@@ -1,45 +1,37 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from './views/home/home'
-import login from './views/login/login'
-import dashboard from './views/home/dashboard'
-import newMech from './views/login/newMech'
-import register from './views/login/register'
-
-import memberList from './views/member/memberList'
-import vote from './views/vote/vote'
-import assets from './views/assets/assets'
-import assetsInfo from './views/assets/assetsInfo'
-import mechanism from './views/mechanism/mechanism'
-
-import poll from './views/poll/poll'
-import pollInfo from './views/poll/pollInfo'
-
-import addMech from './views/mechanism/addMech'
-import mechInfo from './views/mechanism/mechInfo'
-import mechMoney from './views/mechanism/mechMoney'
-
-import editMech from './views/mechanism/editMech'
-import memberAdd from './views/member/memberAdd'
-import memberEdit from './views/member/memberEdit'
-import memberEditPost from './views/member/memberEditPost'
-import memberGroup from './views/member/memberGroup'
-import memberPost from './views/member/memberPost'
-import memberMail from './views/member/memberMail'
-
-import voteAdd from './views/vote/voteAdd'
-import voteInfo from './views/vote/voteInfo'
-import voteEdit from './views/vote/voteEdit'
-import page from './views/page/page'
-
-
-import bonus from './views/bonus/bonus'
-import article from './views/article/artice'
-import tagList from './views/article/tagList'
-import articleAdd from './views/article/articleAdd'
-
-import asset from './views/assets/asset'
-import applyMech from './views/mechanism/applyMech'
+const home = () => import('./views/home/home')
+const login = () => import('./views/login/login')
+const dashboard  = ()=>import('./views/home/dashboard')
+const  newMech = ()=>import('./views/login/newMech')
+const  register = ()=>import('./views/login/register')
+const  memberList = ()=>import('./views/member/memberList')
+const  vote = ()=>import('./views/vote/vote')
+const  assets = ()=>import('./views/assets/assets')
+const  assetsInfo = ()=>import('./views/assets/assetsInfo')
+const  mechanism = ()=>import('./views/mechanism/mechanism')
+const  poll = ()=>import('./views/poll/poll')
+const  pollInfo = ()=>import( './views/poll/pollInfo')
+const  addMech = ()=>import('./views/mechanism/addMech')
+const  mechInfo = ()=>import('./views/mechanism/mechInfo')
+const  mechMoney = ()=>import('./views/mechanism/mechMoney')
+const  editMech = ()=>import('./views/mechanism/editMech')
+const  memberAdd = ()=>import('./views/member/memberAdd')
+const  memberEdit = ()=>import('./views/member/memberEdit')
+const  memberEditPost = ()=>import('./views/member/memberEditPost')
+const  memberGroup = ()=>import('./views/member/memberGroup')
+const  memberPost = ()=>import('./views/member/memberPost')
+const  memberMail = ()=>import('./views/member/memberMail')
+const  voteAdd = ()=>import('./views/vote/voteAdd')
+const  voteInfo = ()=>import('./views/vote/voteInfo')
+const  voteEdit = ()=>import('./views/vote/voteEdit')
+const  page = ()=>import('./views/page/page')
+const  bonus = ()=>import('./views/bonus/bonus')
+const  article = ()=>import('./views/article/artice')
+const  tagList  = ()=>import('./views/article/tagList')
+const  articleAdd = ()=>import('./views/article/articleAdd')
+const  asset = ()=>import('./views/assets/asset')
+const applyMech  = ()=>import('./views/mechanism/applyMech')
 
 Vue.use(Router)
 

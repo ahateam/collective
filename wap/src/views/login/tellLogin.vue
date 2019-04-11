@@ -71,19 +71,19 @@
                         message:'请输入密码'
                     })
                 }else {
-                    let that = this
                     let cnt = {
                         userId: this.info.id,
                         pwd: this.pwd,
                     };
-                    this.$api.loginByUserId(cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            localStorage.setItem('userInfo',res.data.c)
+                    this.$api.loginByUserId(cnt, (res)=> {
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            let data = this.$util.tryParseJson(res.data.c,{})
+                            localStorage.setItem('userInfo',JSON.stringify(data))
                             Toast.success({
                                 duration:500,
                                 message:'登录成功'
                             })
-                            that.$router.push('/choose')
+                            this.$router.push('/choose')
                         }else{
                             Toast.fail({
                                 duration:500,
@@ -110,14 +110,13 @@
             let count = 40
             let offset = 0
 
-            // console.log(this.tell)
             let cnt = {
                 mobile: this.tell, // String 手机号
                 count: count, // Integer
                 offset: offset, // Integer
             };
-            this.$api.getUsersByMobile(cnt,function (res) {
-                that.list = JSON.parse(res.data.c)
+            this.$api.getUsersByMobile(cnt, (res) =>{
+                this.list = this.$util.tryParseJson(res.data.c)
             })
         }
     }

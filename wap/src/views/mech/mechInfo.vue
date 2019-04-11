@@ -75,15 +75,15 @@
         mounted(){
             console.log('1111')
             let orgId = JSON.parse(localStorage.getItem('user')).orgId
-            let that = this
+
             let cnt = {
                 orgId:orgId
             }
-            this.$api.getORGById(cnt,function (res) {
-                if(res.data.rc == that.$util.RC.SUCCESS){
-                    that.info = JSON.parse(res.data.c)
+            this.$api.getORGById(cnt, (res)=> {
+                if(res.data.rc == this.$util.RC.SUCCESS){
+                    this.info = JSON.parse(res.data.c)
                 }
-                console.log(that.info)
+                console.log(this.info)
             })
         }
     }

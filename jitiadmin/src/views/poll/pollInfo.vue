@@ -278,7 +278,7 @@
               this.$api.createVote(cnt,(res)=>{
                   if(res.data.rc == this.$util.RC.SUCCESS){
                       this.$message.success('新增投票成功')
-                      this.voteInfo = JSON.parse(res.data.c)
+                      this.voteInfo =this.$util.tryParseJson(res.data.c,{})
                       this.voteOption()
                   }
               })
@@ -286,12 +286,9 @@
             //获取投票的选项列表
             getVoteOptions(cnt){
                 this.$api.getVoteOptions(cnt,(res)=>{
-                    this.voteOptions = JSON.parse(res.data.c)
+                    this.voteOptions =this.$util.tryParseJson(res.data.c)
                 })
             },
-            //
-
-
 
             //数据过滤层
             templateFilter(row, col, value) {
@@ -445,7 +442,7 @@
                         offset: offset, // Integer
                     };
                     this.$api.getORGUsersLikeRealName(cnt, (res)=> {
-                        this.searchList = JSON.parse(res.data.c)
+                        this.searchList = this.$util.tryParseJson(res.data.c)
                     })
                 }
 
@@ -532,7 +529,7 @@
             let cnt ={}
             //所有的系统的角色列表
             this.$api.getSysORGUserRoles(cnt, (res)=> {
-                this.crowdList.roles = JSON.parse(res.data.c)
+                this.crowdList.roles = this.$util.tryParseJson(res.data.c)
             })
             let info = this.$route.params.info
             if (info == '' || info == undefined) {

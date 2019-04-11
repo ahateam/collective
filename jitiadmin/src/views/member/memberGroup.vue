@@ -373,7 +373,7 @@
             //根据姓名模糊搜索用户列表
             getORGUsersLikeRealName(cnt){
               this.$api.getORGUsersLikeRealName(cnt,(res)=>{
-                  this.tableData = JSON.parse(res.data.c)
+                  this.tableData = this.$util.tryParseJson(res.data.c)
                   if (this.tableData.length < this.count) {
                       this.pageOver = true
                   } else {
@@ -384,7 +384,9 @@
             //根据分组获取用户列表
             getORGUsersByGroups(cnt){
                 this.$api.getORGUsersByGroups(cnt,(res)=>{
-                    this.tableData = JSON.parse(res.data.c)
+                    console.log(res.data.c)
+                    this.tableData = this.$util.tryParseJson(res.data.c)
+                    console.log(this.tableData)
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -395,7 +397,7 @@
             //获取组织类所有的用户信息
             getORGUsers(cnt){
                 this.$api.getORGUsers(cnt,(res)=>{
-                    this.tableData = JSON.parse(res.data.c)
+                    this.tableData = this.$util.tryParseJson(res.data.c)
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -439,9 +441,12 @@
                 })
             },
             createORGUserTagGroup(cnt){
-                if(res.data.rc == this.$util.RC.SUCCESS){
-                    this.$router.push('/page')
-                }
+                this.$api.createORGUserTagGroup(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$router.push('/page')
+                    }
+                })
+
             },
 
 
@@ -778,7 +783,6 @@
             },
 
             //新增分组
-
             addGroupBtn(){
                 if(this.keywordAdd == ''){
                     this.$message.error('请输入分组名')
@@ -833,7 +837,7 @@
             let cnt ={}
             // 请求职位列表
             this.$api.getSysORGUserRoles(cnt,  (res3)=> {
-                this.roleList = JSON.parse(res3.data.c)
+                this.roleList =this.$util.tryParseJson(res3.data.c)
             })
 
             //请求所有组织用户
@@ -846,7 +850,7 @@
 
             //分组列表
             this.$api.getORGUserSysTagGroups(cnt, (res)=> {
-                let data = JSON.parse(res.data.c)
+                let data = this.$util.tryParseJson(res.data.c)
 
                 this.grandId = data[0].groupId
                 let cnt2 = {
@@ -856,10 +860,11 @@
 
                 this.$api.getTagGroupTree(cnt2, (res)=> {
                     if (res.data.rc == this.$util.RC.SUCCESS) {
-                        if (res.data.c == '{}') {
+                         let groupData = this.$util.tryParseJson(res.data.c)
+                        if (groupData == '{}' || groupData== {}) {
                             this.groups = ''
                         } else {
-                            this.groups = JSON.parse(res.data.c)
+                            this.groups = groupData
                         }
                     }
 
@@ -874,7 +879,7 @@
                 offset:0
             }
             this.$api.getORGUsers(cnt2, (res)=> {
-                this.userList = JSON.parse(res.data.c)
+                this.userList = this.$util.tryParseJson(res.data.c)
                 for(let i=0;i<this.userList.length;i++){
                     if(this.userList[i].user.realName != '' && this.userList[i].user.realName != undefined){
                         this.userData.push(this.userList[i].user)

@@ -110,14 +110,10 @@
             this.idNumber = this.userInfo.idNumber
             this.weight = this.userInfo.weight
             this.shareAmount = this.userInfo.shareAmount
-            console.log(this.userInfo )
 
            let orgRoles = this.userInfo.orgRoles
-            // this.userPost
-            let that = this
             let cnt = {}
-            this.$api.getSysORGUserRoles(cnt,function (res) {
-                console.log(JSON.parse(res.data.c))
+            this.$api.getSysORGUserRoles(cnt, (res)=> {
                 let arr = JSON.parse(res.data.c)
                 for(let i=0;i<orgRoles.length;i++){
                     let role = '';
@@ -126,13 +122,9 @@
                             role = arr[j].name
                         }
                     }
-                    that.userPost = that.userPost + role+'  '
+                    this.userPost = this.userPost + role+'  '
                 }
             })
-
-
-
-            // console.log(localStorage.getItem('user'))
         }
     }
 </script>

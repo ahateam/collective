@@ -33,7 +33,7 @@
                 <el-col :span="24" style="margin: 10px 0">
                     <el-col :span="4">
                         <div class="title">
-                            选择机构查询:
+                            输入用户姓名查询:
                         </div>
                     </el-col>
                     <el-col :span="18" style="line-height: 4rem">
@@ -94,9 +94,7 @@
                                 label="操作"
                                 width="250">
                             <template slot-scope="scope">
-
                                 <el-button @click="optionInfo(scope.row)" type="text" size="small">选项详情</el-button>
-
                             </template>
                         </el-table-column>
                     </el-table>

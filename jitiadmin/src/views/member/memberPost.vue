@@ -331,12 +331,14 @@
             //ajax请求层
             //根据姓名模糊搜索用户列表
             getORGUsersLikeRealName(cnt){
-                this.tableData = JSON.parse(res.data.c)
-                if (this.tableData.length < this.count) {
-                    this.pageOver = this
-                } else {
-                    this.pageOver = false
-                }
+                this.$api.getORGUsersLikeRealName(cnt,(res)=>{
+                    this.tableData =this.$util.tryParseJson(res.data.c)
+                    if (this.tableData.length < this.count) {
+                        this.pageOver = this
+                    } else {
+                        this.pageOver = false
+                    }
+                })
             },
             //创建组织用户
             createORGUser(cnt){
@@ -352,7 +354,7 @@
             //获取组织成员列表
             getORGUserByRole(cnt){
               this.$api.getORGUserByRole(cnt,(res)=>{
-                  this.tableData = JSON.parse(res.data.c)
+                  this.tableData = this.$util.tryParseJson(res.data.c)
                   if (this.tableData.length < this.count) {
                       this.pageOver = true
                   } else {
@@ -363,7 +365,7 @@
             //获取组织类所有的用户信息
             getORGUsers(cnt){
                 this.$api.getORGUsers(cnt,(res)=>{
-                    this.tableData = JSON.parse(res.data.c)
+                    this.tableData = this.$util.tryParseJson(res.data.c)
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -408,7 +410,7 @@
             //请求系统角色列表
             getSysORGUserRoles(cnt){
                 this.$api.getSysORGUserRoles(cnt,(res)=>{
-                    this.roleList = JSON.parse(res.data.c)
+                    this.roleList =this.$util.tryParseJson(res.data.c)
                 })
             },
 
@@ -430,7 +432,6 @@
                         offset: this.offset, // Integer
                     };
                     this.getORGUsersLikeRealName(cnt)
-
                 }
             },
             loadExcl() {
@@ -455,8 +456,6 @@
                         this.$message.success('导入完成，稍后刷新')
                         this.$router.push('/page')
                     })
-
-
                 }
             },
             //进度条

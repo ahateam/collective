@@ -41,14 +41,14 @@
         mounted() {
             let orgId = JSON.parse(localStorage.getItem('user')).orgId
             let shareAmount = JSON.parse(localStorage.getItem('user')).shareAmount
-            let that = this
+
             let cnt = {
                 orgId:orgId
             }
-            this.$api.getORGById(cnt,function (res) {
-                if(res.data.rc == that.$util.RC.SUCCESS){
-                    that.info = JSON.parse(res.data.c)
-                    that.money = parseInt(that.info.bonus)*parseInt(shareAmount)
+            this.$api.getORGById(cnt, (res) =>{
+                if(res.data.rc == this.$util.RC.SUCCESS){
+                    this.info = JSON.parse(res.data.c)
+                    this.money = parseInt(this.info.bonus)*parseInt(shareAmount)
                 }
             })
 

@@ -35,8 +35,14 @@
                             <!--<el-button @click="del(scope.row)" type="text" size="small" style="color: #f44">删除</el-button>-->
                         </template>
                     </el-table-column>
+
                 </el-table>
             </template>
+            <p>
+                当前第 {{page}} 页
+                <el-button type="primary" size="mini"  :disabled="page==1"  @click="changePage(page-1)">上一页</el-button>
+                <el-button type="primary" size="mini" :disabled="pageOver ==true"  @click="changePage(page+1)">下一页</el-button>
+            </p>
         </el-row>
     </div>
 </template>
@@ -46,7 +52,11 @@
         name: "mechanism",
         data() {
             return {
-                tableData:[]
+                tableData:[],
+                page:1,
+                pageOver:false,
+                count:10,
+                offset:0,
             }
         },
         methods:{
@@ -55,15 +65,29 @@
             getUserORGs(cnt){
                 this.$api.getUserORGs(cnt,(res)=>{
                     if (res.data.rc == this.$util.RC.SUCCESS) {
-                        this.tableData = JSON.parse(res.data.c)
+                        let data = this.$util.tryParseJson(res.data.c)
+                        this.tableData = data
                     } else {
                         this.tableData = []
                     }
+                    if(this.tableData.length <this.count){
+                        this.pageOver =true
+                    }else{
+                        this.pageOver = false
+                    }
                 })
             },
-
-
             //普通事件层
+            //分页
+            changePage(page){
+                this.page =page
+                let cnt = {
+                    offset:(this.page-1)*this.count,
+                    count:this.count,
+                    userId:localStorage.getItem('userId')
+                }
+               this.getUserORGs(cnt)
+            },
             //详情跳转
             info(row){
                 this.$router.push({
@@ -86,6 +110,8 @@
         mounted(){
             const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let cnt = {
+                offset:this.offset,
+                count:this.count,
                 userId:localStorage.getItem('userId')
             }
             this.getUserORGs(cnt)

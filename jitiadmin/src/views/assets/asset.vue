@@ -271,7 +271,7 @@
             //根据条件查询--对应资产列表
             queryAssets(cnt){
               this.$api.queryAssets(cnt,(res)=>{
-                  this.tableData = JSON.parse(res.data.c)
+                  this.tableData = this.$util.tryParseJson(res.data.c)
                   if (this.tableData.length < this.count) {
                       this.pageOver = true
                   } else {
@@ -282,7 +282,7 @@
             //根据分组信息获取资产列表
             getAssetsByGroups(cnt){
               this.$api.getAssetsByGroups(cnt,(res)=>{
-                  this.tableData = JSON.parse(res.data.c)
+                  this.tableData = this.$util.tryParseJson(res.data.c)
                   if (this.tableData.length < this.count) {
                       this.pageOver = true
                   } else {
@@ -583,7 +583,7 @@
             let cnt ={}
             //分组列表
             this.$api.getORGUserSysTagGroups(cnt,(res)=>{
-                let data = JSON.parse(res.data.c)
+                let data = this.$util.tryParseJson(res.data.c)
                 that.grandId = data[0].groupId
                 let cnt2 = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
@@ -591,10 +591,11 @@
                 };
                 this.$api.getTagGroupTree(cnt2,(res1)=>{
                     if (res1.data.rc == this.$util.RC.SUCCESS) {
-                        if (res1.data.c == '{}') {
+                        let groupData = this.$util.tryParseJson(res1.data.c,{})
+                        if (groupData == '{}' || groupData == {}) {
                             this.groups = ''
                         } else {
-                            this.groups = JSON.parse(res1.data.c)
+                            this.groups = groupData
                         }
                     }
                 })
@@ -615,8 +616,8 @@
                 count:500,
                 offset:0
             }
-            this.$api.queryAssets(cnt2,function (res) {
-                that.assetList = JSON.parse(res.data.c)
+            this.$api.queryAssets(cnt2, (res)=> {
+                that.assetList = this.$util.tryParseJson(res.data.c)
             })
         }
     }

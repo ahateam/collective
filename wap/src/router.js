@@ -1,68 +1,64 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from './views/home/home'
-import login from './views/login/login'
-import tellLogin from './views/login/tellLogin'
-import test from './views/test/test'
-import page from './views/home/page'
-import register from './views/login/register'
-import registerSuccess from './views/login/registerSuccess'
-import voteMeet from './views/vote/voteMeet'
-import voteInfo from './views/vote/voteInfo'
-import waitVote from './views/vote/waitVote'
-import failVote from './views/vote/failVote'
-import overVote from './views/vote/overVote'
-import voteElectionRes from './views/vote/voteElectionRes'
-
-import voteWait from './views/vote/voteWait'
-import voteList from './views/vote/voteList'
-import voteRes from './views/vote/voteRes'
-import user from './views/user/user'
-import userUpdate from './views/user/userUpdate'
 
 
-import meet from './views/meet/meet'
-import meetAdd from './views/meet/meetAdd'
-import meetUser from './views/meet/meetUser'
-import meetChoose from './views/meet/meetChoose'
-import meetAloneVoteAdd from './views/meet/meetAloneVoteAdd'
-import meetMoreVoteAdd from './views/meet/meetMoreVoteAdd'
-import meetVoteOptionAdd from './views/meet/meetVoteOptionAdd'
-import meetInfo from './views/meet/meetInfo'
-import meetVoteInfo from './views/meet/meetVoteInfo'
-import meetAloneVoteEdit from './views/meet/meetAloneVoteEdit'
-import meetVoteAdd from './views/meet/meetVoteAdd'
-import voteOptionPick from './views/meet/voteOptionPick'
+const home = () => import('./views/home/home')
 
-import choose from './views/home/choose'
+const login = () => import('./views/login/login')
+const tellLogin  = () => import('./views/login/tellLogin')
+const  test = () => import('./views/test/test')
+const page  = () => import('./views/home/page')
+const register  = () => import('./views/login/register')
+const registerSuccess  = () => import('./views/login/registerSuccess')
+const voteMeet  = () => import('./views/vote/voteMeet')
+const voteInfo  = () => import('./views/vote/voteInfo')
+const waitVote  = () => import('./views/vote/waitVote')
+const failVote  = () => import('./views/vote/failVote')
 
-import position from './views/position/position'
-import positionSet from './views/position/positionSet'
+const  overVote = () => import('./views/vote/overVote')
+const  voteElectionRes = () => import('./views/vote/voteElectionRes')
+const  voteWait = () => import('./views/vote/voteWait')
+const  voteList = () => import('./views/vote/voteList')
+const  voteRes = () => import('./views/vote/voteRes')
+const  user = () => import('./views/user/user')
+const  userUpdate = () => import('./views/user/userUpdate')
 
-import file from './views/file/file'
-import userFile from './views/file/userFile'
-import formFile from './views/file/formFile'
-import bonusFile from './views/file/bonusFile'
-import article from './views/article/article'
-import articleInfo from './views/article/articleInfo'
+const  meet = () => import('./views/meet/meet')
+const  meetAdd = () => import('./views/meet/meetAdd')
+const  meetUser = () => import('./views/meet/meetUser')
+const meetChoose  = () => import('./views/meet/meetChoose')
+const  meetAloneVoteAdd = () => import('./views/meet/meetAloneVoteAdd')
+const  meetMoreVoteAdd = () => import('./views/meet/meetMoreVoteAdd')
+const meetVoteOptionAdd  = () => import('./views/meet/meetVoteOptionAdd')
+const  meetInfo = () => import('./views/meet/meetInfo')
+const  meetVoteInfo = () => import('./views/meet/meetVoteInfo')
+const meetAloneVoteEdit  = () => import('./views/meet/meetAloneVoteEdit')
+const  meetVoteAdd = () => import('./views/meet/meetVoteAdd')
+const  voteOptionPick = () => import('./views/meet/voteOptionPick')
+const  choose = () => import('./views/home/choose')
+const position  = () => import('./views/position/position')
+const positionSet  = () => import( './views/position/positionSet')
+const file  = () => import('./views/file/file')
+const userFile  = () => import( './views/file/userFile')
+const formFile  = () => import('./views/file/formFile')
+const bonusFile  = () => import('./views/file/bonusFile')
+const article  = () => import('./views/article/article')
+const  articleInfo = () => import('./views/article/articleInfo')
 
-import mechMoney from './views/mech/mechMoney'
-
+const  mechMoney = () => import('./views/mech/mechMoney')
 //集体经济资产/分红展示
-import list from './views/list/list'
-import listBonus from './views/list/listBonus'
-import listInfo from './views/list/listInfo'
-import bonusInfo from './views/list/bonusInfo'
+const  list = () => import('./views/list/list')
+const  listBonus = () => import('./views/list/listBonus')
+const  listInfo= () => import('./views/list/listInfo')
+const  bonusInfo = () => import('./views/list/bonusInfo')
 //我的机构
-import mech from './views/mech/mech'
-import mechInfo from './views/mech/mechInfo'
-
+const  mech = () => import('./views/mech/mech')
+const  mechInfo = () => import('./views/mech/mechInfo')
 //我的投票
-import  poll from './views/poll/poll'
-import pollInfo from './views/poll/pollInfo'
-import pollElectionRes from './views/poll/pollElectionRes'
-import pollRes from './views/poll/pollRes'
-
+const  poll = () => import('./views/poll/poll')
+const pollInfo  = () => import( './views/poll/pollInfo')
+const  pollElectionRes = () => import( './views/poll/pollElectionRes')
+const  pollRes = () => import('./views/poll/pollRes')
 
 Vue.use(Router)
 

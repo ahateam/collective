@@ -253,40 +253,7 @@
                 this.mobile = this.userInfo.mobile
                 this.idNumber = this.userInfo.idNumber
                 this.shareAmount = this.userInfo.shareAmount
-            //     let offset = 0
-            //     let orgId = this.userInfo.orgId
-            //     let count = 100
-            // let cnt = {
-            //     orgId: orgId,
-            //     isActive:true,
-            //     count: count,
-            //     offset: offset,
-            // };
-            // this.$api.getVoteProjectsByOrgId(cnt,function (res) {
-            //     that.started = JSON.parse(res.data.c).started
-            //     that.startedNums = that.started.length
-            //     console.log('asdasdadsadadadasdasdad'+   that.startedNums )
-            // })
 
-                // if (this.userInfo.visor == this.$constData.visor.VISOR_CHAIRMAN) {
-                //     this.userPost = '监事长'
-                // } else if (this.userInfo.duty ==this.$constData.duty.DUTY_CHAIRMAN) {
-                //     this.userPost = '董事长'
-                // } else if (this.userInfo.visor == this.$constData.visor.VISOR_VICE_SUPERVISOR) {
-                //     this.userPost = '副监事长'
-                // } else if (this.userInfo.duty == this.$constData.duty.DUTY_VICE_CHAIRMAN) {
-                //     this.userPost = '副董事长'
-                // } else if (this.userInfo.visor == this.$constData.visor.VISOR_SUPERVISOR) {
-                //     this.userPost = '监事'
-                // } else if (this.userInfo.duty == this.$constData.duty.DUTY_DIRECTOR) {
-                //     this.userPost = '董事'
-                // } else if (this.userInfo.share == this.$constData.share.SHARE_REPRESENTATIVE) {
-                //     this.userPost = '股东代表'
-                // } else if (this.userInfo.share == this.$constData.share.SHARE_SHAREHOLDER) {
-                //     this.userPost = '股东'
-                // } else {
-                //     this.userPost = '暂无职务'
-                // }
                 this.userPost = '暂无职务'
 
            //管理员权限

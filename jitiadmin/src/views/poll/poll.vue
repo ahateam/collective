@@ -148,7 +148,7 @@
             getVotes(cnt){
                 this.$api.getVotes(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.tableData = JSON.parse(res.data.c)
+                        this.tableData = this.$util.tryParseJson(res.data.c)
                     }else{
                         this.tableData = []
                     }

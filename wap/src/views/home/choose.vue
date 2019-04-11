@@ -2,21 +2,31 @@
     <div>
         <home-header></home-header>
         <div class="main-box">
-               <span v-if="orgList.length>0">
+            <van-list
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多可选的组织机构了"
+                    @load="onLoad"
+            >
+
+                <span v-if="orgList.length>0">
                     <span v-for="(item,index) in orgList" :key="index" @click="chooseBtn(item.id)">
-                    <div class="nav-box" >
-                    <div class="nav-title">
-                      {{item.name}}
-                    </div>
-                    <div class="nav-line">
-                    </div>
-                    <div class="nav-content">
-                     {{item.address}}
-                    </div>
-                </div>
-                </span>
+                        <div class="nav-box" >
+                            <div class="nav-title">
+                              {{item.name}}
+                            </div>
+                            <div class="nav-line">
+                            </div>
+                            <div class="nav-content">
+                             {{item.address}}
+                            </div>
+                        </div>
+                    </span>
                </span>
-                <span v-else>
+
+            </van-list>
+
+                <span v-if="orgList.length==0">
                     <p style="padding: 15px;font-size: 1.6rem;color: #666;">
                         您还没有加入一个组织哟，请联系当地机构管理员申请加入哟
                     </p>
@@ -31,6 +41,8 @@
 
 <script>
     import HomeHeader from '@/components/head/homeHeader'
+    import { Toast } from 'vant';
+
     export default {
         name: "home",
         components:{
@@ -38,28 +50,80 @@
         },
         data(){
           return{
-            orgList:[],
+              orgList:[],
+              offset:0,
+              count:10,
+              page:1,
+              // pageOver:false,
+              loading: false,
+              finished: false
 
           }
         },
         methods:{
-            chooseBtn(orgid){
-                let that = this
-                let userId = JSON.parse(localStorage.getItem('userInfo')).id
+            //ajax请求层
+            //根据用户id请求组织列表+分页
+           getUserORGs(cnt){
+              this.$api.getUserORGs(cnt,(res)=>{
+                  let data = []
+                  if(res.data.rc == this.$util.RC.SUCCESS){
+                      data = this.$util.tryParseJson(res.data.c)
+                  }else{
+                      data = []
+                  }
+                  this.orgList = this.orgList.concat(data)
+                  if(data.length <this.count){
+                      this.finished = true
+                  }
+              })
+            },
+            loginInORG(cnt){
+                this.$api.loginInORG(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        let user = res.data.c
+                        localStorage.setItem('orgInfo',user)
+                        this.$router.push('/home')
+                    }else{
+                        Toast.fail({
+                            duration:200,
+                            message:'选择失败'
+                        })
+                    }
 
+
+                })
+
+
+            },
+
+
+            //普通事件层
+            onLoad() {
+                // 异步更新数据
+                setTimeout(() => {
+                   if(this.finished == false){
+                       this.page = this.page+1
+                       let cnt={
+                           offset:(this.page-1)*this.count,
+                           count:this.count,
+                           userId: JSON.parse(localStorage.getItem('userInfo')).id,
+                       }
+                       this.getUserORGs(cnt)
+                       // 加载状态结束
+                       this.loading = false
+                   }else{
+                       this.loading = false
+                   }
+                }, 300);
+            },
+
+            chooseBtn(orgid){
+                let userId = JSON.parse(localStorage.getItem('userInfo')).id
                 let cnt = {
                     orgId: orgid,
                     userId: userId,
                 };
-                this.$api.loginInORG(cnt,function (res) {
-                    let user = res.data.c
-                    localStorage.setItem('orgInfo',user)
-                    that.$router.push('/home')
-                })
-
-
-
-
+                this.loginInORG(cnt)
             },
             returnBtn(){
                 localStorage.clear()
@@ -67,16 +131,13 @@
             }
         },
         mounted(){
-            let that = this
             let userId = JSON.parse(localStorage.getItem('userInfo')).id
             let cnt = {
+                offset:this.offset,
+                count:this.count,
                 userId: userId,
-            };
-
-            this.$api.getUserORGs(cnt,function (res) {
-                that.orgList = JSON.parse(res.data.c)
-                console.log( that.orgList )
-            })
+            }
+            this.getUserORGs(cnt)
 
 
         }

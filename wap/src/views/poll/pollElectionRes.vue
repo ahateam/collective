@@ -82,39 +82,35 @@
             }
         },
         mounted() {
-            let that =this
             this.info = JSON.parse(localStorage.getItem('vote')).voteInfo
             let cnt = {
                 voteId:this.info.id
             }
 
-            this.$api.getVoteDetail(cnt,function (res) {
+            this.$api.getVoteDetail(cnt, (res)=> {
 
-                that.optionList = JSON.parse(res.data.c)
-                console.log('11111')
-                console.log(   that.optionList)
-                that.opsNum =  that.optionList.ticketCount
-                that.quorum = that.optionList.vote.quorum
+                this.optionList =this.$util.tryParseJson(res.data.c)
+                this.opsNum =  this.optionList.ticketCount
+                this.quorum = this.optionList.vote.quorum
 
-                let opsArr = that.optionList.ops
+                let opsArr = this.optionList.ops
 
                 //计算弃权数/取出身份证
                 for(let i=0;i<opsArr.length;i++){
-                    // that.opsNum = that.opsNum +opsArr[i].ballotCount
                     if(opsArr[i].title == '弃权'){
-                        that.waiver = that.waiver + opsArr[i].ballotCount
-                        that.idNumberList.push('')
+                        this.waiver = this.waiver + opsArr[i].ballotCount
+                        this.idNumberList.push('')
                     }else{
-                        that.idNumberList.push(JSON.parse(opsArr[i].ext).idNumber +'')
+                        this.idNumberList.push(JSON.parse(opsArr[i].ext).idNumber +'')
                     }
                 }
 
-                let  passData = parseInt(that.quorum *(parseInt(that.info.effectiveRatio)/100))+1
-                let  failData = parseInt(that.quorum *(parseInt(that.info.failureRatio)/100))+1
+                let  passData = parseInt(this.quorum *(parseInt(this.info.effectiveRatio)/100))+1
+                let  failData = parseInt(this.quorum *(parseInt(this.info.failureRatio)/100))+1
 
 
-                if(that.waiver >= failData){        //无效
-                    that.status = 0
+                if(this.waiver >= failData){        //无效
+                    this.status = 0
                 }else{
                     let   successType = 0  //默认是不成功
 
@@ -126,14 +122,14 @@
                     if(successType == 1){
                         for(let i=0;i<opsArr.length;i++){
                             if(opsArr[i].ballotCount >= passData){
-                                that.status = 1                 //通过
+                                this.status = 1                 //通过
                             }
                         }
                     }else{
-                        if(that.opsNum ==that.quorum){     //人到齐了
-                            that.status = 2             //失败
+                        if(this.opsNum ==this.quorum){     //人到齐了
+                            this.status = 2             //失败
                         }else{
-                            that.status = -1            //等待投票
+                            this.status = -1            //等待投票
                         }
                     }
                 }

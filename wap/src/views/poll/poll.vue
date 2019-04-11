@@ -4,7 +4,14 @@
         <div class="main-box">
             <van-tabs  swipeable>
                 <van-tab title="我的投票">
-                    <div v-if="voteList.length>0">
+                    <van-list
+                            v-model="loading"
+                            :finished="finished"
+                            finished-text="没有更多投票了"
+                            @load="onLoad"
+                    >
+                        <div v-if="voteList.length>0">
+
                         <div v-for="(item,index) in voteList" :key="index">
                             <div class="vote-item-box">
                                 <div class="vote-item-title">
@@ -52,13 +59,19 @@
                             </div>
                         </div>
                     </div>
-
-
+                    </van-list>
 
 
                 </van-tab>
+
                 <van-tab title="已参与">
-                    <div v-if="voteList.length>0">
+                    <van-list
+                            v-model="loading"
+                            :finished="finished"
+                            finished-text="没有更多可选的组织机构了"
+                            @load="onLoad"
+                    >
+                        <div v-if="voteList.length>0">
                         <div v-for="(item,index) in voteList" :key="index">
                             <div class="vote-item-box">
                                 <div class="vote-item-title">
@@ -96,6 +109,7 @@
                             </div>
                         </div>
                     </div>
+                    </van-list>
                 </van-tab>
             </van-tabs>
             <div class="create-btn" @click="returnBtn">返回首页</div>
@@ -112,13 +126,53 @@
             return {
                 voteList:[],
                 count:10,
-                offset:0
+                offset:0,
+                page:1,
+                loading: false,
+                finished: false,
             }
         },
         components: {
             HeaderBox
         },
         methods: {
+            //ajax请求层
+            getVotes(cnt){
+                this.$api.getVotes(cnt, (res)=> {
+                    let data = []
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        data = this.$util.tryParseJson(res.data.c)
+                    }else{
+                        data = []
+                    }
+                    this.voteList = this.voteList.concat(data)
+                    if(data.length <this.count){
+                        this.finished = true
+                    }
+                })
+            },
+
+            //普通事件层
+            //分页
+            onLoad() {
+                // 异步更新数据
+                setTimeout(() => {
+                    if(this.finished == false){
+                        this.page = this.page+1
+                        let cnt={
+                            offset:(this.page-1)*this.count,
+                            count:this.count,
+                            orgId: JSON.parse(localStorage.getItem('user')).orgId,
+                        }
+                        this.getVotes(cnt)
+                        // 加载状态结束
+                        this.loading = false
+                    }else{
+                        this.loading = false
+                    }
+                }, 300);
+            },
+
             returnBtn(){
                 this.$router.push('/home')
             },
@@ -140,21 +194,12 @@
             },
         },
         mounted() {
-            let that = this
-            console.log(JSON.parse(localStorage.getItem('user')))
             let cnt = {
                 orgId: JSON.parse(localStorage.getItem('user')).orgId,
                 count: this.count,
                 offset: this.offset,
             }
-            this.$api.getVotes(cnt,function (res) {
-                if(res.data.rc == that.$util.RC.SUCCESS){
-                    that.voteList = JSON.parse(res.data.c)
-                    console.log(that.voteList)
-                }
-
-
-            })
+            this.getVotes(cnt)
 
 
         }
@@ -176,7 +221,6 @@
     }
     .main-box {
         background: #fff;
-
     }
     .list-box{
         width: 85%;

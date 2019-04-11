@@ -58,31 +58,25 @@
         name: "pollRes",
         data() {
             return {
-                // quorum:0,   //应到人数
-                // opsNum:0,   //已投人数
-                // waiver:0,   //弃权人数
+
                 //投票
                 info: '',
                 optionList :[],
             }
         },
         mounted() {
-            let that =this
+
             this.info = JSON.parse(localStorage.getItem('vote')).voteInfo
             let cnt = {
                 voteId:this.info.id
             }
-            this.$api.getVoteDetail(cnt,function (res) {
-                that.optionList = JSON.parse(res.data.c)
-                // console.log(that.optionList)
-                // let info = JSON.parse(res.data.c)
-                // that.quorum = info.vote.quorum
-                // for(let i=0;i<info.ops.length;i++){
-                //     if(info.ops[i].title == '弃权'){
-                //         that.waiver  =   that.waiver +info.ops[i].ballotCount
-                //     }
-                //     that.opsNum = that.opsNum+info.ops[i].ballotCount
-                // }
+            this.$api.getVoteDetail(cnt, (res)=> {
+                if(res.data.rc == this.$util.RC.SUCCESS){
+                    this.optionList = this.$util.tryParseJson(res.data.c)
+                }else{
+                    this.optionList = []
+                }
+
 
             })
         },

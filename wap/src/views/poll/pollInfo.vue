@@ -362,7 +362,6 @@
 
             //投票按钮
             submitBtn() {
-                let that =this
                 let options = []        //获取页面的selections数据
                 for (let i = 0; i < this.optionActive.length; i++) {
                     if (this.optionActive[i] == true) {
@@ -380,21 +379,18 @@
                     ballotCount: user.weight,
                     remark: '无'
                 }
-                console.log(cnt)
-                this.$api.vote(cnt, function (res) {
-                    console.log(res)
-                    if(res.data.rc == that.$util.RC.SUCCESS){
+                this.$api.vote(cnt,  (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
                         Toast.success({
-                            duration:500,
+                            duration:200,
                             message:'投票成功'
                         })
-                        that.$router.push('/poll')
+                        this.$router.push('/poll')
                     }else{
                         Toast.fail({
-                            duration:500,
+                            duration:200,
                             message:'投票失败 ,'+res.data.c
                         })
-
                     }
                 })
             },
@@ -408,7 +404,7 @@
         mounted() {
 
             this.info = JSON.parse(localStorage.getItem('vote')).voteInfo
-            console.log(this.info)
+
 
 
             this.activeNums = this.info.choiceCount
@@ -420,70 +416,62 @@
 
             Object.assign(data, obj)
             localStorage.setItem('vote', JSON.stringify(data))
-            let that = this
-            let that1 = this
 
             let cnt = {
                 voteId: this.info.id,
             };
-            console.log(cnt)
+
 
             //计算投票信息
-            this.$api.getVoteDetail(cnt,function (res) {
-
-                if(res.data.rc == that.$util.RC.SUCCESS){
-
-
+            this.$api.getVoteDetail(cnt, (res)=> {
+                if(res.data.rc == this.$util.RC.SUCCESS){
                     let info = JSON.parse(res.data.c)
-                    that.voteDetail = info
-                    console.log('111')
-                    console.log(info)
-                    that.ticketCount = info.ticketCount
-                    that.quorum = info.vote.quorum
+                    this.voteDetail = info
+                    this.ticketCount = info.ticketCount
+                    this.quorum = info.vote.quorum
                     for(let i=0;i<info.ops.length;i++){
                         if(info.ops[i].title == '弃权'){
-                            that.waiver  =   that.waiver +info.ops[i].ballotCount
+                            this.waiver  =   this.waiver +info.ops[i].ballotCount
                         }
-                        that.opsNum = that.opsNum+info.ops[i].ballotCount
+                        this.opsNum = this.opsNum+info.ops[i].ballotCount
                     }
                 }
             })
 
 
 
-            this.$api.getVoteOptions(cnt, function (res) {
-                console.log(res)
-                that.voteOption = JSON.parse(res.data.c)
-                let voteOptionArr = that.voteOption
+            this.$api.getVoteOptions(cnt,  (res)=> {
+
+                this.voteOption = this.$util.tryParseJson(res.data.c)
+                let voteOptionArr = this.voteOption
                 //判断用户选择过哪些选项
                 let cnt1 = {
-                    voteId: that.info.id,
+                    voteId: this.info.id,
                     userId: JSON.parse(localStorage.getItem('user')).id
                 }
-                that.$api.getVoteTicket( cnt1, function (res1) {
-                    if (res1.data.rc == that1.$util.RC.SUCCESS) {
-                        console.log(voteOptionArr)
+
+                this.$api.getVoteTicket( cnt1,  (res1)=> {
+                    if (res1.data.rc == this.$util.RC.SUCCESS) {
                         if (JSON.parse(res1.data.c) == null) {        //未投票的
-                            that1.voteShow = false
-                            that1.subBtnShow = true                 //显示投票按钮
-                            for (let i = 0; i < that1.voteOption.length + 1; i++) {
-                                that1.optionActive.push(false)
+                            this.voteShow = false
+                            this.subBtnShow = true                 //显示投票按钮
+                            for (let i = 0; i < this.voteOption.length + 1; i++) {
+                                this.optionActive.push(false)
                             }
                         } else {                  //已经投过票的
-                            for (let i = 0; i < that1.voteOption.length + 1; i++) { //默认未投票展示
-                                that1.optionActive.push(false)
+                            for (let i = 0; i < this.voteOption.length + 1; i++) { //默认未投票展示
+                                this.optionActive.push(false)
                             }
-                            that1.voteShow = true
-                            that1.subBtnShow = false                //隐藏投票按钮
+                            this.voteShow = true
+                            this.subBtnShow = false                //隐藏投票按钮
                             let selection = JSON.parse(JSON.parse(res1.data.c).selection)
-                            console.log(selection.length);
                             if (selection.length == 0) {      //投弃权票的展示
                                 console.log('弃权')
                             } else {                      //投票选项
                                 for (let i = 0; i < selection.length; i++) {        //投有效票的展示
                                     for (let j = 0; j < voteOptionArr.length; j++) {
                                         if (selection[i] == voteOptionArr[j].id) {
-                                            that1.optionActive[j] = true
+                                            this.optionActive[j] = true
                                         }
                                     }
                                 }

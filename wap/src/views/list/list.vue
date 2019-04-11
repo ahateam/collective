@@ -6,6 +6,7 @@
                 <van-tabs  swipeable @change="changeTab" v-model="activeTab" >
 
                     <van-tab :title="item.keyword"  v-for="(item,index) in groups" :key="index">
+
                         <div  v-if="listData.length != 0">
                             <van-list
                                     v-model="loading"
@@ -88,7 +89,6 @@
         },
         methods:{
             onLoad() {          //分页加载
-                let that = this
                 // 异步更新数据
                     this.offset = this.offset+this.count
                     let orgId = JSON.parse(localStorage.getItem('user')).orgId
@@ -98,19 +98,19 @@
                             count:this.count,
                             offset:this.offset
                         }
-                        this.$api.queryAssets(cnt,function (res) {
+                        this.$api.queryAssets(cnt, (res)=> {
                             let  arr = JSON.parse(res.data.c)
                             console.log(arr)
                             setTimeout(() => {
                                 for (let i = 0; i < arr.length; i++) {
-                                    that.listData.push(arr[i]);
+                                    this.listData.push(arr[i]);
                                 }
                                 // 加载状态结束
-                                that.loading = false;
+                                this.loading = false;
 
                                 // 数据全部加载完成
-                                if (arr.length< that.count) {
-                                    that.finished = true;
+                                if (arr.length< this.count) {
+                                    this.finished = true;
                                 }
                             }, 500);
                         })
@@ -121,17 +121,17 @@
                             count: this.count, // Integer
                             offset: this.offset, // Integer
                         }
-                        this.$api.getAssetsByGroups(cnt,function (res) {
+                        this.$api.getAssetsByGroups(cnt, (res)=> {
                             let  arr = JSON.parse(res.data.c)
                             setTimeout(() => {
                                 for (let i = 0; i < arr.length; i++) {
-                                    that.listData.push(arr[i]);
+                                    this.listData.push(arr[i]);
                                 }
                                 // 加载状态结束
-                                that.loading = false;
+                                this.loading = false;
                                 // 数据全部加载完成
-                                if (arr.length< that.count) {
-                                    that.finished = true;
+                                if (arr.length< this.count) {
+                                    this.finished = true;
                                 }
                             }, 500);
                         })
@@ -146,7 +146,6 @@
 
 
             changeTab(index,value){
-                let that = this
                 let orgId = JSON.parse(localStorage.getItem('user')).orgId
                 this.offset = 0
                 this.finished = false
@@ -157,8 +156,8 @@
                         count:this.count,
                         offset:this.offset
                     }
-                    this.$api.queryAssets(cnt,function (res) {
-                        that.listData = JSON.parse(res.data.c)
+                    this.$api.queryAssets(cnt, (res) =>{
+                        this.listData = JSON.parse(res.data.c)
                     })
                 }else{              //其他tab
                     for(let i = 0 ;i<this.groups.length;i++){
@@ -173,10 +172,10 @@
                         offset: this.offset, // Integer
                     }
                     console.log(cnt)
-                    this.$api.getAssetsByGroups(cnt,function (res) {
+                    this.$api.getAssetsByGroups(cnt, (res) =>{
 
-                        that.listData = JSON.parse(res.data.c)
-                        console.log(  that.listData)
+                        this.listData = JSON.parse(res.data.c)
+                        console.log(  this.listData)
                     })
                 }
 
@@ -201,9 +200,8 @@
                     let cnt = {
                         assetId: info.id,
                     }
-                    let that = this
-                    this.$api.delAsset(cnt,function (res) {
-                       if(res.data.rc == that.$util.RC.SUCCESS){
+                    this.$api.delAsset(cnt, (res)=> {
+                       if(res.data.rc == this.$util.RC.SUCCESS){
                            Toast.success({
                                duration:500,
                                message:'删除成功'
@@ -214,7 +212,7 @@
                                message:'删除失败'
                            })
                        }
-                       that.$router.push('/page')
+                       this.$router.push('/page')
                     })
                 }).catch(() => {
                     // on cancel
@@ -222,7 +220,7 @@
             }
         },
         mounted(){
-            let that = this
+
             let orgId = JSON.parse(localStorage.getItem('user')).orgId
             let cnt = {
                 orgId:orgId,
@@ -230,9 +228,9 @@
                 offset:this.offset
             }
 
-            this.$api.queryAssets(cnt,function (res) {
-                that.listData = JSON.parse(res.data.c)
-                console.log(that.listData)
+            this.$api.queryAssets(cnt, (res)=> {
+                this.listData = JSON.parse(res.data.c)
+                console.log(this.listData)
             })
 
             //请求机构内 第一层的组织分组
@@ -240,8 +238,8 @@
                 orgId:orgId,
                 groupId:100
             }
-            this.$api.getTagGroupTree(cnt1,function (res) {
-                that.groups = JSON.parse(res.data.c)
+            this.$api.getTagGroupTree(cnt1, (res)=> {
+                this.groups = JSON.parse(res.data.c)
                 let obj1 = {
                     keyword: "组织资产",
                     groupId:102
@@ -249,9 +247,9 @@
                 let obj={
                     keyword: "全部资产"
                 }
-                that.groups.unshift(obj1)
-                that.groups.unshift(obj)
-                console.log(that.groups)
+                this.groups.unshift(obj1)
+                this.groups.unshift(obj)
+
             })
 
 

@@ -99,6 +99,8 @@
                         pwd: this.pwd,
                     }
                     this.$api.registeUser(cnt,(res)=>{
+
+
                         if(res.data.rc == this.$util.RC.SUCCESS){
                             this.$message({
                                 showClose: true,

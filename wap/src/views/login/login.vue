@@ -63,36 +63,33 @@
         },
         methods:{
             formBtn(){
-                let that = this
                 let cnt = {
                     mobile: this.userName,
                     pwd: this.pwd,
                 };
                 if(this.userName == ''){
                     Toast.fail({
-                        duration:500,
+                        duration:200,
                         message:'请输入手机号'
                     })
                 }else if(this.pwd == ''){
                     Toast.fail({
-                        duration:500,
+                        duration:200,
                         message:'请输入密码'
                     })
                 }else{
-                    this.$api.loginByMobileAndPwd(cnt,function (res) {
-
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-
-                            localStorage.setItem('userInfo',res.data.c)
-
+                    this.$api.loginByMobileAndPwd(cnt, (res)=> {
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            let data = this.$util.tryParseJson(res.data.c,{})
+                            localStorage.setItem('userInfo',JSON.stringify(data))
                             Toast.success({
-                                durationL:500,
+                                durationL:200,
                                 message:'登录成功'
                             })
-                            that.$router.push('/choose')
+                            this.$router.push('/choose')
                         }else{
                             Toast.fail({
-                                duration:500,
+                                duration:200,
                                 message:'登录失败'
                             })
                         }
@@ -127,7 +124,6 @@
             }
         },
         mounted(){
-            console.log(localStorage.getItem('userInfo'));
             if(localStorage.getItem('userInfo') !=null){
                 this.$router.push('/choose')
             }

@@ -176,7 +176,7 @@
                };
                this.$api.getVoteOptions(cnt,function (res) {
                    if(res.data.rc == that.$util.RC.SUCCESS){
-                       let data = JSON.parse(res.data.c)
+                       let data = this.$util.tryParseJson(res.data.c)
                        for(let i = 0; i<data.length;i++){
 
                            let obj = {
@@ -219,7 +219,6 @@
            }
        },
         mounted(){
-            let that = this
             let orgId = localStorage.getItem('orgId')
             let cnt = {
                 orgId: orgId,
@@ -227,8 +226,8 @@
                 count: this.count,
                 offset:0
             };
-            this.$api.getVoteProjectsByOrgId(cnt,function (res) {
-                let data = JSON.parse(res.data.c)
+            this.$api.getVoteProjectsByOrgId(cnt, (res) =>{
+                let data = this.$util.tryParseJson(res.data.c)
                 if(data != '' || data != undefined){
                     console.log(data)
                     let dataList = []
@@ -247,7 +246,7 @@
                         let item = Object.assign(data.waiting[i],obj)
                         dataList.push(item)
                     }
-                    that.tableData = dataList
+                    this.tableData = dataList
                 }
             })
 

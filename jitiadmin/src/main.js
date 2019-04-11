@@ -8,9 +8,8 @@ import './assets/icon/iconfont.css'
 import VDistpicker from 'v-distpicker'
 import constData from './assets/api/util/constData'
 import axios from 'axios'
-import util from 'ahaapi'
 import api from './assets/api/util/utils'
-
+import util from 'ahaapi'
 import vueConfig from '../vue.config.js'
 
 
