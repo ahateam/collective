@@ -54,8 +54,7 @@
             </el-container>
         </el-container>
 
-        <el-dialog title="机构列表" :visible.sync="showActive">
-
+        <el-dialog title="选择机构" :visible.sync="showActive">
             <template>
                 <el-table
                         :data="tableData"
@@ -124,8 +123,8 @@
                 tableData: [],
                 orgName: '',
                 isRouterActive: true,
-                menuList:[]
-
+                menuList:[],
+                name:'',
 
             }
         },
@@ -143,7 +142,6 @@
 
             show() {
                 let that = this
-
                 let cnt = {
                    userId:localStorage.getItem('userId')
                 }
@@ -242,10 +240,6 @@
             }
         },
         created() {
-
-
-
-
         },
         mounted() {
             this.menuList = menu.areaMenu

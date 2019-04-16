@@ -281,6 +281,7 @@
                 });
                this.outLogin()
             }
+
             if(localStorage.getItem('orgId') == '' || localStorage.getItem('orgId') == null){
                 this.menuList = menu.lowMenu
                 this.showActive1 = true

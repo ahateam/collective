@@ -108,7 +108,9 @@
             }
         },
         mounted() {
+
             this.info = this.$route.params.info
+            console.log(this.info)
         },
 
     }
