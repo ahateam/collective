@@ -215,7 +215,6 @@
         methods:{
             //查询列表
             searchListBtn(){
-                let that =this
                 this.isList = true
                 this.page = 1
                 let cnt ={
@@ -241,13 +240,13 @@
                     cnt.businessModes = this.businessMode
                 }
 
-                this.$area.getAssetListByTypes(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.tableData = JSON.parse(res.data.c)
-                        if( that.tableData.length <that.count){
-                            that.pageOver = true
+                this.$bank.getAssetListByTypes(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.tableData = this.$util.tryParseJson(res.data.c)
+                        if( this.tableData.length <this.count){
+                            this.pageOver = true
                         }else{
-                            that.pageOver = false
+                            this.pageOver = false
                         }
                 }
                 })
@@ -257,7 +256,7 @@
             //表格分页
             changePage(page){
                 this.page = page
-                let that = this
+
                 let cnt ={
                     districtId: localStorage.getItem('mechId'), // Long 区id
                     offset:(page-1)*this.count,
@@ -281,20 +280,20 @@
                     cnt.businessModes = this.businessMode
                 }
 
-                this.$area.getAssetListByTypes(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.tableData = JSON.parse(res.data.c)
-                        if(that.tableData.length < that.count){
-                            that.pageOver = true
+                this.$bank.getAssetListByTypes(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.tableData = JSON.parse(res.data.c)
+                        if(this.tableData.length < this.count){
+                            this.pageOver = true
                         }else{
-                            that.pageOver = false
+                            this.pageOver = false
                         }
                     }
                 })
             },
             //查询统计图
             searchBtn(){
-                let that =this
+
                 this.isList = false
                 this.chartData.rows = []
                 let cnt ={
@@ -320,23 +319,23 @@
                      cnt.businessModes = this.businessMode
                  }
                 console.log(cnt)
-                this.$area.districtCountByYears(cnt,function (res) {
-                    that.data = JSON.parse(res.data.c)
-                    for(let i=0;i<that.data.length;i++){
-                        if(that.data[i].build_time == undefined || that.data[i].build_time == null) {
+                this.$bank.districtCountByYears(cnt, (res)=> {
+                    this.data = JSON.parse(res.data.c)
+                    for(let i=0;i<this.data.length;i++){
+                        if(this.data[i].build_time == undefined || this.data[i].build_time == null) {
                             let obj = {
                                 '年份':cnt.buildTimes[i],
                                 '原值':0,
                                 '产值':0
                             }
-                            that.chartData.rows.push(obj)
+                            this.chartData.rows.push(obj)
                         }else {
                             let obj = {
-                                '年份':that.data[i].build_time,
-                                '原值':that.data[i].originPrice,
-                                '产值':that.data[i].yearlyIncome
+                                '年份':this.data[i].build_time,
+                                '原值':this.data[i].originPrice,
+                                '产值':this.data[i].yearlyIncome
                             }
-                            that.chartData.rows.push(obj)
+                            this.chartData.rows.push(obj)
                         }
                     }
                 })
@@ -344,14 +343,14 @@
             //查看详情
             infoBtn(info){
                 this.$router.push({
-                    path:'/areaAssetsInfo',
-                    name:'areaAssetsInfo',
+                    path:'/bankAssetsInfo',
+                    name:'bankAssetsInfo',
                     params:{info:info}
                 })
             }
         },
         mounted(){
-            let that = this
+
 
 
 
@@ -379,49 +378,48 @@
 
             //初始化数据
             //org列表
-            this.$area.getORGSByDistrictId(cnt,function (res) {
-                that.orgList = JSON.parse(res.data.c)
-                console.log( that.orgList)
+            this.$bank.getORGSByDistrictId(cnt, (res)=> {
+                this.orgList = JSON.parse(res.data.c)
             })
             //请求资产类型--列表
-            this.$area.getAssetType(cnt,function (res) {
-                that.assetTypeList = JSON.parse(res.data.c)
-                console.log()
+            this.$bank.getAssetType(cnt, (res)=> {
+                this.assetTypeList =this.$util.tryParseJson(res.data.c)
+
             })
             //请求资源类型--列表
-            this.$area.getResType(cnt,function (res) {
-                that.resTypeList = JSON.parse(res.data.c)
+            this.$bank.getResType(cnt, (res) =>{
+                this.resTypeList =this.$util.tryParseJson(res.data.c)
             })
             //请求创建时间（年份） --列表
             let cnt1 = {
                 districtId: localStorage.getItem('mechId'),
                 buildTimes:this.defaultYear
             }
-            this.$area.districtCountByYears(cnt1,function (res) {
-                that.data = JSON.parse(res.data.c)
-                for(let i=0;i<that.data.length;i++){
-                    if(that.data[i].build_time == undefined || that.data[i].build_time == null) {
+            this.$bank.districtCountByYears(cnt1, (res) =>{
+                this.data = this.$util.tryParseJson(res.data.c)
+                for(let i=0;i<this.data.length;i++){
+                    if(this.data[i].build_time == undefined || this.data[i].build_time == null) {
                         let obj = {
                             '年份':cnt1.buildTimes[i],
                             '原值':0,
                             '产值':0
                         }
-                        that.chartData.rows.push(obj)
+                        this.chartData.rows.push(obj)
                     }else {
                         let obj = {
-                            '年份':that.data[i].build_time,
-                            '原值':that.data[i].originPrice,
-                            '产值':that.data[i].yearlyIncome
+                            '年份':this.data[i].build_time,
+                            '原值':this.data[i].originPrice,
+                            '产值':this.data[i].yearlyIncome
                         }
-                        that.chartData.rows.push(obj)
+                        this.chartData.rows.push(obj)
                     }
                 }
             })
 
 
             //请求经营方式--列表
-            this.$area.getBusinessMode(cnt,function (res) {
-                that.businessModeList = JSON.parse(res.data.c)
+            this.$bank.getBusinessMode(cnt, (res)=> {
+                this.businessModeList = this.$util.tryParseJson(res.data.c)
             })
 
 

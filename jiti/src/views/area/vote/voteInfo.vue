@@ -83,8 +83,7 @@
             //分页
             changePage(page){
                 this.page = page
-                let that = this
-                let that1 = this
+
                 this.showUserList = true
                 let cnt ={
                     voteId: this.info.id, // Long 投票编号
@@ -92,28 +91,28 @@
                     count: this.count, // Integer
                     offset: (page-1)*this.count, // Integer
                 }
-                this.$area.getUserBySelection(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.userList = JSON.parse(res.data.c)
+                this.$area.getUserBySelection(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.userList = this.$util.tryParseJson(res.data.c)
                     }
 
-                    if(that.userList.length>0){
-                        that.list = []
-                        for(let i =0;i<that.userList.length;i++){
+                    if(this.userList.length>0){
+                        this.list = []
+                        for(let i =0;i<this.userList.length;i++){
                             let info = {}
                             let cnt1 = {
-                                userId: that.userList[i].userId, // Long 用户编号
+                                userId: this.userList[i].userId, // Long 用户编号
                             };
-                            that.$area.getUserById(cnt1,function (res) {
-                                if(res.data.rc== that1.$util.RC.SUCCESS){
-                                    info = JSON.parse(res.data.c)
-                                    that1.list.push(info)
+                            this.$area.getUserById(cnt1, (res)=> {
+                                if(res.data.rc== this.$util.RC.SUCCESS){
+                                    info = this.$util.tryParseJson(res.data.c)
+                                    this.list.push(info)
                                 }
                             })
-                            if(i < that.count-1){
-                                that.pageOver = true
+                            if(i < this.count-1){
+                                this.pageOver = true
                             }else{
-                                that.pageOver = false
+                                this.pageOver = false
                             }
                         }
                     }
@@ -121,9 +120,7 @@
 
             },
             optionInfo(info){
-                console.log(info)
-                let that = this
-                let that1 = this
+
                 this.page= 1
                 this.showUserList = true
                 this.optionId =  info.id
@@ -133,31 +130,31 @@
                     count: this.count, // Integer
                     offset: this.offset, // Integer
                 }
-                this.$area.getUserBySelection(cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            that.userList = JSON.parse(res.data.c)
+                this.$area.getUserBySelection(cnt, (res)=> {
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.userList = this.$util.tryParseJson(res.data.c)
                         }
 
-                        if(that.userList.length>0){
-                            that.list = []
-                            for(let i =0;i<that.userList.length;i++){
+                        if(this.userList.length>0){
+                            this.list = []
+                            for(let i =0;i<this.userList.length;i++){
                                 let info = {}
                                 let cnt1 = {
-                                    userId: that.userList[i].userId, // Long 用户编号
+                                    userId: this.userList[i].userId, // Long 用户编号
                                 };
-                                that.$area.getUserById(cnt1,function (res) {
+                                this.$area.getUserById(cnt1, (res)=> {
 
-                                    if(res.data.rc== that1.$util.RC.SUCCESS){
-                                        info = JSON.parse(res.data.c)
+                                    if(res.data.rc== this.$util.RC.SUCCESS){
+                                        info = this.$util.tryParseJson(res.data.c)
 
-                                        that1.list.push(info)
+                                        this.list.push(info)
 
                                     }
                                 })
-                                if(i < that.count-1){
-                                    that.pageOver = true
+                                if(i < this.count-1){
+                                    this.pageOver = true
                                 }else{
-                                    that.pageOver = false
+                                    this.pageOver = false
                                 }
                             }
                         }
@@ -169,15 +166,14 @@
         },
 
         mounted() {
-            let that = this
+
             this.info = this.$route.params.info
             let cnt = {
                 voteId:this.info.id
             }
             this.$area.getVoteOptions(cnt,function (res) {
-                if(res.data.rc == that.$util.RC.SUCCESS){
-                    that.tableData = JSON.parse(res.data.c)
-                    console.log(that.tableData)
+                if(res.data.rc == this.$util.RC.SUCCESS){
+                    this.tableData = this.$util.tryParseJson(res.data.c)
                 }
             })
         }

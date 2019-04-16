@@ -154,7 +154,6 @@
         methods:{
             userBtn(userInfo){
                 console.log(userInfo)
-                let that = this
                 this.searchList = []
                 this.searchData = userInfo.realName
                 this.searchDataId = userInfo.id
@@ -164,13 +163,13 @@
                     count: this.count, // Integer
                     offset: this.offset, // Integer
                 }
-                this.$area.getVoteTicketByUserId(cnt,function (res) {
-                   if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.tableData = JSON.parse(res.data.c)
-                        if(that.tableData.length <that.count){
-                            that.pageOver = true
+                this.$area.getVoteTicketByUserId(cnt, (res)=> {
+                   if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.tableData = this.$util.tryParseJson(res.data.c)
+                        if(this.tableData.length <this.count){
+                            this.pageOver = true
                         }else{
-                            that.pageOver = false
+                            this.pageOver = false
                         }
 
                    }
@@ -180,7 +179,7 @@
             },
             //选人搜索事件
             searchBtn(){
-                let that = this
+
                 if(this.org == ''){
                     this.$message.error('请先选择一个组织机构')
                 }else if(this.searchData == ''){
@@ -192,8 +191,8 @@
                         count: this.count, // Integer
                         offset: this.offset, // Integer
                     };
-                    this.$area.getORGUsersLikeRealName(cnt,function (res) {
-                        that.searchList = JSON.parse(res.data.c)
+                    this.$area.getORGUsersLikeRealName(cnt, (res)=> {
+                        this.searchList = this.$util.tryParseJson(res.data.c)
                     })
                 }
 
@@ -224,7 +223,7 @@
 
             changePage(page){
                 this.page = page
-                let that = this
+
                 let offset = (this.page-1)*this.count
                 if(this.org == ''){
                     this.$message.error('请先选择一个组织机构')
@@ -237,12 +236,12 @@
                         count: this.count, // Integer
                         offset: offset, // Integer
                     };
-                    this.$area.getORGUsersLikeRealName(cnt,function (res) {
-                        that.searchList = JSON.parse(res.data.c)
-                        if(that.tableData.length <that.count){
-                            that.pageOver = true
+                    this.$area.getORGUsersLikeRealName(cnt, (res)=> {
+                        this.searchList = this.$util.tryParseJson(res.data.c)
+                        if(this.tableData.length <this.count){
+                            this.pageOver = true
                         }else{
-                            that.pageOver = false
+                            this.pageOver = false
                         }
                     })
                 }
@@ -250,28 +249,27 @@
             },
             optionInfo(info){
                 this.optionShow = true
-                let that = this
+
                 let cnt = {
                     userId: this.searchDataId, // Long 用户编号
                     voteId: info.id, // Long 投票编号
                 }
-                this.$area.getOptionByUserSelection(cnt,function (res) {
-                    console.log(JSON.parse(res.data.c))
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.optionList = JSON.parse(res.data.c)
+                this.$area.getOptionByUserSelection(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.optionList = this.$util.tryParseJson(res.data.c)
                     }
                 })
 
             }
         },
         mounted(){
-            let that = this
+
             let cnt ={
                 districtId: localStorage.getItem('mechId'),
             }
             //org列表
-            this.$area.getORGSByDistrictId(cnt,function (res) {
-                that.orgList = JSON.parse(res.data.c)
+            this.$area.getORGSByDistrictId(cnt, (res)=> {
+                this.orgList = this.$util.tryParseJson(res.data.c)
             })
 
 

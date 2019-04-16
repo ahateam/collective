@@ -273,12 +273,12 @@
             if(localStorage.getItem('assetId') == ''){
                 this.$message.error('请选择资产')
             }else{
-                let that = this
+
                 let cnt={
                     assetId:localStorage.getItem('assetId')
                 }
                 console.log(cnt)
-                this.$demo.getAssetById(cnt,function (res) {
+                this.$demo.getAssetById(cnt, (res)=> {
                     let info= ''
                     info = JSON.parse(res.data.c)
 
@@ -328,7 +328,7 @@
                     if(info.treeNumber == undefined || info.treeNumber == ''){
                         info.treeNumber = '暂无'
                     }
-                    that.info = info
+                    this.info = info
                 })
             }
             console.log(this.info)

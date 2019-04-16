@@ -17,9 +17,13 @@ console.log('开始调用ctrl');
 
 
 //账号登录
-
-
-
+api.loginByMobileAndPwd = function (cnt,callback) {
+    util.call(baseUrl+'/org/loginByMobileAndPwd', cnt, callback)
+}
+//机构列表
+api.getUserORGs = function (cnt,callback) {
+    util.call(baseUrl+'/org/getUserORGs', cnt, callback)
+}
 //区级管理查询-机构列表
 api.getORGExamine = function (cnt,callback) {
     util.call(baseUrl+'/org/getORGExamine', cnt, callback)

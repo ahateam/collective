@@ -42,16 +42,12 @@
             }else{
                 localStorage.setItem('assetId','')
                 let groups = [localStorage.getItem('groupId')]
-                let that = this
                 let cnt={
                     groups:groups
                 }
-                this.$demo.getAsset(cnt,function (res) {
-                    console.log(res)
-                  that.assetlist = JSON.parse(res.data.c)
+                this.$demo.getAsset(cnt, (res)=> {
+                  this.assetlist = this.$util.tryParseJson(res.data.c)
                 })
-
-                console.log(localStorage.getItem('groupId'))
             }
 
         }

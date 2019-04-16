@@ -31,16 +31,15 @@
             }
         },
         mounted(){
-            let that = this
-            this.$demo.getGroup({},function (res) {
-                that.list = JSON.parse(res.data.c)
-                console.log(that.list)
+
+            this.$demo.getGroup({}, (res)=> {
+                this.list = this.$util.tryParseJson(res.data.c)
 
                 let obj = {
                     keyword:'组织资产',
                     groupId:102
                 }
-                that.list.unshift(obj)
+                this.list.unshift(obj)
 
             })
 

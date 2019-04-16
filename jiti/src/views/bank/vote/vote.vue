@@ -147,7 +147,6 @@
 
 
             searchListBtn(){
-                let that = this
                 this.page = 1
                 this.isList = true
                 if(this.org.length == 0){
@@ -165,12 +164,12 @@
                     offset:this.offset,
                     count:this.count
                 }
-                this.$area.getVotesByOrgId(cnt,function (res) {
+                this.$bank.getVotesByOrgId(cnt, (res)=> {
 
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.tableData = JSON.parse(res.data.c)
-                        if(that.tableData.length <that.count){
-                            that.pageOver = true
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.tableData = this.$util.tryParseJson(res.data.c)
+                        if(this.tableData.length <this.count){
+                            this.pageOver = true
                         }
                     }
                 })
@@ -179,7 +178,7 @@
             },
             searchBtn(){
                 this.isList = false
-                let that = this
+
                 if(this.org.length == 0){
                     let arr = []
                     for(let i=0;i<this.orgList.length;i++){
@@ -193,8 +192,8 @@
                     districtId: localStorage.getItem('mechId'),
                     orgIds:this.orgData
                 }
-                this.$area.countVoteTurnout(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
+                this.$bank.countVoteTurnout(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
 
                         let resData = 0
                         if(res.data.c == 'null' || res.data.c == null){
@@ -206,15 +205,15 @@
                             { '是否参与': '已参与', '占比': resData*100 },
                             { '是否参与': '未参与', '占比': 100-resData*100},
                         ]
-                        that.chartData.rows = rows
+                        this.chartData.rows = rows
                     }
                 })
 
             },
             voteInfo(info){
                 this.$router.push({
-                    path:'/areaVoteInfo',
-                    name:'areaVoteInfo',
+                    path:'/bankVoteInfo',
+                    name:'bankVoteInfo',
                     params:{
                         info:info
                     }
@@ -223,7 +222,7 @@
             changePage(page){
                 this.page = page
                 this.isList = true
-                let that = this
+
                 let offset = (this.page-1)*this.count
                 if(this.org.length == 0){
                     let arr = []
@@ -241,12 +240,12 @@
                     offset:offset,
                     count:this.count
                 }
-                this.$area.getVotesByOrgId(cnt,function (res) {
+                this.$bank.getVotesByOrgId(cnt, (res)=> {
 
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.tableData = JSON.parse(res.data.c)
-                        if(that.tableData.length <that.count){
-                            that.pageOver = true
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.tableData = this.$util.tryParseJson(res.data.c)
+                        if(this.tableData.length <this.count){
+                            this.pageOver = true
                         }
                     }
                 })
@@ -255,26 +254,25 @@
             }
         },
         mounted(){
-            let that = this
-            let that1 = this
+
 
             let cnt ={
                 districtId: localStorage.getItem('mechId'),
             }
             //org列表
-            this.$area.getORGSByDistrictId(cnt,function (res) {
-                that.orgList = JSON.parse(res.data.c)
+            this.$bank.getORGSByDistrictId(cnt, (res)=> {
+                this.orgList = this.$util.tryParseJson(res.data.c)
                 let arr = []
-                for(let i=0;i<that.orgList.length;i++){
-                    arr.push(that.orgList[i].id)
+                for(let i=0;i<this.orgList.length;i++){
+                    arr.push(this.orgList[i].id)
                 }
                 let cnt1 = {
                     districtId: localStorage.getItem('mechId'),
                     orgIds:arr
                 }
-                that.$area.countVoteTurnout(cnt1,function (res1) {
+                this.$bank.countVoteTurnout(cnt1, (res1)=> {
                     console.log(res1)
-                    if(res1.data.rc == that1.$util.RC.SUCCESS){
+                    if(res1.data.rc == this.$util.RC.SUCCESS){
                         let resData = 0
                         if(res.data.c == 'null' || res.data.c == null){
                             resData = 0
@@ -286,7 +284,7 @@
                             { '是否参与': '已参与', '占比': resData*100 },
                             { '是否参与': '未参与', '占比':100-resData*100},
                         ]
-                        that1.chartData.rows = rows
+                        this.chartData.rows = rows
                         console.log(rows)
                     }
                 })

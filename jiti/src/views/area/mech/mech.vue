@@ -213,7 +213,6 @@
         },
         methods:{
             changePage(page){
-                let that = this
                 this.page = page
                 let offset = (page-1)*this.count
                 let cnt = {
@@ -222,19 +221,18 @@
                     count: this.count, // Integer
                     offset: offset, // Integer
                 }
-                this.$area.getORGExamine(cnt,function (res) {
-                    that.tableData = JSON.parse(res.data.c)
-                    if(that.tableData.length < that.count){
-                        that.pageOver = true
+                this.$area.getORGExamine(cnt, (res)=> {
+                    this.tableData = JSON.parse(res.data.c)
+                    if(this.tableData.length < this.count){
+                        this.pageOver = true
                     }else{
-                        that.pageOver = false
+                        this.pageOver = false
                     }
                 })
             },
 
             activeBtn(index){
                 this.isActive= index
-                let that = this
                 this.page = 1
                 let cnt = {
                     areaId: localStorage.getItem('mechId'),
@@ -242,13 +240,13 @@
                     count: this.count, // Integer
                     offset: this.offset, // Integer
                 }
-                this.$area.getORGExamine(cnt,function (res) {
+                this.$area.getORGExamine(cnt, (res)=> {
 
-                    that.tableData = JSON.parse(res.data.c)
-                    if(that.tableData.length < that.count){
-                        that.pageOver = true
+                    this.tableData = this.$util.tryParseJson(res.data.c)
+                    if(this.tableData.length < this.count){
+                        this.pageOver = true
                     }else{
-                        that.pageOver = false
+                        this.pageOver = false
                     }
                 })
             },
@@ -276,7 +274,6 @@
             },
             //审核
             Btn(){
-                let that = this
                 let cnt ={
                     orgExamineId:  this.info.id,
                     userId:  this.info.userId,
@@ -292,30 +289,29 @@
                     examine: this.examine,
                 }
 
-                this.$area.upORGApply(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.$message.success('操作成功')
+                this.$area.upORGApply(cnt,(res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('操作成功')
                     }else{
-                        that.$message.error('操作失败')
+                        this.$message.error('操作失败')
                     }
-                    that.$router.push('/page')
+                    this.$router.push('/page')
                 })
             },
         },
         mounted(){
-            let that = this
             let cnt = {
                 areaId: localStorage.getItem('mechId'),
                 examine:this.isActive,
                 count: this.count,
                 offset: this.offset,
             }
-            this.$area.getORGExamine(cnt,function (res) {
-                that.tableData = JSON.parse(res.data.c)
-                if(that.tableData.length < that.count){
-                    that.pageOver = true
+            this.$area.getORGExamine(cnt, (res)=> {
+                this.tableData = this.$util.tryParseJson(res.data.c)
+                if(this.tableData.length < this.count){
+                    this.pageOver = true
                 }else{
-                    that.pageOver = false
+                    this.pageOver = false
                 }
             })
 

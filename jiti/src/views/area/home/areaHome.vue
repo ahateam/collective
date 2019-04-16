@@ -141,15 +141,14 @@
             },
 
             show() {
-                let that = this
                 let cnt = {
                     userId:localStorage.getItem('userId')
                 }
-                this.$area.api.getUserORGs(cnt, function (res) {
-                    if (res.data.rc == that.$util.RC.SUCCESS) {
-                        that.tableData = JSON.parse(res.data.c)
+                this.$area.api.getUserORGs(cnt,  (res)=> {
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        this.tableData = this.$util.tryParseJson(res.data.c)
                     } else {
-                        that.tableData = []
+                        this.tableData = []
                     }
                 })
 
@@ -166,28 +165,28 @@
                 this.$router.push('/addMech')
             },
             active(row) {
-                let that = this
+
                 let cnt = {
                     userId: localStorage.getItem('userId'),
                     orgId: row.id, // Long 组织编号
                 }
-                this.$area.api.adminLoginInORG(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
+                this.$area.api.adminLoginInORG(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
-                        that.orgName = localStorage.getItem('orgName')
-                        that.menuList = menu.menu
+                        this.orgName = localStorage.getItem('orgName')
+                        this.menuList = menu.menu
 
-                        that.$router.push('/dashboard')
-                        that.$message({
+                        this.$router.push('/dashboard')
+                        this.$message({
                             showClose: true,
                             message: '更换机构成功',
                             type: 'success'
                         });
-                        that.showActive = false
-                        that.showActive1 = false
+                        this.showActive = false
+                        this.showActive1 = false
                     }else{
-                        that.$message({
+                        this.$message({
                             showClose: true,
                             message: '更换机构失败，你不是该机构的管理员',
                             type: 'error'
@@ -200,28 +199,28 @@
                     .then()
             },
             active1(row) {
-                let that = this
+
                 let cnt = {
                     userId: localStorage.getItem('userId'),
                     orgId: row.id, // Long 组织编号
                 }
-                this.$area.api.adminLoginInORG(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
+                this.$area.api.adminLoginInORG(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
-                        that.orgName = localStorage.getItem('orgName')
-                        that.menuList = menu.menu
+                        this.orgName = localStorage.getItem('orgName')
+                        this.menuList = menu.menu
 
-                        that.$router.push('/areaDashboard')
-                        that.$message({
+                        this.$router.push('/areaDashboard')
+                        this.$message({
                             showClose: true,
                             message: '更换机构成功',
                             type: 'success'
                         });
-                        that.showActive = false
-                        that.showActive1 = false
+                        this.showActive = false
+                        this.showActive1 = false
                     }else{
-                        that.$message({
+                        this.$message({
                             showClose: true,
                             message: '更换机构失败，你不是该机构的管理员',
                             type: 'error'
