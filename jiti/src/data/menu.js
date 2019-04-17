@@ -3,18 +3,18 @@
 //最低管理权限--只能创建机构
 const  lowMenu=[
     {
-        path:'/dashboard',
+        path:'/areaDashboard',
         title:'系统首页',
         icon:'icon-shouye',
         child:[]
     },
     {
-        path:'/mechanism',
+        path:'/',
         title:'机构管理',
         icon:'icon-bangong-jigou',
         child:[
             {
-                path:'/applyMech',
+                path:'/areaManageApplyMech',
                 title:'机构申请列表',
                 icon:''
             },
@@ -23,27 +23,6 @@ const  lowMenu=[
 ]
 
 
-//演示版系统
-const  demoMenu =[
-    {
-        path:'/demoDashboard',
-        title:'演示系统',
-        icon:'icon-shouye',
-        child:[]
-    },
-    {
-        path:'/demoAsset',
-        title:'组织资产',
-        icon:'icon-caiwuguanli',
-        child:[]
-    },
-    {
-        path:'/demoVote',
-        title:'组织表决',
-        icon:'icon-toupiao1',
-        child:[]
-    },
-]
 //银行查询系统
 const bankMenu = [
     {
@@ -87,7 +66,21 @@ const  areaMenu=[
         path:'/areaMech',
         title:'机构管理',
         icon:'icon-bangong-jigou',
-        child:[]
+        child:[
+
+            {
+                path:'/areaChildMech',
+                title:'下级机构管理'
+            },
+            {
+                path:'/areaManageApplyMech',
+                title:'我的申请'
+            },
+            {
+                path:'/areaManageMech',
+                title:' 我的机构'
+            }
+        ]
     },
     {
         path:'/areaAsset',
@@ -116,7 +109,6 @@ const  areaMenu=[
 
 export default {
     lowMenu,
-    demoMenu,
     bankMenu,
     areaMenu,
 

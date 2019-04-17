@@ -85,7 +85,7 @@
                    :before-close="handleClose"
                    :visible.sync="showActive1">
             <template>
-                    <el-button type="primary" style="margin-bottom: 2rem" @click="addMech">申请机构</el-button>
+                    <el-button type="primary" style="margin-bottom: 2rem" @click="addMech" v-if="grade ==0">申请机构</el-button>
 
                 <el-table
                         :data="tableData"
@@ -135,7 +135,7 @@
                 count:10,
                 page:1,
                 pageOver:false,
-
+                grade:''
 
             }
         },
@@ -198,28 +198,34 @@
                 this.$router.push('/addMech')
             },
             active(row) {
-                let that = this
+
                 let cnt = {
                     userId: localStorage.getItem('userId'),
                     orgId: row.id, // Long 组织编号
                 }
-                this.$api.adminLoginInORG(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
+                this.$api.adminLoginInORG(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
-                        that.orgName = localStorage.getItem('orgName')
-                        that.menuList = menu.menu
+                        this.orgName = localStorage.getItem('orgName')
 
-                        that.$router.push('/dashboard')
-                        that.$message({
+
+                        if(localStorage.getItem('grade') == '0'){
+                            this.menuList = menu.menu
+                        }else{
+                            this.menuList = menu.demoMenu
+                        }
+
+                        this.$router.push('/dashboard')
+                        this.$message({
                             showClose: true,
                             message: '更换机构成功',
                             type: 'success'
                         });
-                        that.showActive = false
-                        that.showActive1 = false
+                        this.showActive = false
+                        this.showActive1 = false
                     }else{
-                        that.$message({
+                        this.$message({
                             showClose: true,
                             message: '更换机构失败，你不是该机构的管理员',
                             type: 'error'
@@ -232,28 +238,32 @@
                     .then()
             },
             active1(row) {
-                let that = this
+
                 let cnt = {
                     userId: localStorage.getItem('userId'),
                     orgId: row.id, // Long 组织编号
                 }
-                this.$api.adminLoginInORG(cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
+                this.$api.adminLoginInORG(cnt, (res)=> {
+                    if(res.data.rc == this.$util.RC.SUCCESS){
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
-                        that.orgName = localStorage.getItem('orgName')
-                        that.menuList = menu.menu
+                        this.orgName = localStorage.getItem('orgName')
+                        if(localStorage.getItem('grade') == '0'){
+                            this.menuList = menu.menu
+                        }else{
+                            this.menuList = menu.demoMenu
+                        }
 
-                        that.$router.push('/dashboard')
-                        that.$message({
+                        this.$router.push('/dashboard')
+                        this.$message({
                             showClose: true,
                             message: '更换机构成功',
                             type: 'success'
                         });
-                        that.showActive = false
-                        that.showActive1 = false
+                        this.showActive = false
+                        this.showActive1 = false
                     }else{
-                        that.$message({
+                        this.$message({
                             showClose: true,
                             message: '更换机构失败，你不是该机构的管理员',
                             type: 'error'
@@ -273,7 +283,7 @@
         },
         mounted() {
             const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
-
+            this.grade = localStorage.getItem('grade')
             if(localStorage.getItem('userId') == '' || localStorage.getItem('userId') == null){
                 this.$message.error({
                     showClose: true,
@@ -287,7 +297,11 @@
                 this.showActive1 = true
             }else{
                 this.$router.push('/dashboard')
-                this.menuList = menu.menu
+                if(localStorage.getItem('grade') == '0'){
+                    this.menuList = menu.menu
+                }else{
+                    this.menuList = menu.demoMenu
+                }
                 this.orgName = localStorage.getItem('orgName')
                 this.showActive1 = false
             }

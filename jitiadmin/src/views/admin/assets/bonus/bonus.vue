@@ -9,8 +9,8 @@
         <el-row class="row-box1">
             <el-col :span="18" :offset="3">
                 <div class="image-box">
-                    <img src="../../../assets/image/bonus/1.png" alt="">
-                    <img src="../../../assets/image/bonus/2.png" alt="">
+                    <img src="../../../../assets/image/bonus/1.png" alt="">
+                    <img src="../../../../assets/image/bonus/2.png" alt="">
                 </div>
             </el-col>
 

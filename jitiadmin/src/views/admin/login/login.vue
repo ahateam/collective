@@ -27,8 +27,11 @@
                     </div>
                 </div>
                 <div class="form-btn">
-                    <div class="login-btn" @click="loginBtn">
+                    <div class="login-btn" @click="loginBtn(0)">
                         立 即 登 录
+                    </div>
+                    <div class="login-btn"  style="margin-top: 2rem" @click="loginBtn(1)">
+                        演示系统登录
                     </div>
                     <router-link to="/register">
                         <div class="login-btn" style="margin-top: 2rem">
@@ -51,7 +54,8 @@
             }
         },
         methods: {
-            loginBtn() {
+            //garde : 0:管理系统  1：演示版
+            loginBtn(key) {
                 if (this.mobile == '' || this.pwd == '') {
                    alert('请输入完整的手机号及密码')
                 } else {
@@ -61,6 +65,11 @@
                     }
                     this.$api.loginByMobileAndPwd(cnt,(res)=>{
                             if(res.data.rc == this.$util.RC.SUCCESS){
+                                if(key == '0'){
+                                    localStorage.setItem('grade','0')
+                                }else{
+                                    localStorage.setItem('grade','1')
+                                }
                                 let data = this.$util.tryParseJson(res.data.c,{})
                                 localStorage.setItem('userId',data.id)
                                 this.$router.push('/home')
@@ -70,10 +79,12 @@
                                 this.mobile = ''
                             }
                     })
-
-
                 }
             }
+        },
+        mounted(){
+            localStorage.setItem('grade','')
+            localStorage.setItem('userId','')
         }
     }
 </script>
@@ -84,7 +95,7 @@
         width: 100%;
         height: 100vh;
         overflow: hidden;
-        background-image: url("../../assets/image/bg.jpg");
+        background-image: url("../../../assets/image/bg.jpg");
         background-position: center;
         background-size: cover;
     }

@@ -29,21 +29,13 @@ const  menu =[
         title:'成员管理',
         icon:'icon-yonghu',
         child:[
-            // {
-            //     path:'/memberMail',
-            //     title:'通讯录' ,
-            //     icon:'',
-            // },
+
             {
                 path:'/memberGroup',
                 title:'分组管理',
                 icon:'',
             },
-            // {
-            //     path:'/memberList',
-            //     title:'成员管理',
-            //     icon:'',
-            // },
+
             {
                 path:'/memberPost',
                 title:'职务管理',
@@ -57,47 +49,14 @@ const  menu =[
         icon:'icon-toupiao1',
         child:[]
     },
-    // {
-    //     path:'/vote',
-    //     title:'会议管理',
-    //     icon:'icon-toupiao1',
-    //     child:[]
-    // },
-    // {
-    //     path:'/assets',
-    //     title:'集体资产',
-    //     icon:'icon-tongyongzichan',
-    //     child:[]
-    // },
+
     {
         path:'/asset',
         title:'集体资产',
         icon:'icon-tongyongzichan',
         child:[]
     },
-    // {
-    //     path:'/bonus',
-    //     title:'分红管理',
-    //     icon:'icon-tongyongzichan',
-    //     child:[]
-    // },
-    // {
-    //     path:'',
-    //     title:'文章公告',
-    //     icon:'icon-tongyongzichan',
-    //     child:[
-    //         {
-    //             path:'/tagList',
-    //             title:'标签管理',
-    //             icon:'',
-    //         },
-    //         {
-    //             path:'/article',
-    //             title:'文章公告',
-    //             icon:'',
-    //         }
-    //     ]
-    // },
+
 ]
 
 //最低管理权限--只能创建机构
@@ -118,16 +77,33 @@ const  lowMenu=[
                 title:'机构申请列表',
                 icon:''
             },
-            {
-                path:'/mechanism',
-                title:'机构管理',
-                icon:'',
-            }
         ]
     }
+]
+//演示版系统
+const  demoMenu =[
+    {
+        path:'/demoDashboard',
+        title:'演示系统',
+        icon:'icon-shouye',
+        child:[]
+    },
+    {
+        path:'/demoAsset',
+        title:'组织资产',
+        icon:'icon-caiwuguanli',
+        child:[]
+    },
+    {
+        path:'/demoVote',
+        title:'组织表决',
+        icon:'icon-toupiao1',
+        child:[]
+    },
 ]
 
 export default {
     menu,
-    lowMenu
+    lowMenu,
+    demoMenu
 }

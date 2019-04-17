@@ -1,37 +1,46 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const home = () => import('./views/home/home')
-const login = () => import('./views/login/login')
-const dashboard  = ()=>import('./views/home/dashboard')
-const  newMech = ()=>import('./views/login/newMech')
-const  register = ()=>import('./views/login/register')
-const  memberList = ()=>import('./views/member/memberList')
-const  vote = ()=>import('./views/vote/vote')
-const  assets = ()=>import('./views/assets/assets')
-const  assetsInfo = ()=>import('./views/assets/assetsInfo')
-const  mechanism = ()=>import('./views/mechanism/mechanism')
-const  poll = ()=>import('./views/poll/poll')
-const  pollInfo = ()=>import( './views/poll/pollInfo')
-const  addMech = ()=>import('./views/mechanism/addMech')
-const  mechInfo = ()=>import('./views/mechanism/mechInfo')
-const  mechMoney = ()=>import('./views/mechanism/mechMoney')
-const  editMech = ()=>import('./views/mechanism/editMech')
-const  memberAdd = ()=>import('./views/member/memberAdd')
-const  memberEdit = ()=>import('./views/member/memberEdit')
-const  memberEditPost = ()=>import('./views/member/memberEditPost')
-const  memberGroup = ()=>import('./views/member/memberGroup')
-const  memberPost = ()=>import('./views/member/memberPost')
-const  memberMail = ()=>import('./views/member/memberMail')
-const  voteAdd = ()=>import('./views/vote/voteAdd')
-const  voteInfo = ()=>import('./views/vote/voteInfo')
-const  voteEdit = ()=>import('./views/vote/voteEdit')
-const  page = ()=>import('./views/page/page')
-const  bonus = ()=>import('./views/bonus/bonus')
-const  article = ()=>import('./views/article/artice')
-const  tagList  = ()=>import('./views/article/tagList')
-const  articleAdd = ()=>import('./views/article/articleAdd')
-const  asset = ()=>import('./views/assets/asset')
-const applyMech  = ()=>import('./views/mechanism/applyMech')
+
+const home = () => import('./views/admin/home/home')
+const login = () => import('./views/admin/login/login')
+const dashboard  = ()=>import('./views/admin/home/dashboard')
+const  newMech = ()=>import('./views/admin/login/newMech')
+const  register = ()=>import('./views/admin/login/register')
+const  memberList = ()=>import('./views/admin/member/memberList')
+const  vote = ()=>import('./views/admin/vote/vote')
+const  assets = ()=>import('./views/admin/assets/assets')
+const  assetsInfo = ()=>import('./views/admin/assets/assetsInfo')
+const  mechanism = ()=>import('./views/admin/mechanism/mechanism')
+const  poll = ()=>import('./views/admin/poll/poll')
+const  pollInfo = ()=>import( './views/admin/poll/pollInfo')
+const  addMech = ()=>import('./views/admin/mechanism/addMech')
+const  mechInfo = ()=>import('./views/admin/mechanism/mechInfo')
+const  mechMoney = ()=>import('./views/admin/mechanism/mechMoney')
+const  editMech = ()=>import('./views/admin/mechanism/editMech')
+const  memberAdd = ()=>import('./views/admin/member/memberAdd')
+const  memberEdit = ()=>import('./views/admin/member/memberEdit')
+const  memberEditPost = ()=>import('./views/admin/member/memberEditPost')
+const  memberGroup = ()=>import('./views/admin/member/memberGroup')
+const  memberPost = ()=>import('./views/admin/member/memberPost')
+const  memberMail = ()=>import('./views/admin/member/memberMail')
+const  voteAdd = ()=>import('./views/admin/vote/voteAdd')
+const  voteInfo = ()=>import('./views/admin/vote/voteInfo')
+const  voteEdit = ()=>import('./views/admin/vote/voteEdit')
+const  page = ()=>import('./views/admin/page/page')
+const  bonus = ()=>import('./views/admin/bonus/bonus')
+const  article = ()=>import('./views/admin/article/artice')
+const  tagList  = ()=>import('./views/admin/article/tagList')
+const  articleAdd = ()=>import('./views/admin/article/articleAdd')
+const  asset = ()=>import('./views/admin/assets/asset')
+const applyMech  = ()=>import('./views/admin/mechanism/applyMech')
+
+//演示系统
+const demoDashboard = ()=> import( './views/demo/home/dashboard')
+const demoAsset = ()=> import( './views/demo/asset/asset')
+const demoAssetList= ()=> import( './views/demo/asset/assetList')
+const demoAssetInfo = ()=> import('./views/demo/asset/assetInfo')
+const demoVote =()=> import( './views/demo/vote/vote')
+
 
 Vue.use(Router)
 
@@ -196,7 +205,34 @@ export default new Router({
                     path:'/asset',
                     name:'asset',
                     component:asset
-                }
+                },
+
+                //演示系统
+                {
+                    path:'/demoDashboard',
+                    name:'demoDashboard',
+                    component:demoDashboard
+                },
+                {
+                    path: '/demoAsset',
+                    name: 'demoAsset',
+                    component: demoAsset
+                },
+                {
+                    path:'/demoAssetList',
+                    name:'demoAssetList',
+                    component:demoAssetList
+                },
+                {
+                    path:'/demoAssetInfo',
+                    name:'demoAssetInfo',
+                    component:demoAssetInfo
+                },
+                {
+                    path:'/demoVote',
+                    name:'demoVote',
+                    component:demoVote
+                },
             ]
         },
         {

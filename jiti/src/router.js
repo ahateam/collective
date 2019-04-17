@@ -3,14 +3,6 @@ import Router from 'vue-router'
 import login from './views/login'
 import page from  './views/login'
 
-//演示系统
-const demoHome = ()=>import('./views/demo/home/demoHome')
-const demoDashboard = ()=> import( './views/demo/home/dashboard')
-const demoAsset = ()=> import( './views/demo/asset/asset')
-const demoAssetList= ()=> import( './views/demo/asset/assetList')
-const demoAssetInfo = ()=> import('./views/demo/asset/assetInfo')
-const demoVote =()=> import( './views/demo/vote/vote')
-
 
 //银行查询系统
 const bankHome = ()=>import('./views/bank/home/bankHome')
@@ -27,13 +19,16 @@ const bankVoteUser = ()=>import('./views/bank/vote/voteUser')
 //区级管理平台
 const areaHome = ()=>import('./views/area/home/areaHome')
 const areaDashboard = ()=>import('./views/area/home/dashboard')
-const areaMech = ()=>import('./views/area/mech/mech')
+const areaChildMech = ()=>import('./views/area/mech/childMech')
+const areaAddMech = ()=>import('./views/area/mech/addMech')
+const areaManageApplyMech = ()=>import('./views/area/mech/manageApplyMech')
+const areaManageMech = ()=>import('./views/area/mech/manageMech')
+const areaMechInfo = ()=>import('./views/area/mech/mechInfo')
 const areaAsset = ()=>import('./views/area/asset/asset')
 const areaAssetsInfo = ()=>import('./views/area/asset/assetsInfo')
 const areaVote = ()=>import('./views/area/vote/vote')
 const areaVoteInfo = ()=>import('./views/area/vote/voteInfo')
 const areaVoteUser = ()=>import('./views/area/vote/voteUser')
-
 
 
 
@@ -63,41 +58,6 @@ export default new Router({
           name:'page',
           component:page,
       },
-
-
-    //演示平台
-    {
-        path:'/demoHome',
-        name:'demoHome',
-        component:demoHome,
-        children:[
-            {
-                path:'/demoDashboard',
-                name:'demoDashboard',
-                component:demoDashboard
-            },
-            {
-                path: '/demoAsset',
-                name: 'demoAsset',
-                component: demoAsset
-            },
-            {
-                path:'/demoAssetList',
-                name:'demoAssetList',
-                component:demoAssetList
-            },
-            {
-                path:'/demoAssetInfo',
-                name:'demoAssetInfo',
-                component:demoAssetInfo
-            },
-            {
-                path:'/demoVote',
-                name:'demoVote',
-                component:demoVote
-            },
-        ]
-    },
 
     //银行平台
     {
@@ -153,9 +113,29 @@ export default new Router({
                 component:areaDashboard
             },
             {
-                path: '/areaMech',
-                name: 'areaMech',
-                component: areaMech
+                path: '/areaChildMech',
+                name: 'areaChildMech',
+                component: areaChildMech
+            },
+            {
+                path:'/areaAddMech',
+                name:'areaAddMech',
+                component:areaAddMech
+            },
+            {
+                path:'/areaManageApplyMech',
+                name:'areaManageApplyMech',
+                component:areaManageApplyMech
+            },
+            {
+                path:'/areaManageMech',
+                name:'areaManageMech',
+                component:areaManageMech
+            },
+            {
+                path:'/areaMechInfo',
+                name:'areaMechInfo',
+                component:areaMechInfo
             },
             {
                 path: '/areaAsset',
@@ -182,6 +162,7 @@ export default new Router({
                 name: 'areaVoteUser',
                 component: areaVoteUser
             },
+
         ]
     },
   ]

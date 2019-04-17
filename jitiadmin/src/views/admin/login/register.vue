@@ -124,7 +124,7 @@
         width: 100%;
         height: 100vh;
         overflow: hidden;
-        background-image: url("../../assets/image/bg.jpg");
+        background-image: url("../../../assets/image/bg.jpg");
         background-position: center;
         background-size: cover;
     }

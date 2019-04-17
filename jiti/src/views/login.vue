@@ -32,16 +32,13 @@
                     <i :class="passwordType === 'password' ? 'iconfont icon-yanjing-bi' : 'iconfont icon-ai-eye'"/>
                 </span>
             </el-form-item>
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-left: 0" @click="loginBtn('0')">
-                演示登录
-            </el-button>
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-left: 0" @click="loginBtn('1')">
-                银行登录
-            </el-button>
-
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-left: 0" @click="loginBtn('2')">
                 行政管理登录
             </el-button>
+            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-left: 0" @click="loginBtn('1')">
+                金融银行登录
+            </el-button>
+
 
 
         </el-form>
@@ -76,23 +73,7 @@
                 if(this.username == '' || this.password == ''){
                     this.$message.error('请将账号密码输入完整')
                 }else{
-
-                   if(key ==this.$constData.grade.demo){
-                       //合作社管理员演示版
-                       localStorage.setItem('grade',this.$constData.grade.demo)
-                       let cnt = {
-                           mobile: this.username,
-                           pwd: this.password,
-                       }
-                        this.$demo.loginByMobileAndPwd(cnt,(res)=>{
-                            if(res.data.rc == this.$util.RC.SUCCESS){
-                                localStorage.setItem('userId',this.$util.tryParseJson(res.data.c,{}).id)
-                                this.$router.push('/demoHome')
-                            }else{
-                                this.$message.error('账号信息有误')
-                            }
-                        })
-                   }else if(key == this.$constData.grade.bank){
+                    if(key == this.$constData.grade.bank){
                        //银行管理员
                        localStorage.setItem('grade',this.$constData.grade.bank)
                        localStorage.setItem('userName','银行管理员')
@@ -100,12 +81,24 @@
                        this.$router.push('/bankHome')
                    }else if(key == this.$constData.grade.area){
                        //区级管理员
-                       localStorage.setItem('grade',this.$constData.grade.area)
-                       console.log(this.$root.api)
-                       localStorage.setItem('userName','区级管理员')
-                       localStorage.setItem('userId','2333')
-                       localStorage.setItem('mechId','22222')
-                       this.$router.push('/areaHome')
+                        let cnt = {
+                            mobile: this.username, // String 手机号
+                            pwd: this.password, // String 密码
+                        };
+
+                        this.$area.loginByMobileAndPwd(cnt,(res)=>{
+                            if(res.data.rc == this.$util.RC.SUCCESS){
+                                this.$message.success('登录成功')
+                                localStorage.setItem('grade',this.$constData.grade.area)
+
+                                localStorage.setItem('userId',this.$util.tryParseJson(res.data.c,{}).id)
+                                this.$router.push('/areaHome')
+                            }else{
+                                this.$message.error('登录失败，请重新输入账号密码')
+                            }
+                        })
+
+
                    }
 
 

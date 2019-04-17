@@ -10,7 +10,7 @@ import util from 'ahaapi'
 import VCharts from 'v-charts'
 import area from './data/api/area'
 import bank from './data/api/bank'
-import demo from './data/api/demo'
+
 
 
 Vue.use(ElementUI)
@@ -21,7 +21,6 @@ Vue.prototype.$constData = constData
 Vue.prototype.$util = util
 Vue.prototype.$area = area
 Vue.prototype.$bank = bank
-Vue.prototype.$demo = demo
 
 
 

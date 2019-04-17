@@ -8,8 +8,9 @@ import './assets/icon/iconfont.css'
 import VDistpicker from 'v-distpicker'
 import constData from './assets/api/util/constData'
 import axios from 'axios'
-import api from './assets/api/util/utils'
 import util from 'ahaapi'
+import api from './assets/api/util/utils'
+import demo from './assets/api/util/demo'
 import vueConfig from '../vue.config.js'
 
 
@@ -23,6 +24,7 @@ Vue.prototype.$http = axios
 Vue.prototype.$util = util
 
 Vue.prototype.$api = api
+Vue.prototype.$demo = demo
 Vue.prototype.$constData = constData
 
 

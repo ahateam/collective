@@ -26,20 +26,17 @@
                                 <el-menu-item :index="key+'-'+key1" v-for="(item1,key1) in item.child" @click="navActive1(key,item1,key1)">{{item1.title}}</el-menu-item>
                         </el-submenu>
                     </span>
-
-
-
                 </el-menu>
             </el-aside>
             <el-container>
                 <el-header class="header-box">
-                    <div class="system-box">集体经济区级管理系统</div>
+                    <div class="system-box">集体经济管理系统</div>
                     <div class="system-mech">
                         <span v-if="tableData.length != 0">
                            <div class="system-center"> {{orgName}}</div>
                         </span>
-                        <div class="system-right" @click="show">
-                            <el-tag>更换机构</el-tag>
+                        <div class="system-right" >
+                            <el-tag @click="show">更换机构</el-tag>
                         </div>
                         <div style="float: right">
                             <el-button type="danger" plain size="mini" @click="outLogin">注销登录</el-button>
@@ -48,13 +45,13 @@
 
                 </el-header>
                 <el-main style="background: #f0f2f5;height: 100vh;overflow-y: auto;padding-bottom:100px; ">
-
                     <router-view v-if="isRouterActive"></router-view>
                 </el-main>
             </el-container>
         </el-container>
 
-        <el-dialog title="选择机构" :visible.sync="showActive">
+        <el-dialog title="机构列表" :visible.sync="showActive">
+
             <template>
                 <el-table
                         :data="tableData"
@@ -77,13 +74,18 @@
                     </el-table-column>
                 </el-table>
             </template>
+            <p>
+                当前第 {{page}} 页
+                <el-button type="primary" size="mini"  :disabled="page==1"  @click="changePage(page-1)">上一页</el-button>
+                <el-button type="primary" size="mini" :disabled="pageOver ==true"  @click="changePage(page+1)">下一页</el-button>
+            </p>
 
         </el-dialog>
         <el-dialog title="选择机构"
                    :before-close="handleClose"
                    :visible.sync="showActive1">
             <template>
-                <el-button type="primary" style="margin-bottom: 2rem" @click="addMech">新增机构</el-button>
+                <el-button type="primary" style="margin-bottom: 2rem" @click="addMech" >申请机构</el-button>
 
                 <el-table
                         :data="tableData"
@@ -106,6 +108,11 @@
                     </el-table-column>
                 </el-table>
             </template>
+            <p>
+                当前第 {{page}} 页
+                <el-button type="primary" size="mini"  :disabled="page==1"  @click="changePage(page-1)">上一页</el-button>
+                <el-button type="primary" size="mini" :disabled="pageOver ==true"  @click="changePage(page+1)">下一页</el-button>
+            </p>
 
         </el-dialog>
     </div>
@@ -119,50 +126,77 @@
         data() {
             return {
                 showActive: false,
-                showActive1: false,
+                showActive1: true,
                 tableData: [],
                 orgName: '',
                 isRouterActive: true,
                 menuList:[],
-                name:'',
+                offset:0,
+                count:10,
+                page:1,
+                pageOver:false,
+                grade:''
 
             }
         },
         methods: {
-            //一级菜单事件
+            //ajax请求封装层
+            //获取用户的所有组织列表
+            getUserORGs(cnt){
+                this.$area.getUserORGs(cnt,(res)=>{
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        let data = this.$util.tryParseJson(res.data.c)
+                        this.tableData = data
+                    } else {
+                        this.tableData = []
+                    }
+                    if(this.tableData.length <this.count){
+                        this.pageOver =true
+                    }else{
+                        this.pageOver = false
+                    }
+                })
+            },
+
+            //事件层
+            //分页
+            changePage(page){
+                this.page =page
+                let cnt = {
+                    offset:(this.page-1)*this.count,
+                    count:this.count,
+                    userId:localStorage.getItem('userId')
+                }
+                this.getUserORGs(cnt)
+            },
+
+            //一级菜单选中事件
             navActive(item,key) {
                 this.$store.state.navDefaultActive = ''+key
                 this.$router.push(item.path)
             },
-            //二级菜单事件
+            //二级菜单选中事件
             navActive1(key,item1,key1) {
                 this.$store.state.navDefaultActive = key+'-'+key1
                 this.$router.push(item1.path)
             },
 
             show() {
+                this.page = 1
                 let cnt = {
+                    offset:this.offset,
+                    count:this.count,
                     userId:localStorage.getItem('userId')
                 }
-                this.$area.api.getUserORGs(cnt,  (res)=> {
-                    if (res.data.rc == this.$util.RC.SUCCESS) {
-                        this.tableData = this.$util.tryParseJson(res.data.c)
-                    } else {
-                        this.tableData = []
-                    }
-                })
-
-
-                this.$router.push('/dashboard')
+                this.getUserORGs(cnt)
+                this.$router.push('/areaDashboard')
                 this.$store.state.navDefaultActive = '0'
                 this.showActive = true
-
-
-
             },
             addMech(){
                 this.showActive1 = false
-                this.$router.push('/addMech')
+                this.$router.push('/areaAddMech')
+                this.$store.state.navDefaultActive = '1'
             },
             active(row) {
 
@@ -170,12 +204,13 @@
                     userId: localStorage.getItem('userId'),
                     orgId: row.id, // Long 组织编号
                 }
-                this.$area.api.adminLoginInORG(cnt, (res)=> {
+                this.$area.areaAdminLoginInORG(cnt, (res)=> {
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
                         this.orgName = localStorage.getItem('orgName')
-                        this.menuList = menu.menu
+
+                        this.menuList = menu.areaMenu
 
                         this.$router.push('/dashboard')
                         this.$message({
@@ -188,7 +223,7 @@
                     }else{
                         this.$message({
                             showClose: true,
-                            message: '更换机构失败，你不是该机构的管理员',
+                            message: '更换机构失败，你不是该机构的管理员或者该机构不是行政管理机构',
                             type: 'error'
                         });
                     }
@@ -204,14 +239,14 @@
                     userId: localStorage.getItem('userId'),
                     orgId: row.id, // Long 组织编号
                 }
-                this.$area.api.adminLoginInORG(cnt, (res)=> {
+                this.$area.areaAdminLoginInORG(cnt, (res)=> {
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
                         this.orgName = localStorage.getItem('orgName')
-                        this.menuList = menu.menu
+                        this.menuList = menu.areaMenu
 
-                        this.$router.push('/areaDashboard')
+                        this.$router.push('/dashboard')
                         this.$message({
                             showClose: true,
                             message: '更换机构成功',
@@ -222,7 +257,7 @@
                     }else{
                         this.$message({
                             showClose: true,
-                            message: '更换机构失败，你不是该机构的管理员',
+                            message: '更换机构失败，你不是该机构的管理员或者该机构不是行政管理机构',
                             type: 'error'
                         });
                     }
@@ -230,20 +265,17 @@
 
 
             },
-
             outLogin(){
                 localStorage.setItem('orgId','')
                 localStorage.setItem('orgName', '')
                 localStorage.setItem('userId', '')
                 this.$router.push('/login')
-            }
-        },
-        created() {
+            },
+
         },
         mounted() {
-            this.menuList = menu.areaMenu
-            this.$router.push('/areaDashboard')
-            this.$store.state.navDefaultActive = '0'
+            const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
+            this.grade = localStorage.getItem('grade')
             if(localStorage.getItem('userId') == '' || localStorage.getItem('userId') == null){
                 this.$message.error({
                     showClose: true,
@@ -252,6 +284,23 @@
                 this.outLogin()
             }
 
+            if(localStorage.getItem('orgId') == '' || localStorage.getItem('orgId') == null){
+                this.menuList = menu.lowMenu
+                this.showActive1 = true
+            }else{
+                this.$router.push('/areaDashboard')
+                this.menuList = menu.areaMenu
+
+                this.orgName = localStorage.getItem('orgName')
+                this.showActive1 = false
+            }
+            let cnt = {
+                offset:this.offset,
+                count:this.count,
+                userId:localStorage.getItem('userId')
+            }
+            this.getUserORGs(cnt)
+            loading.close()
         }
 
     }
