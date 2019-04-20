@@ -75,12 +75,25 @@
                 }else{
                     if(key == this.$constData.grade.bank){
                        //银行管理员
-                       localStorage.setItem('grade',this.$constData.grade.bank)
-                       localStorage.setItem('userName','银行管理员')
-                       localStorage.setItem('userId','2')
-                       this.$router.push('/bankHome')
+                        let cnt = {
+                            mobile: this.username, // String 手机号
+                            pwd: this.password, // String 密码
+                        };
+                        this.$bank.bankAdminLogin(cnt,(res)=>{
+                            if(res.data.rc == this.$util.RC.SUCCESS){
+                                this.$message.success('登录成功!')
+                                localStorage.setItem('grade',this.$constData.grade.bank)
+                                localStorage.setItem('userId',this.$util.tryParseJson(res.data.c).id)
+                                this.$router.push('/bankHome')
+                            }else{
+                                this.$message.error('登录失败，请重新输入账号密码')
+                            }
+                        })
+
+
+
                    }else if(key == this.$constData.grade.area){
-                       //区级管理员
+                       //行政管理员
                         let cnt = {
                             mobile: this.username, // String 手机号
                             pwd: this.password, // String 密码

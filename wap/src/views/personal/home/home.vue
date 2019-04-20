@@ -5,7 +5,7 @@
             <div class="nav-box">
                 <div class="nav-img-box"  @click="userBtn">
                     <div class="nav-user-img">
-                        <img src="../../assets/image/headImage.png" alt="">
+                        <img src="../../../assets/image/headImage.png" alt="">
                     </div>
                     <div class="nav-user-info">
                         <div class="nav-user-name">
@@ -242,8 +242,6 @@
         },
             mounted() {
 
-                let that = this
-
 
                 this.userInfo = JSON.parse(localStorage.getItem('user'))
 
@@ -271,7 +269,7 @@
     .nav-box {
            width: 100%;
            height: 14rem;
-           background-image: url("../../assets/image/banner.jpg");
+           background-image: url("../../../assets/image/banner.jpg");
            background-position: center;
            background-size: cover;
        }

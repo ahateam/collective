@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import login from './views/login'
-import page from  './views/login'
+import page from  './views/page'
 
 
 //银行查询系统
@@ -24,14 +24,16 @@ const areaAddMech = ()=>import('./views/area/mech/addMech')
 const areaManageApplyMech = ()=>import('./views/area/mech/manageApplyMech')
 const areaManageMech = ()=>import('./views/area/mech/manageMech')
 const areaMechInfo = ()=>import('./views/area/mech/mechInfo')
+const areaEditMech = ()=>import('./views/area/mech/editMech')
+
 const areaAsset = ()=>import('./views/area/asset/asset')
 const areaAssetsInfo = ()=>import('./views/area/asset/assetsInfo')
 const areaVote = ()=>import('./views/area/vote/vote')
 const areaVoteInfo = ()=>import('./views/area/vote/voteInfo')
 const areaVoteUser = ()=>import('./views/area/vote/voteUser')
-
-
-
+const areaBank = ()=>import('./views/area/bank/bank')
+const areaAddBank = ()=>import('./views/area/bank/addBank')
+const areaSetAdminBank = ()=>import('./views/area/bank/setAdminBank')
 
 
 
@@ -138,6 +140,12 @@ export default new Router({
                 component:areaMechInfo
             },
             {
+                path:'/areaEditMech',
+                name:'areaEditMech',
+                component:areaEditMech
+            },
+
+            {
                 path: '/areaAsset',
                 name: 'areaAsset',
                 component: areaAsset
@@ -162,6 +170,21 @@ export default new Router({
                 name: 'areaVoteUser',
                 component: areaVoteUser
             },
+            {
+                path:'/areaBank',
+                name:'areaBank',
+                component:areaBank
+            },
+            {
+                path:'/areaAddBank',
+                name:'areaAddBank',
+                component:areaAddBank
+            },
+            {
+                path:'/areaSetAdminBank',
+                name:'areaSetAdminBank',
+                component:areaSetAdminBank
+            }
 
         ]
     },

@@ -13,7 +13,7 @@
                         active-text-color="#ffd04b"
                         style="overflow: hidden;width: 200px;background: #545c64;"
                 >
-                    <span v-for="(item,key) in menuList" >
+                    <span v-for="(item,key) in menuList" :key="key" >
                         <el-menu-item v-if="item.child.length ==0"    :index="''+key" @click="navActive(item,key)" >
                             <i class="iconfont icon-box" :class="item.icon"></i>
                             <span slot="title">{{item.title}}</span>
@@ -23,7 +23,7 @@
                                 <i class="el-icon-location"></i>
                                 <span>{{item.title}}</span>
                             </template>
-                                <el-menu-item :index="key+'-'+key1" v-for="(item1,key1) in item.child" @click="navActive1(key,item1,key1)">{{item1.title}}</el-menu-item>
+                                <el-menu-item :index="key+'-'+key1" v-for="(item1,key1) in item.child" @click="navActive1(key,item1,key1)" :key="key1">{{item1.title}}</el-menu-item>
                         </el-submenu>
                     </span>
                 </el-menu>
@@ -165,7 +165,8 @@
                 let cnt = {
                     offset:(this.page-1)*this.count,
                     count:this.count,
-                    userId:localStorage.getItem('userId')
+                    userId:localStorage.getItem('userId'),
+                    level:this.$constData.orgLevel[2].key
                 }
                 this.getUserORGs(cnt)
             },
@@ -186,6 +187,7 @@
                 let cnt = {
                     offset:this.offset,
                     count:this.count,
+                    level:this.$constData.orgLevel[2].key,
                     userId:localStorage.getItem('userId')
                 }
                 this.getUserORGs(cnt)
@@ -206,13 +208,22 @@
                 }
                 this.$area.areaAdminLoginInORG(cnt, (res)=> {
                     if(res.data.rc == this.$util.RC.SUCCESS){
+                        console.log(row)
+
+                        localStorage.setItem('level',row.level)
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
                         this.orgName = localStorage.getItem('orgName')
 
-                        this.menuList = menu.areaMenu
+                        if(localStorage.getItem('level') == this.$constData.orgLevel[0].key){
+                            this.menuList = menu.proMenu
+                        }else if(localStorage.getItem('level') == this.$constData.orgLevel[1].key){
+                            this.menuList = menu.cityMenu
+                        }else if(localStorage.getItem('level') == this.$constData.orgLevel[2].key){
+                            this.menuList = menu.areaMenu
+                        }
 
-                        this.$router.push('/dashboard')
+                        this.$router.push('/areaDashboard')
                         this.$message({
                             showClose: true,
                             message: '更换机构成功',
@@ -241,12 +252,20 @@
                 }
                 this.$area.areaAdminLoginInORG(cnt, (res)=> {
                     if(res.data.rc == this.$util.RC.SUCCESS){
+                        localStorage.setItem('level',row.level)
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
                         this.orgName = localStorage.getItem('orgName')
-                        this.menuList = menu.areaMenu
 
-                        this.$router.push('/dashboard')
+                        if(localStorage.getItem('level') == this.$constData.orgLevel[0].key){
+                            this.menuList = menu.proMenu
+                        }else if(localStorage.getItem('level') == this.$constData.orgLevel[1].key){
+                            this.menuList = menu.cityMenu
+                        }else if(localStorage.getItem('level') == this.$constData.orgLevel[2].key){
+                            this.menuList = menu.areaMenu
+                        }
+
+                        this.$router.push('/areaDashboard')
                         this.$message({
                             showClose: true,
                             message: '更换机构成功',
@@ -289,7 +308,14 @@
                 this.showActive1 = true
             }else{
                 this.$router.push('/areaDashboard')
-                this.menuList = menu.areaMenu
+                if(localStorage.getItem('level') == this.$constData.orgLevel[0].key){
+                    this.menuList = menu.proMenu
+                }else if(localStorage.getItem('level') == this.$constData.orgLevel[1].key){
+                    this.menuList = menu.cityMenu
+                }else if(localStorage.getItem('level') == this.$constData.orgLevel[2].key){
+                    this.menuList = menu.areaMenu
+                }
+
 
                 this.orgName = localStorage.getItem('orgName')
                 this.showActive1 = false
@@ -297,7 +323,8 @@
             let cnt = {
                 offset:this.offset,
                 count:this.count,
-                userId:localStorage.getItem('userId')
+                userId:localStorage.getItem('userId'),
+                level:this.$constData.orgLevel[2].key
             }
             this.getUserORGs(cnt)
             loading.close()

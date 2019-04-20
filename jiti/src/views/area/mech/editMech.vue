@@ -2,7 +2,7 @@
     <div>
         <el-row class="row-box">
             <el-col :span="24">
-                申请行政管理组织机构
+                修改行政管理组织机构信息
             </el-col>
         </el-row>
 
@@ -14,44 +14,6 @@
                 <el-col :span="18">
                     <div class="text-box">
                         <el-input v-model="mechName" placeholder="管理机构名称"></el-input>
-                    </div>
-                </el-col>
-            </el-col>
-            <el-col :span="24">
-                <el-col :span="4">
-                    <div class="title-box">管理机构行政等级:</div>
-                </el-col>
-                <el-col :span="18">
-                    <div class="text-box">
-                        <el-radio-group v-model="level">
-                            <el-radio :label="item.key" v-for="(item,index) in levelList" :key="index" style="line-height: 4rem">{{item.val}}</el-radio>
-                        </el-radio-group>
-                    </div>
-                </el-col>
-            </el-col>
-            <el-col :span="24">
-                <el-col :span="4">
-                    <div class="title-box">管理机构上级（可选）:</div>
-                </el-col>
-                <el-col :span="18">
-                    <div class="text-box">
-                        <el-select
-                                v-model="superiorId"
-                                filterable
-                                remote
-                                reserve-keyword
-                                placeholder="请输入上级机构名称"
-                                :remote-method="getOrgByNameAndLevelBtn"
-                                :loading="loading"
-                                @focus="superiorBtn">
-                            <el-option
-                                    v-for="(item,index) in superiorList"
-                                    :key="index"
-                                    :label="item.name"
-                                    :value="item.id">
-                            </el-option>
-                        </el-select>
-                        <span style="line-height: 40px;font-size: 1.4rem;color: #666;margin-left: 20px">(若暂无上级，可不选，等待上级开通后再次申请即可)</span>
                     </div>
                 </el-col>
             </el-col>
@@ -172,7 +134,7 @@
             </el-col>
             <el-col :span="24">
                 <div class="row-box3">
-                    <el-button type="primary" @click="submitBtn">提交组织资料</el-button>
+                    <el-button type="primary" @click="editBtn">确认修改提交</el-button>
                 </div>
             </el-col>
         </el-row>
@@ -187,13 +149,14 @@
         name: "addMech",
         data() {
             return {
+                isMech:false,
+                isEditpro:false,
                 mechName: '',
                 province: '',        //省份
                 city: '',            //市
                 district: '',        //区
-
+                level:'',               //机构等级
                 levelList:[],           //等级列表
-
                 mechAddress: '',
                 mechCode: '',
                 superiorId:'',
@@ -212,31 +175,35 @@
                 provinceList:[],
                 cityList:[],
                 districtList:[],
-                superiorList:[],
-                level:'',               //机构等级',
+                superiorList:[]
             }
         },
         watch:{
             province(val,oldVal){
-                console.log(val,oldVal)
-                this.city = ''
-                this.district = ''
+                if(oldVal != ''){
+                    this.city = ''
+                    this.district = ''
+                    this.isEditpro = true
+                }
+
             },
             city(val,oldVal){
-                console.log(val,oldVal)
-                this.district = ''
+                if(oldVal != '') {
+                    this.district = ''
+                    this.isEditpro = true
+                }
             },
-            level(val,oldVal){
-                console.log(val,oldVal)
-                this.superiorId = ''
-                this.provinceList = []
-            },
+            district(val,oldVal){
+                if(oldVal != ''){
+                    this.isEditpro = true
+                }
+            }
         },
         methods: {
             //ajax请求封装层
             // 创建组织申请
-            createORGApply(cnt){
-                this.$area.createORGApply(cnt,(res)=>{
+            oRGApplyAgain(cnt){
+                this.$area.oRGApplyAgain(cnt,(res)=>{
                     if (res.data.rc == this.$util.RC.SUCCESS) {
                         this.$message({
                             showClose: true,
@@ -299,26 +266,16 @@
                 }
             },
 
-
-            //更改选择上级
-            superiorBtn(){
-                this.superiorList = []
-            },
             getOrgByNameAndLevelBtn(orgName){
-                this.superiorList  = []
-                console.log(orgName)
-                if(orgName != ''){
-                    let level = parseInt(this.level) -1
-                    let cnt = {
-                        level: level, // Byte 等级
-                        orgName: orgName, // String 需要查询的名称
-                    };
-                    this.$area.getOrgByNameAndLevel(cnt,(res)=>{
-                        this.superiorList = this.$util.tryParseJson(res.data.c)
-                        console.log(this.superiorList)
-                    })
-                }
-
+                let level = parseInt(this.level) -1
+                let cnt = {
+                    level: level, // Byte 等级
+                    orgName: orgName, // String 需要查询的名称
+                };
+                this.$area.getOrgByNameAndLevel(cnt,(res)=>{
+                    this.superiorList = this.$util.tryParseJson(res.data.c)
+                    console.log(this.superiorList)
+                })
 
             },
 
@@ -403,8 +360,7 @@
                 this.mechGrantImg = event.target.files[0]
                 this.doUpload(this.mechGrantImg,'grant')
             },
-
-            submitBtn() {
+            editBtn(){
                 if (this.mechName == '' || this.province == '' || this.mechAddress == '' || this.mechCode == '' || this.city == '' || this.district == '') {
                     this.$message({
                         showClose: true,
@@ -412,7 +368,13 @@
                         type: 'error'
                     })
                 } else {
+                    let obj = {}
+                    if(this.isMech == true){
+                        obj.orgId = this.info.id
+                    }
+
                     let cnt = {
+                        orgExamineId:this.info.id,
                         userId:localStorage.getItem('userId'),
                         name: this.mechName,
                         code: this.mechCode,
@@ -425,13 +387,39 @@
                         shareAmount: this.shareAmount,
                         level: this.level,
                         superiorId: this.superiorId,
-                };
+                        updateDistrict:this.isEditpro
+                    };
+                    Object.assign(cnt,obj)
                     console.log(cnt)
-                    this.createORGApply(cnt)
+                    this.oRGApplyAgain(cnt)
                 }
-            }
+            },
+
         },
         mounted(){
+
+
+            this.info = this.$route.params.info
+            this.isMech = this.$route.params.isMech
+            console.log(this.info)
+
+
+            this.mechName = this.info.name
+            this.level = this.info.level
+            this.superiorId = this.info.superiorId
+            this.province = ''
+            this.city = ''
+            this.district = ''
+
+
+            this.mechAddress = this.info.address
+
+            this.mechCode = this.info.code
+
+            this.shareAmount = this.info.shareAmount
+            this.mechCodeImgUrl = this.info.imgOrg
+            this.mechGrantImgUrl = this.info.imgAuth
+
 
             //拼接oss地址前缀
             let date = new Date()
@@ -446,7 +434,46 @@
             }
             this.address = '/mechanism/'+year+month+day+'/'
             this.levelList = this.$constData.orgLevel
-            this.level =   this.levelList[3].key
+
+            //请求对应的地址默认值展示
+            if(this.isMech == true){
+                let cnt = {
+                    orgId: this.info.id, // Long 组织id
+                }
+                this.$area.getORGDistrict(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+
+                        this.provinceList.push( this.$util.tryParseJson(res.data.c).province)
+                        this.cityList.push(this.$util.tryParseJson(res.data.c).city)
+                        this.districtList.push(this.$util.tryParseJson(res.data.c).district)
+                        this.province =  this.provinceList[0].id
+                        this.city =  this.cityList[0].id
+                        this.district = this.districtList[0].id
+                        this.isEditpro = false
+                        console.log( this.provinceList[0].id)
+                    }
+                })
+            }else{
+                let cnt = {
+                    orgExamineId: this.info.id, // Long 组织id
+                }
+                this.$area.getORGDistrictByOrgApplyId(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.provinceList.push( this.$util.tryParseJson(res.data.c).province)
+                        this.cityList.push(this.$util.tryParseJson(res.data.c).city)
+                        this.districtList.push(this.$util.tryParseJson(res.data.c).district)
+                        this.province =  this.provinceList[0].id
+                        this.city =  this.cityList[0].id
+                        this.district = this.districtList[0].id
+                        this.isEditpro = false
+                        console.log(  this.provinceList[0])
+                    }
+                })
+            }
+
+
+
+
         },
     }
 </script>

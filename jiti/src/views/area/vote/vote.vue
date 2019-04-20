@@ -257,27 +257,29 @@
 
 
             let cnt ={
-                districtId: localStorage.getItem('mechId'),
+                superiorId: localStorage.getItem('orgId'),
+                count: 500, // Integer
+                offset: 0, // Integer
             }
             //org列表
-            this.$area.getORGSByDistrictId(cnt, (res)=> {
+            this.$area.getORGs(cnt, (res)=> {
                 this.orgList = this.$util.tryParseJson(res.data.c)
                 let arr = []
                 for(let i=0;i<this.orgList.length;i++){
                     arr.push(this.orgList[i].id)
                 }
                 let cnt1 = {
-                    districtId: localStorage.getItem('mechId'),
                     orgIds:arr
                 }
+
                 this.$area.countVoteTurnout(cnt1, (res1)=> {
                     console.log(res1)
                     if(res1.data.rc == this.$util.RC.SUCCESS){
                         let resData = 0
-                        if(res.data.c == 'null' || res.data.c == null){
+                        if(res1.data.c == 'null' || res1.data.c == null){
                             resData = 0
                         }else{
-                            resData = JSON.parse(res1.data.c).toFixed(4)
+                            resData = this.$util.tryParseJson(res1.data.c).toFixed(4)
                         }
 
                         let rows  =  [

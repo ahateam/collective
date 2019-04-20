@@ -265,10 +265,12 @@
         mounted(){
 
             let cnt ={
-                districtId: localStorage.getItem('mechId'),
+                superiorId:localStorage.getItem('orgId'),
+                count: 500, // Integer
+                offset: 0, // Integer
             }
             //org列表
-            this.$area.getORGSByDistrictId(cnt, (res)=> {
+            this.$area.getORGs(cnt, (res)=> {
                 this.orgList = this.$util.tryParseJson(res.data.c)
             })
 

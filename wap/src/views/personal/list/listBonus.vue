@@ -5,7 +5,7 @@
 
             <div class="money-box">
                 <div class="money-img">
-                    <img src="../../assets/image/money.png" alt="">
+                    <img src="../../../assets/image/money.png" alt="">
                 </div>
                 <div class="money-title">
                     我的分红总额

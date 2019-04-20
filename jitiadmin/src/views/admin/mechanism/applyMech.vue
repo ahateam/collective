@@ -34,9 +34,12 @@
                     <el-table-column
                             label="操作">
                         <template slot-scope="scope">
-                            <el-button @click="info(scope.row)" type="text" size="small">详情</el-button>
 
-                            <el-button @click="editMech(scope.row)" type="text" size="small" v-if="scope.row.examine != 1">修改信息</el-button>
+                            <el-button @click="info(scope.row,false)" type="text" size="small" v-if="scope.row.examine == '0' || scope.row.examine == '2'">详情</el-button>
+                            <el-button @click="info(scope.row,true)" type="text" size="small" v-if="scope.row.examine == '1' || scope.row.examine == '3'">详情</el-button>
+
+                            <el-button @click="editMech(scope.row,false)" type="text" size="small"  v-if="scope.row.examine == '0' || scope.row.examine == '2'">修改信息</el-button>
+                            <el-button @click="editMech(scope.row,true)" type="text" size="small"  v-if="scope.row.examine == '1' || scope.row.examine == '3'">修改信息</el-button>
 
                             <el-button @click="del(scope.row)" type="text" size="small" v-if="scope.row.examine != 1"><span style="color: #f44;">取消申请</span></el-button>
 
@@ -110,19 +113,19 @@
 
             //普通事件层
             //详情跳转
-            info(row){
+            info(row,isMech){
                 this.$router.push({
                     path:'/mechInfo',
                     name:'mechInfo',
-                    params:{info:row},
+                    params:{info:row,isMech:isMech},
                 })
             },
             //修改信息
-            editMech(row){
+            editMech(row,isMech){
                 this.$router.push({
                     path:'/editMech',
                     name:'editMech',
-                    params:{info:row},
+                    params:{info:row,isMech:isMech},
                 })
             },
             //删除提示

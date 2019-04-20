@@ -17,113 +17,60 @@
                         </div>
                     </el-col>
                     <el-col :span="18" style="line-height: 4rem">
-                        <el-select v-model="org"
-                                   multiple
-                                   placeholder="不选择默认为所有组织机构"
-                                   style="margin-left: 20px; width: 100%;">
+                        <el-select
+                                v-model="org"
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入查询的机构名称"
+                                style="width: 70%"
+                                :remote-method="orgSearch"
+                                :loading="loading">
                             <el-option
-                                    v-for="item in orgList"
-                                    :key="item.id"
+                                    v-for="(item,index) in orgList"
+                                    :key="index"
                                     :label="item.name"
                                     :value="item.id">
                             </el-option>
                         </el-select>
                     </el-col>
                 </el-col>
+            </el-row>
+            <el-row :gutter="40" >
                 <el-col :span="24" style="margin: 10px 0">
                     <el-col :span="4">
                         <div class="title">
-                            选择资源类型:
+                            选择资产查询:
                         </div>
                     </el-col>
                     <el-col :span="18" style="line-height: 4rem">
-                        <el-select v-model="resType"
-                                   multiple
-                                   placeholder="不选择默认为所有资源类型"
-                                   style="margin-left: 20px; width: 100%;">
+                        <el-select
+                                v-model="asset"
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入资产的编号或者资产名进行查询"
+                                style="width: 70%"
+                                :remote-method="assetSearch"
+                                :loading="loading">
                             <el-option
-                                    v-for="(item,index) in resTypeList"
+                                    v-for="(item,index) in orgList"
                                     :key="index"
                                     :label="item.name"
-                                    :value="item.name">
+                                    :value="item.id">
                             </el-option>
                         </el-select>
                     </el-col>
                 </el-col>
-                <el-col :span="24" style="margin: 10px 0">
-                    <el-col :span="4">
-                        <div class="title">
-                            选择资产类型:
-                        </div>
-                    </el-col>
-                    <el-col :span="18" style="line-height: 4rem">
-                        <el-select v-model="assetType"
-                                   multiple
-                                   placeholder="不选择默认为所有资产类型"
-                                   style="margin-left: 20px; width: 100%;">
-                            <el-option
-                                    v-for="(item,index) in assetTypeList"
-                                    :key="index"
-                                    :label="item.name"
-                                    :value="item.name">
-                            </el-option>
-                        </el-select>
-                    </el-col>
+            </el-row>
+            <el-row >
+                <el-col :span="22" style="margin-top: 20px;text-align: right">
+                    <el-button  type="primary" @click="searchListBtn" >开始查询</el-button>
                 </el-col>
-                <el-col :span="24" style="margin: 10px 0">
-                    <el-col :span="4">
-                        <div class="title">
-                            选择经营方式:
-                        </div>
-                    </el-col>
-                    <el-col :span="18" style="line-height: 4rem">
-                        <el-select v-model="businessMode"
-                                   multiple
-                                   placeholder="不选择默认为所有经营方式"
-                                   style="margin-left: 20px; width: 100%;">
-                            <el-option
-                                    v-for="(item,index) in businessModeList"
-                                    :key="index"
-                                    :label="item.name"
-                                    :value="item.name">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                </el-col>
-                <el-col :span="24" style="margin: 10px 0">
-                    <el-col :span="4">
-                        <div class="title">
-                            选择年份:
-                        </div>
-                    </el-col>
-                    <el-col :span="18" style="line-height: 4rem">
-                        <el-select v-model="year"
-                                   multiple
-                                   placeholder="不选择默认为近五年年份"
-                                   style="margin-left: 20px; width: 100%;">
-                            <el-option
-                                    v-for="(item,index) in yearList"
-                                    :key="index"
-                                    :label="item"
-                                    :value="item">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                </el-col>
+
             </el-row>
 
             <el-row >
-                <el-col :span="22" style="margin-top: 20px;text-align: right">
-                    <el-button  type="primary" @click="searchBtn">查询统计</el-button>
-                    <el-button  type="primary" @click="searchListBtn" >查询列表</el-button>
-                </el-col>
-
-            </el-row>
-
-            <el-row v-if="isList == false">
-                <ve-histogram :data="chartData"></ve-histogram>
-            </el-row>
-            <el-row v-if="isList == true">
                     <el-table
                             ref="multipleTable"
                             :data="tableData"
@@ -184,75 +131,41 @@
         name: "asset",
         data(){
             return{
-                data:[],
-                chartData: {
-                    columns: ['年份','原值','产值'],
-                    rows: []
-                },
+
                 orgList: [],          //组织列表
-                resTypeList:[],          //资源类型列表
-                assetTypeList:[],          //资产类型列表
-                businessModeList:[],      //经营方式列表
-                yearList:[],                //年份列表
 
-                year:[],
-                defaultYear:[],              //默认近五年年份
+                loading:false,
 
-                org: [],
-                resType:[],
-                assetType:[],
-                businessMode:[],
+
+                org:'',
+                asset:'',
 
                 //表格相关
-                isList:false,
+
                 offset:0,
                 count:10,
                 tableData:[],
                 page:1,
                 pageOver:false,
+
             }
         },
         methods:{
-            //查询列表
-            searchListBtn(){
-                this.isList = true
-                this.page = 1
-                let cnt ={
-                    districtId: localStorage.getItem('mechId'), // Long 区id
-                    offset:this.offset,
-                    count:this.count
-                }
-                if(this.org.length >0){
-                    cnt.orgIds = this.org
-                }
-                if(this.year.length >0){
-                    cnt.buildTimes = this.year
-                }else{
-                    cnt.buildTimes = this.yearList
-                }
-                if(this.resType.length >0){
-                    cnt.resTypes = this.resType
-                }
-                if(this.assetType.length >0){
-                    cnt.assetTypes = this.assetType
-                }
-                if(this.businessMode.length>0){
-                    cnt.businessModes = this.businessMode
-                }
 
-                this.$bank.getAssetListByTypes(cnt, (res)=> {
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.tableData = this.$util.tryParseJson(res.data.c)
-                        if( this.tableData.length <this.count){
-                            this.pageOver = true
-                        }else{
-                            this.pageOver = false
-                        }
-                }
-                })
-
+            //搜素org列表
+            orgSearch(name){
+              console.log(name)
 
             },
+            //模糊查询资产列表
+            assetSearch(){
+
+            },
+
+            searchListBtn(){
+                console.log(this.org);
+            },
+
             //表格分页
             changePage(page){
                 this.page = page
@@ -291,55 +204,7 @@
                     }
                 })
             },
-            //查询统计图
-            searchBtn(){
 
-                this.isList = false
-                this.chartData.rows = []
-                let cnt ={
-                    districtId: localStorage.getItem('mechId'), // Long 区id
-                }
-                 if(this.org.length >0){
-                    cnt.orgIds = this.org
-                 }
-
-                 if(this.year.length >0){
-                     cnt.buildTimes = this.year
-                 }else{
-                     cnt.buildTimes = this.defaultYear
-                 }
-
-                 if(this.resType.length >0){
-                     cnt.resTypes = this.resType
-                 }
-                 if(this.assetType.length >0){
-                     cnt.assetTypes = this.assetType
-                 }
-                 if(this.businessMode.length>0){
-                     cnt.businessModes = this.businessMode
-                 }
-                console.log(cnt)
-                this.$bank.districtCountByYears(cnt, (res)=> {
-                    this.data = JSON.parse(res.data.c)
-                    for(let i=0;i<this.data.length;i++){
-                        if(this.data[i].build_time == undefined || this.data[i].build_time == null) {
-                            let obj = {
-                                '年份':cnt.buildTimes[i],
-                                '原值':0,
-                                '产值':0
-                            }
-                            this.chartData.rows.push(obj)
-                        }else {
-                            let obj = {
-                                '年份':this.data[i].build_time,
-                                '原值':this.data[i].originPrice,
-                                '产值':this.data[i].yearlyIncome
-                            }
-                            this.chartData.rows.push(obj)
-                        }
-                    }
-                })
-            },
             //查看详情
             infoBtn(info){
                 this.$router.push({
@@ -350,79 +215,6 @@
             }
         },
         mounted(){
-
-
-
-
-
-            let nowYear = new Date().getFullYear()
-
-            //年份取值默认为近20年
-            this.yearList = []
-            for(let i=19;i>=0;i--){
-                this.yearList.push(nowYear-i)
-            }
-
-            //默认近五年数据
-            let yearArr = []
-            for(let i=4;i>=0;i--){
-                yearArr.push(nowYear-i)
-            }
-            this.defaultYear = yearArr
-
-            let cnt ={
-                districtId: localStorage.getItem('mechId'),
-            }
-            console.log(cnt)
-
-
-            //初始化数据
-            //org列表
-            this.$bank.getORGSByDistrictId(cnt, (res)=> {
-                this.orgList = JSON.parse(res.data.c)
-            })
-            //请求资产类型--列表
-            this.$bank.getAssetType(cnt, (res)=> {
-                this.assetTypeList =this.$util.tryParseJson(res.data.c)
-
-            })
-            //请求资源类型--列表
-            this.$bank.getResType(cnt, (res) =>{
-                this.resTypeList =this.$util.tryParseJson(res.data.c)
-            })
-            //请求创建时间（年份） --列表
-            let cnt1 = {
-                districtId: localStorage.getItem('mechId'),
-                buildTimes:this.defaultYear
-            }
-            this.$bank.districtCountByYears(cnt1, (res) =>{
-                this.data = this.$util.tryParseJson(res.data.c)
-                for(let i=0;i<this.data.length;i++){
-                    if(this.data[i].build_time == undefined || this.data[i].build_time == null) {
-                        let obj = {
-                            '年份':cnt1.buildTimes[i],
-                            '原值':0,
-                            '产值':0
-                        }
-                        this.chartData.rows.push(obj)
-                    }else {
-                        let obj = {
-                            '年份':this.data[i].build_time,
-                            '原值':this.data[i].originPrice,
-                            '产值':this.data[i].yearlyIncome
-                        }
-                        this.chartData.rows.push(obj)
-                    }
-                }
-            })
-
-
-            //请求经营方式--列表
-            this.$bank.getBusinessMode(cnt, (res)=> {
-                this.businessModeList = this.$util.tryParseJson(res.data.c)
-            })
-
-
 
 
         }

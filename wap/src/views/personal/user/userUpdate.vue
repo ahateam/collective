@@ -113,7 +113,7 @@
     .bg-box {
         width: 100%;
         height: 100vh;
-        background-image: url('../../assets/image/banner.jpg');
+        background-image: url('../../../assets/image/banner.jpg');
         background-position: center;
         background-size: cover;
         overflow: hidden;

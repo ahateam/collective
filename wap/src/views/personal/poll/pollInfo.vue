@@ -164,11 +164,9 @@
                             确 定
                         </div>
                     </div>
-
                 </van-popup>
 
                 <van-popup v-model="failShow">
-
                     <div class="modal-box">
                         <div class="modal-nav2">
                             <div class="modal-status">
@@ -255,15 +253,12 @@
                 if(this.waiver >=failData){     //无效
                     this.status = 0
                 }else{                          //有效
-
                     let   successType = 0  //默认是不成功
-
                     for(let i=0;i<ops.length;i++){
                         if(ops[i].ballotCount >= passData) {
                             successType = 1         //成功的中间变量
                         }
                     }
-
                     if(successType == 1){
                         for(let i=0;i<ops.length;i++){
                             if(ops[i].ballotCount >= passData){
@@ -320,8 +315,6 @@
                         }
                     })
                 }
-
-
             },
 
 
@@ -553,17 +546,17 @@
     .modal-nav{
         width: 25rem;
         height: 9rem;
-        background:url("../../assets/image/bgbanner.jpg");
+        background:url("../../../assets/image/bgbanner.jpg");
     }
     .modal-nav1{
         width: 25rem;
         height: 9rem;
-        background:url("../../assets/image/bg1.jpg");
+        background:url("../../../assets/image/bg1.jpg");
     }
     .modal-nav2{
         width: 25rem;
         height: 9rem;
-        background:url("../../assets/image/bg2.png");
+        background:url("../../../assets/image/bg2.png");
     }
     .van-popup{
         border-radius: 5px;

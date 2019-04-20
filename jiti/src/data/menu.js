@@ -83,6 +83,12 @@ const  areaMenu=[
         ]
     },
     {
+        path:'/areaBank',
+        title:'银行金融',
+        icon:'icon-zichan1',
+        child:[]
+    },
+    {
         path:'/areaAsset',
         title:'资产统计',
         icon:'icon-caiwuguanli',
@@ -105,11 +111,70 @@ const  areaMenu=[
     }
 ]
 
+//市级管理平台
+const  cityMenu=[
+    {
+        path:'/areaHome',
+        title:'市级管理',
+        icon:'icon-shouye',
+        child:[]
+    },
+    {
+        path:'/areaMech',
+        title:'机构管理',
+        icon:'icon-bangong-jigou',
+        child:[
+
+            {
+                path:'/areaChildMech',
+                title:'下级机构管理'
+            },
+            {
+                path:'/areaManageApplyMech',
+                title:'我的申请'
+            },
+            {
+                path:'/areaManageMech',
+                title:' 我的机构'
+            }
+        ]
+    },
+]
+
+//省级管理平台
+const  proMenu=[
+    {
+        path:'/areaHome',
+        title:'省级管理',
+        icon:'icon-shouye',
+        child:[]
+    },
+    {
+        path:'/areaMech',
+        title:'机构管理',
+        icon:'icon-bangong-jigou',
+        child:[
+            {
+                path:'/areaChildMech',
+                title:'下级机构管理'
+            },
+            {
+                path:'/areaManageApplyMech',
+                title:'我的申请'
+            },
+            {
+                path:'/areaManageMech',
+                title:' 我的机构'
+            }
+        ]
+    },
+]
 
 
 export default {
     lowMenu,
     bankMenu,
     areaMenu,
-
+    cityMenu,
+    proMenu
 }

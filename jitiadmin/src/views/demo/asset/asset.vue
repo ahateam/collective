@@ -31,10 +31,11 @@
             }
         },
         mounted(){
-
-            this.$demo.getGroup({}, (res)=> {
+            let cnt = {
+                orgId:localStorage.getItem('orgId')
+            }
+            this.$demo.getGroup(cnt, (res)=> {
                 this.list = this.$util.tryParseJson(res.data.c)
-
                 let obj = {
                     keyword:'组织资产',
                     groupId:102

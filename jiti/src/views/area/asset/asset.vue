@@ -370,55 +370,64 @@
             }
             this.defaultYear = yearArr
 
-            let cnt ={
-                districtId: localStorage.getItem('mechId'),
-            }
-            console.log(cnt)
 
+
+
+            let cnt ={
+                superiorId: localStorage.getItem('orgId'),
+                count: 500, // Integer
+                offset: 0, // Integer
+            }
 
             //初始化数据
             //org列表
-            this.$area.getORGSByDistrictId(cnt, (res)=> {
-                this.orgList = JSON.parse(res.data.c)
+            this.$area.getORGs(cnt, (res)=> {
+                this.orgList = this.$util.tryParseJson(res.data.c)
+
+                //所有org的近五年资产数据统计
+                let arr =[]
+                for(let i =0;i<this.orgList.length;i++){
+                    arr.push(this.orgList[i].id)
+                }
+
+                let cnt1 = {
+                    orgIds:arr,
+                    buildTimes:this.defaultYear
+                }
+                console.log(cnt1)
+                this.$area.districtCountByYears(cnt1, (res) =>{
+                    this.data = this.$util.tryParseJson(res.data.c)
+                    for(let i=0;i<this.data.length;i++){
+                        if(this.data[i].build_time == undefined || this.data[i].build_time == null) {
+                            let obj = {
+                                '年份':cnt1.buildTimes[i],
+                                '原值':0,
+                                '产值':0
+                            }
+                            this.chartData.rows.push(obj)
+                        }else {
+                            let obj = {
+                                '年份':this.data[i].build_time,
+                                '原值':this.data[i].originPrice,
+                                '产值':this.data[i].yearlyIncome
+                            }
+                            this.chartData.rows.push(obj)
+                        }
+                    }
+                })
+
             })
             //请求资产类型--列表
-            this.$area.getAssetType(cnt, (res)=> {
+            this.$area.getAssetType({}, (res)=> {
                 this.assetTypeList =this.$util.tryParseJson(res.data.c)
-
             })
             //请求资源类型--列表
-            this.$area.getResType(cnt, (res) =>{
+            this.$area.getResType({}, (res) =>{
                 this.resTypeList =this.$util.tryParseJson(res.data.c)
             })
-            //请求创建时间（年份） --列表
-            let cnt1 = {
-                districtId: localStorage.getItem('mechId'),
-                buildTimes:this.defaultYear
-            }
-            this.$area.districtCountByYears(cnt1, (res) =>{
-                this.data = this.$util.tryParseJson(res.data.c)
-                for(let i=0;i<this.data.length;i++){
-                    if(this.data[i].build_time == undefined || this.data[i].build_time == null) {
-                        let obj = {
-                            '年份':cnt1.buildTimes[i],
-                            '原值':0,
-                            '产值':0
-                        }
-                        this.chartData.rows.push(obj)
-                    }else {
-                        let obj = {
-                            '年份':this.data[i].build_time,
-                            '原值':this.data[i].originPrice,
-                            '产值':this.data[i].yearlyIncome
-                        }
-                        this.chartData.rows.push(obj)
-                    }
-                }
-            })
-
 
             //请求经营方式--列表
-            this.$area.getBusinessMode(cnt, (res)=> {
+            this.$area.getBusinessMode({}, (res)=> {
                 this.businessModeList = this.$util.tryParseJson(res.data.c)
             })
 

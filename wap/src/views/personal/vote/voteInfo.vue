@@ -558,17 +558,17 @@
     .modal-nav{
         width: 25rem;
         height: 9rem;
-        background:url("../../assets/image/bgbanner.jpg");
+        background:url("../../../assets/image/bgbanner.jpg");
     }
     .modal-nav1{
         width: 25rem;
         height: 9rem;
-        background:url("../../assets/image/bg1.jpg");
+        background:url("../../../assets/image/bg1.jpg");
     }
     .modal-nav2{
         width: 25rem;
         height: 9rem;
-        background:url("../../assets/image/bg2.png");
+        background:url("../../../assets/image/bg2.png");
     }
     .van-popup{
         border-radius: 5px;

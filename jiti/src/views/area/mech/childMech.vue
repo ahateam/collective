@@ -74,7 +74,7 @@
                     </el-col>
                     <el-col :span="18">
                         <div class="text-box">
-                            {{info.province}}{{info.city}}{{info.district}}
+                            {{province.name}} {{city.name}} {{district.name}}
                         </div>
                     </el-col>
                 </el-col>
@@ -195,6 +195,8 @@
                 page:1,
                 pageOver:false,
 
+
+
                 count:10,
                 offset:0,
 
@@ -206,7 +208,9 @@
                     {key:0,val:'正在申请'},{key:3,val:'再次申请'},{key:1,val:'申请通过'},{key:2,val:'申请失败'}
                 ],
                 statusShow:false,
-
+                province:'',
+                district:'',
+                city:'',
 
 
             }
@@ -235,7 +239,7 @@
                 this.isActive= index
                 this.page = 1
                 let cnt = {
-                    areaId: localStorage.getItem('mechId'),
+                    areaId: localStorage.getItem('orgId'),
                     examine:this.isActive,
                     count: this.count, // Integer
                     offset: this.offset, // Integer
@@ -261,11 +265,22 @@
                     return '申请失败'
                 }
             },
+
+
             //详情
             infoBtn(info){
                 this.info = info
+                let cnt={
+                    orgId:this.info.orgId
+                }
+                this.$area.getORGDistrict(cnt,(res)=>{
+                    console.log(res)
+                })
+
+
                 this.infoShow = true
                 this.examine = this.info.examine
+
             },
             editStatusBtn(info){
                 this.info = info
@@ -274,40 +289,63 @@
             },
             //审核
             Btn(){
-                let cnt ={
-                    orgExamineId:  this.info.id,
-                    userId:  this.info.userId,
-                    name:  this.info.name,
-                    code:  this.info.code,
-                    province:  this.info.province,
-                    city:  this.info.city,
-                    district:  this.info.district,
-                    address:  this.info.address,
-                    imgOrg:  this.info.imgOrg,
-                    imgAuth:  this.info.imgAuth,
-                    shareAmount:  this.info.shareAmount,
-                    examine: this.examine,
-                }
 
-                this.$area.upORGApply(cnt,(res)=> {
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('操作成功')
-                    }else{
-                        this.$message.error('操作失败')
+                let cnt ={
+                    orgExamineId:this.info.id
+                }
+                this.$area.getORGDistrictByOrgApplyId(cnt,(res)=>{
+                    this.province  =this.$util.tryParseJson(res.data.c).province.id
+                    this.city  =this.$util.tryParseJson(res.data.c).city.id
+                    this.district  =this.$util.tryParseJson(res.data.c).district.id
+                    let cnt ={
+                        orgExamineId:  this.info.id,
+                        province:this.province,
+                        city:this.city,
+                        district:this.district,
+                        userId:  this.info.userId,
+                        name:  this.info.name,
+                        code:  this.info.code,
+                        level:this.info.level,
+                        address:  this.info.address,
+                        imgOrg:  this.info.imgOrg,
+                        imgAuth:  this.info.imgAuth,
+                        shareAmount:  this.info.shareAmount,
+                        examine: this.examine,
+                        superiorId:localStorage.getItem('orgId'),
+                        updateDistrict: this.info.updateDistrict, // Boolean 组织id
                     }
-                    this.$router.push('/page')
+                    this.$area.upORGApply(cnt,(res)=> {
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+
+                            this.$message.success('操作成功')
+                        }else{
+                            this.$message.error('操作失败')
+                        }
+                        this.$router.push('/page')
+                    })
+
                 })
+
+
+
+
+
+
+
+
             },
         },
         mounted(){
             let cnt = {
-                areaId: localStorage.getItem('mechId'),
+                areaId: localStorage.getItem('orgId'),
                 examine:this.isActive,
                 count: this.count,
                 offset: this.offset,
             }
             this.$area.getORGExamine(cnt, (res)=> {
                 this.tableData = this.$util.tryParseJson(res.data.c)
+                console.log(this.tableData)
+
                 if(this.tableData.length < this.count){
                     this.pageOver = true
                 }else{

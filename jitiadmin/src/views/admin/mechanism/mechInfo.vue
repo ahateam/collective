@@ -19,17 +19,17 @@
             </el-col>
             <el-col :span="24">
                 <el-col :span="4">
-                    <div class="title-box">机构层级:</div>
+                    <div class="title-box">机构地址:</div>
                 </el-col>
                 <el-col :span="18">
-                    <div class="text-box">
-                        {{info.province}}{{info.city}}{{info.district}}
+                    <div class="text-box" v-if="addressMech != '' ">
+                        {{addressMech.province.name}}   &nbsp; {{addressMech.city.name}}&nbsp;  {{addressMech.district.name}}
                     </div>
                 </el-col>
             </el-col>
             <el-col :span="24">
                 <el-col :span="4">
-                    <div class="title-box">机构地址:</div>
+                    <div class="title-box">机构详细地址:</div>
                 </el-col>
                 <el-col :span="18">
                     <div class="text-box">
@@ -94,6 +94,8 @@
         data() {
             return {
                 info: {},
+                isMech:'',
+                addressMech:''
             }
         },
         methods: {
@@ -102,7 +104,8 @@
                     path: '/editMech',
                     name: 'editMech',
                     params: {
-                        info: this.info
+                        info: this.info,
+                        isMech:this.isMech
                     }
                 })
             }
@@ -110,7 +113,29 @@
         mounted() {
 
             this.info = this.$route.params.info
+            this.isMech = this.$route.params.isMech
             console.log(this.info)
+
+            if(this.isMech == true){
+                let cnt = {
+                    orgId: this.info.id, // Long 组织id
+                }
+                this.$api.getORGDistrict(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.addressMech = this.$util.tryParseJson(res.data.c)
+                    }
+                    console.log(this.addressMech)
+                })
+            }else{
+                let cnt = {
+                    orgExamineId: this.info.id, // Long 组织id
+                }
+                this.$api.getORGDistrictByOrgApplyId(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.addressMech = this.$util.tryParseJson(res.data.c)
+                    }
+                })
+            }
         },
 
     }

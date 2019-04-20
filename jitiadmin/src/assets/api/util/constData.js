@@ -57,7 +57,13 @@ const contentType=[
 ]
 
 
-
+/*
+* 组织等级
+*
+* */
+const orgLevel = [
+    {key:1,val:'省级'}, {key:2,val:'市级'}, {key:3,val:'区级'}, {key:4,val:'合作社'},{key:5,val:'其他'}
+]
 
 
 export default {
@@ -66,5 +72,6 @@ export default {
     visor,
     type,
     opt,
-    contentType
+    contentType,
+    orgLevel
 }

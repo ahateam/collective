@@ -2,11 +2,11 @@
     <div>
         <div class="bg-box">
             <div class="logo">
-                <div class="logo-img">
+                <div class="logo-img" >
                     <i class="iconfont icon-logo"></i>
                 </div>
                 <div class="logo-text">
-                    集体经济组织专用软件
+                    集体经济组织银行金融组织平台
                 </div>
             </div>
             <div class="form-box">
@@ -19,7 +19,7 @@
                             <i class="iconfont icon-quxiao"></i>
                         </div>
                         <div class="input-text">
-                            <input type="text" class="text" placeholder="请输入手机号" v-model="userName">
+                            <input type="text" class="text" placeholder="请输入银行管理员账号" v-model="userName">
                         </div>
                     </div>
                 </div>
@@ -36,15 +36,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-box" @click="tellBtn">
-                    根据手机号--选择账号登陆
-                </div>
-                <div class="form-btn" @click="formBtn">
+                <div class="form-btn" @click="bankLoginBtn">
                     立 即 登 录
                 </div>
-                <!--<div class="form-btn1" @click="registerBtn">-->
-                    <!--注 册 机 构-->
-                <!--</div>-->
+                <router-link to="/login">
+                    <div class="bank-text">
+                        集体经济组织成员专用软件
+                    </div>
+                </router-link>
+
+
+
             </div>
         </div>
     </div>
@@ -62,7 +64,7 @@
             }
         },
         methods:{
-            formBtn(){
+            bankLoginBtn(){
                 let cnt = {
                     mobile: this.userName,
                     pwd: this.pwd,
@@ -77,65 +79,53 @@
                         duration:200,
                         message:'请输入密码'
                     })
-                }else{
-                    this.$api.loginByMobileAndPwd(cnt, (res)=> {
-                        if(res.data.rc == this.$util.RC.SUCCESS){
-                            let data = this.$util.tryParseJson(res.data.c,{})
-                            localStorage.setItem('userInfo',JSON.stringify(data))
+                }else {
+                    this.$bank.loginByMobileAndPwd(cnt, (res) => {
+                        if (res.data.rc == this.$util.RC.SUCCESS) {
+                            let data = this.$util.tryParseJson(res.data.c, {})
+                            localStorage.setItem('userInfo', JSON.stringify(data))
                             Toast.success({
-                                durationL:200,
-                                message:'登录成功'
+                                durationL: 200,
+                                message: '登录成功'
                             })
-                            this.$router.push('/choose')
-                        }else{
+                            this.$router.push('/bankChoose')
+                        } else {
                             Toast.fail({
-                                duration:200,
-                                message:'登录失败'
+                                duration: 200,
+                                message: '登录失败'
                             })
                         }
                     })
-
-
-
                 }
             },
             quxiao(){
                 this.userName =''
                 this.pwd = ''
             },
-            registerBtn(){
-                this.$router.push('/register')
-            },
-            tellBtn(){
-                if(this.userName == ''){
-                    Toast.fail({
-                        duration:500,
-                        message:'请输入手机号'
-                    });
-                }else{
-                    this.$router.push({
-                        path:'/tellLogin',
-                        name:'tellLogin',
-                        params:{
-                            tell:this.userName
-                        }
-                    })
-                }
-            }
+
         },
         mounted(){
             if(localStorage.getItem('userInfo') !=null){
-                this.$router.push('/choose')
+                this.$router.push('/bankLogin')
             }
         }
     }
 </script>
 
 <style scoped lang="scss">
+    .bank-text{
+        width: 100%;
+        height: 2rem;
+        margin-top: 2rem;
+        line-height: 2rem;
+        color: #fff;
+        font-size: 1.4rem;
+        text-align: right;
+    }
     .bg-box {
         width: 100%;
         height: 100vh;
-        background-image: url('../../assets/image/bg.jpg');
+        background-image: url('../../../assets/image/bg.jpg');
         background-position: center;
         background-size: cover;
         overflow: hidden;
@@ -144,16 +134,17 @@
 
     .logo {
         position: absolute;
-        width: 15rem;
+        width: 30rem;
         height: 8rem;
         left: 50%;
-        margin-left: -7.5rem;
+        margin-left: -15rem;
         margin-top: 12%;
+        text-align: center;
     }
 
     .logo-img {
         width: 6rem;
-        margin-left: 4.5rem;
+        margin-left: 12rem;
         height: 6rem;
         overflow: hidden;
         color: #0a6c05;
@@ -175,6 +166,7 @@
         font-size: 1.6rem;
         color: #0a6c05;
         text-align: center;
+        margin-top: 1rem;
     }
 
     .form-box {

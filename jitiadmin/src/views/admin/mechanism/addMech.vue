@@ -20,23 +20,70 @@
             <el-col :span="24">
                 <div class="row-box2">
                     <el-col :span="4">
-                        <div class="title-box">机构层级:</div>
+                        <div class="title-box">机构地址:</div>
                     </el-col>
                     <el-col :span="18">
                         <div class="text-box">
-                            <v-distpicker @selected="sel"></v-distpicker>
+                            <el-select v-model="province" placeholder="请选择省份" @focus="proListBtn(levelList[0].key)">
+                                <el-option
+                                        v-for="(item,index) in provinceList"
+                                        :key="index"
+                                        :label="item.name"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="city" placeholder="请选择市" @focus="proListBtn(levelList[1].key)">
+                                <el-option
+                                        v-for="(item,index) in cityList"
+                                        :key="index"
+                                        :label="item.name"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="district" placeholder="请选择区县" @focus="proListBtn(levelList[2].key)">
+                                <el-option
+                                        v-for="(item,index) in districtList"
+                                        :key="index"
+                                        :label="item.name"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
                         </div>
                     </el-col>
                 </div>
             </el-col>
-
+            <el-col :span="24" class="row-box2">
+                <el-col :span="4">
+                    <div class="title-box">管理机构上级（可选）:</div>
+                </el-col>
+                <el-col :span="18">
+                    <div class="text-box">
+                        <el-select
+                                v-model="superiorId"
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入上级机构名称"
+                                :remote-method="getOrgByNameAndLevelBtn"
+                                :loading="loading"
+                                @focus="superiorBtn">
+                            <el-option
+                                    v-for="(item,index) in superiorList"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                        <span style="line-height: 40px;font-size: 1.4rem;color: #666;margin-left: 20px">(若暂无上级，可不选，等待上级开通后再次申请即可)</span>
+                    </div>
+                </el-col>
+            </el-col>
             <el-col :span="24">
                 <div class="row-box2">
                     <el-col :span="4">
                         <div class="title-box">机构详细地址:</div>
                     </el-col>
                     <el-col :span="18">
-
                         <div class="text-box">
                             <el-input v-model="mechAddress" placeholder="请输入机构详细地址"></el-input>
                         </div>
@@ -141,11 +188,30 @@
                 mechGrantImgUrl:'',
 
                 shareAmount: '',        //总股份数
-                address:''              //oss地址
+                address:'',              //oss地址
+
+                provinceList:[],
+                cityList:[],
+                districtList:[],
+                superiorList:[],
+                levelList:[],
+                superiorId:'',
+                loading: false,
             }
         },
         components: {
             VDistpicker
+        },
+        watch:{
+            province(val,oldVal){
+                console.log(val,oldVal)
+                this.city = ''
+                this.district = ''
+            },
+            city(val,oldVal){
+                console.log(val,oldVal)
+                this.district = ''
+            },
         },
         methods: {
             //ajax请求封装层
@@ -171,6 +237,69 @@
             },
 
             //普通事件层
+            //省市区选择
+            proListBtn(key){
+                console.log(key)
+                if(key == this.levelList[0].key){
+                    let cnt = {
+                        level: key, // Byte 等级
+                        father:1,
+                        count: 500, // Integer
+                        offset: 0, // Integer
+                    }
+                    this.$api.getProCityDistrict(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.provinceList = this.$util.tryParseJson(res.data.c)
+                            console.log(this.provinceList)
+                        }
+                    })
+                }else if(key == this.levelList[1].key){
+                    let cnt = {
+                        level: key, // Byte 等级
+                        father:this.province,
+                        count: 500, // Integer
+                        offset: 0, // Integer
+                    }
+                    this.$api.getProCityDistrict(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.cityList = this.$util.tryParseJson(res.data.c)
+                        }
+                    })
+                }else if(key == this.levelList[2].key){
+                    let cnt = {
+                        level: key, // Byte 等级
+                        father:this.city,
+                        count: 500, // Integer
+                        offset: 0, // Integer
+                    }
+                    this.$api.getProCityDistrict(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.districtList = this.$util.tryParseJson(res.data.c)
+                        }
+                    })
+                }
+            },
+            //更改选择上级
+            superiorBtn(){
+                this.superiorList = []
+            },
+            getOrgByNameAndLevelBtn(orgName){
+                this.superiorList  = []
+                console.log(orgName)
+                if(orgName != ''){
+                    let level = parseInt(this.level) -1
+                    let cnt = {
+                        level: level, // Byte 等级
+                        orgName: orgName, // String 需要查询的名称
+                    };
+                    this.$api.getOrgByNameAndLevel(cnt,(res)=>{
+                        this.superiorList = this.$util.tryParseJson(res.data.c)
+                        console.log(this.superiorList)
+                    })
+                }
+
+
+            },
             //进度条
             getProgress(p){
                 this.num = p
@@ -273,6 +402,8 @@
                         imgOrg: this.mechCodeImgUrl,
                         imgAuth: this.mechGrantImgUrl,
                         shareAmount: this.shareAmount,
+                        level:this.level,
+                        superiorId: this.superiorId,
                     };
                     this.createORGApply(cnt)
                 }
@@ -293,6 +424,8 @@
             }
             this.address = '/mechanism/'+year+month+day+'/'
 
+            this.levelList = this.$constData.orgLevel
+            this.level = this.levelList[3].key
         },
     }
 </script>

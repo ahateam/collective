@@ -4,7 +4,7 @@
         <div class="main-box">
             <div class="img-box">
                 <div class="img-info">
-                    <img src="../../assets/image/headImage.png" alt="">
+                    <img src="../../../assets/image/headImage.png" alt="">
                 </div>
                 <div class="img-title">
                     <!--<div class="icon-title">-->
@@ -134,7 +134,7 @@
         width: 100%;
         height: 12rem;
         padding-top: 1rem;
-        background-image: url('../../assets/image/banner.jpg');
+        background-image: url('../../../assets/image/banner.jpg');
     }
 
     .img-title {

@@ -165,6 +165,7 @@
                 let cnt = {
                     offset:(this.page-1)*this.count,
                     count:this.count,
+                    level:4,
                     userId:localStorage.getItem('userId')
                 }
                 this.getUserORGs(cnt)
@@ -308,6 +309,7 @@
             let cnt = {
                 offset:this.offset,
                 count:this.count,
+                level:4,
                 userId:localStorage.getItem('userId')
             }
             this.getUserORGs(cnt)

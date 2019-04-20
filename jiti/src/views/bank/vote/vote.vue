@@ -257,17 +257,18 @@
 
 
             let cnt ={
-                districtId: localStorage.getItem('mechId'),
+                superiorId: localStorage.getItem('orgId'),
             }
             //org列表
             this.$bank.getORGSByDistrictId(cnt, (res)=> {
                 this.orgList = this.$util.tryParseJson(res.data.c)
+                console.log(this.orgList)
                 let arr = []
                 for(let i=0;i<this.orgList.length;i++){
                     arr.push(this.orgList[i].id)
                 }
                 let cnt1 = {
-                    districtId: localStorage.getItem('mechId'),
+                    superiorId: localStorage.getItem('orgId'),
                     orgIds:arr
                 }
                 this.$bank.countVoteTurnout(cnt1, (res1)=> {

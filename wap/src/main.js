@@ -9,7 +9,7 @@ import axios from 'axios'
 import constData from './assets/api/util/constData'
 import util from 'ahaapi'
 import api from './assets/api/util/utils'
-
+import bank from './assets/api/util/bank'
 
 Vue.use(Vant)
 
@@ -18,7 +18,7 @@ Vue.prototype.$http = axios
 Vue.prototype.$util = util
 Vue.prototype.$constData = constData
 Vue.prototype.$api = api
-
+Vue.prototype.$bank = bank
 
 
 new Vue({

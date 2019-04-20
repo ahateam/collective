@@ -2,63 +2,73 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 
-const home = () => import('./views/home/home')
+const home = () => import('./views/personal/home/home')
 
-const login = () => import('./views/login/login')
-const tellLogin  = () => import('./views/login/tellLogin')
-const  test = () => import('./views/test/test')
-const page  = () => import('./views/home/page')
-const register  = () => import('./views/login/register')
-const registerSuccess  = () => import('./views/login/registerSuccess')
-const voteMeet  = () => import('./views/vote/voteMeet')
-const voteInfo  = () => import('./views/vote/voteInfo')
-const waitVote  = () => import('./views/vote/waitVote')
-const failVote  = () => import('./views/vote/failVote')
+const login = () => import('./views/personal/login/login')
+const tellLogin  = () => import('./views/personal/login/tellLogin')
+const  test = () => import('./views/personal/test/test')
+const page  = () => import('./views/personal/home/page')
+const register  = () => import('./views/personal/login/register')
+const registerSuccess  = () => import('./views/personal/login/registerSuccess')
+const voteMeet  = () => import('./views/personal/vote/voteMeet')
+const voteInfo  = () => import('./views/personal/vote/voteInfo')
+const waitVote  = () => import('./views/personal/vote/waitVote')
+const failVote  = () => import('./views/personal/vote/failVote')
 
-const  overVote = () => import('./views/vote/overVote')
-const  voteElectionRes = () => import('./views/vote/voteElectionRes')
-const  voteWait = () => import('./views/vote/voteWait')
-const  voteList = () => import('./views/vote/voteList')
-const  voteRes = () => import('./views/vote/voteRes')
-const  user = () => import('./views/user/user')
-const  userUpdate = () => import('./views/user/userUpdate')
+const  overVote = () => import('./views/personal/vote/overVote')
+const  voteElectionRes = () => import('./views/personal/vote/voteElectionRes')
+const  voteWait = () => import('./views/personal/vote/voteWait')
+const  voteList = () => import('./views/personal/vote/voteList')
+const  voteRes = () => import('./views/personal/vote/voteRes')
+const  user = () => import('./views/personal/user/user')
+const  userUpdate = () => import('./views/personal/user/userUpdate')
 
-const  meet = () => import('./views/meet/meet')
-const  meetAdd = () => import('./views/meet/meetAdd')
-const  meetUser = () => import('./views/meet/meetUser')
-const meetChoose  = () => import('./views/meet/meetChoose')
-const  meetAloneVoteAdd = () => import('./views/meet/meetAloneVoteAdd')
-const  meetMoreVoteAdd = () => import('./views/meet/meetMoreVoteAdd')
-const meetVoteOptionAdd  = () => import('./views/meet/meetVoteOptionAdd')
-const  meetInfo = () => import('./views/meet/meetInfo')
-const  meetVoteInfo = () => import('./views/meet/meetVoteInfo')
-const meetAloneVoteEdit  = () => import('./views/meet/meetAloneVoteEdit')
-const  meetVoteAdd = () => import('./views/meet/meetVoteAdd')
-const  voteOptionPick = () => import('./views/meet/voteOptionPick')
-const  choose = () => import('./views/home/choose')
-const position  = () => import('./views/position/position')
-const positionSet  = () => import( './views/position/positionSet')
-const file  = () => import('./views/file/file')
-const userFile  = () => import( './views/file/userFile')
-const formFile  = () => import('./views/file/formFile')
-const bonusFile  = () => import('./views/file/bonusFile')
-const article  = () => import('./views/article/article')
-const  articleInfo = () => import('./views/article/articleInfo')
+const  meet = () => import('./views/personal/meet/meet')
+const  meetAdd = () => import('./views/personal/meet/meetAdd')
+const  meetUser = () => import('./views/personal/meet/meetUser')
+const meetChoose  = () => import('./views/personal/meet/meetChoose')
+const  meetAloneVoteAdd = () => import('./views/personal/meet/meetAloneVoteAdd')
+const  meetMoreVoteAdd = () => import('./views/personal/meet/meetMoreVoteAdd')
+const meetVoteOptionAdd  = () => import('./views/personal/meet/meetVoteOptionAdd')
+const  meetInfo = () => import('./views/personal/meet/meetInfo')
+const  meetVoteInfo = () => import('./views/personal/meet/meetVoteInfo')
+const meetAloneVoteEdit  = () => import('./views/personal/meet/meetAloneVoteEdit')
+const  meetVoteAdd = () => import('./views/personal/meet/meetVoteAdd')
+const  voteOptionPick = () => import('./views/personal/meet/voteOptionPick')
+const  choose = () => import('./views/personal/home/choose')
+const position  = () => import('./views/personal/position/position')
+const positionSet  = () => import( './views/personal/position/positionSet')
+const file  = () => import('./views/personal/file/file')
+const userFile  = () => import( './views/personal/file/userFile')
+const formFile  = () => import('./views/personal/file/formFile')
+const bonusFile  = () => import('./views/personal/file/bonusFile')
+const article  = () => import('./views/personal/article/article')
+const  articleInfo = () => import('./views/personal/article/articleInfo')
 
-const  mechMoney = () => import('./views/mech/mechMoney')
+const  mechMoney = () => import('./views/personal/mech/mechMoney')
 //集体经济资产/分红展示
-const  list = () => import('./views/list/list')
-const  listBonus = () => import('./views/list/listBonus')
-const  listInfo= () => import('./views/list/listInfo')
-const  bonusInfo = () => import('./views/list/bonusInfo')
+const  list = () => import('./views/personal/list/list')
+const  listBonus = () => import('./views/personal/list/listBonus')
+const  listInfo= () => import('./views/personal/list/listInfo')
+const  bonusInfo = () => import('./views/personal/list/bonusInfo')
 //我的机构
-const  mech = () => import('./views/mech/mech')
-const  mechInfo = () => import('./views/mech/mechInfo')
+const  mech = () => import('./views/personal/mech/mech')
+const  mechInfo = () => import('./views/personal/mech/mechInfo')
 //我的投票
-const  poll = () => import('./views/poll/poll')
-const pollInfo  = () => import( './views/poll/pollInfo')
-const  pollElectionRes = () => import( './views/poll/pollElectionRes')
-const  pollRes = () => import('./views/poll/pollRes')
+const  poll = () => import('./views/personal/poll/poll')
+const pollInfo  = () => import( './views/personal/poll/pollInfo')
+const  pollElectionRes = () => import( './views/personal/poll/pollElectionRes')
+const  pollRes = () => import('./views/personal/poll/pollRes')
+
+
+
+//银行版
+const bankLogin =()=> import('./views/bank/login/login')
+const bankChoose =()=> import('./views/bank/home/choose')
+const bankHome =()=> import('./views/bank/home/home')
+const bankVote =()=> import('./views/bank/vote/vote')
+const bankVoteList =()=> import('./views/bank/vote/voteList')
+const bankVoteRes = ()=>import('./views/bank/vote/voteRes')
 
 Vue.use(Router)
 
@@ -66,6 +76,7 @@ export default new Router({
     mode: 'hash',
     base: process.env.BASE_URL,
     routes: [
+        //集体经济组织成员
         {
             path: '/',
             name: 'login',
@@ -325,6 +336,42 @@ export default new Router({
             path:'/pollRes',
             name:'pollRes',
             component:pollRes
+        },
+
+
+
+
+        //银行版
+        {
+            path:'/bankLogin',
+            name:'bankLogin',
+            component:bankLogin
+        },
+        {
+            path:'/bankChoose',
+            name:'bankChoose',
+            component:bankChoose
+        },
+        {
+            path:'/bankHome',
+            name:'bankHome',
+            component:bankHome
+        },
+        {
+            path:'/bankVote',
+            name:'bankVote',
+            component:bankVote
+        },
+        {
+            path:'/bankVoteList',
+            name:'bankVoteList',
+            component:bankVoteList
+        },
+        {
+            path:'/bankVoteRes',
+            name:'bankVoteRes',
+            component:bankVoteRes
         }
+
     ]
 })

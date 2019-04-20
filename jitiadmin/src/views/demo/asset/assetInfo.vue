@@ -275,6 +275,7 @@
             }else{
 
                 let cnt={
+                    orgId:localStorage.getItem('orgId'),
                     assetId:localStorage.getItem('assetId')
                 }
                 console.log(cnt)

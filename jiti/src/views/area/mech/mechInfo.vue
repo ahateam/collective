@@ -19,17 +19,17 @@
             </el-col>
             <el-col :span="24">
                 <el-col :span="4">
-                    <div class="title-box">机构层级:</div>
+                    <div class="title-box">机构地址:</div>
                 </el-col>
                 <el-col :span="18">
-                    <div class="text-box">
-                        {{info.province}}{{info.city}}{{info.district}}
+                    <div class="text-box" v-if="addressMech != '' ">
+                        {{addressMech.province.name}}    {{addressMech.city.name}}  {{addressMech.district.name}}
                     </div>
                 </el-col>
             </el-col>
             <el-col :span="24">
                 <el-col :span="4">
-                    <div class="title-box">机构地址:</div>
+                    <div class="title-box">机构详细地址:</div>
                 </el-col>
                 <el-col :span="18">
                     <div class="text-box">
@@ -79,7 +79,7 @@
             </el-col>
             <el-col :span="24" class="row-box2">
                 <el-button type="primary" @click="edit">修改机构信息</el-button>
-                <router-link to="/applyMech">
+                <router-link to="/areaManageApplyMech">
                     <el-button style="margin-left: 50px">返回机构列表</el-button>
                 </router-link>
             </el-col>
@@ -94,15 +94,18 @@
         data() {
             return {
                 info: {},
+                isMech:'',
+                addressMech:''
             }
         },
         methods: {
             edit() {
                 this.$router.push({
-                    path: '/editMech',
-                    name: 'editMech',
+                    path: '/areaEditMech',
+                    name: 'areaEditMech',
                     params: {
-                        info: this.info
+                        info: this.info,
+                        isMech:this.isMech
                     }
                 })
             }
@@ -110,7 +113,30 @@
         mounted() {
 
             this.info = this.$route.params.info
-            console.log(this.info)
+            this.isMech = this.$route.params.isMech
+
+
+            if(this.isMech == true){
+                let cnt = {
+                    orgId: this.info.id, // Long 组织id
+                }
+                this.$area.getORGDistrict(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.addressMech = this.$util.tryParseJson(res.data.c)
+                    }
+                })
+            }else{
+                let cnt = {
+                    orgExamineId: this.info.id, // Long 组织id
+                }
+                this.$area.getORGDistrictByOrgApplyId(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.addressMech = this.$util.tryParseJson(res.data.c)
+                    }
+                })
+            }
+
+
         },
 
     }
