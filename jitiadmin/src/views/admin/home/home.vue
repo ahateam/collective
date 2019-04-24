@@ -187,6 +187,7 @@
                 let cnt = {
                    offset:this.offset,
                    count:this.count,
+                    level:4,
                    userId:localStorage.getItem('userId')
                 }
                 this.getUserORGs(cnt)

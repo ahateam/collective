@@ -73,8 +73,8 @@
                         <div class="title-box">机构层级:</div>
                     </el-col>
                     <el-col :span="18">
-                        <div class="text-box">
-                            {{province.name}} {{city.name}} {{district.name}}
+                        <div class="text-box" v-if="addressMech != ''">
+                            {{addressMech.province.name}} {{addressMech.city.name}} {{addressMech.district.name}}
                         </div>
                     </el-col>
                 </el-col>
@@ -208,10 +208,8 @@
                     {key:0,val:'正在申请'},{key:3,val:'再次申请'},{key:1,val:'申请通过'},{key:2,val:'申请失败'}
                 ],
                 statusShow:false,
-                province:'',
-                district:'',
-                city:'',
 
+                addressMech:''
 
             }
         },
@@ -270,14 +268,13 @@
             //详情
             infoBtn(info){
                 this.info = info
+                console.log(info)
                 let cnt={
-                    orgId:this.info.orgId
+                    orgExamineId:this.info.id
                 }
-                this.$area.getORGDistrict(cnt,(res)=>{
-                    console.log(res)
+                this.$area.getORGDistrictByOrgApplyId(cnt,(res)=>{
+                  this.addressMech=this.$util.tryParseJson(res.data.c,{})
                 })
-
-
                 this.infoShow = true
                 this.examine = this.info.examine
 

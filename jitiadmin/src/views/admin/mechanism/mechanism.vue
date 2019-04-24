@@ -36,7 +36,7 @@
                             width="200">
                         <template slot-scope="scope">
                             <el-button @click="info(scope.row,true)" type="text" size="small">详情</el-button>
-                            <!--<el-button @click="infoMoney(scope.row)" type="text" size="small">机构资金</el-button>-->
+                            <el-button @click="infoMoney(scope.row)" type="text" size="small">机构资金</el-button>
                             <!--<el-button @click="del(scope.row)" type="text" size="small" style="color: #f44">删除</el-button>-->
                         </template>
                     </el-table-column>
@@ -123,6 +123,15 @@
                     path:'/mechInfo',
                     name:'mechInfo',
                     params:{info:row,isMech:isMech},
+                })
+            },
+            infoMoney(info){
+                this.$router.push({
+                    path:'/mechMoney',
+                    name:'mechMoney',
+                    params:{
+                        info:info
+                    }
                 })
             }
         },

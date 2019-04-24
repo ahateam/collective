@@ -41,7 +41,7 @@
                 this.$message.error('请选择一个分组')
             }else{
                 localStorage.setItem('assetId','')
-                let groups = [localStorage.getItem('groupId')]
+                let groups = localStorage.getItem('groupId')
                 let cnt={
                     groups:groups,
                     orgId:localStorage.getItem('orgId')

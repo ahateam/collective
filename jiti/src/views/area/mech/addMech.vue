@@ -412,6 +412,9 @@
                         type: 'error'
                     })
                 } else {
+                    if(this.superiorId == '' || this.superiorId == undefined){
+                        this.superiorId = 1
+                    }
                     let cnt = {
                         userId:localStorage.getItem('userId'),
                         name: this.mechName,

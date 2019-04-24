@@ -126,6 +126,13 @@
                     }
                     console.log(this.addressMech)
                 })
+
+                this.$api.getSuperior(cnt,(res)=>{
+                    let obj = {
+                        superiorId:this.$util.tryParseJson(res.data.c,{}).superiorId
+                    }
+                    Object.assign(this.info,obj)
+                })
             }else{
                 let cnt = {
                     orgExamineId: this.info.id, // Long 组织id

@@ -258,7 +258,7 @@
             <el-button type="primary" @click="editBtn">确认修改</el-button>
         </el-row>
         <el-row class="row-btn" >
-           <router-link to="/asset">
+           <router-link to="/areaAsset">
                <el-button type="primary" >返回搜索</el-button>
            </router-link>
         </el-row>

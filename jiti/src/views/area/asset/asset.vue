@@ -215,16 +215,27 @@
         methods:{
             //查询列表
             searchListBtn(){
+
                 this.isList = true
                 this.page = 1
                 let cnt ={
                     districtId: localStorage.getItem('mechId'), // Long 区id
                     offset:this.offset,
-                    count:this.count
+                    count:this.count,
                 }
                 if(this.org.length >0){
                     cnt.orgIds = this.org
+                }else{
+                    let arr = []
+                    for(let i=0;i<this.orgList.length;i++){
+                        arr.push(this.orgList[i].id)
+                    }
+                    cnt.orgIds = arr
+
                 }
+
+
+
                 if(this.year.length >0){
                     cnt.buildTimes = this.year
                 }else{
@@ -264,7 +275,15 @@
                 }
                 if(this.org.length >0){
                     cnt.orgIds = this.org
+                }else{
+                    let arr = []
+                    for(let i=0;i<this.orgList.length;i++){
+                        arr.push(this.orgList[i].id)
+                    }
+                    cnt.orgIds = arr
                 }
+
+
                 if(this.year.length >0){
                     cnt.buildTimes = this.year
                 }else{
@@ -301,6 +320,12 @@
                 }
                  if(this.org.length >0){
                     cnt.orgIds = this.org
+                 }else{
+                     let arr = []
+                     for(let i=0;i<this.orgList.length;i++){
+                         arr.push(this.orgList[i].id)
+                     }
+                     cnt.orgIds = arr
                  }
 
                  if(this.year.length >0){
@@ -320,9 +345,11 @@
                  }
                 console.log(cnt)
                 this.$area.districtCountByYears(cnt, (res)=> {
+
                     this.data = JSON.parse(res.data.c)
+
                     for(let i=0;i<this.data.length;i++){
-                        if(this.data[i].build_time == undefined || this.data[i].build_time == null) {
+                        if(this.data[i].buildTime == undefined || this.data[i].buildTime == null) {
                             let obj = {
                                 '年份':cnt.buildTimes[i],
                                 '原值':0,
@@ -331,12 +358,13 @@
                             this.chartData.rows.push(obj)
                         }else {
                             let obj = {
-                                '年份':this.data[i].build_time,
+                                '年份':this.data[i].buildTime,
                                 '原值':this.data[i].originPrice,
                                 '产值':this.data[i].yearlyIncome
                             }
                             this.chartData.rows.push(obj)
                         }
+
                     }
                 })
             },
@@ -398,7 +426,7 @@
                 this.$area.districtCountByYears(cnt1, (res) =>{
                     this.data = this.$util.tryParseJson(res.data.c)
                     for(let i=0;i<this.data.length;i++){
-                        if(this.data[i].build_time == undefined || this.data[i].build_time == null) {
+                        if(this.data[i].buildTime == undefined || this.data[i].buildTime == null) {
                             let obj = {
                                 '年份':cnt1.buildTimes[i],
                                 '原值':0,
@@ -407,13 +435,15 @@
                             this.chartData.rows.push(obj)
                         }else {
                             let obj = {
-                                '年份':this.data[i].build_time,
+                                '年份':this.data[i].buildTime,
                                 '原值':this.data[i].originPrice,
                                 '产值':this.data[i].yearlyIncome
                             }
                             this.chartData.rows.push(obj)
                         }
+
                     }
+                    console.log(this.chartData)
                 })
 
             })

@@ -79,9 +79,10 @@
             </el-col>
             <el-col :span="24" class="row-box2">
                 <el-button type="primary" @click="edit">修改机构信息</el-button>
-                <router-link to="/areaManageApplyMech">
-                    <el-button style="margin-left: 50px">返回机构列表</el-button>
-                </router-link>
+                <el-button style="margin-left: 50px" @click="goBack">返回上一页</el-button>
+                <!--<router-link to="/areaManageApplyMech">-->
+
+                <!--</router-link>-->
             </el-col>
         </el-row>
 
@@ -95,7 +96,7 @@
             return {
                 info: {},
                 isMech:'',
-                addressMech:''
+                addressMech:'',
             }
         },
         methods: {
@@ -108,14 +109,15 @@
                         isMech:this.isMech
                     }
                 })
+            },
+            goBack(){
+                this.$router.go(-1)
             }
         },
         mounted() {
 
             this.info = this.$route.params.info
             this.isMech = this.$route.params.isMech
-
-
             if(this.isMech == true){
                 let cnt = {
                     orgId: this.info.id, // Long 组织id
@@ -125,6 +127,13 @@
                         this.addressMech = this.$util.tryParseJson(res.data.c)
                     }
                 })
+               this.$area.getSuperior(cnt,(res)=>{
+                   let obj = {
+                       superiorId:this.$util.tryParseJson(res.data.c,{}).superiorId
+                   }
+                   Object.assign(this.info,obj)
+               })
+0
             }else{
                 let cnt = {
                     orgExamineId: this.info.id, // Long 组织id

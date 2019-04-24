@@ -147,9 +147,11 @@
                     if (res.data.rc == this.$util.RC.SUCCESS) {
                         let data = this.$util.tryParseJson(res.data.c)
                         this.tableData = data
+
                     } else {
                         this.tableData = []
                     }
+                    console.log(this.tableData)
                     if(this.tableData.length <this.count){
                         this.pageOver =true
                     }else{

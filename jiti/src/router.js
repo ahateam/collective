@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import login from './views/login'
 import page from  './views/page'
-
+import register from './views/register'
 
 //银行查询系统
 const bankHome = ()=>import('./views/bank/home/bankHome')
@@ -49,6 +49,11 @@ export default new Router({
           path: '/',
           name: 'login',
           component: login,
+      },
+      {
+          path: '/register',
+          name: 'register',
+          component: register,
       },
       {
           path:'/login',

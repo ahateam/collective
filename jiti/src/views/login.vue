@@ -38,6 +38,9 @@
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-left: 0" @click="loginBtn('1')">
                 金融银行登录
             </el-button>
+            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-left: 0" @click="registerBtn">
+                管理用户注册
+            </el-button>
 
 
 
@@ -60,6 +63,10 @@
             }
         },
         methods: {
+            //用户注册
+            registerBtn(){
+                this.$router.push('/register')
+            },
             //显示密码
             showPwd() {
                 if (this.passwordType === 'password') {
@@ -75,20 +82,21 @@
                 }else{
                     if(key == this.$constData.grade.bank){
                        //银行管理员
-                        let cnt = {
-                            mobile: this.username, // String 手机号
-                            pwd: this.password, // String 密码
-                        };
-                        this.$bank.bankAdminLogin(cnt,(res)=>{
-                            if(res.data.rc == this.$util.RC.SUCCESS){
-                                this.$message.success('登录成功!')
-                                localStorage.setItem('grade',this.$constData.grade.bank)
-                                localStorage.setItem('userId',this.$util.tryParseJson(res.data.c).id)
-                                this.$router.push('/bankHome')
-                            }else{
-                                this.$message.error('登录失败，请重新输入账号密码')
-                            }
-                        })
+                        this.$message.error('银行系统暂不支持pc登录，请前往手机版登录')
+                       //  let cnt = {
+                       //      mobile: this.username, // String 手机号
+                       //      pwd: this.password, // String 密码
+                       //  };
+                       //  this.$bank.bankAdminLogin(cnt,(res)=>{
+                       //      if(res.data.rc == this.$util.RC.SUCCESS){
+                       //          this.$message.success('登录成功!')
+                       //          localStorage.setItem('grade',this.$constData.grade.bank)
+                       //          localStorage.setItem('userId',this.$util.tryParseJson(res.data.c).id)
+                       //          this.$router.push('/bankHome')
+                       //      }else{
+                       //          this.$message.error('登录失败，请重新输入账号密码')
+                       //      }
+                       //  })
 
 
 

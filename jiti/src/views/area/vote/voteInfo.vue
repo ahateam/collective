@@ -33,7 +33,7 @@
             </template>
 
             <p>
-              <router-link to="/vote">
+              <router-link to="/areaVote">
                   <el-button type="primary" >返回统计页</el-button>
               </router-link>
             </p>
@@ -171,9 +171,10 @@
             let cnt = {
                 voteId:this.info.id
             }
-            this.$area.getVoteOptions(cnt,function (res) {
+            this.$area.getVoteOptions(cnt, (res)=> {
                 if(res.data.rc == this.$util.RC.SUCCESS){
                     this.tableData = this.$util.tryParseJson(res.data.c)
+                    console.log(this.tableData)
                 }
             })
         }

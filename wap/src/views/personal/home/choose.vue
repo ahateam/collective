@@ -107,7 +107,7 @@
                            offset:(this.page-1)*this.count,
                            count:this.count,
                            userId: JSON.parse(localStorage.getItem('userInfo')).id,
-                           level:0,
+                           level:4,
                        }
                        this.getUserORGs(cnt)
                        // 加载状态结束
@@ -137,7 +137,7 @@
                 offset:this.offset,
                 count:this.count,
                 userId: userId,
-                level:0
+                level:4
             }
             this.getUserORGs(cnt)
 
