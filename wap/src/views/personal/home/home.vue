@@ -143,8 +143,8 @@
                     <!--</div>-->
                 <!--</router-link>-->
 
-               <div v-if="root == true">
-                   <router-link to="/meet">
+               <div >
+                   <router-link to="/voteManage">
                        <div class="item-box">
                            <div class="img-box1">
                                <div class="i-box" style="background: #E6A23C">
@@ -153,7 +153,7 @@
                            </div>
                            <div class="text-box">
                                <div class="item-text">
-                                   会议管理
+                                   发起投票
                                </div>
                                <div class="item-next">
                                    <van-icon name="arrow"/>

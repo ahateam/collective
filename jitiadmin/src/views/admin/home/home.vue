@@ -206,6 +206,7 @@
                     orgId: row.id, // Long 组织编号
                 }
                 this.$api.adminLoginInORG(cnt, (res)=> {
+
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         localStorage.setItem('orgId', row.id)
                         localStorage.setItem('orgName', row.name)
@@ -245,6 +246,7 @@
                     userId: localStorage.getItem('userId'),
                     orgId: row.id, // Long 组织编号
                 }
+
                 this.$api.adminLoginInORG(cnt, (res)=> {
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         localStorage.setItem('orgId', row.id)

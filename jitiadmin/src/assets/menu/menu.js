@@ -25,6 +25,12 @@ const  menu =[
         ]
     },
     {
+        path:'/permission',
+        title:'权限管理',
+        icon:'icon-yonghu',
+        child:[]
+    },
+    {
         path:'/memberList',
         title:'成员管理',
         icon:'icon-yonghu',

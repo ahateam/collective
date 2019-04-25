@@ -18,6 +18,7 @@
                             placeholder="请输入会议内容"
                             autosize
                     />
+
                     <van-field
                             v-model="startDate"
                             label="开始时间"
@@ -113,8 +114,10 @@
                     this.endTimeShow = true
                 }
             },
+
             subBtn(){
                 let that = this
+                that.$router.push('/meetVoteAdd')
                 if(this.title == '' || this.text == '' || this.startDate == '' || this.endDate == '' ){
                     Toast.fail('信息不完整')
                 }else{

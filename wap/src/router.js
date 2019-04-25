@@ -60,7 +60,13 @@ const pollInfo  = () => import( './views/personal/poll/pollInfo')
 const  pollElectionRes = () => import( './views/personal/poll/pollElectionRes')
 const  pollRes = () => import('./views/personal/poll/pollRes')
 
-
+//发起投票
+const voteManage = ()=>import('./views/personal/voteManage/voteManage')
+const createVote = ()=>import('./views/personal/voteManage/createVote')
+const createVoteChoose = ()=>import('./views/personal/voteManage/createVoteChoose')
+const editVote = ()=>import('./views/personal/voteManage/editVote')
+const createVoteOptionWork = ()=>import('./views/personal/voteManage/createVoteOptionWork')
+const createVoteOptionPeople = ()=>import('./views/personal/voteManage/createVoteOptionPeople')
 
 //银行版
 const bankLogin =()=> import('./views/bank/login/login')
@@ -336,6 +342,37 @@ export default new Router({
             path:'/pollRes',
             name:'pollRes',
             component:pollRes
+        },
+        //发起投票管理
+        {
+            path:'/voteManage',
+            name:'voteManage',
+            component:voteManage
+        },
+        {
+            path:'/createVote',
+            name:'createVote',
+            component:createVote
+        },
+        {
+            path:'/createVoteChoose',
+            name:'createVoteChoose',
+            component:createVoteChoose
+        },
+        {
+            path:'/editVote',
+            name:'editVote',
+            component:editVote
+        },
+        {
+            path:'/createVoteOptionWork',
+            name:'createVoteOptionWork',
+            component:createVoteOptionWork
+        },
+        {
+            path:'/createVoteOptionPeople',
+            name:'createVoteOptionPeople',
+            component:createVoteOptionPeople
         },
 
 

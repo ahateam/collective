@@ -33,6 +33,7 @@ const  tagList  = ()=>import('./views/admin/article/tagList')
 const  articleAdd = ()=>import('./views/admin/article/articleAdd')
 const  asset = ()=>import('./views/admin/assets/asset')
 const applyMech  = ()=>import('./views/admin/mechanism/applyMech')
+const permission = ()=>import('./views/admin/permission/permission')
 
 //演示系统
 const demoDashboard = ()=> import( './views/demo/home/dashboard')
@@ -205,6 +206,11 @@ export default new Router({
                     path:'/asset',
                     name:'asset',
                     component:asset
+                },
+                {
+                    path:'/permission',
+                    name:'permission',
+                    component:permission
                 },
 
                 //演示系统

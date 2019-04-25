@@ -79,9 +79,18 @@
             },
             loginInORG(cnt){
                 this.$api.loginInORG(cnt,(res)=>{
+                    console.log(JSON.parse(res.data.c))
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         let user = res.data.c
                         localStorage.setItem('orgInfo',user)
+                        let userInfo = this.$util.tryParseJson(res.data.c)
+                        let arr = []
+
+                        for(let i=0;i<userInfo.permissions.length;i++){
+                            arr.push(userInfo.permissions[i].permissionId)
+                        }
+
+                        localStorage.setItem('permission',JSON.stringify(arr))
                         this.$router.push('/home')
                     }else{
                         Toast.fail({
@@ -89,14 +98,8 @@
                             message:'选择失败'
                         })
                     }
-
-
                 })
-
-
             },
-
-
             //普通事件层
             onLoad() {
                 // 异步更新数据
@@ -117,7 +120,6 @@
                    }
                 }, 300);
             },
-
             chooseBtn(orgid){
                 let userId = JSON.parse(localStorage.getItem('userInfo')).id
                 let cnt = {
