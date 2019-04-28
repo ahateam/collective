@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-box title="修改议程"></header-box>
+        <header-box title="创建投票"></header-box>
         <div class="main-box">
             <van-cell-group>
                 <van-field
@@ -22,77 +22,55 @@
                         autosize
                         class="text"
                 />
-                <div class="inp-box">
-                    <div class="inp-title" style="width: 90px">
-                        参会人员
+                <van-field
+                        v-model="startDate"
+                        label="开始时间"
+                        type="textarea"
+                        placeholder="请选择会议开始时间"
+                        autosize
+                        @click="startTimeShow = true"
+                />
+                <van-field
+                        v-model="endDate"
+                        label="截至时间"
+                        type="textarea"
+                        placeholder="请选择会议截止时间"
+                        autosize
+                        @click="showEndTime"
+                />
+                <div style="margin: 1rem 0">
+                    <div class="inp-box">
+                        <div class="inp-title" style="width: 90px">
+                            参会人员
+                        </div>
                     </div>
-                    <div class="inp-text" style="width: auto">
+                    <div class="inp-box" style="width: auto;padding-top: 0">
                         <van-checkbox-group v-model="crowd">
                             <van-checkbox
-                                    v-for="item in crowdList"
-                                    :key="item.v"
-                                    :name="item.v"
+                                    v-for="(item,index) in crowdList"
+                                    :key="index"
+                                    :name="item.roleId"
                                     class="radio-box"
-
                                     style="margin-left: 1rem;margin-top: 1rem"
                             >
-                                {{ item.t}}
+                                {{ item.name}}
                             </van-checkbox>
                         </van-checkbox-group>
                     </div>
                 </div>
-                <!--<div class="inp-box">-->
-                <!--<div class="inp-title">-->
-                <!--弃权选项-->
-                <!--</div>-->
-                <!--<div class="inp-text">-->
-                <!--<van-switch v-model="isAbstain" />-->
-                <!--</div>-->
-                <!--</div>-->
+
                 <div class="inp-box">
                     <div class="inp-title">
                         选项类型
                     </div>
                     <div class="inp-text">
                         <van-radio-group v-model="type" @change="typeBtn">
-                            <van-radio :name="0" class="radio-box" >单选</van-radio>
-                            <van-radio :name="1" class="radio-box" style="margin-left: 5rem">多选</van-radio>
+                            <van-radio name="0" class="radio-box">单选</van-radio>
+                            <van-radio name="1" class="radio-box" style="margin-left: 5rem">多选</van-radio>
                         </van-radio-group>
                     </div>
                 </div>
-                <!--<div class="inp-box" v-if="template == '0'">-->
-                <!--<div class="inp-title">-->
-                <!--选票重投-->
-                <!--</div>-->
-                <!--<div class="inp-text">-->
-                <!--<van-radio-group v-model="reeditable" >-->
-                <!--<van-radio :name="true" class="radio-box">支持重投</van-radio>-->
-                <!--<van-radio :name="false" class="radio-box" style="margin-left: 5rem">禁用重投</van-radio>-->
-                <!--</van-radio-group>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--<div class="inp-box" v-if="template == '0'">-->
-                <!--<div class="inp-title">-->
-                <!--选票实名-->
-                <!--</div>-->
-                <!--<div class="inp-text">-->
-                <!--<van-radio-group v-model="realName" >-->
-                <!--<van-radio :name="true" class="radio-box">实名</van-radio>-->
-                <!--<van-radio :name="false" class="radio-box" style="margin-left: 5rem">不实名</van-radio>-->
-                <!--</van-radio-group>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--<div class="inp-box" v-if="template == '0'">-->
-                <!--<div class="inp-title">-->
-                <!--内部投票-->
-                <!--</div>-->
-                <!--<div class="inp-text">-->
-                <!--<van-radio-group v-model="isInternal" >-->
-                <!--<van-radio :name="true" class="radio-box">内部投票</van-radio>-->
-                <!--<van-radio :name="false" class="radio-box" style="margin-left: 5rem">公共投票</van-radio>-->
-                <!--</van-radio-group>-->
-                <!--</div>-->
-                <!--</div>-->
+
                 <van-field
                         v-model="choiceCount"
                         label="选项限制"
@@ -108,7 +86,6 @@
                         label="表决失效"
                         placeholder="请选择自动表决失效比例"
                         @focus="fail"
-                        v-if="template == '0'"
                         style="margin-top: 2rem"
                 />
                 <van-field
@@ -117,21 +94,22 @@
                         label="通过比例"
                         placeholder="请选择自动通过的比例"
                         @focus="pass"
-                        v-if="template == '0'"
                         style="margin-top: 2rem"
                 />
             </van-cell-group>
 
 
-            <div class="create-btn" @click="btn">确认修改</div>
-            <div class="create-btn" @click="returnBtn">取消</div>
+            <div class="create-btn" @click="btn">确认修改 — 选项管理</div>
+
+            <div class="create-btn"  @click="editBtn">确认修改 — 返回列表</div>
+
+
         </div>
 
         <van-popup v-model="passShow" position="bottom" :overlay="true">
             <van-picker
                     :columns="num"
                     @change="onChangePass"
-                    :defaultIndex="1"
             />
         </van-popup>
         <van-popup v-model="failShow" position="bottom" :overlay="true">
@@ -140,22 +118,40 @@
                     @change="onChangePassFail"
             />
         </van-popup>
+
+
+        <van-popup v-model="startTimeShow" position="bottom" :overlay="true">
+            <van-datetime-picker
+                    v-model="startTime"
+                    :min-date="minDate"
+                    @confirm="confirmStartBtn"
+                    @cancel="cancelStartBtn"
+            />
+        </van-popup>
+        <van-popup v-model="endTimeShow" position="bottom" :overlay="true">
+            <van-datetime-picker
+                    v-model="endTime"
+                    :min-date="startTime"
+                    @confirm="confirmEndBtn"
+                    @cancel="cancelEndBtn"
+            />
+        </van-popup>
+
     </div>
 </template>
 
 <script>
     import HeaderBox from '@/components/head/headerBox'
     import { Toast } from 'vant'
-    const  num=['1/3','1/2','2/3']
     export default {
-        name: "meetAloneVoteAdd",
+        name: "createVote",
         components: {
             HeaderBox
         },
         data() {
             return {
-                voteId:'',
                 isAbstain:true,
+                voteId:'',
                 template:'0',         //控制0  选举和 1 投票的显示区别
                 type:'0',
                 reeditable:false,
@@ -170,35 +166,42 @@
                 passShow:false,
                 passData:'',
                 num:['1/3','1/2','2/3'],
-                // passNum:[num,defaultIndex],
                 effectiveRatio:'100',
                 failureRatio:'100',
                 crowd:[],
-                crowdList:[
-                    {
-                        v:0,
-                        t:'所有人',
-                    },
-                    {
-                        v:1,
-                        t:'股东',
-                    },
-                    {
-                        v:2,
-                        t:'股东代表',
-                    },
-                    {
-                        v:3,
-                        t:'董事会',
-                    },
-                    {
-                        v:4,
-                        t:'监事会',
-                    }
-                ],
+                startDate:'',
+                endDate:'',
+                crowdList:[],
+                startTimeShow:false,
+                startTime: new Date(),
+                minDate:new Date(),
+                endTimeShow:false,
+                endTime:new Date(),
             }
         },
         methods: {
+            confirmStartBtn(){
+                this.startDate =  this.startTime.toLocaleDateString()+ ' '+this.startTime.toLocaleTimeString('chinese',{hour12:false})
+                this.startTimeShow = false
+            },
+            cancelStartBtn(){
+                this.startTimeShow = false
+            },
+            confirmEndBtn(){
+                this.endDate = this.endTime.toLocaleDateString()+ ' '+this.endTime.toLocaleTimeString('chinese',{hour12:false})
+                this.endTimeShow = false
+            },
+            cancelEndBtn(){
+                this.endTimeShow = false
+            },
+            showEndTime(){
+                if(this.startDate == ''){
+                    Toast.fail('请先选择开始时间')
+                }else{
+                    this.endTimeShow = true
+                }
+            },
+
             typeBtn(){
                 if(this.type == '0'){
                     this.choiceCount = 1
@@ -207,25 +210,25 @@
                     this.choiceCountShow = true
                 }
             },
-            returnBtn(){
-                this.$router.go(-1)
-            },
             chooseBtn(){
-                this.$router.push('/meetChoose')
+                this.$router.push('/createVoteChoose')
             },
             btn(){
-                let that = this
-                if(this.voteTitle == '' || this.voteText == '' ||  this.effectiveRatio == '' || this.failureRatio == '' ||this.crowd == []){
+                if(this.remark== '' ||this.title == ''||this.crowd == [] ||this.startDate == '' ||this.endDate == '' ||this.failData == '' || this.passData == ''){
                     Toast.fail('信息不完整')
                 }else{
+                    let crowd = {
+                        roles:this.crowd,
+                        tags:{groups:[],tag:[]}
+                    }
+
                     let cnt = {
-                        orgId:JSON.parse(localStorage.getItem('user')).orgId,
-                        projectId:JSON.parse(localStorage.getItem('meet')).id,
                         voteId:this.voteId,
+                        orgId:JSON.parse(localStorage.getItem('user')).orgId,
                         template:this.template,
                         type:this.type,
                         choiceCount:this.choiceCount,
-                        crowd:JSON.stringify(this.crowd),
+                        crowd:crowd,
                         reeditable:this.reeditable,
                         realName:this.realName,
                         isInternal:this.isInternal,
@@ -234,26 +237,71 @@
                         failureRatio:this.failureRatio,
                         title:this.title,
                         remark:this.remark,
-                        ext:'无'
+                        ext:'无',
+                        startTime: new Date(this.startDate).getTime(), // Date 开始时间
+                        expiryTime: new Date(this.endDate).getTime(), // Date 终止时间
                     }
-                    console.log(cnt)
-                    this.$util.call('/vote/editVote',cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
+                    this.$api.editVote(cnt,(res)=>{
+
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            cnt.id = this.voteId
+                            cnt.crowd = JSON.stringify(cnt.crowd)
                             localStorage.setItem('voteInfo',JSON.stringify(cnt))
-                            Toast.success({
-                                duration:500,
-                                message:'修改成功'
-                            })
+                            if(this.template == 0){
+                                this.$router.push('/createVoteOptionPeople')
+                            }else{
+                                this.$router.push('/createVoteOptionWork')
+                            }
                         }else{
-                            Toast.fail({
-                                duration:500,
-                                message:'修改失败'
-                            })
+                            Toast.fail('信息有误或权限不足！')
+                            this.$router.push('/voteManage')
                         }
-                        that.$router.go(-1)
                     })
                 }
             },
+            editBtn(){
+                if(this.remark== '' ||this.title == ''||this.crowd == [] ||this.startDate == '' ||this.endDate == '' ||this.failData == '' || this.passData == ''){
+                    Toast.fail('信息不完整')
+                }else{
+                    let crowd = {
+                        roles:this.crowd,
+                        tags:{groups:[],tag:[]}
+                    }
+
+                    let cnt = {
+                        voteId:this.voteId,
+                        orgId:JSON.parse(localStorage.getItem('user')).orgId,
+                        template:this.template,
+                        type:this.type,
+                        choiceCount:this.choiceCount,
+                        crowd:crowd,
+                        reeditable:this.reeditable,
+                        realName:this.realName,
+                        isInternal:this.isInternal,
+                        isAbstain:this.isAbstain,
+                        effectiveRatio:this.effectiveRatio,
+                        failureRatio:this.failureRatio,
+                        title:this.title,
+                        remark:this.remark,
+                        ext:'无',
+                        startTime: new Date(this.startDate).getTime(), // Date 开始时间
+                        expiryTime: new Date(this.endDate).getTime(), // Date 终止时间
+                    }
+
+                    this.$api.editVote(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            cnt.crowd = JSON.stringify(cnt.crowd)
+                            cnt.id = this.voteId
+                            localStorage.setItem('voteInfo',JSON.stringify(cnt))
+                            this.$router.push('/voteManage')
+                        }else{
+                            Toast.fail('信息有误或权限不足！')
+                            this.$router.push('/voteManage')
+                        }
+                    })
+                }
+            },
+
             onChangePass(picker, value, index) {
                 this.passShow = false
                 this.passData =  value
@@ -287,20 +335,35 @@
 
         },
         mounted(){
+
+
+
+            this.$api.getSysORGUserRoles({},(res)=>{
+                if(res.data.rc == this.$util.RC.SUCCESS){
+                    this.crowdList = this.$util.tryParseJson(res.data.c)
+                }else{
+                    this.crowdList = []
+                }
+                console.log(this.crowdList)
+            })
+
             let info = JSON.parse(localStorage.getItem('voteInfo'))
+            console.log(info)
             this.voteId = info.id
             this.template= info.template
             this.title = info.title
             this.remark = info.remark
             this.isAbstain = info.isAbstain
-            this.type = info.type
+            this.type = info.type+''
             this.reeditable = info.reeditable
             this.realName = info.realName
             this.isInternal = info.isInternal
             this.choiceCount = info.choiceCount
 
-            this.crowd = JSON.parse(info.crowd)
+            this.crowd = JSON.parse(info.crowd).roles
 
+            this.startDate =new Date(info.startTime) .toLocaleDateString()+ ' '+new Date(info.startTime) .toLocaleTimeString('chinese',{hour12:false})
+            this.endDate = new Date(info.expiryTime) .toLocaleDateString()+ ' '+new Date(info.expiryTime) .toLocaleTimeString('chinese',{hour12:false})
             this.effectiveRatio = info.effectiveRatio
             this.failureRatio = info.failureRatio
 
@@ -319,6 +382,7 @@
             }else{
                 this.passData = '2/3'
             }
+
 
         }
     }

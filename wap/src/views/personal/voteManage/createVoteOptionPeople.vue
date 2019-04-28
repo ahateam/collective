@@ -1,11 +1,11 @@
 <template>
     <div>
-        <header-box title="新增选项"></header-box>
+        <header-box title="选项管理"></header-box>
         <div class="main-box">
             <div class="vote-box">
                 <div class="vote-box-title">
                     <div class="vote-title">
-                        会议名称:
+                        投票标题:
                     </div>
                     <div class="vote-text">
                         {{voteInfo.title}}
@@ -13,7 +13,7 @@
                 </div>
                 <div class="vote-box-title">
                     <div class="vote-title">
-                        会议内容:
+                        投票内容:
                     </div>
                     <div class="vote-text">
                         {{voteInfo.remark}}
@@ -48,7 +48,7 @@
             <div class="box2" >
                 <van-search
                         v-model="search"
-                        placeholder="请输入搜索身份证号码"
+                        placeholder="请输入搜索成员的姓名"
                         show-action
 
                 >
@@ -60,10 +60,10 @@
                 <div class="list" v-for="(item,index) in searchList" :key="index">
                     <div @click="addBtn(item)">
                         <div class="list-name">
-                            {{ item.realName}}
+                            {{ item.user.realName}}
                         </div>
                         <div class="list-info">
-                            {{item.idNumber}}
+                            {{item.user.idNumber}}
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
 
     import { Dialog } from 'vant';
     export default {
-        name: "voteOptionPick",
+        name: "createVoteOptionPeople",
         components: {
             HeaderBox,
             draggable
@@ -105,6 +105,26 @@
             }
         },
         methods: {
+            //根据用户姓名搜索用户列表
+            getORGUsersLikeRealName(cnt){
+                    this.$api.getORGUsersLikeRealName(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.searchList = this.$util.tryParseJson(res.data.c)
+                            if(this.searchList.length == 0){
+                                Toast.fail({
+                                    duration:300,
+                                    message:'暂无数据'
+                                })
+                            }
+                        }else{
+                            Toast.fail({
+                                duration:500,
+                                message:'输入错误'
+                            })
+                        }
+                    })
+            },
+            //请求选项列表
             getVoteOptions(cnt){
               this.$api.getVoteOptions(cnt,(res)=>{
                   if(res.data.rc == this.$util.RC.SUCCESS){
@@ -114,130 +134,107 @@
                   }
               })
             },
+            //交换选项的位置
+            setVoteOptionIds(cnt){
+                this.$api.setVoteOptionIds(cnt,(res)=>{
+                    if(res.data.rc != this.$util.RC.SUCCESS){
+                     Toast.fail('交换位置失败')
+                    }
+                })
+            },
+            //删除选项
+            delVoteOption(cnt){
+                this.$api.delVoteOption(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        Toast.success('删除成功')
+                        this.$router.push('/page')
+                    }else{
+                        Toast.success('删除失败')
+                        this.$router.push('/page')
+                    }
+                })
+            },
+            //新增选项
+            addVoteOption(cnt){
+                this.$api.addVoteOption(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$router.push('/page')
+                    }else{
+                        Toast.fail('新增选项失败')
+                        this.$router.push('/page')
+                    }
+                })
+            },
+
 
             onSearch(){
-                let that =this
-                let count = 40
+                let count = 20
                 let offset = 0
+
                 let cnt ={
                     orgId:JSON.parse(localStorage.getItem('user')).orgId,
-                    idNumber:this.search,
+                    realName:this.search,
                     count:count,
                     offset:offset
                 }
-                this.$util.call('/org/getORGUsersLikeIDNumber',cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
+                this.getORGUsersLikeRealName(cnt)
 
-                        that.searchList = JSON.parse(res.data.c)
-                        console.log( that.searchList)
-                        if(that.searchList.length == 0){
-                            Toast.fail({
-                                duration:300,
-                                message:'暂无数据'
-                            })
-                        }
-                    }else{
-                        Toast.fail({
-                            duration:500,
-                            message:'输入错误'
-                        })
-                    }
-
-                    console.log(res)
-                })
-                console.log()
             },
             changeBtn(){
                 let optionIds = []
-                let that = this
                 for(let i=0;i<this.optionList.length;i++){
                     optionIds.push(this.optionList[i].id)
                 }
                 let cnt = {
-                    projectId:JSON.parse(localStorage.getItem('meet')).id, // Long 投票项目编号
                     voteId: JSON.parse(localStorage.getItem('voteInfo')).id, // Long 投票编号
                     optionIds: JSON.stringify(optionIds), // JSONArray 投票选项编号列表（JSONArray）
                 };
-                this.$util.call('/vote/setVoteOptionIds',cnt,function (res) {
-                    if(res.data.rc != that.$util.RC.SUCCESS){
-                        Toast.success({
-                            duration:500,
-                            message:'交换位置失败'
-                        })
-                    }
-                })
+                this.setVoteOptionIds(cnt)
             },
             del(id,index){
-                let that =this
                 Dialog.alert({
                     title: '删除选项',
                     message: '是否确认删除该选项'
                 }).then(() => {
                     let cnt = {
-                        projectId:this.meetId,
-                        voteId:JSON.parse(localStorage.getItem('voteInfo')).id,
+                        voteId:this.voteId,
                         optionId:id
                     }
-                    console.log(id)
-                    console.log(index)
-                    console.log(this.optionList)
-                    this.$util.call('/vote/delVoteOption',cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            Toast({
-                                duration:300,
-                                message:'删除成功'
-                            });
-                            that.$router.push('/page')
-                        }
-                    })
+                    this.delVoteOption(cnt)
                 });
             },
 
             addBtn(info){
-                console.log(info)
-                let that = this
                 let ext = {
-                    userId:info.userId,
-                    idNumber:info.idNumber,
-                    realName:info.realName,
+                    userId:info.user.userId,
+                    idNumber:info.user.idNumber,
+                    realName:info.user.realName,
                 }
                 let cnt ={
-                    projectId:this.meetId,
                     voteId:this.voteId,
-                    title:info.realName,
+                    title:info.user.realName,
                     remark:'无',
-                    ext:JSON.stringify(ext)
+                    ext:ext
                 }
-
-                this.$util.call('/vote/addVoteOption',cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.$router.push('/page')
-                    }
-                })
+                this.addVoteOption(cnt)
 
             },
 
             //修改议程信息
             editVoteBtn(){
-                this.$router.push('/meetAloneVoteEdit')
+                this.$router.push('/editVote')
             },
             btn(){
-                this.$router.push('/meetVoteAdd')
+                this.$router.push('/voteManage')
             }
         },
         mounted(){
-
             this.voteInfo =  JSON.parse(localStorage.getItem('voteInfo'))
             this.voteId  = JSON.parse(localStorage.getItem('voteInfo')).id
-            if(this.meetId == '' || this.voteId == ''){
-                this.$router.push('/meet')
-                Toast.fail('重新选择会议')
-            }
             let cnt = {
                 voteId:this.voteId
             }
-
-
+            this.getVoteOptions(cnt)
         }
     }
 </script>

@@ -25,7 +25,7 @@
 
                         <div class="item-content">
                             <div class="status-btn">
-                                <div class="del" @click="meetDel(item.id)" style="text-align: right">
+                                <div class="del" @click="voteDel(item.id)" style="text-align: right">
                                     <i class="iconfont icon-19icon"></i>
                                 </div>
                             </div>
@@ -46,7 +46,8 @@
 
 <script>
     import HeaderBox from '@/components/head/headerBox'
-    import { Toast } from 'vant';
+    import { Dialog } from 'vant'
+    import { Toast } from 'vant'
     export default {
         name: "voteManage",
         data() {
@@ -55,7 +56,8 @@
                 offset:0,
                 count:10,
                 loading: false,
-                finished: false
+                finished: false,
+                page:1,
             }
         },
         components: {
@@ -69,6 +71,7 @@
                         arr= this.$util.tryParseJson(res.data.c)
                     }else{
                         arr = []
+                        this.finished = true
                     }
                     this.list = this.list.concat(arr)
                     if(arr.length <this.count){
@@ -79,6 +82,27 @@
             //跳转
             createBtn(){
               this.$router.push('/createVoteChoose')
+            },
+            //删除投票
+            voteDel(id){
+                Dialog.confirm({
+                    title: '确认删除',
+                    message: '是否确认删除该投票'
+                }).then(() => {
+                    let cnt={
+                        voteId: id, // Long 投票编号
+                    }
+                    this.$api.delVote(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            Toast.success('删除成功')
+                        }else{
+                            Toast.fail('删除失败')
+                        }
+                        this.$router.push('/page')
+                    })
+                }).catch(() => {
+                    // on cancel
+                })
             },
 
             //分页
@@ -102,9 +126,9 @@
             },
 
             infoBtn(info){
-                //正在进行的会议详细
-                localStorage.setItem('meet',JSON.stringify(info))
-                this.$router.push('/meetVoteAdd')
+                localStorage.setItem('voteInfo',JSON.stringify(info))
+                console.log(localStorage.getItem('voteInfo'))
+                this.$router.push('/editVote')
             },
             meetDel(id){
                 let that = this

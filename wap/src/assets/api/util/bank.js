@@ -21,7 +21,14 @@ api.getUserORGs = function (cnt,callback) {
 api.adminLoginInORG = function (cnt,callback) {
     util.call(baseUrl+'/org/adminLoginInORG', cnt, callback)
 }
-
+//根据手机号查找用户
+api.getUsersByMobile = function (cnt,callback) {
+    util.call(baseUrl+'/org/getUsersByMobile', cnt, callback)
+}
+//根据userid+密码登录
+api.loginByUserId = function (cnt,callback) {
+    util.call(baseUrl+'/org/loginByUserId', cnt, callback)
+}
 //获取银行下的组织列表
 api.getORGByBank = function (cnt,callback) {
     util.call(baseUrl+'/bank/getORGByBank', cnt, callback)

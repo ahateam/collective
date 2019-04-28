@@ -1,36 +1,36 @@
 <template>
     <div>
-            <head-return title="选择账号"></head-return>
-            <div class="main-box">
-                <div class="title-box">
-                   <span style="color: #f60;font-weight: 600">{{tell}}</span>  选择登录账号：
-                </div>
-                <div class="list" v-for="(item,index) in list" :key="index" @click="pwdBtn(item)">
-                    <div class="list-name">
-                        {{item.realName.substr(0,item.realName.length-1)}}*
-                    </div>
-                    <div class="list-card">
-                       {{item.idNumber.substr(0,item.idNumber.length-6)}}******
-                    </div>
-                </div>
-
-                <div class="create-btn" @click="returnBtn">返回登录</div>
+        <head-return title="选择账号"></head-return>
+        <div class="main-box">
+            <div class="title-box">
+                <span style="color: #f60;font-weight: 600">{{tell}}</span>  选择登录账号：
             </div>
-            <van-dialog
-                    v-model="pwdShow"
-                    show-cancel-button
-                    @confirm="onConfirm"
-                    @cancel="onCancel"
-                    title="输入密码"
-            >
+            <div class="list" v-for="(item,index) in list" :key="index" @click="pwdBtn(item)">
+                <div class="list-name">
+                    {{item.realName.substr(0,item.realName.length-1)}}*
+                </div>
+                <div class="list-card">
+                    {{item.idNumber.substr(0,item.idNumber.length-6)}}******
+                </div>
+            </div>
 
-                <van-field
-                        v-model="pwd"
-                        type="password"
-                        label="密码"
-                        placeholder="请输入密码"
-                />
-            </van-dialog>
+            <div class="create-btn" @click="returnBtn">返回登录</div>
+        </div>
+        <van-dialog
+                v-model="pwdShow"
+                show-cancel-button
+                @confirm="onConfirm"
+                @cancel="onCancel"
+                title="输入密码"
+        >
+
+            <van-field
+                    v-model="pwd"
+                    type="password"
+                    label="密码"
+                    placeholder="请输入密码"
+            />
+        </van-dialog>
     </div>
 </template>
 
@@ -61,7 +61,7 @@
                 this.$router.push('/login')
             },
             onCancel(){
-              this.pwdShow = false
+                this.pwdShow = false
             },
             onConfirm(){
                 console.log(this.info)
@@ -75,7 +75,7 @@
                         userId: this.info.id,
                         pwd: this.pwd,
                     };
-                    this.$api.loginByUserId(cnt, (res)=> {
+                    this.$bank.loginByUserId(cnt, (res)=> {
                         if(res.data.rc == this.$util.RC.SUCCESS){
                             let data = this.$util.tryParseJson(res.data.c,{})
                             localStorage.setItem('userInfo',JSON.stringify(data))
@@ -83,7 +83,7 @@
                                 duration:500,
                                 message:'登录成功'
                             })
-                            this.$router.push('/choose')
+                            this.$router.push('/bankChoose')
                         }else{
                             Toast.fail({
                                 duration:500,
@@ -93,19 +93,18 @@
                     })
                 }
 
-              this.pwdShow = false
+                this.pwdShow = false
 
             },
         },
         mounted(){
             this.tell = this.$route.params.tell
-            console.log('asdasdasd')
             if(this.tell == '' || this.tell == undefined){
                 Toast.fail({
                     duration:500,
                     message:'手机号失效，重新输入'
                 })
-                this.$router.push('/login')
+                this.$router.push('/bankLogin')
             }
             let count = 40
             let offset = 0
@@ -115,9 +114,13 @@
                 count: count, // Integer
                 offset: offset, // Integer
             };
+            this.$bank.getUsersByMobile(cnt, (res) =>{
+                if(res.data.rc == this.$util.RC.SUCCESS){
+                    this.list = this.$util.tryParseJson(res.data.c)
+                }else{
+                    this.list = []
+                }
 
-            this.$api.getUsersByMobile(cnt, (res) =>{
-                this.list = this.$util.tryParseJson(res.data.c)
             })
         }
     }

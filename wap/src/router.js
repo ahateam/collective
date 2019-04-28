@@ -70,11 +70,14 @@ const createVoteOptionPeople = ()=>import('./views/personal/voteManage/createVot
 
 //银行版
 const bankLogin =()=> import('./views/bank/login/login')
+const bankTellLogin =()=>import('./views/bank/login/tellLogin')
 const bankChoose =()=> import('./views/bank/home/choose')
 const bankHome =()=> import('./views/bank/home/home')
 const bankVote =()=> import('./views/bank/vote/vote')
 const bankVoteList =()=> import('./views/bank/vote/voteList')
 const bankVoteRes = ()=>import('./views/bank/vote/voteRes')
+
+
 
 Vue.use(Router)
 
@@ -383,6 +386,12 @@ export default new Router({
             path:'/bankLogin',
             name:'bankLogin',
             component:bankLogin
+        },
+        {
+            path:'/bankTellLogin',
+            name:'bankTellLogin',
+            component:bankTellLogin
+
         },
         {
             path:'/bankChoose',

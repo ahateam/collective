@@ -35,7 +35,7 @@
             </div>
 
 
-            <div class="create-btn" @click="btn">返回会议</div>
+            <div class="create-btn" @click="btn">返回投票列表</div>
         </div>
     </div>
 </template>

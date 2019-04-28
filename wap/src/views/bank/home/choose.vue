@@ -5,7 +5,7 @@
             <van-list
                     v-model="loading"
                     :finished="finished"
-                    finished-text="没有更多可选的组织机构了"
+                    finished-text="没有更多可选的银行金融组织机构了"
                     @load="onLoad"
             >
 
@@ -22,13 +22,19 @@
                             </div>
                         </div>
                     </span>
+
                </span>
 
             </van-list>
 
+            <span v-if="orgList.length>0">
+                  <div class="foot-box" >
+                        <van-button size="large"  type="danger" @click="loginBtn">注销登录</van-button>
+                    </div>
+            </span>
             <span v-if="orgList.length==0">
                     <p style="padding: 15px;font-size: 1.6rem;color: #666;">
-                        您还没有加入一个组织哟，请联系当地机构管理员申请加入哟
+                        您还没有加入一个银行金融组织哟，请联系当地区级机构管理员申请加入哟
                     </p>
                     <div style="width: 100%;text-align: center;margin-top: 4rem;">
                         <van-button type="danger" @click="returnBtn">退 出 系 统</van-button>
@@ -94,6 +100,10 @@
 
 
             //普通事件层
+            loginBtn(){
+                localStorage.clear()
+                this.$router.push('/bankLogin')
+            },
             onLoad() {
                 // 异步更新数据
                 setTimeout(() => {
@@ -145,6 +155,11 @@
 </script>
 
 <style scoped lang="scss">
+    .foot-box{
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 5rem;
+    }
     .nav-box{
         width: 80%;
         height: 10rem;

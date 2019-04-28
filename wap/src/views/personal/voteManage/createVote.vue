@@ -144,7 +144,7 @@
     import HeaderBox from '@/components/head/headerBox'
     import { Toast } from 'vant'
     export default {
-        name: "meetAloneVoteAdd",
+        name: "createVote",
         components: {
             HeaderBox
         },
@@ -241,6 +241,7 @@
                         roles:JSON.parse(localStorage.getItem('orgInfo')).orgRoles,
                         permissionId:100,
                     }
+
                     this.$api.createVote(cnt,(res)=>{
                         if(res.data.rc == this.$util.RC.SUCCESS){
                             localStorage.setItem('voteInfo',res.data.c)
@@ -289,7 +290,6 @@
 
         },
         mounted(){
-
             if( this.$route.params.type ==null ||  this.$route.params.type == undefined){
                 Toast.fail({
                     duration:500,

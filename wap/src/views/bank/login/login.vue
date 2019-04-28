@@ -36,6 +36,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-box" @click="tellBtn">
+                    根据手机号--选择账号登陆
+                </div>
                 <div class="form-btn" @click="bankLoginBtn">
                     立 即 登 录
                 </div>
@@ -64,6 +67,23 @@
             }
         },
         methods:{
+            tellBtn(){
+                console.log(this.userName)
+                if(this.userName == ''){
+                    Toast.fail({
+                        duration:500,
+                        message:'请输入手机号'
+                    });
+                }else{
+                    this.$router.push({
+                        path:'/bankTellLogin',
+                        name:'bankTellLogin',
+                        params:{
+                            tell:this.userName
+                        }
+                    })
+                }
+            },
             bankLoginBtn(){
                 let cnt = {
                     mobile: this.userName,

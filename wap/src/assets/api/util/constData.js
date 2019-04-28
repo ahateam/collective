@@ -70,6 +70,9 @@ const status = { // zyxhj.economy.domain.Vote$STATUS
     DONE:{v:"3",t:"已结束"},
 };
 
+const permission =[
+    {key:100,val:'发起投票'},    {key:102,val:'职务管理'},
+]
 
 
 
@@ -80,5 +83,6 @@ export default {
     type,
     opt,
     crowd,
-    status
+    status,
+    permission
 }

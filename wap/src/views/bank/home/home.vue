@@ -28,6 +28,10 @@
                     </div>
                 </router-link>
             </div>
+
+        </div>
+        <div class="foot-box" >
+            <van-button size="large"  type="danger" @click="chooseBtn">退出当前银行</van-button>
         </div>
     </div>
 </template>
@@ -42,13 +46,12 @@
         },
         data() {
             return {
-                userInfo: '',
-                orgName:'',
-
             }
         },
         methods:{
-
+            chooseBtn(){
+                this.$router.push('/bankChoose')
+            }
         },
         mounted() {
 
@@ -59,6 +62,11 @@
 </script>
 
 <style scoped lang="scss">
+    .foot-box{
+            margin:  10rem auto;
+        width: 80%;
+
+    }
     .bank-title-box{
         padding-top: 5rem;
         width: auto;

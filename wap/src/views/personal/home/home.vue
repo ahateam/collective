@@ -143,60 +143,70 @@
                     <!--</div>-->
                 <!--</router-link>-->
 
-               <div >
-                   <router-link to="/voteManage">
-                       <div class="item-box">
-                           <div class="img-box1">
-                               <div class="i-box" style="background: #E6A23C">
-                                   <van-icon name="idcard"/>
-                               </div>
-                           </div>
-                           <div class="text-box">
-                               <div class="item-text">
-                                   发起投票
-                               </div>
-                               <div class="item-next">
-                                   <van-icon name="arrow"/>
-                               </div>
-                           </div>
-                       </div>
-                   </router-link>
-                   <router-link to="/position">
-                       <div class="item-box">
-                           <div class="img-box1">
-                               <div class="i-box" style="background: #ff976a">
-                                   <van-icon name="idcard"/>
-                               </div>
-                           </div>
-                           <div class="text-box">
-                               <div class="item-text">
-                                   职务管理
-                               </div>
-                               <div class="item-next">
-                                   <van-icon name="arrow"/>
-                               </div>
-                           </div>
-                       </div>
-                   </router-link>
-                   <router-link to="/file">
-                       <div class="item-box">
-                           <div class="img-box1">
-                               <div class="i-box" style="background: #4cae4c">
-                                   <van-icon name="idcard"/>
-                               </div>
-                           </div>
 
-                           <div class="text-box">
-                               <div class="item-text">
-                                   文件管理
-                               </div>
-                               <div class="item-next">
-                                   <van-icon name="arrow"/>
-                               </div>
-                           </div>
-                       </div>
-                   </router-link>
-               </div>
+                <div v-for="(item,index) in userInfo.permissions" v-if="userInfo.permissions.length>0" :key="index">
+                    <div v-if="item.id !=undefined &&item.id == addVoteId">
+                        <router-link to="/voteManage">
+                            <div class="item-box">
+                                <div class="img-box1">
+                                    <div class="i-box" style="background: #E6A23C">
+                                        <van-icon name="idcard"/>
+                                    </div>
+                                </div>
+                                <div class="text-box">
+                                    <div class="item-text">
+                                        发起投票
+                                    </div>
+                                    <div class="item-next">
+                                        <van-icon name="arrow"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </router-link>
+                    </div>
+                    <div v-if="item.id !=undefined &&item.id == editPostId">
+                        <router-link to="/position">
+                            <div class="item-box">
+                                <div class="img-box1">
+                                    <div class="i-box" style="background: #ff976a">
+                                        <van-icon name="idcard"/>
+                                    </div>
+                                </div>
+                                <div class="text-box">
+                                    <div class="item-text">
+                                        职务管理
+                                    </div>
+                                    <div class="item-next">
+                                        <van-icon name="arrow"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </router-link>
+                    </div>
+                </div>
+
+
+
+
+                   <!--<router-link to="/file">-->
+                       <!--<div class="item-box">-->
+                           <!--<div class="img-box1">-->
+                               <!--<div class="i-box" style="background: #4cae4c">-->
+                                   <!--<van-icon name="idcard"/>-->
+                               <!--</div>-->
+                           <!--</div>-->
+
+                           <!--<div class="text-box">-->
+                               <!--<div class="item-text">-->
+                                   <!--文件管理-->
+                               <!--</div>-->
+                               <!--<div class="item-next">-->
+                                   <!--<van-icon name="arrow"/>-->
+                               <!--</div>-->
+                           <!--</div>-->
+                       <!--</div>-->
+                   <!--</router-link>-->
+
             </div>
         </div>
     </div>
@@ -212,6 +222,11 @@
         },
         data() {
             return {
+                //权限
+                addVoteId:'',       //发起投票
+                editPostId:'',      //修改职务
+
+
                 userInfo: '',
 
 
@@ -241,10 +256,11 @@
 
         },
             mounted() {
-
+                this.addVoteId = this.$constData.permission[0].key
+                this.editPostId = this.$constData.permission[1].key
 
                 this.userInfo = JSON.parse(localStorage.getItem('user'))
-
+                console.log(this.userInfo.permissions)
 
 
                 this.realName = this.userInfo.realName
@@ -254,11 +270,6 @@
 
                 this.userPost = '暂无职务'
 
-           //管理员权限
-           if(this.userInfo.realName == 'root'){
-                this.root = true
-           }
-           console.log(this.userInfo.realName)
         }
     }
 

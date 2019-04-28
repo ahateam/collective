@@ -77,6 +77,7 @@
         },
         methods:{
             resModalBtn(){
+                console.log(this.ticketCount)
                 this.successData = []
                 let ops = this.voteDetail.ops
                 console.log(ops)

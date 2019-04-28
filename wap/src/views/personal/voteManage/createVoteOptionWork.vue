@@ -114,6 +114,54 @@
             }
         },
         methods: {
+            //删除选项
+            delVoteOption(cnt){
+                this.$api.delVoteOption(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        Toast.success('删除成功')
+                        this.$router.push('/page')
+                    }else{
+                        Toast.success('删除失败')
+                        this.$router.push('/page')
+                    }
+                })
+            },
+            //修改选项
+            editVoteOption(cnt){
+                this.$api.editVoteOption(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        Toast.success('修改成功')
+                        this.$router.push('/page')
+                    }else{
+                        Toast.fail('修改失败')
+                        this.$router.push('/page')
+                    }
+                })
+            },
+            //修改选项的先后位置顺序
+            setVoteOptionIds(cnt){
+                this.$api.setVoteOptionIds(cnt,(res)=>{
+                    if(res.data.rc != this.$util.RC.SUCCESS){
+                        Toast.fail({
+                            duration:500,
+                            message:'交换位置失败'
+                        })
+                    }
+                })
+            },
+            //新增选项
+            addVoteOption(cnt){
+                this.$api.addVoteOption(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$router.push('/page')
+                    }else{
+                        Toast.fail('新增失败')
+                        this.$router.push('/page')
+                    }
+                })
+
+            },
+            //
             getVoteOptions(cnt){
               this.$api.getVoteOptions(cnt,(res)=>{
                   if(res.data.rc == this.$util.RC.SUCCESS){
@@ -127,7 +175,6 @@
 
             changeBtn(){
                 let optionIds = []
-                let that = this
                 for(let i=0;i<this.optionList.length;i++){
                     optionIds.push(this.optionList[i].id)
                 }
@@ -135,14 +182,7 @@
                     voteId: JSON.parse(localStorage.getItem('voteInfo')).id, // Long 投票编号
                     optionIds: optionIds, // JSONArray 投票选项编号列表（JSONArray）
                 };
-                this.$util.call('/vote/setVoteOptionIds',cnt,function (res) {
-                    if(res.data.rc != that.$util.RC.SUCCESS){
-                        Toast.success({
-                            duration:500,
-                            message:'交换位置失败'
-                        })
-                    }
-                })
+                this.setVoteOptionIds(cnt)
             },
             edit(item,id,index){
                 this.editShow = true
@@ -157,52 +197,29 @@
                         message:'请输入修改值'
                     });
                 }else{
-                    let that = this
                     let cnt = {
-                        projectId: this.meetId,
+                        voteId:this.voteId,
                         optionId: this.editId,
                         title: this.editInput,
                         remark: '无',
                         ext: '无',
                     }
-                    this.$util.call('/vote/editVoteOption',cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            Toast({
-                                duration:500,
-                                message:'修改成功'
-                            })
-                            that.$router.push('/page')
-                        }
-
-                    })
+                    this.editVoteOption(cnt)
                 }
 
 
             },
 
             del(id,index){
-                let that =this
                 Dialog.alert({
                     title: '删除选项',
                     message: '是否确认删除该选项'
                 }).then(() => {
                     let cnt = {
-                        projectId:this.meetId,
-                        voteId:JSON.parse(localStorage.getItem('voteInfo')).id,
+                        voteId:this.voteId,
                         optionId:id
                     }
-                    console.log(id)
-                    console.log(index)
-                    console.log(this.optionList)
-                    this.$util.call('/vote/delVoteOption',cnt,function (res) {
-                        if(res.data.rc == that.$util.RC.SUCCESS){
-                            Toast({
-                                duration:300,
-                                message:'删除成功'
-                            });
-                            that.$router.push('/page')
-                        }
-                    })
+                    this.delVoteOption(cnt)
                 });
             },
 
@@ -210,37 +227,32 @@
                 this.addShow = true
             },
             addBtn(){
-
-                let that = this
                 let cnt ={
-                    projectId:this.meetId,
                     voteId:this.voteId,
                     title:this.addInput,
                     remark:'无',
                     ext:'无'
                 }
-                this.$util.call('/vote/addVoteOption',cnt,function (res) {
-                    if(res.data.rc == that.$util.RC.SUCCESS){
-                        that.addInput = ''
-                        that.addShow = false
-                        that.$router.push('/page')
-                    }
-                })
+                this.addVoteOption(cnt)
 
             },
 
             btn(){
-                this.$router.push('/meetVoteAdd')
+                this.$router.push('/voteManage')
             },
             //修改议程信息
             editVoteBtn(){
-                this.$router.push('/meetAloneVoteEdit')
+
+                this.$router.push('/editVote')
             }
         },
         mounted(){
+            console.log('222223333322')
 
             this.voteInfo =  JSON.parse(localStorage.getItem('voteInfo'))
             this.voteId  = JSON.parse(localStorage.getItem('voteInfo')).id
+            console.log(localStorage.getItem('voteInfo'))
+            console.log(  this.voteInfo)
             let cnt = {
                 voteId:this.voteId
             }
