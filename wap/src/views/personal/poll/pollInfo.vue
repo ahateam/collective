@@ -15,10 +15,13 @@
                     </div>
                     <div class="vote-item-text">
                         <div class="vote-item-status">
-                            <span v-if="info.status == '0'">正在投票</span>
-                            <span v-if="info.status == '1'">等待投票</span>
-                            <span v-if="info.status == '2' || info.status == '4'">投票作废</span>
-                            <span v-if="info.status == '3'">投票结束</span>
+
+                            <span style="color:#40c9c6" v-if="status == '-1'">表决未完成</span>
+                            <span v-if="status =='0'" style="color: #909399">表决失效</span>
+                            <span v-if="status =='1'" style="color: #67C23A">表决成功</span>
+                            <span v-if="status =='2'" style="color: #F56C6C">表决失败</span>
+
+
                         </div>
                         <div class="vote-item-title-box">
                             {{info.title}}
@@ -30,7 +33,7 @@
             <div class="info-time">
                 最多可以选投: {{activeNums}} 个选项
             </div>
-            <div class="info-xuanju" v-if="template == '0' ">
+            <div class="info-xuanju" >
                 应到总人数：{{quorum}} 人，已参投有效人数：{{ticketCount}} 人，已投票数：{{opsNum}}票，其中弃权人数：{{waiver}} 人，未参投人数：{{quorum-ticketCount}} 人
             </div>
             <div class="info-text">
@@ -107,7 +110,7 @@
                         <div class="modal-content">
                             <div class="content-text">
                                 <div class="text">
-                                    参与本次议程的应到总人数：{{info.quorum}}
+                                    参与本次议程的应到总人数：{{quorum}}
                                 </div>
                                 <div class="text">
                                     经网络表决：{{info.title}}
@@ -143,7 +146,7 @@
                         <div class="modal-content">
                             <div class="content-text">
                                 <div class="text">
-                                    参与本次议程的应到总人数：{{info.quorum}}
+                                    参与本次议程的应到总人数：{{quorum}}
                                 </div>
                                 <div class="text">
                                     经网络表决：{{info.title}}
@@ -180,7 +183,7 @@
                         <div class="modal-content">
                             <div class="content-text">
                                 <div class="text">
-                                    参与本次议程的应到总人数：{{info.quorum}}
+                                    参与本次议程的应到总人数：{{quorum}}
                                 </div>
                                 <div class="text">
                                     经网络表决：{{info.title}}
@@ -243,7 +246,8 @@
             HeaderBox
         },
         methods: {
-            resModalBtn(){
+            //计算投票状态
+            getStatus(){
                 this.successData = []
                 let ops = this.voteDetail.ops
                 console.log(ops)
@@ -270,10 +274,14 @@
                         if(this.ticketCount ==this.quorum){     //人到齐了
                             this.status = 2             //失败
                         }else{
-                            this.status = -1            //等待投票
+                            this.status = -1             //等待投票
                         }
                     }
                 }
+            },
+
+            resModalBtn(){
+                this.getStatus()
                 console.log(this.status)
                 if(this.status == -1){
                     Dialog.alert({
@@ -296,25 +304,14 @@
             },
             infoBtn(){
 
+                this.$router.push({
+                    path:'/pollElectionRes',
+                    name:'pollElectionRes',
+                    params:{
+                        info:this.info
+                    }
+                })
 
-                console.log(this.voteDetail)
-                if(this.info.template == '0'){  //选举结果跳转
-                    this.$router.push({
-                        path:'/pollElectionRes',
-                        name:'pollElectionRes',
-                        params:{
-                            info:this.info
-                        }
-                    })
-                }else{
-                    this.$router.push({
-                        path:'/pollRes',
-                        name:'pollRes',
-                        params:{
-                            info:this.info
-                        }
-                    })
-                }
             },
 
 
@@ -397,7 +394,7 @@
         mounted() {
 
             this.info = JSON.parse(localStorage.getItem('vote')).voteInfo
-
+            console.log(this.info)
 
 
             this.activeNums = this.info.choiceCount
@@ -430,9 +427,6 @@
                     }
                 }
             })
-
-
-
             this.$api.getVoteOptions(cnt,  (res)=> {
 
                 this.voteOption = this.$util.tryParseJson(res.data.c)
@@ -468,10 +462,15 @@
                                         }
                                     }
                                 }
+
+
                             }
                         }
                     }
+
+                    this.getStatus()
                 })
+
             })
         },
 

@@ -40,18 +40,31 @@
                     {{info.remark}}
                 </p>
             </div>
+
             <div class="info-btn">
                 <div class="item-box" v-if="optionList.ops != undefined">
-                    <div v-for="(item,index) in optionList.ops" :key="index">
+
+                    <div v-for="(item,index) in optionList.ops" :key="index" v-if="info.template == 0">
                         <span v-if=" parseInt(item.ballotCount) >= parseInt(parseInt(quorum)*parseInt(info.effectiveRatio)/100)+1">
                               <van-panel :title="item.title" :desc="idNumberList[index]" :status="item.ballotCount + ''" style="border: 1px solid #40c9c6">
                               </van-panel>
                         </span>
+
                         <span v-else>
                             <van-panel :title="item.title" :desc="idNumberList[index]" :status="item.ballotCount + ''" >
                             </van-panel>
                         </span>
                     </div>
+
+                    <div v-for="(item,index) in optionList.ops" :key="index" v-if="info.template == 1">
+                        <span  v-if=" parseInt(item.ballotCount) >= parseInt(parseInt(quorum)*parseInt(info.effectiveRatio)/100)+1">
+                            <van-cell :title="item.title" :value="item.ballotCount" size="large"  style="border: 1px solid #40c9c6"/>
+                        </span>
+                        <span v-else>
+                             <van-cell :title="item.title" :value="item.ballotCount" size="large"  />
+                        </span>
+                    </div>
+
                 </div>
 
             </div>
@@ -78,61 +91,39 @@
                 //投票
                 info: '',
                 optionList :[],
+                successData:[],
                 status: -1,   //投票状态   -1：表决未完成  0：表决失效  1：表决成功  2:表决失败
             }
         },
         mounted() {
             this.info = JSON.parse(localStorage.getItem('vote')).voteInfo
+            console.log(this.info);
             let cnt = {
                 voteId:this.info.id
             }
 
             this.$api.getVoteDetail(cnt, (res)=> {
-
-                this.optionList =this.$util.tryParseJson(res.data.c)
+                this.optionList =JSON.parse(res.data.c)
                 this.opsNum =  this.optionList.ticketCount
                 this.quorum = this.optionList.vote.quorum
+
+
 
                 let opsArr = this.optionList.ops
 
                 //计算弃权数/取出身份证
-                for(let i=0;i<opsArr.length;i++){
-                    if(opsArr[i].title == '弃权'){
-                        this.waiver = this.waiver + opsArr[i].ballotCount
-                        this.idNumberList.push('')
-                    }else{
-                        this.idNumberList.push(JSON.parse(opsArr[i].ext).idNumber +'')
-                    }
-                }
-
-                let  passData = parseInt(this.quorum *(parseInt(this.info.effectiveRatio)/100))+1
-                let  failData = parseInt(this.quorum *(parseInt(this.info.failureRatio)/100))+1
-
-
-                if(this.waiver >= failData){        //无效
-                    this.status = 0
-                }else{
-                    let   successType = 0  //默认是不成功
-
+                if(this.info.template == 0){
                     for(let i=0;i<opsArr.length;i++){
-                        if(opsArr[i].ballotCount >= passData) {
-                            successType = 1         //成功的中间变量
-                        }
-                    }
-                    if(successType == 1){
-                        for(let i=0;i<opsArr.length;i++){
-                            if(opsArr[i].ballotCount >= passData){
-                                this.status = 1                 //通过
-                            }
-                        }
-                    }else{
-                        if(this.opsNum ==this.quorum){     //人到齐了
-                            this.status = 2             //失败
+                        if(opsArr[i].title == '弃权'){
+                            this.waiver = this.waiver + opsArr[i].ballotCount
+                            this.idNumberList.push('')
                         }else{
-                            this.status = -1            //等待投票
+                                this.idNumberList.push(JSON.parse(opsArr[i].ext).idNumber +'')
                         }
                     }
                 }
+                this.getStatus()
+
             })
 
 
@@ -144,6 +135,38 @@
         methods: {
             returnBtn(){
                 this.$router.go(-1)
+            },
+            getStatus(){
+                this.successData = []
+                let ops = this.optionList.ops
+                console.log(ops)
+                let  passData = parseInt(this.quorum *(parseInt(this.info.effectiveRatio)/100))+1
+                let  failData = parseInt(this.quorum *(parseInt(this.info.failureRatio)/100))+1
+
+                if(this.waiver >=failData){     //无效
+                    this.status = 0
+                }else{                          //有效
+                    let   successType = 0  //默认是不成功
+                    for(let i=0;i<ops.length;i++){
+                        if(ops[i].ballotCount >= passData) {
+                            successType = 1         //成功的中间变量
+                        }
+                    }
+                    if(successType == 1){
+                        for(let i=0;i<ops.length;i++){
+                            if(ops[i].ballotCount >= passData){
+                                this.status = 1                 //通过
+                                this.successData.push(ops[i].title)
+                            }
+                        }
+                    }else{
+                        if(this.ticketCount ==this.quorum){     //人到齐了
+                            this.status = 2             //失败
+                        }else{
+                            this.status = -1             //等待投票
+                        }
+                    }
+                }
             },
 
         },

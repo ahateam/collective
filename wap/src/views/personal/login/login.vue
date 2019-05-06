@@ -19,7 +19,7 @@
                             <i class="iconfont icon-quxiao"></i>
                         </div>
                         <div class="input-text">
-                            <input type="text" class="text" placeholder="请输入手机号" v-model="userName">
+                            <input type="text" class="text" placeholder="请输入手机号或者身份证号" v-model="userName">
                         </div>
                     </div>
                 </div>
@@ -70,10 +70,7 @@
         },
         methods:{
             formBtn(){
-                let cnt = {
-                    mobile: this.userName,
-                    pwd: this.pwd,
-                };
+
                 if(this.userName == ''){
                     Toast.fail({
                         duration:200,
@@ -85,22 +82,51 @@
                         message:'请输入密码'
                     })
                 }else{
-                    this.$api.loginByMobileAndPwd(cnt, (res)=> {
-                        if(res.data.rc == this.$util.RC.SUCCESS){
-                            let data = this.$util.tryParseJson(res.data.c,{})
-                            localStorage.setItem('userInfo',JSON.stringify(data))
-                            Toast.success({
-                                durationL:200,
-                                message:'登录成功'
-                            })
-                            this.$router.push('/choose')
-                        }else{
-                            Toast.fail({
-                                duration:200,
-                                message:'登录失败'
-                            })
+                    if(this.userName.length>11){
+                        let cnt = {
+                            idNumber: this.userName, // String 身份证号
+                            pwd: this.pwd, // String 密码
                         }
-                    })
+                        this.$api.loginByIdNumber(cnt,(res)=>{
+                            if(res.data.rc == this.$util.RC.SUCCESS){
+                                let data = this.$util.tryParseJson(res.data.c,{})
+                                localStorage.setItem('userInfo',JSON.stringify(data))
+                                Toast.success({
+                                    durationL:200,
+                                    message:'登录成功'
+                                })
+                                this.$router.push('/choose')
+                            }else{
+                                Toast.fail({
+                                    duration:200,
+                                    message:'登录失败'
+                                })
+                            }
+                        })
+
+                    }else{
+                        let cnt = {
+                            mobile: this.userName,
+                            pwd: this.pwd,
+                        };
+                        this.$api.loginByMobileAndPwd(cnt, (res)=> {
+                            if(res.data.rc == this.$util.RC.SUCCESS){
+                                let data = this.$util.tryParseJson(res.data.c,{})
+                                localStorage.setItem('userInfo',JSON.stringify(data))
+                                Toast.success({
+                                    durationL:200,
+                                    message:'登录成功'
+                                })
+                                this.$router.push('/choose')
+                            }else{
+                                Toast.fail({
+                                    duration:200,
+                                    message:'登录失败'
+                                })
+                            }
+                        })
+                    }
+
 
 
 
@@ -116,9 +142,14 @@
             tellBtn(){
                 if(this.userName == ''){
                     Toast.fail({
-                        duration:500,
+                        duration:200,
                         message:'请输入手机号'
                     });
+                }else if(this.userName.length != 11){
+                   Toast.fail({
+                           duration:200,
+                           message:'手机号格式错误'
+                       })
                 }else{
                     this.$router.push({
                         path:'/tellLogin',
