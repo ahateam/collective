@@ -60,7 +60,16 @@ const  menu =[
         path:'/asset',
         title:'集体资产',
         icon:'icon-tongyongzichan',
-        child:[]
+        child:[
+            {
+                path:'/asset',
+                title:'资产列表',
+            },
+            {
+                path:'/assetImport',
+                title:'资产导入'
+            }
+        ]
     },
 
 ]

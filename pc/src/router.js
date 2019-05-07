@@ -34,6 +34,9 @@ const  articleAdd = ()=>import('./views/admin/article/articleAdd')
 const  asset = ()=>import('./views/admin/assets/asset')
 const applyMech  = ()=>import('./views/admin/mechanism/applyMech')
 const permission = ()=>import('./views/admin/permission/permission')
+const assetImport =()=>import('./views/admin/assets/assetImport')
+const assetImportInfo =()=>import('./views/admin/assets/assetImportInfo')
+const assetImportRes =()=>import('./views/admin/assets/assetImportRes')
 
 //演示系统
 const demoDashboard = ()=> import( './views/demo/home/dashboard')
@@ -206,6 +209,21 @@ export default new Router({
                     path:'/asset',
                     name:'asset',
                     component:asset
+                },
+                {
+                    path:'/assetImport',
+                    name:'assetImport',
+                    component:assetImport
+                },
+                {
+                    path:'/assetImportInfo',
+                    name:'assetImportInfo',
+                    component:assetImportInfo
+                },
+                {
+                    path:'/assetImportRes',
+                    name:'assetImportRes',
+                    component:assetImportRes
                 },
                 {
                     path:'/permission',
