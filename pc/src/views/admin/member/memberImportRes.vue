@@ -72,7 +72,7 @@
     import ossAuth from '@/assets/api/oss/ossAuth'
     let client = ossAuth.client
     export default {
-        name: "assetImportInfo",
+        name: "memberImportInfo",
         data(){
             return{
                 tableData:[],
@@ -123,23 +123,23 @@
 
             //查看报错的数据列表
             assetErrorBtn(){
-                this.$router.push('/assetErrorData')
+                this.$router.push('/memberErrorData')
             },
             //反复调用获取进度条
             getPropressData(){
                 if(this.status != 1 ){
-                        let cnt = {
-                            orgId: localStorage.getItem('orgId'), // Long 组织id
-                            userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
-                            importTaskId: this.info.id, // Long 导入任务id
-                        }
-                        this.$api.getAssetImportTask(cnt,(res)=>{
-                            this.sum = this.$util.tryParseJson(res.data.c).sum
-                            this.success = this.$util.tryParseJson(res.data.c).success
-                            this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
-                            this.status = this.$util.tryParseJson(res.data.c).status
-                            this.propressData = parseFloat(((this.success/this.sum)*100).toFixed(2))
-                        })
+                    let cnt = {
+                        orgId: localStorage.getItem('orgId'), // Long 组织id
+                        userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
+                        importTaskId: this.info.id, // Long 导入任务id
+                    }
+                    this.$api.getORGUserImportTask(cnt,(res)=>{
+                        this.sum = this.$util.tryParseJson(res.data.c).sum
+                        this.success = this.$util.tryParseJson(res.data.c).success
+                        this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
+                        this.status = this.$util.tryParseJson(res.data.c).status
+                        this.propressData = parseFloat(((this.success/this.sum)*100).toFixed(2))
+                    })
                 }else{
                     clearInterval(this.timer)
                     let cnt = {
@@ -147,7 +147,7 @@
                         userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
                         importTaskId: this.info.id, // Long 导入任务id
                     }
-                    this.$api.getAssetImportTask(cnt,(res)=>{
+                    this.$api.getORGUserImportTask(cnt,(res)=>{
                         this.sum = this.$util.tryParseJson(res.data.c).sum
                         this.success = this.$util.tryParseJson(res.data.c).success
                         this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
@@ -185,11 +185,11 @@
 
             if(this.info.id == undefined || this.info.id ==  ''){
                 this.$message.error('信息失效')
-                this.$router.push('/assetImport')
+                this.$router.push('/memberImport')
             }
 
             this.sum = this.info.sum
-            this.address = 'asset/'+orgId+'/'+  this.info.id+'/'
+            this.address = 'user/'+orgId+'/'+  this.info.id+'/'
             this.list()
 
             let cnt = {
@@ -198,7 +198,7 @@
                 importTaskId: this.info.id, // Long 导入任务id
             }
 
-            this.$api.getAssetImportTask(cnt,(res)=>{
+            this.$api.getORGUserImportTask(cnt,(res)=>{
                 if(res.data.rc == this.$util.RC.SUCCESS){
                     this.success = this.$util.tryParseJson(res.data.c).success
                     this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
@@ -209,7 +209,7 @@
                             orgId: orgId, // Long 组织编号
                             importTaskId: this.info.id, // Long 导入任务id
                         }
-                        this.$api.importAsset(cnt1,(res1)=>{
+                        this.$api.importORGUser(cnt1,(res1)=>{
                             if(res1.data.rc == this.$util.RC.SUCCESS){
                                 this.getPropressData()
                             }
@@ -220,7 +220,7 @@
                 }
             })
 
-           this.timer = setInterval(this.getPropressData,5000)
+            this.timer = setInterval(this.getPropressData,5000)
 
 
 

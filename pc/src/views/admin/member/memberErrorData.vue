@@ -2,7 +2,7 @@
     <div>
         <el-row class="row-box" >
             <el-col :span="24" >
-                <span class="title-box" style="line-height: 40px">集体资产导入任务: 啊实打实的</span>
+                <span class="title-box" style="line-height: 40px">集体资产导入任务: {{info.name}}</span>
             </el-col>
 
         </el-row>
@@ -10,24 +10,24 @@
             <el-col :span="24">
                 <p>
                     <span class="info-text">
-                         任务数据总量：<span style="color: #f44;"> {{sum}} 条</span>；
-                        已完成导入数据总量：<span style="color: #f44;"> {{success}} 条</span>；
+                         任务数据总量：<span style="color: #f44;"> {{info.sum}} 条</span>；
+                        已完成导入数据总量：<span style="color: #f44;"> {{info.success}} 条</span>；
                     </span>
                 </p>
                 <p>
                     <span class="info-text">
                             创建任务时间：<span style="color: #f44;">{{   new Date(info.createTime ).toLocaleDateString()+ ' '+new Date(info.createTime ).toLocaleTimeString('chinese',{hour12:false})}}</span>；
-                    任务状态：<span v-if="status == 0" style="color: #468847">正在进行导入</span>
-                    <span v-if="status == 1" style="color: #1483d8">已完成导入</span>
-                    <span v-if="status == 2" style="color: #f44">等待导入</span>
-                    ；错误数据条数：<span style="color: #f44;"> {{errorData}} 条</span>
+                    任务状态：<span v-if="info.status == 0" style="color: #468847">正在进行导入</span>
+                    <span v-if="info.status == 1" style="color: #1483d8">已完成导入</span>
+                    <span v-if="info.status == 2" style="color: #f44">等待导入</span>
+                    ；错误数据条数：<span style="color: #f44;"> {{info.notCompletion}} 条</span>
                     </span>
                 </p>
             </el-col>
             <el-row  style="margin: 15px 0">
                 <el-col :span="24">
                     <span class="info-text" style="line-height: 30px;font-size: 16px;float: left;">写入进度：</span>
-                    <el-progress :text-inside="true" :stroke-width="18" :percentage="propressData"  style="line-height: 30px;float: left;width: 300px;margin-left: 20px; "></el-progress>
+                    <el-progress :text-inside="true" :stroke-width="18" :percentage="parseFloat(((info.success/info.sum)*100).toFixed(2))" style="line-height: 30px;float: left;width: 300px;margin-left: 20px; "></el-progress>
                 </el-col>
 
             </el-row>
@@ -56,10 +56,13 @@
                         </el-table-column>
                     </el-table>
                 </template>
-
-            </el-col>
-            <el-col :span="24" style="margin: 15px 0">
-                <el-button type="primary" style="float: right" @click="assetErrorBtn" v-if="status ==1"> 查看错误数据报告</el-button>
+                <el-col :span="24" style="margin-top: 20px">
+                    <div class="page-btn " style=" float: right; font-size: 16px;color: #666;">
+                        <span class="page-text">当前页码：第 <span style="color: #f60;">{{page}}</span> 页</span>
+                        <el-button type="primary" :disabled="page==1"   @click="changePage(page-1)">上一页</el-button>
+                        <el-button type="primary" :disabled="pageOver ==true"  @click="changePage(page+1)">下一页</el-button>
+                    </div>
+                </el-col>
             </el-col>
         </el-row>
 
@@ -69,167 +72,66 @@
 </template>
 
 <script>
-    import ossAuth from '@/assets/api/oss/ossAuth'
-    let client = ossAuth.client
+
     export default {
-        name: "assetImportInfo",
+        name: "memberErrorData",
         data(){
             return{
                 tableData:[],
-
-                loadData:false,
-                address:'',     //导入地址
-
-                success:0,
-                sum:0,
-
-                propressData:0,
-                isOver:false,
-                errorData:0,
                 info:'',
-                timer:'',
-                status:2,
+                offset:0,
+                count:10,
+                page:1,
+                pageOver:false,
             }
         },
         methods:{
-
-            //异步方法-请求该组织下的该任务下的excl列表
-            async list () {
-                try{
-                    let result = await client.list({
-                        prefix: this.address,
-                    });
-                    if(result.objects == undefined || result.objects.length ==0){
-                        this.tableData = []
+            getNotcompletionRecord(cnt){
+                this.$api.getNotcompletionRecord(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.tableData = this.$util.tryParseJson(res.data.c)
                     }else{
-                        this.tableData = result.objects
+                        this.tableData = []
                     }
-                } catch (e) {
-                    console.log(e);
-                }
-            },
-
-            //过滤层
-            nameFilter(row,col,val){
-                let name = val.replace(this.address, '')
-                name = name.slice(13)
-                name = decodeURIComponent(name)
-                return name
-            },
-            timerFilter(row,col,val){
-                let timer = new Date(val).toLocaleDateString()+ ' '+new Date(val).toLocaleTimeString('chinese',{hour12:false})
-                return timer
-            },
-
-            //查看报错的数据列表
-            assetErrorBtn(){
-                this.$router.push('/assetErrorData')
-            },
-            //反复调用获取进度条
-            getPropressData(){
-                if(this.status != 1 ){
-                        let cnt = {
-                            orgId: localStorage.getItem('orgId'), // Long 组织id
-                            userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
-                            importTaskId: this.info.id, // Long 导入任务id
-                        }
-                        this.$api.getAssetImportTask(cnt,(res)=>{
-                            this.sum = this.$util.tryParseJson(res.data.c).sum
-                            this.success = this.$util.tryParseJson(res.data.c).success
-                            this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
-                            this.status = this.$util.tryParseJson(res.data.c).status
-                            this.propressData = parseFloat(((this.success/this.sum)*100).toFixed(2))
-                        })
-                }else{
-                    clearInterval(this.timer)
-                    let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织id
-                        userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
-                        importTaskId: this.info.id, // Long 导入任务id
+                    console.log(this.tableData)
+                    if(this.tableData.length <this.count){
+                        this.pageOver = true
                     }
-                    this.$api.getAssetImportTask(cnt,(res)=>{
-                        this.sum = this.$util.tryParseJson(res.data.c).sum
-                        this.success = this.$util.tryParseJson(res.data.c).success
-                        this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
-                        this.status = this.$util.tryParseJson(res.data.c).status
-                        this.propressData = parseFloat(((this.success/this.sum)*100).toFixed(2))
-                        localStorage.setItem('taskInfo',res.data.c)
-
-
-                    })
+                })
+            },
+            changePage(page){
+                this.page = page
+                let cnt = {
+                    orgId: localStorage.getItem('orgId'), // Long 组织编号
+                    importTaskId: this.info.id, // Long 导入任务id
+                    count: this.count, // Integer
+                    offset:(this.page-1)*this.count, // Integer
                 }
-            },
-
-            //执行批量导入
-            importBtn(){
-                let arr = []
-                for(let i = 0;i<this.tableData.length;i++){
-                    arr.push(this.tableData[i].url)
-                }
-                console.log(arr);
-            },
-            //下载文件
-            downLoadBtn(info){
-                window.location.href = info.url
-            },
-
-
-
-
+                this.getNotcompletionRecord(cnt)
+            }
         },
         mounted(){
-            this.orgName = localStorage.getItem('orgName')
-            let orgId = localStorage.getItem('orgId')
             this.info = JSON.parse(localStorage.getItem('taskInfo'))
-
-
-            if(this.info.id == undefined || this.info.id ==  ''){
-                this.$message.error('信息失效')
-                this.$router.push('/assetImport')
-            }
-
-            this.sum = this.info.sum
-            this.address = 'asset/'+orgId+'/'+  this.info.id+'/'
-            this.list()
-
+            console.log(this.info)
             let cnt = {
-                orgId: orgId, // Long 组织编号
-                userId: JSON.parse(localStorage.getItem('orgUser')).id,
+                orgId: localStorage.getItem('orgId'), // Long 组织编号
+                importTaskId: this.info.id, // Long 导入任务id
+                count: this.count, // Integer
+                offset: this.offset, // Integer
+            }
+            this.getNotcompletionRecord(cnt)
+
+            let cnt1 = {
+                orgId: localStorage.getItem('orgId'), // Long 组织id
+                userId: JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
                 importTaskId: this.info.id, // Long 导入任务id
             }
-
-            this.$api.getAssetImportTask(cnt,(res)=>{
-                if(res.data.rc == this.$util.RC.SUCCESS){
-                    this.success = this.$util.tryParseJson(res.data.c).success
-                    this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
-                    this.status = this.$util.tryParseJson(res.data.c).status
-                    this.sum =  this.$util.tryParseJson(res.data.c).sum
-                    if(this.status == 2){
-                        let cnt1 ={
-                            orgId: orgId, // Long 组织编号
-                            importTaskId: this.info.id, // Long 导入任务id
-                        }
-                        this.$api.importAsset(cnt1,(res1)=>{
-                            if(res1.data.rc == this.$util.RC.SUCCESS){
-                                this.getPropressData()
-                            }
-                        })
-                    }else{
-                        this.getPropressData()
-                    }
+            this.$api.getAssetImportTask(cnt1,(res1)=>{
+                if(res1.data.rc == this.$util.RC.SUCCESS){
+                    this.info = this.$util.tryParseJson(res1.data.c)
                 }
             })
 
-           this.timer = setInterval(this.getPropressData,5000)
-
-
-
-
-        },
-        beforeDestroy(){
-            this.$once('hook:beforeDestroy', () => {
-                clearInterval(this.timer);
-            })
         }
     }
 </script>

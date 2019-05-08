@@ -2,7 +2,7 @@
     <div>
         <el-row class="row-box" >
             <el-col :span="24" >
-                <span class="title-box" style="line-height: 40px">集体资产导入任务: 啊实打实的</span>
+                <span class="title-box" style="line-height: 40px">组织成员导入任务: {{info.name}}</span>
             </el-col>
 
         </el-row>
@@ -127,14 +127,14 @@
 
             }
         },
-           methods:{
+        methods:{
 
             //异步方法-请求该组织下的该任务下的excl列表
             async list () {
                 try{
                     let result = await client.list({
-                    prefix: this.address,
-                });
+                        prefix: this.address,
+                    });
                     if(result.objects == undefined || result.objects.length ==0){
                         this.tableData = []
                     }else{
@@ -196,18 +196,25 @@
                         url: arr, // String excel文件url
                         importTaskId: this.info.id, // Long 导入任务id
                     }
-                    this.$api.importAssetsRecord(cnt,(res)=>{
+
+                    setTimeout(()=>{
+                        this.$router.push('/memberImportRes')
+                    },60000)
+
+                    this.$api.importORGUserRecord(cnt,(res)=>{
                         loading.close()
+
                         if(res.data.rc == this.$util.RC.SUCCESS){
 
                             this.$message.success('准备执行批量数据写入......')
-                            this.$router.push('/assetImportRes')
+                            this.$router.push('/memberImportRes')
                         }else{
                             loading.close()
                             this.$message.error('数据批量上传失败...')
-                            this.$router.push('/assetImport')
+                            this.$router.push('/memberImport')
                         }
                     })
+
                 }
 
 
@@ -310,7 +317,7 @@
                 this.$message.error('信息失效，返回上一页')
                 this.$router.push('/assetImport')
             }
-            this.address = 'asset/'+orgId+'/'+this.info.id+'/'
+            this.address = 'user/'+orgId+'/'+this.info.id+'/'
 
             this.list()
         }

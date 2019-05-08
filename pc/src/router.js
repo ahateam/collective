@@ -23,6 +23,11 @@ const  memberEditPost = ()=>import('./views/admin/member/memberEditPost')
 const  memberGroup = ()=>import('./views/admin/member/memberGroup')
 const  memberPost = ()=>import('./views/admin/member/memberPost')
 const  memberMail = ()=>import('./views/admin/member/memberMail')
+const memberErrorData =()=>import('./views/admin/member/memberErrorData')
+const memberImport =()=>import('./views/admin/member/memberImport')
+const memberImportInfo =()=>import('./views/admin/member/memberImportInfo')
+const memberImportRes =()=>import('./views/admin/member/memberImportRes')
+
 const  voteAdd = ()=>import('./views/admin/vote/voteAdd')
 const  voteInfo = ()=>import('./views/admin/vote/voteInfo')
 const  voteEdit = ()=>import('./views/admin/vote/voteEdit')
@@ -37,6 +42,7 @@ const permission = ()=>import('./views/admin/permission/permission')
 const assetImport =()=>import('./views/admin/assets/assetImport')
 const assetImportInfo =()=>import('./views/admin/assets/assetImportInfo')
 const assetImportRes =()=>import('./views/admin/assets/assetImportRes')
+const assetErrorData =()=>import('./views/admin/assets/assetErrorData')
 
 //演示系统
 const demoDashboard = ()=> import( './views/demo/home/dashboard')
@@ -166,6 +172,26 @@ export default new Router({
                     component:voteAdd
                 },
                 {
+                    path:'/memberImportRes',
+                    name:'memberImportRes',
+                    component:memberImportRes
+                },
+                {
+                    path:'/memberImportInfo',
+                    name:'memberImportInfo',
+                    component:memberImportInfo
+                },
+                {
+                    path:'/memberImport',
+                    name:'memberImport',
+                    component:memberImport
+                },
+                {
+                    path:'/memberErrorData',
+                    name:'memberErrorData',
+                    component:memberErrorData
+                },
+                {
                     path:'/voteInfo',
                     name:'voteInfo',
                     component:voteInfo
@@ -224,6 +250,11 @@ export default new Router({
                     path:'/assetImportRes',
                     name:'assetImportRes',
                     component:assetImportRes
+                },
+                {
+                    path:'/assetErrorData',
+                    name:'assetErrorData',
+                    component:assetErrorData
                 },
                 {
                     path:'/permission',

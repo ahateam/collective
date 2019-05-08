@@ -2,7 +2,7 @@
     <div>
         <el-row class="row-box" >
             <el-col :span="24" >
-                <span class="title-box" style="line-height: 40px">集体资产导入任务</span>
+                <span class="title-box" style="line-height: 40px">组织成员导入任务</span>
             </el-col>
 
         </el-row>
@@ -28,11 +28,11 @@
                         <el-table-column
                                 prop="createTime"
                                 label="创建时间"
-                               :formatter="timeFilter">
+                                :formatter="timeFilter">
                         </el-table-column>
                         <el-table-column
                                 label="导入进度"
-                                >
+                        >
                             <template slot-scope="scope">
                                 <span v-if="scope.row.sum == 0">0</span>
                                 <span v-else>
@@ -84,7 +84,7 @@
 
 <script>
     export default {
-        name: "assetImport",
+        name: "memberImport",
         data(){
             return{
                 addImportShow:false,
@@ -97,8 +97,8 @@
             }
         },
         methods:{
-            getAssetImportTasks(cnt){
-                this.$api.getAssetImportTasks(cnt,(res)=>{
+            getORGUserImportTasks(cnt){
+                this.$api.getORGUserImportTasks(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         this.tableData = this.$util.tryParseJson(res.data.c)
                     }else{
@@ -118,7 +118,7 @@
             statusFilter(row,col,val){
                 console.log(val)
                 if(val == '0'){
-                     return '正在导入'
+                    return '正在导入'
                 }else if(val == '1'){
                     return '导入完成'
                 }else {
@@ -130,12 +130,12 @@
             //查看进度报告
             infoResBtn(info){
                 localStorage.setItem('taskInfo',JSON.stringify(info))
-                this.$router.push('/assetImportRes')
+                this.$router.push('/memberImportRes')
             },
             //查看失败的数据
             infoErrorBtn(info){
                 localStorage.setItem('taskInfo',JSON.stringify(info))
-                this.$router.push('/assetErrorData')
+                this.$router.push('/memberErrorData')
             },
 
             //分页
@@ -147,17 +147,16 @@
                     offset:(this.page-1)*this.count,
                     count:this.count
                 }
-                this.getAssetImportTasks(cnt)
+                this.getORGUserImportTasks(cnt)
             },
 
             addImportBtn(){
-                console.log(this.name)
                 let cnt = {
                     orgId:localStorage.getItem('orgId'),
                     userId:JSON.parse(localStorage.getItem('orgUser')).id,
                     name:this.name
                 }
-                this.$api.createAssetImportTask(cnt,(res)=>{
+                this.$api.createORGUserImportTask(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         this.$message.success('创建任务成功')
                     }else{
@@ -169,7 +168,7 @@
             infoBtn(info){
                 localStorage.setItem('taskInfo',JSON.stringify(info))
                 console.log(localStorage.getItem('taskInfo'))
-                this.$router.push('/assetImportInfo')
+                this.$router.push('/memberImportInfo')
             }
         },
         mounted(){
@@ -181,7 +180,7 @@
                 offset:this.offset,
                 count:this.count
             }
-            this.getAssetImportTasks(cnt)
+            this.getORGUserImportTasks(cnt)
             loading.close()
         }
     }

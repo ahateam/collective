@@ -47,6 +47,11 @@ const  menu =[
                 title:'职务管理',
                 icon:'',
             },
+            {
+                path:'/memberImport',
+                title:'导入成员',
+                icon:'',
+            }
         ]
     },
     {
