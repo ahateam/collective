@@ -19,7 +19,6 @@
                   <el-col :span="12">
                       <el-button type="primary" size="mini" @click="addMemberModal = true" style="margin-top: 6px">添加成员</el-button>
                       <el-button type="primary" size="mini"  @click="loadExcl" style="margin-top: 6px">用户表模板下载</el-button>
-                      <el-button type="primary" size="mini" @click="importUserModal =true" style="margin-top: 6px">批量导入</el-button>
                       <el-button type="warning" size="mini" @click="delMore" style="margin-top: 6px">移除职位</el-button>
                   </el-col>
 

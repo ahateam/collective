@@ -2,7 +2,7 @@
     <div>
         <el-row class="row-box" >
             <el-col :span="24" >
-                <span class="title-box" style="line-height: 40px">集体资产导入任务: 啊实打实的</span>
+                <span class="title-box" style="line-height: 40px">集体资产导入任务: {{info.name}}</span>
             </el-col>
 
         </el-row>

@@ -104,9 +104,10 @@
                     }else{
                         this.tableData = []
                     }
-                    console.log(this.tableData)
                     if(this.tableData.length < this.count){
                         this.pageOver =true
+                    }else{
+                        this.pageOver =false
                     }
                 })
             },
@@ -116,7 +117,6 @@
                 return timer.toLocaleDateString()+ ' '+timer.toLocaleTimeString('chinese',{hour12:false})
             },
             statusFilter(row,col,val){
-                console.log(val)
                 if(val == '0'){
                      return '正在导入'
                 }else if(val == '1'){
@@ -146,7 +146,7 @@
                     userId:JSON.parse(localStorage.getItem('orgUser')).id,
                     offset:(this.page-1)*this.count,
                     count:this.count
-                }
+            }
                 this.getAssetImportTasks(cnt)
             },
 

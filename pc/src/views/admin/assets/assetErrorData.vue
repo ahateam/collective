@@ -27,7 +27,7 @@
             <el-row  style="margin: 15px 0">
                 <el-col :span="24">
                     <span class="info-text" style="line-height: 30px;font-size: 16px;float: left;">写入进度：</span>
-                    <el-progress :text-inside="true" :stroke-width="18" :percentage="parseFloat(((info.success/info.sum)*100).toFixed(2))" style="line-height: 30px;float: left;width: 300px;margin-left: 20px; "></el-progress>
+                    <el-progress :text-inside="true" :stroke-width="18" :percentage="percentageData" style="line-height: 30px;float: left;width: 300px;margin-left: 20px; "></el-progress>
                 </el-col>
 
             </el-row>
@@ -39,20 +39,24 @@
                             style="width: 100%">
                         <el-table-column
                                 prop="name"
-                                label="文件名"
-                                :formatter="nameFilter">
+                                label="资产名称">
                         </el-table-column>
                         <el-table-column
-                                prop="lastModified"
-                                label="上传时间"
-                                :formatter="timerFilter">
+                                prop="sn"
+                                label="资产编号">
                         </el-table-column>
                         <el-table-column
-                                fixed="right"
-                                label="操作">
-                            <template slot-scope="scope">
-                                <el-button @click="downLoadBtn(scope.row)" type="text" size="small">下载</el-button>
-                            </template>
+                                prop="estateType"
+                                label="资产类型">
+                        </el-table-column>
+                        <el-table-column
+                                prop="location"
+                                label="资产地址">
+                        </el-table-column>
+                        <el-table-column
+                                prop="errorReason"
+                                label="错误原因"
+                                >
                         </el-table-column>
                     </el-table>
                 </template>
@@ -83,6 +87,8 @@
                 count:10,
                 page:1,
                 pageOver:false,
+                percentageData:0,
+
             }
         },
         methods:{
@@ -96,6 +102,8 @@
                     console.log(this.tableData)
                     if(this.tableData.length <this.count){
                         this.pageOver = true
+                    }else{
+                        this.pageOver = false
                     }
                 })
             },
@@ -108,11 +116,19 @@
                     offset:(this.page-1)*this.count, // Integer
                 }
                 this.getNotcompletionRecord(cnt)
+            },
+            errorFilter(row,col,val){
+                if(val == '' || val == undefined || val== null || row.errorFilter == undefined){
+                    return '未知错误'
+                }else{
+                    return val
+                }
             }
+
         },
         mounted(){
             this.info = JSON.parse(localStorage.getItem('taskInfo'))
-            console.log(this.info)
+
             let cnt = {
                 orgId: localStorage.getItem('orgId'), // Long 组织编号
                 importTaskId: this.info.id, // Long 导入任务id
@@ -120,7 +136,7 @@
                 offset: this.offset, // Integer
             }
             this.getNotcompletionRecord(cnt)
-
+            this.percentageData = parseFloat(((this.info.success/this.info.sum)*100).toFixed(2))
             let cnt1 = {
                 orgId: localStorage.getItem('orgId'), // Long 组织id
                 userId: JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
@@ -129,6 +145,7 @@
             this.$api.getAssetImportTask(cnt1,(res1)=>{
                 if(res1.data.rc == this.$util.RC.SUCCESS){
                     this.info = this.$util.tryParseJson(res1.data.c)
+                    this.percentageData = parseFloat(((this.info.success/this.info.sum)*100).toFixed(2))
                 }
             })
 

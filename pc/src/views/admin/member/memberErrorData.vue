@@ -27,7 +27,7 @@
             <el-row  style="margin: 15px 0">
                 <el-col :span="24">
                     <span class="info-text" style="line-height: 30px;font-size: 16px;float: left;">写入进度：</span>
-                    <el-progress :text-inside="true" :stroke-width="18" :percentage="parseFloat(((info.success/info.sum)*100).toFixed(2))" style="line-height: 30px;float: left;width: 300px;margin-left: 20px; "></el-progress>
+                    <el-progress :text-inside="true" :stroke-width="18" :percentage="percentageData" style="line-height: 30px;float: left;width: 300px;margin-left: 20px; "></el-progress>
                 </el-col>
 
             </el-row>
@@ -38,21 +38,26 @@
                             border
                             style="width: 100%">
                         <el-table-column
-                                prop="name"
-                                label="文件名"
-                                :formatter="nameFilter">
+                                prop="familyNumber"
+                                label="户序号">
                         </el-table-column>
                         <el-table-column
-                                prop="lastModified"
-                                label="上传时间"
-                                :formatter="timerFilter">
+                                prop="realName"
+                                label="姓名">
                         </el-table-column>
                         <el-table-column
-                                fixed="right"
-                                label="操作">
-                            <template slot-scope="scope">
-                                <el-button @click="downLoadBtn(scope.row)" type="text" size="small">下载</el-button>
-                            </template>
+                                prop="mobile"
+                                label="手机号">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                label="地址">
+                        </el-table-column>
+
+                        <el-table-column
+                                prop="errorReason"
+                                label="错误原因"
+                                :formatter="errorFilter">
                         </el-table-column>
                     </el-table>
                 </template>
@@ -83,11 +88,12 @@
                 count:10,
                 page:1,
                 pageOver:false,
+                percentageData:0
             }
         },
         methods:{
-            getNotcompletionRecord(cnt){
-                this.$api.getNotcompletionRecord(cnt,(res)=>{
+            getOrgNotcompletionRecord(cnt){
+                this.$api.getOrgNotcompletionRecord(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         this.tableData = this.$util.tryParseJson(res.data.c)
                     }else{
@@ -96,6 +102,8 @@
                     console.log(this.tableData)
                     if(this.tableData.length <this.count){
                         this.pageOver = true
+                    }else{
+                        this.pageOver = false
                     }
                 })
             },
@@ -107,7 +115,14 @@
                     count: this.count, // Integer
                     offset:(this.page-1)*this.count, // Integer
                 }
-                this.getNotcompletionRecord(cnt)
+                this.getOrgNotcompletionRecord(cnt)
+            },
+            errorFilter(row,col,val){
+                if(val == '' || val == undefined || val== null || row.errorFilter == undefined){
+                    return '未知错误'
+                }else{
+                    return val
+                }
             }
         },
         mounted(){
@@ -119,16 +134,17 @@
                 count: this.count, // Integer
                 offset: this.offset, // Integer
             }
-            this.getNotcompletionRecord(cnt)
-
+            this.getOrgNotcompletionRecord(cnt)
+            this.percentageData = parseFloat(((this.info.success/this.info.sum)*100).toFixed(2))
             let cnt1 = {
                 orgId: localStorage.getItem('orgId'), // Long 组织id
                 userId: JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
                 importTaskId: this.info.id, // Long 导入任务id
             }
-            this.$api.getAssetImportTask(cnt1,(res1)=>{
+            this.$api.getORGUserImportTask(cnt1,(res1)=>{
                 if(res1.data.rc == this.$util.RC.SUCCESS){
                     this.info = this.$util.tryParseJson(res1.data.c)
+                    this.percentageData = parseFloat(((this.info.success/this.info.sum)*100).toFixed(2))
                 }
             })
 

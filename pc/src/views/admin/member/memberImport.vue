@@ -107,6 +107,8 @@
                     console.log(this.tableData)
                     if(this.tableData.length < this.count){
                         this.pageOver =true
+                    }else{
+                        this.pageOver = false
                     }
                 })
             },

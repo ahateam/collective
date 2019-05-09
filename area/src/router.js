@@ -34,8 +34,10 @@ const areaVoteUser = ()=>import('./views/area/vote/voteUser')
 const areaBank = ()=>import('./views/area/bank/bank')
 const areaAddBank = ()=>import('./views/area/bank/addBank')
 const areaSetAdminBank = ()=>import('./views/area/bank/setAdminBank')
+const  areaSetChildUser = ()=>import('./views/area/user/setChildUser')
 
-
+const areaUser = ()=>import('./views/area/user/user')
+const areaChildUser =()=>import('./views/area/user/childUser')
 
 
 
@@ -189,8 +191,22 @@ export default new Router({
                 path:'/areaSetAdminBank',
                 name:'areaSetAdminBank',
                 component:areaSetAdminBank
+            },
+            {
+                path:'/areaUser',
+                name:'areaUser',
+                component:areaUser
+            },
+            {
+                path:'/areaChildUser',
+                name:'areaChildUser',
+                component:areaChildUser
+            },
+            {
+                path:'/areaSetChildUser',
+                name:'areaSetChildUser',
+                component:areaSetChildUser
             }
-
         ]
     },
   ]

@@ -60,9 +60,9 @@
         </el-row>
 
 
-        <!--批量移入资产-->
+        <!--批量移入用户-->
         <el-dialog
-                title="上传资产表格"
+                title="上传组织成员表格"
                 :visible.sync="importModal"
                 width="30%"
                 :before-close="handleClose"

@@ -83,6 +83,22 @@ const  areaMenu=[
         ]
     },
     {
+        path:'/areaUser',
+        title:'管理员管理',
+        icon:'icon-bangong-jigou',
+        child:[
+            {
+                path:'/areaUser',
+                title:'平台管理员'
+            },
+            {
+                path:'/areaChildUser',
+                title:'下级管理员'
+            },
+
+        ]
+    },
+    {
         path:'/areaBank',
         title:'银行金融',
         icon:'icon-zichan1',
