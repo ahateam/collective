@@ -22,6 +22,7 @@ const  voteList = () => import('./views/personal/vote/voteList')
 const  voteRes = () => import('./views/personal/vote/voteRes')
 const  user = () => import('./views/personal/user/user')
 const  userUpdate = () => import('./views/personal/user/userUpdate')
+const userWX =()=> import('./views/personal/user/userWX' )
 
 const  meet = () => import('./views/personal/meet/meet')
 const  meetAdd = () => import('./views/personal/meet/meetAdd')
@@ -145,6 +146,11 @@ export default new Router({
             path: '/userUpdate',
             name: 'userUpdate',
             component: userUpdate
+        },
+        {
+            path:'/userWX',
+            name:'userWX',
+            component:userWX
         },
 
         {

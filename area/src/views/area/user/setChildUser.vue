@@ -36,7 +36,7 @@
                                 <!--<el-button @click="info(scope.row,true)" type="text" size="small">详情</el-button>-->
                                 <!--<el-button @click="setAdmin(scope.row)" type="text" size="small">设置管理员</el-button>-->
                                 <!--<el-button @click="infoMoney(scope.row)" type="text" size="small">机构资金</el-button>-->
-                                <el-button @click="del(scope.row.user.id)" type="text" size="small" style="color: #f44">删除
+                                <el-button @click="del(scope.row)" type="text" size="small" style="color: #f44">删除
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -62,12 +62,6 @@
                 </el-form-item>
                 <el-form-item label="手机号" label-width="150px">
                     <el-input v-model="mobile" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="登录密码" label-width="150px">
-                    <el-input v-model="pwd" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="确认密码" label-width="150px">
-                    <el-input v-model="pwd1" autocomplete="off"></el-input>
                 </el-form-item>
 
             </el-form>
@@ -100,8 +94,6 @@
                 addShow: false,
 
                 mobile: '',
-                pwd: '',
-                pwd1: '',
                 realName: '',
                 idNumber: '',
 
@@ -151,48 +143,46 @@
                 this.addShow = true
             },
             addAdminBtn() {
-                if (this.pwd != this.pwd1) {
-                    this.$message.error('两次密码输出不一致')
-                } else if (this.mobile == ' ' || this.realName == '' || this.realName == '' || this.idNumber == '') {
-                    this.$message.error('请将银行管理员的信息输入完整')
+                if (this.mobile == ' '  || this.realName == '' || this.idNumber == '') {
+                    this.$message.error('请将管理员的资料输入完整')
                 } else {
                     let cnt = {
-                        bankId: this.info.id,
-                        address: this.info.address,
+                        orgId:this.info.id,
+                        level:this.info.level,
                         idNumber: this.idNumber,
                         mobile: this.mobile,
-                        pwd: this.pwd,
                         realName: this.realName
                     }
-                    this.$area.createBankAdmin(cnt, (res) => {
+
+
+                    this.$area.createORGAdmin(cnt, (res) => {
+
                         if (res.data.rc == this.$util.RC.SUCCESS) {
 
-                            this.addShow = false
-                            this.idNumber = ''
-                            this.realName = ''
-                            this.pwd = ''
-                            this.pwd1 = ''
-                            this.mobile = ''
-                            this.$message.success('新增当前银行管理员成功')
+
+                            this.$message.success('新增管理员成功')
                         } else {
-                            this.$message.error('新增失败')
+                            this.$message.error('新增失败,输入的信息有误')
                         }
-                        this.getORGUsers()
+                        this.addShow = false
+                        this.idNumber = ''
+                        this.realName = ''
+                        this.mobile = ''
+                        this.changePage(1)
                     })
                 }
             },
-            del(id) {
+            del(item) {
                 this.delShow = true
-                this.delId = id
+                this.delId = item.id
             },
             delBtn(){
                 let cnt={
-                    bankId: this.info.id, // Long 银行机构id
+                    orgId: this.info.id, // Long 银行机构id
                     userId: this.delId, // Long 用户id
                 }
 
-
-                this.$area.deleteBankAdmin(cnt,(res)=>{
+                this.$area.delORGUserAdmin(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         this.delShow = false
                         this.delId =''
@@ -200,7 +190,7 @@
                     }else{
                         this.$message.error('删除失败')
                     }
-                    this.getORGUsers()
+                    this.changePage(1)
                 })
 
             }

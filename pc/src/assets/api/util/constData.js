@@ -71,6 +71,11 @@ const permission = [
     {key:100,val:'发起投票'}
 ]
 
+/**
+* 审批类型
+* */
+const examineType = [{key:0,val:'组织申请'},{key:1,val:'分户申请'},{key:2,val:'股权变更申请'}]
+
 
 export default {
     share,
@@ -80,5 +85,6 @@ export default {
     opt,
     contentType,
     orgLevel,
-    permission
+    permission,
+    examineType
 }

@@ -60,6 +60,25 @@ const  menu =[
         icon:'icon-toupiao1',
         child:[]
     },
+    {
+        path:'/examine',
+        title:'审批管理',
+        icon:'icon-toupiao1',
+        child:[
+            {
+                path:'/examine',
+                title:'审批记录'
+            },
+            {
+                path:'/examineSeparateList',
+                title:'分户管理审批',
+            },
+            {
+                path:'/examineSeparate',
+                title:'股权变更审批',
+            },
+        ]
+    },
 
     {
         path:'/asset',

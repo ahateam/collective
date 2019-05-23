@@ -99,6 +99,17 @@ const  areaMenu=[
         ]
     },
     {
+        path:'/areaExamine',
+        title:'审批管理',
+        icon:'icon-bangong-jigou',
+        child:[
+            {
+                path:'/areaExamine',
+                title:'审批管理'
+            }
+        ]
+    },
+    {
         path:'/areaBank',
         title:'银行金融',
         icon:'icon-zichan1',
@@ -155,6 +166,22 @@ const  cityMenu=[
             }
         ]
     },
+    {
+        path:'/areaUser',
+        title:'管理员管理',
+        icon:'icon-bangong-jigou',
+        child:[
+            {
+                path:'/areaUser',
+                title:'平台管理员'
+            },
+            {
+                path:'/areaChildUser',
+                title:'下级管理员'
+            },
+
+        ]
+    },
 ]
 
 //省级管理平台
@@ -182,6 +209,22 @@ const  proMenu=[
                 path:'/areaManageMech',
                 title:' 我的机构'
             }
+        ]
+    },
+    {
+        path:'/areaUser',
+        title:'管理员管理',
+        icon:'icon-bangong-jigou',
+        child:[
+            {
+                path:'/areaUser',
+                title:'平台管理员'
+            },
+            {
+                path:'/areaChildUser',
+                title:'下级管理员'
+            },
+
         ]
     },
 ]

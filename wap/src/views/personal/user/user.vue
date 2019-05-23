@@ -63,10 +63,17 @@
                         表决票数
                     </div>
                     <div class="item-text">
-                        3
+                        {{userInfo.weight}}
                     </div>
                 </div>
-
+                <div class="user-item" @click="wxBtn">
+                    <div class="item-title">
+                        绑定微信
+                    </div>
+                    <div class="item-text">
+                       <span > 未绑定（点击绑定）</span>
+                    </div>
+                </div>
             </div>
 
             <div class="update-btn" @click="updateBtn">修改账号信息</div>
@@ -77,6 +84,7 @@
 
 <script>
     import HeaderBox from '@/components/head/headerBox'
+    import { Dialog } from 'vant'
 
     export default {
         name: "user",
@@ -95,6 +103,23 @@
             }
         },
         methods: {
+            //绑定微信弹窗
+            wxBtn(){
+                Dialog.confirm({
+                    title: '绑定微信',
+                    message: '是否绑定当前登录微信信息'
+                }).then(() => {
+                    this.getWXUserCode()
+                }).catch(() => {
+                    // on cancel
+                });
+            },
+            //获取微信用户信息
+            getWXUserCode(){
+               let  info=  this.$commen.getWXUserCode(this.$store.state.wxInfo.APPID,this.$store.state.wxInfo.REDIRECT_URI)
+               alert(info)
+            },
+
             updateBtn() {
                 this.$router.push('/userUpdate')
             },
@@ -112,6 +137,7 @@
             this.shareAmount = this.userInfo.shareAmount
 
            let orgRoles = this.userInfo.orgRoles
+            console.log(this.userInfo)
             let cnt = {}
             this.$api.getSysORGUserRoles(cnt, (res)=> {
                 let arr = JSON.parse(res.data.c)

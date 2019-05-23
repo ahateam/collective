@@ -44,6 +44,13 @@ const assetImportInfo =()=>import('./views/admin/assets/assetImportInfo')
 const assetImportRes =()=>import('./views/admin/assets/assetImportRes')
 const assetErrorData =()=>import('./views/admin/assets/assetErrorData')
 
+const examine =()=>import('./views/admin/examine/examine')
+const examineSeparate =()=>import('./views/admin/examine/examineSeparate')
+const examineSeparateList =()=>import('./views/admin/examine/examineSeparateList')
+const examineShare = ()=>import('./views/admin/examine/examineShare')
+
+
+
 //演示系统
 const demoDashboard = ()=> import( './views/demo/home/dashboard')
 const demoAsset = ()=> import( './views/demo/asset/asset')
@@ -230,6 +237,26 @@ export default new Router({
                     path:'/articleAdd',
                     name:'articleAdd',
                     component:articleAdd
+                },
+                {
+                    path:'/examine',
+                    name:'examine',
+                    component:examine
+                },
+                {
+                    path:'/examineSeparate',
+                    name:'examineSeparate',
+                    component:examineSeparate
+                },
+                {
+                    path:'/examineSeparateList',
+                    name:'examineSeparateList',
+                    component:examineSeparateList
+                },
+                {
+                    path:'/examineShare',
+                    name:'examineShare',
+                    component:examineShare
                 },
                 {
                     path:'/asset',

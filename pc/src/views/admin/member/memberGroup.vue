@@ -10,30 +10,31 @@
                     <el-col :span="24" >
                         <el-col :span="24">
                             <el-tree
+
                                     v-if="groups != ''"
                                     :data="groups"
                                     node-key="groupId"
                                     :props="defaultProps"
                                     default-expand-all
                                     :expand-on-click-node="false"
-                                    @node-click="handleNodeClick">
-                                <div  class="custom-tree-node " slot-scope="{ node, data }">
-                                    <div class="label-box">{{ node.label }}</div>
-                                    <div class="icon-box">
+                                    @node-click="handleNodeClick" >
+                                    <div  class="custom-tree-node " slot-scope="{ node, data }"    >
+                                        <div class="label-box" style="font-size: 1.6rem"><span style="margin: 10px 0">{{ node.label }}</span></div>
+                                    <!--<div class="icon-box">-->
 
-                                        <el-button
-                                                type="text"
-                                                size="mini"
-                                                @click="() => append(node,data)">
-                                            <i class="el-icon-plus" ></i>
-                                        </el-button>
                                         <!--<el-button-->
-                                        <!--type="text"-->
-                                        <!--size="mini"-->
-                                        <!--@click="() => remove(node, data)">-->
-                                        <!--<i class="el-icon-minus" style="color: #f60;"></i>-->
+                                                <!--type="text"-->
+                                                <!--size="mini"-->
+                                                <!--@click="() => append(node,data)">-->
+                                            <!--<i class="el-icon-plus" ></i>-->
                                         <!--</el-button>-->
-                                    </div>
+                                        <!--&lt;!&ndash;<el-button&ndash;&gt;-->
+                                        <!--&lt;!&ndash;type="text"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;size="mini"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;@click="() => remove(node, data)">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<i class="el-icon-minus" style="color: #f60;"></i>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                                    <!--</div>-->
                                 </div>
                             </el-tree>
 
@@ -43,8 +44,8 @@
                 </template>
             </el-col>
             <el-col :span="16" style="border-left: 1px solid #ddd">
-                <el-row>
-                    <p>
+                <el-row >
+                    <p style="font-size: 16px">
                         当前分组：<span v-if="nowNode==''">{{orgName}}</span> <span v-if="nowNode != ''">{{nowNode.keyword}}</span>
                     </p>
                 </el-row>
@@ -97,6 +98,7 @@
                                     <template slot-scope="scope">
                                         <el-button @click="infoBtn(scope.row)" type="text" size="small">基础信息</el-button>
                                         <el-button @click="infoPostBtn(scope.row)" type="text" size="small">职务信息</el-button>
+                                        <el-button @click="delBtn(scope.row)" type="text" size="small" > <span style="color: #f44;">删除</span></el-button>
 
                                     </template>
                                 </el-table-column>
@@ -255,6 +257,13 @@
                             </el-checkbox-group>
                         </template>
                     </el-form-item>
+                    <el-form-item label="分组信息" label-width="100px">
+                        <template>
+                            <el-checkbox-group v-model="groupsInfo">
+                                <el-checkbox  v-for="(item,index) in groups" :key="index" :label="item.groupId" :disabled="editMember !=1">{{item.keyword}}</el-checkbox>
+                            </el-checkbox-group>
+                        </template>
+                    </el-form-item>
                 </el-form>
             </el-row>
             <div slot="footer" class="dialog-footer">
@@ -275,6 +284,18 @@
                 <el-button type="primary" @click="addGroupBtn">确 定</el-button>
             </div>
         </el-dialog>
+        <!--删除用户-->
+        <el-dialog
+                title="提示"
+                :visible.sync="delModal"
+                width="30%"
+                :before-close="handleClose">
+                <span>是否确认从当前组织删除该用户？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="delModal = false">取 消</el-button>
+                    <el-button type="primary" @click="delORGUser">确 定</el-button>
+                </span>
+        </el-dialog>
     </div>
 
 </template>
@@ -285,10 +306,13 @@
 
     export default {
 
-        name: "memberMail",
+        name: "memberGroup",
         data(){
             return {
                 loadData:false,
+                delModal:false,
+                delId:'',
+
 
                 orgName:'',     //机构名称
 
@@ -358,10 +382,15 @@
                 familyNumberInfo:'',            //户序号
                 familyMasterInfo:'',            //户主名
 
+
+
                 //分组操作-穿梭框相关
                 addMemberModal:false, //穿梭框弹窗
                 addUserList:[],
                 userData:[],
+                transferCount:500,
+                transferPage:1,
+
 
                 //搜索相关
                 searchData:'',
@@ -369,6 +398,8 @@
             }
         },
         methods: {
+
+
             //ajax请求层
             //根据姓名模糊搜索用户列表
             getORGUsersLikeRealName(cnt){
@@ -384,9 +415,7 @@
             //根据分组获取用户列表
             getORGUsersByGroups(cnt){
                 this.$api.getORGUsersByGroups(cnt,(res)=>{
-                    console.log(res.data.c)
                     this.tableData = this.$util.tryParseJson(res.data.c)
-                    console.log(this.tableData)
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -452,6 +481,48 @@
 
 
             //普通事件层
+            delBtn(row){
+                this.delId = row.user.id
+                this.delModal =true
+            },
+            delORGUser(){
+                let cnt = {
+                    orgId: localStorage.getItem('orgId'),
+                    userId: this.delId,
+                }
+                this.$api.delORGUser(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('用户已移除当前组织')
+                    }else{
+                        this.$message.error('删除用户失败')
+                    }
+                })
+                this.$router.push('/page')
+            },
+            getMoreUserList(){
+
+                let cnt2={
+                    orgId:localStorage.getItem('orgId'),
+                    count:this.transferCount,
+                    offset:(this.transferPage-1)*this.transferCount
+                }
+
+                this.$api.getORGUsers(cnt2, (res)=> {
+                    let userList = this.$util.tryParseJson(res.data.c)
+                    for(let i=0;i< userList.length;i++){
+                        if(userList[i].user.realName != '' && userList[i].user.realName != undefined){
+                            this.userData.push(userList[i].user)
+                        }
+                    }
+                    if(userList.length == this.transferCount){
+                            this.transferPage = this.transferPage +1
+                            this.getMoreUserList()
+                    }
+                })
+            },
+
+
+
             searchBtn(){
               if(this.searchData == ''){
                   this.$message.error('请输入查找的用户姓名')
@@ -515,7 +586,6 @@
                 let tmpName = encodeURIComponent(file[0].name)
                 tmpName = this.address + tmpName
 
-                console.log(tmpName)
 
                 this.multipartUpload(tmpName, file[0])
             },
@@ -539,9 +609,7 @@
 
                         //导入用户
                         let address = res.res.requestUrls[0]
-                        console.log(address)
                         let _index =address.indexOf('?')
-                        console.log(_index)
                         if(_index == -1){
                             _this.url = address
                             _this.importUsers()
@@ -552,7 +620,6 @@
 
 
                     }).catch(err => {
-                        console.log(result)
                         console.log(err)
                     });
 
@@ -578,8 +645,6 @@
 
             //移入用户
             addMemberBtn() {
-                let that = this
-                console.log(this.addUserList)
                 if(this.addUserList.length == 0){
                     this.$message.error('请至少选择一个用户引入该分组')
                 }else{
@@ -588,7 +653,7 @@
                     let cnt  = {
                         orgId: localStorage.getItem('orgId'), // Long 组织编号
                         userIds: this.addUserList, // JSONArray 用户编号列表，JSONArray格式
-                        groups: [groupId], // JSONArray 分组信息列表，JSONArray格式
+                        groups: groupId,
                     }
 
                     this.$api.batchEditORGUsersGroups(cnt, (res)=>{
@@ -669,6 +734,7 @@
 
             //修改组织用户的职位信息
             infoPostBtn(info){
+                console.log(info)
                 this.memberInfo = info
                 this.userIdInfo = this.memberInfo.user.id
                 this.editMember = 0
@@ -681,16 +747,25 @@
                 this.rolesInfo = JSON.parse(this.memberInfo.orgUser.roles)
                 this.tagsInfo = this.memberInfo.orgUser.tags
                 this.memberPostInfoModal = true
-                this.groupsInfo = this.memberInfo.orgUser.groups
+
+
                 this.familyNumberInfo = this.memberInfo.orgUser.familyNumber
                 this.familyMasterInfo = this.memberInfo.orgUser.familyMaster
+
+                if(this.memberInfo.orgUser.groups != undefined || this.memberInfo.orgUser.groups != ''){
+                    this.groupsInfo = JSON.parse(this.memberInfo.orgUser.groups)
+                }else {
+                    this.groupsInfo = []
+                }
+
+
             },
 
 
             //用户信息
             infoBtn(info){
                 this.memberInfo = info
-                console.log(this.memberInfo)
+
                 this.memberInfoModal =true
                 this.realNameInfo = this.memberInfo.user.realName
                 this.idNumberInfo = this.memberInfo.user.idNumber
@@ -773,7 +848,7 @@
                 this.parentId = data.groupId
                 this.parentsAdd = JSON.parse(data.parents)
                 this.parentsAdd.push(this.parentId)
-                console.log(this.parentsAdd)
+
             },
             remove(node, data) {
                 const parent = node.parent;
@@ -825,6 +900,9 @@
                     this.$message.error('请先选择一个组织下的分组')
                 }else{
                     this.addMemberModal = true
+                    //请求所有组织用户数据（无分页/等修改）
+
+                    this.getMoreUserList()
                 }
             }
         },
@@ -851,7 +929,6 @@
             //分组列表
             this.$api.getORGUserSysTagGroups(cnt, (res)=> {
                 let data = this.$util.tryParseJson(res.data.c)
-
                 this.grandId = data[0].groupId
                 let cnt2 = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
@@ -867,25 +944,12 @@
                             this.groups = groupData
                         }
                     }
-
                 })
             })
             loading.close()
 
-            //请求所有组织用户数据（无分页/等修改）
-            let cnt2={
-                orgId:localStorage.getItem('orgId'),
-                count:500,
-                offset:0
-            }
-            this.$api.getORGUsers(cnt2, (res)=> {
-                this.userList = this.$util.tryParseJson(res.data.c)
-                for(let i=0;i<this.userList.length;i++){
-                    if(this.userList[i].user.realName != '' && this.userList[i].user.realName != undefined){
-                        this.userData.push(this.userList[i].user)
-                    }
-                }
-            })
+
+
 
 
         }
@@ -1072,5 +1136,9 @@
         font-weight: 600;
         background: rgb(236,245,255);
     }
+    .el-tree-node__content {
+        margin: 10px 0;
+    }
+
 
 </style>

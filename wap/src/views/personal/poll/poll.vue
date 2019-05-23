@@ -31,7 +31,6 @@
                                             {{item.title}}
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="vote-item-content">
                                     <div class="vote-item-btn" @click="voteBtn(item)" v-if="item.status == '0' " >

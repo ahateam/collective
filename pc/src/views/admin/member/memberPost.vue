@@ -239,6 +239,13 @@
                             </el-checkbox-group>
                         </template>
                     </el-form-item>
+                    <el-form-item label="分组信息" label-width="100px">
+                        <template>
+                            <el-checkbox-group v-model="groupsInfo">
+                                <el-checkbox  v-for="(item,index) in groups" :key="index" :label="item.groupId" :disabled="editMember !=1">{{item.keyword}}</el-checkbox>
+                            </el-checkbox-group>
+                        </template>
+                    </el-form-item>
                 </el-form>
             </el-row>
             <div slot="footer" class="dialog-footer">
@@ -317,7 +324,7 @@
                 weightInfo:'',                  //选举权重
                 rolesInfo:[],                       //用户角色id 列表
                 tagsInfo:[],                    //用户标签/分组信息
-                groupsInfo:'',
+                groupsInfo:[],
                 familyNumberInfo:'',            //户序号
                 familyMasterInfo:'',            //户主姓名
 
@@ -666,9 +673,15 @@
                 this.rolesInfo = JSON.parse(this.memberInfo.orgUser.roles)
                 this.tagsInfo = this.memberInfo.orgUser.tags
                 this.memberPostInfoModal = true
-                this.groupsInfo  = this.memberInfo.orgUser.groups
+
                 this.familyNumberInfo = this.memberInfo.orgUser.familyNumber
                 this.familyMasterInfo = this.memberInfo.orgUser.familyMaster
+                if(this.memberInfo.orgUser.groups != undefined || this.memberInfo.orgUser.groups != ''){
+                    this.groupsInfo = JSON.parse(this.memberInfo.orgUser.groups)
+                }else {
+                    this.groupsInfo = []
+                }
+
 
             },
 
@@ -745,6 +758,30 @@
                 offset: this.offset
             }
             this.getORGUsers(cnt1)
+
+
+            //获取所有分组列表
+            this.$api.getORGUserSysTagGroups(cnt, (res)=> {
+                let data = this.$util.tryParseJson(res.data.c)
+                this.grandId = data[0].groupId
+                let cnt2 = {
+                    orgId: localStorage.getItem('orgId'), // Long 组织编号
+                    groupId:this.grandId, // Long 分组编号
+                };
+
+                this.$api.getTagGroupTree(cnt2, (res)=> {
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
+                        let groupData = this.$util.tryParseJson(res.data.c)
+                        if (groupData == '{}' || groupData== {}) {
+                            this.groups = ''
+                        } else {
+                            this.groups = groupData
+                        }
+                    }
+                    console.log(this.groups)
+                })
+            })
+
             loading.close()
         }
     }
