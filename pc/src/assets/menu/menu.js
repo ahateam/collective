@@ -55,6 +55,38 @@ const  menu =[
         ]
     },
     {
+        path:'/leaveFamily',
+        title:'分户管理',
+        icon:'icon-toupiao1',
+        child:[
+            {
+                path:'/leaveFamily',
+                title:'成员分户',
+                icon:''
+            },
+            {
+                path:'/moveFamily',
+                title:'成员移户',
+                icon:''
+            },
+            {
+                path:'/createFamily',
+                title:'创建家庭户',
+                icon:''
+            },
+            {
+                path:'/addFamily',
+                title:'户成员新增',
+                icon:''
+            },
+            {
+                path:'/deleteFamily',
+                title:'户成员移除',
+                icon:''
+            },
+        ]
+    },
+    {
         path:'/poll',
         title:'投票管理',
         icon:'icon-toupiao1',

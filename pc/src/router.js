@@ -28,6 +28,7 @@ const memberImport =()=>import('./views/admin/member/memberImport')
 const memberImportInfo =()=>import('./views/admin/member/memberImportInfo')
 const memberImportRes =()=>import('./views/admin/member/memberImportRes')
 
+
 const  voteAdd = ()=>import('./views/admin/vote/voteAdd')
 const  voteInfo = ()=>import('./views/admin/vote/voteInfo')
 const  voteEdit = ()=>import('./views/admin/vote/voteEdit')
@@ -49,7 +50,13 @@ const examineSeparate =()=>import('./views/admin/examine/examineSeparate')
 const examineSeparateList =()=>import('./views/admin/examine/examineSeparateList')
 const examineShare = ()=>import('./views/admin/examine/examineShare')
 
-
+//分户管理
+const familyList =()=>import('./views/admin/family/familyList')
+const leaveFamily  = ()=>import('./views/admin/family/leaveFamily')
+const addFamily = ()=>import('./views/admin/family/addFamily')
+const moveFamily =()=>import('./views/admin/family/moveFamily')
+const deleteFamily = ()=>import('./views/admin/family/deleteFamily')
+const createFamily = ()=>import('./views/admin/family/createFamily')
 
 //演示系统
 const demoDashboard = ()=> import( './views/demo/home/dashboard')
@@ -287,6 +294,36 @@ export default new Router({
                     path:'/permission',
                     name:'permission',
                     component:permission
+                },
+                {
+                    path:'/leaveFamily',
+                    name:'leaveFamily',
+                    component:leaveFamily
+                },
+                {
+                    path:'/addFamily',
+                    name:'addFamily',
+                    component:addFamily
+                },
+                {
+                    path:'/deleteFamily',
+                    name:'deleteFamily',
+                    component:deleteFamily
+                },
+                {
+                    path:'/moveFamily',
+                    name:'moveFamily',
+                    component:moveFamily
+                },
+                {
+                    path:'/familyList',
+                    name:'familyList',
+                    component:familyList
+                },
+                {
+                    path:'/createFamily',
+                    name:'createFamily',
+                    component:createFamily
                 },
 
                 //演示系统

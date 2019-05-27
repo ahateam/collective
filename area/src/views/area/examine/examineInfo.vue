@@ -2,22 +2,21 @@
     <div>
         <el-row class="row-box" >
             <el-col :span="24" >
-                <span class="title-box" style="line-height: 40px">家庭分户操作</span>
+                <span class="title-box" style="line-height: 40px">家庭分户审批</span>
             </el-col>
-
         </el-row>
 
         <el-row class="row-box1" >
-            <el-row>
+            <el-row class="row-box1">
                 <el-col :span="24">
-                    <el-button type="primary"  size="small" @click="addSeparate"> + 新增家庭户</el-button>
+                    <span style="color: #333;font-size: 16px">变更前家庭户数据</span>
                 </el-col>
             </el-row>
-            <el-row class="row-box1">
+            <el-row >
                 <el-row >
                     <el-col :span="24">
                       <span class="table-title">
-                            原始家庭户
+                          原始家庭户
                       </span>
                         <span class="table-master">
                             家庭户主: <span v-if="pastData.length>0">{{pastData[0].familyMaster}}</span>
@@ -51,15 +50,15 @@
                                         prop="familyMaster"
                                         label="户主姓名">
                                 </el-table-column>
-                                <el-table-column
-                                        label="操作"
-                                        width="200">
-                                    <template slot-scope="scope">
-                                        <el-button @click="delSeparateBtn(scope.row)" type="text" size="small"><span style="color: #f44;font-size: 20px" class="iconfont icon-quxiao1"></span></el-button>
-                                        <el-button @click="setPastMasterBtn(scope.row)" type="text" size="small" style="font-size: 16px;line-height: 20px">设置为户主</el-button>
+                                <!--<el-table-column-->
+                                        <!--label="操作"-->
+                                        <!--width="200">-->
+                                    <!--<template slot-scope="scope">-->
+                                        <!--&lt;!&ndash;<el-button @click="delSeparateBtn(scope.row)" type="text" size="small"><span style="color: #f44;font-size: 20px" class="iconfont icon-quxiao1"></span></el-button>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<el-button @click="setPastMasterBtn(scope.row)" type="text" size="small" style="font-size: 16px;line-height: 20px">设置为户主</el-button>&ndash;&gt;-->
 
-                                    </template>
-                                </el-table-column>
+                                    <!--</template>-->
+                                <!--</el-table-column>-->
 
                             </el-table>
                         </template>
@@ -68,68 +67,76 @@
             </el-row>
         </el-row>
 
-        <el-row class="row-box1" v-for="(item,index) in newData" :key="index">
-            <el-row >
+        <el-row class="row-box1" >
+            <el-row class="row-box1">
                 <el-col :span="24">
+                    <span style="color: #333;font-size: 16px">变更后家庭户数据</span>
+                </el-col>
+            </el-row>
+            <div v-for="(item,index) in newData" :key="index">
+                <el-row class="row-box1">
+                    <el-col :span="24">
                       <span class="table-title">
                             家庭户 {{index+1}}
                       </span>
-                      <span class="table-master">
+                        <span class="table-master">
                           家庭户主: <span v-if="item.length>0">{{item[0].familyMaster}}</span>
                       </span>
-                    <span class="table-del" @click="delSeparate(item,index)">
-                            <i class="iconfont icon-19icon"></i>
-                    </span>
-                    <span class="table-add">
-                        <el-button type="success" size="mini" @click="removeModal(index)">移入成员</el-button>
-                    </span>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <template>
-                        <el-table
-                                :data="item"
-                                border
-                                style="width: 100%">
-                            <el-table-column
-                                    prop="familyNumber"
-                                    label="户序号">
-                            </el-table-column>
-                            <el-table-column
-                                    prop="shareCerNo"
-                                    label="股权证编号">
-                            </el-table-column>
-                            <el-table-column
-                                    prop="realName"
-                                    label="用户名">
-                            </el-table-column>
-                            <el-table-column
-                                    prop="idNumber"
-                                    label="身份证">
-                            </el-table-column>
-                            <el-table-column
-                                    prop="familyMaster"
-                                    label="户主姓名">
-                            </el-table-column>
-                            <el-table-column
-                                    label="操作"
-                                    width="200">
-                                <template slot-scope="scope">
-                                    <el-button @click="returnBtn(scope.row,index)" type="text" size="small"><span style="color: #f60;font-size: 20px;padding: 0 20px;line-height: 20px" class="iconfont icon-quxiao2"></span></el-button>
-                                    <el-button @click="setMasterBtn(scope.row,index)" type="text" size="small" style="font-size: 16px;line-height: 20px">设置为户主</el-button>
+                        <!--<span class="table-del" @click="delSeparate(item,index)">-->
+                        <!--<i class="iconfont icon-19icon"></i>-->
+                        <!--</span>-->
+                        <!--<span class="table-add">-->
+                        <!--<el-button type="success" size="mini" @click="removeModal(index)">移入成员</el-button>-->
+                        <!--</span>-->
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <template>
+                            <el-table
+                                    :data="item"
+                                    border
+                                    style="width: 100%">
+                                <el-table-column
+                                        prop="familyNumber"
+                                        label="户序号">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="shareCerNo"
+                                        label="股权证编号">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="realName"
+                                        label="用户名">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="idNumber"
+                                        label="身份证">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="familyMaster"
+                                        label="户主姓名">
+                                </el-table-column>
+                                <!--<el-table-column-->
+                                <!--label="操作"-->
+                                <!--width="200">-->
+                                <!--<template slot-scope="scope">-->
+                                <!--&lt;!&ndash;<el-button @click="returnBtn(scope.row,index)" type="text" size="small"><span style="color: #f60;font-size: 20px;padding: 0 20px;line-height: 20px" class="iconfont icon-quxiao2"></span></el-button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<el-button @click="setMasterBtn(scope.row,index)" type="text" size="small" style="font-size: 16px;line-height: 20px">设置为户主</el-button>&ndash;&gt;-->
 
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </template>
-                </el-col>
-            </el-row>
+                                <!--</template>-->
+                                <!--</el-table-column>-->
+                            </el-table>
+                        </template>
+                    </el-col>
+                </el-row>
+            </div>
+
         </el-row>
 
         <el-row class="row-box1">
             <el-col :span="24" style="text-align: center">
-                <el-button type="primary"  @click="createBtn">确认提交分户信息进行审批</el-button>
+                <el-button type="primary"  @click="createBtn">初审通过并获取户序号</el-button>
             </el-col>
         </el-row>
 
@@ -159,6 +166,8 @@
         data(){
             return{
                 info:'',
+                data:[],        //所有默认数据
+
                 pastData:[],    //动态改变的过去的数据
                 oldData:[],     //永不改变的过去的数据
                 newData:[],     //现在新增的户的数据
@@ -176,7 +185,7 @@
 
             //原始数据清除一个用户
             delSeparateBtn(){
-              this.$message.error('暂不支持清除原始家庭户中的用户')
+                this.$message.error('暂不支持清除原始家庭户中的用户')
             },
 
             //提交数据进行审批
@@ -258,17 +267,12 @@
                 }
             },
 
-            //新增一个新的户
-            addSeparate(){
-                let arr =[]
-                this.newData.push(arr)
-            },
             //删除一个新增户
             delSeparate(item,index){
                 if(item.length>0){
                     this.$message.error('删除家庭户失败，请先移出当前家庭户的成员')
                 }else{
-                  this.newData.splice(index,1)
+                    this.newData.splice(index,1)
                 }
             },
             //点击移入成员弹窗
@@ -307,23 +311,16 @@
         mounted(){
             this.info = this.$route.params.info
             if(this.info == '' || this.info == undefined){
-                this.$message.error('信息失效，请重新选择家庭户')
-                this.$router.push('/examineSeparateList')
+                this.$message.error('信息失效，请重新选择审批项')
+                this.$router.push('/examine')
             }else {
-                let cnt = {
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
-                    familyNumber: this.info.familyNumber, // Long 户序号
-                }
-                this.$api.getFamilyUserByFamilyNumber(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.pastData = this.$util.tryParseJson(res.data.c)
-                        this.oldData = this.$util.tryParseJson(res.data.c)
-                    }else{
-                        this.pastData = []
-                        this.oldData = []
-                    }
-                    console.log(this.pastData)
-                })
+
+                console.log(this.info)
+                this.data =JSON.parse( this.info.data)
+                this.pastData = this.data.oldData
+                this.newData = this.data.newData
+                console.log(this.data)
+
             }
         }
     }

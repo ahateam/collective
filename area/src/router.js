@@ -40,7 +40,7 @@ const areaUser = ()=>import('./views/area/user/user')
 const areaChildUser =()=>import('./views/area/user/childUser')
 
 const areaExamine =()=>import('./views/area/examine/examine')
-
+const areaExamineInfo =()=>import('./views/area/examine/examineInfo')
 
 
 Vue.use(Router)
@@ -213,6 +213,11 @@ export default new Router({
                 path:'/areaExamine',
                 name:'areaExamine',
                 component:areaExamine
+            },
+            {
+                path:'/areaExamineInfo',
+                name:'areaExamineInfo',
+                component:areaExamineInfo
             }
 
         ]

@@ -75,6 +75,14 @@ const permission = [
 * 审批类型
 * */
 const examineType = [{key:0,val:'组织申请'},{key:1,val:'分户申请'},{key:2,val:'股权变更申请'}]
+const examineStatus = [{key:0,val:'等待组织审核'},{key:1,val:'组织审核通过，等待区级审核'},{key:2,val:'区级审核通过'},{key:3,valv:'制证完成'},{key:4,val:'制证失败'}]
+/**
+ * 分户常量
+ * */
+const tab = [{key:0,val:'移除'},{key:1,val:'移入'}]
+const familyType = [
+    {key:0,val:'createFamily'}, {key:1,val:'leaveFamily'}, {key:2,val:'addFamily'}, {key:3,val:'deleteFamily'}, {key:4,val:'moveFamily'},
+]
 
 
 export default {
@@ -86,5 +94,9 @@ export default {
     contentType,
     orgLevel,
     permission,
-    examineType
+    examineType,
+    examineStatus,
+    tab,
+    familyType
+
 }
