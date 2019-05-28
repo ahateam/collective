@@ -89,7 +89,7 @@
                 offset:0,
 
 
-                isActive:1,
+                isActive:0,
                 type:1,
 
 
@@ -124,9 +124,16 @@
             },
             userFilter(row,col,val){
                 let arr = JSON.parse(val).oldData
+                console.log(arr)
                 let str =''
                 for(let i =0;i<arr.length;i++){
-                    str = str+';'+arr[i].realName
+                    if(Array.isArray(arr[i])){
+                        for(let j=0;j<arr[i].length;j++){
+                            str = str+';'+arr[i][j].realName
+                        }
+                    }else {
+                        str = str+';'+arr[i].realName
+                    }
                 }
                 str = str.substr(1)
                 return str
@@ -189,11 +196,8 @@
                 this.getExamine(cnt)
             },
 
-
-
         },
         mounted(){
-
             let cnt={
                 orgId: localStorage.getItem('orgId'), // Long 组织编号
                 type: this.type, // Byte 类型
@@ -202,9 +206,6 @@
                 offset: this.offset, // Integer
             }
             this.getExamine(cnt)
-
-
-
         }
     }
 </script>

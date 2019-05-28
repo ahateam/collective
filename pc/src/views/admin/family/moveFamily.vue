@@ -218,23 +218,23 @@
             </el-col>
         </el-row>
 
-        <el-dialog title="移入成员到家庭户" :visible.sync="removeModalShow">
+        <!--<el-dialog title="移入成员到家庭户" :visible.sync="removeModalShow">-->
 
-            <el-transfer
-                    v-model="rightArr"
-                    :props="{
-                      key: 'id',
-                      label: 'realName'
-                    }"
-                    :titles="['原始家庭户1','原始家庭户2' ]"
-                    :data="leftArr">
-            </el-transfer>
+            <!--<el-transfer-->
+                    <!--v-model="rightArr"-->
+                    <!--:props="{-->
+                      <!--key: 'id',-->
+                      <!--label: 'realName'-->
+                    <!--}"-->
+                    <!--:titles="['原始家庭户1','原始家庭户2' ]"-->
+                    <!--:data="leftArr">-->
+            <!--</el-transfer>-->
 
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="removeModalShow = false">取 消</el-button>
-                <el-button type="primary" @click="removeBtn">确 定</el-button>
-            </div>
-        </el-dialog>
+            <!--<div slot="footer" class="dialog-footer">-->
+                <!--<el-button @click="removeModalShow = false">取 消</el-button>-->
+                <!--<el-button type="primary" @click="removeBtn">确 定</el-button>-->
+            <!--</div>-->
+        <!--</el-dialog>-->
     </div>
 </template>
 
@@ -250,10 +250,10 @@
                 newData: [],     //现在新增的户的数据
                 removeModalShow: false,
 
-                //穿梭框所需数组
-                allArr:[],  //全部数据
-                leftArr:[], //左侧数据
-                rightArr:[],    //右侧数据
+
+                editFamilyMaster:'',    //是否修改户主
+                pastDataSignArr:[], //带标记的家庭户1数据
+                pastData1SignArr:[],    //带标记的家庭户2数据
             }
         },
         methods:{
@@ -266,16 +266,110 @@
                     }else{
                         arr = []
                     }
+                    for(let i=0;i<arr.length;i++){
+                        arr[i].userTab =''
+                    }
+
                     if(index == 0){
-                        this.oldData[0] =arr
-                        this.pastData = arr
+                        this.oldData[0] =arr.concat()
+                        this.pastData = arr.concat()
+                        this.pastDataSignArr = arr.concat()
+
                     }else if(index==1){
-                        this.oldData[1] =arr
-                        this.pastData1 = arr
+                        this.oldData[1] =arr.concat()
+                        this.pastData1 = arr.concat()
+
+                        this.pastData1SignArr = arr.concat()
+
+                        console.log(this.pastData1SignArr)
                     }
                 })
 
             },
+            //户2移除标记
+            moveFamilySign2(row){
+                let obj = JSON.parse(JSON.stringify(row))
+                let key = -1    //获取当前数据在标记数组中的下标
+                let signKey = -1    //查看当前数据是否是 逆向操作（移入 移除）
+                for(let i=0;i<this.pastData1SignArr.length;i++){
+                    if(obj.id == this.pastData1SignArr[i].id){
+                        key = i
+                        if(this.pastData1SignArr[i].userTab == this.$constData.tab[1].key){
+                            signKey =i
+                        }
+                    }
+                }
+
+                if(signKey == -1){
+                    this.pastData1SignArr[key].userTab = this.$constData.tab[0].key
+                }else{
+                    this.pastData1SignArr.splice(key,1)
+                }
+            },
+            //户1移入标记
+            addFamilySign1(row){
+                let obj = JSON.parse(JSON.stringify(row))
+                let familySign = -1  //原来没有被移除过
+                let familySignKey = -1
+
+                for(let i=0;i<this.pastDataSignArr.length;i++){
+                    if(obj.id == this.pastDataSignArr[i].id){
+                        familySignKey = i
+                        if(this.pastDataSignArr[i].userTab == this.$constData.tab[0].key){
+                            familySign = i
+                        }
+                    }
+                }
+                if(familySign == -1){
+                    obj.userTab = this.$constData.tab[1].key
+                    this.pastDataSignArr.push(obj)
+                }else{
+                    this.pastDataSignArr[familySign].userTab = ''
+                }
+            },
+            //户1移除标记
+            moveFamilySign1(row){
+                let obj = JSON.parse(JSON.stringify(row))
+                let key = -1    //获取当前数据在标记数组中的下标
+                let signKey = -1    //查看当前数据是否是 逆向操作（移入 移除）
+                for(let i=0;i<this.pastDataSignArr.length;i++){
+                    if(obj.id == this.pastDataSignArr[i].id){
+                        key = i
+                        if(this.pastDataSignArr[i].userTab == this.$constData.tab[1].key){
+                            signKey =i
+                        }
+                    }
+                }
+                if(signKey == -1){
+                    this.pastDataSignArr[key].userTab = this.$constData.tab[0].key
+                }else{
+                    this.pastDataSignArr.splice(key,1)
+                }
+
+
+            },
+            //户2移入标记
+            addFamilySign2(row){
+                let obj = JSON.parse(JSON.stringify(row))
+                let familySign = -1  //原来没有被移除过
+                let familySignKey = -1
+
+                for(let i=0;i<this.pastData1SignArr.length;i++){
+                    if(obj.id == this.pastData1SignArr[i].id){
+                        familySignKey = i
+                        if(this.pastData1SignArr[i].userTab == this.$constData.tab[0].key){
+                            familySign = i
+                        }
+                    }
+                }
+                if(familySign == -1){
+                    obj.userTab = this.$constData.tab[1].key
+                    this.pastData1SignArr.push(obj)
+                }else{
+                    this.pastData1SignArr[familySign].userTab = ''
+                }
+            },
+
             changeFmaily(key){
                 this.$store.state.family.familyKey = key
                 this.$router.push({
@@ -287,105 +381,104 @@
                     }
                 })
             },
-            removeBtn(row,key){
 
-              if(key == 0){
-                    if(this.pastData.length >0){
+            //移户操作
+            removeBtn(row,key){
+                if(key == 0){   //户2移到户1
+                    if(this.pastData.length >0){ //户1至少有一个用户
+                        // console.log(this.pastData1SignArr)
                         let _index = -1
                         for(let i=0;i<this.pastData1.length;i++){
                             if(row.id == this.pastData1[i].id){
-                                _index =i
+                                _index = i
                             }
                         }
+                        //户2移除标记
+                        this.moveFamilySign2(row)
                         let obj = this.pastData1[_index]
                         obj.familyMaster = this.pastData[0].familyMaster
                         obj.familyNumber = this.pastData[0].familyNumber
                         obj.shareCerNo = this.pastData[0].shareCerNo
                         this.pastData.push(obj)
                         this.pastData1.splice(_index,1)
+                        //户1的移入标记
+                        this.addFamilySign1(row)
                     }else{
                         let _index = -1
                         for(let i=0;i<this.pastData1.length;i++){
                             if(row.id == this.pastData1[i].id){
-                                _index =i
+                                _index = i
                             }
                         }
-                        this.pastData.push(row)
+                        //户2移除标记
+                        this.moveFamilySign2(row)
+                        let obj = this.pastData1[_index]
+                        this.pastData.push(obj)
                         this.pastData1.splice(_index,1)
+                        //户1的移入标记
+                        this.addFamilySign1(row)
                     }
-              }else if(key == 1){
-                  if(this.pastData1.length >0){
-                      let _index = -1
-                      for(let i=0;i<this.pastData.length;i++){
-                          if(row.id == this.pastData[i].id){
-                              _index =i
-                          }
-                      }
-                      let obj = this.pastData[_index]
-                      obj.familyMaster = this.pastData1[0].familyMaster
-                      obj.familyNumber = this.pastData1[0].familyNumber
-                      obj.shareCerNo = this.pastData1[0].shareCerNo
-                      this.pastData1.push(obj)
-                      this.pastData.splice(_index,1)
-                  }else{
-                      let _index = -1
-                      for(let i=0;i<this.pastData.length;i++){
-                          if(row.id == this.pastData[i].id){
-                              _index =i
-                          }
-                      }
-                      this.pastData1.push(row)
-                      this.pastData.splice(_index,1)
-                  }
+                }else if(key == 1){ //户1移到户2
+                    if(this.pastData1.length>0){
+                        let _index = -1
+                        for(let i=0;i<this.pastData.length;i++){
+                            if(row.id == this.pastData[i].id){
+                                _index = i
+                            }
+                        }
+                        this.moveFamilySign1(row)
+                        let obj = this.pastData[_index]
+                        obj.familyMaster = this.pastData1[0].familyMaster
+                        obj.familyNumber = this.pastData1[0].familyNumber
+                        obj.shareCerNo = this.pastData1[0].shareCerNo
+                        this.pastData1.push(obj)
+                        this.pastData.splice(_index,1)
+                        this.addFamilySign2(row)
 
-              }
+                    }else{
+                        let _index = -1
+                        for(let i=0;i<this.pastData.length;i++){
+                            if(row.id == this.pastData[i].id){
+                                _index = i
+                            }
+                        }
+                        this.moveFamilySign1(row)
+                        let obj = this.pastData[_index]
+                        this.pastData1.push(obj)
+                        this.pastData.splice(_index,1)
+                        this.addFamilySign2(row)
+                    }
+
+                }
             },
-            // //穿梭框数据初始化
-            // tranShowBtn(){
-            //     this.allArr =  []
-            //     this.leftArr = []
-            //     this.rightArr = []
-            //     if(this.pastData.length ==0 || this.pastData1.length == 0){
-            //         this.$message.error('请先选择两个不同的家庭户进行移户操作')
-            //     }else{
-            //         this.allArr = this.pastData.concat(this.pastData1)
-            //         console.log(this.allArr)
-            //         //穿梭框左侧数据
-            //         for(let i =0;i<this.allArr.length;i++){
-            //             let obj = {
-            //                 id:this.allArr[i].id,
-            //                 realName:this.allArr[i].realName
-            //             }
-            //             this.leftArr.push(obj)
-            //         }
-            //         //穿梭框右侧数据
-            //         for(let i =0;i<this.pastData1.length;i++){
-            //             this.rightArr.push(this.pastData1[i].id)
-            //         }
-            //         this.removeModalShow = true
-            //     }
-            //
-            //
-            //
-            // },
-            // //根据穿梭框改动新数据
-            // removeBtn(){
-            //     let arr = []
-            //     let arr1 = []
-            //     console.log(this.rightArr)
-            //     for(let i=0;i<this.allArr.length;i++){
-            //         let index = false
-            //         for(let j=0;j<this.rightArr.length;j++){
-            //             if(this.allArr[i].id== this.rightArr[j]){
-            //                     index =true
-            //             }
-            //         }
-            //
-            //     }
-            // },
+
 
             //提交最终值
             submitBtn(){
+                //比较新旧数据 打标记
+                // 户1移除标记
+                let data = {}
+                data.ext={familyOperate:this.$constData.familyType[4].key,editHouseholder:this.editFamilyMaster}
+                let arr =[]
+                arr.push(this.pastDataSignArr)
+                arr.push(this.pastData1SignArr)
+                data.newData = arr
+                data.oldData = this.oldData
+                let cnt = {
+                    orgId: localStorage.getItem('orgId'),
+                    data:data,
+                    type:this.$constData.examineType[1].key,
+                    remark:'无'
+                }
+                console.log(cnt);
+                this.$api.createExamine(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('申请审批成功，等待组织或者区级审批')
+                    }else{
+                        this.$message.error('申请审批失败')
+                    }
+                })
+                this.$router.push('/examine')
 
             }
         },
@@ -425,6 +518,8 @@
                 }
                 this.getFamilyUserByFamilyNumber(cnt,1)
             }
+
+
 
         }
 
