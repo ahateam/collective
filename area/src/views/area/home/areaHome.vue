@@ -44,7 +44,7 @@
                     </div>
 
                 </el-header>
-                <el-main style="background: #f0f2f5;height: 100vh;overflow-y: auto;padding-bottom:100px; ">
+                <el-main style="background: #f0f2f5;height: 500px;overflow-y: auto; ">
                     <router-view v-if="isRouterActive"></router-view>
                 </el-main>
             </el-container>
@@ -125,6 +125,7 @@
         components: {},
         data() {
             return {
+                mainHeight:{},
                 showActive: false,
                 showActive1: true,
                 tableData: [],
@@ -330,12 +331,21 @@
             }
             this.getUserORGs(cnt)
             loading.close()
+        },
+        created(){
+            let winHeight = document.body.clientWidth-100
+            this.mainHeight={
+                height:winHeight+'px'
+            }
         }
 
     }
 </script>
 
 <style scoped lang="scss">
+    .center-box{
+        height: 100vh;
+    }
     .slide-box {
         width: 200px;
         background: #545c64;

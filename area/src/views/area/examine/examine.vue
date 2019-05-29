@@ -4,21 +4,17 @@
             <el-col :span="24">
                 <div class="tab-box">
                     <div v-for="(item,index) in examineType" :key="index" style="float: left">
-                        <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="changeTypeBtn(item.key)" v-if="type == item.key">{{item.val}}</el-tag>
-                        <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click.native="changeTypeBtn(item.key)" v-if="type != item.key">{{item.val}}</el-tag>
-
+                        <el-tag style="margin-left: 20px;cursor: pointer;" @click="changeTypeBtn(item.key)" v-if="type == item.key">{{item.val}}</el-tag>
+                        <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click="changeTypeBtn(item.key)" v-if="type != item.key">{{item.val}}</el-tag>
                     </div>
-
                 </div>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
                 <div class="tab-box">
                     <div v-for="(item,index) in examineStatus" :key="index" style="float: left">
-                        <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="activeBtn(item.key)" v-if="isActive == item.key">{{item.val}}</el-tag>
-                        <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click.native="activeBtn(item.key)" v-if="isActive != item.key">{{item.val}}</el-tag>
+                        <el-tag style="margin-left: 20px;cursor: pointer;" @click="activeBtn(item.key)" v-if="isActive == item.key">{{item.val}}</el-tag>
+                        <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click="activeBtn(item.key)" v-if="isActive != item.key">{{item.val}}</el-tag>
                     </div>
-
-
                 </div>
             </el-col>
         </el-row>
@@ -54,7 +50,9 @@
                     <el-table-column
                             label="操作">
                         <template slot-scope="scope">
-                            <el-button @click="infoBtn(scope.row)" type="text" size="small">开始审批</el-button>
+                            <el-button @click="infoBtn(scope.row)" type="text" size="small" v-if="scope.row.status==1">开始审批</el-button>
+                            <el-button @click="infoBtn(scope.row)" type="text" size="small" v-if="scope.row.status==2">更改证件</el-button>
+                            <el-button @click="getShareBtn(scope.row)" type="primary" size="mini" v-if="scope.row.status==5">已取证</el-button>
                             <!--<el-button type="text" size="small" v-if="scope.row.status < 2" @click="delExamine(scope.row)"><span style="color: #f60;">撤回审批</span></el-button>-->
                         </template>
                     </el-table-column>
@@ -91,6 +89,7 @@
                 isActive:1,
                 type:1,
 
+                activeRow:''
 
             }
         },
@@ -102,12 +101,12 @@
                     }else{
                         this.tableData = []
                     }
+                    console.log(this.tableData)
                     if(this.tableData.length<this.count){
                         this.pageOver = true
                     }else{
                         this.pageOver = false
                     }
-
                 })
             },
 
@@ -121,8 +120,7 @@
                 }
             },
             userFilter(row,col,val){
-                let arr = JSON.parse(val).oldData
-                console.log(arr)
+                let arr = JSON.parse(JSON.stringify(JSON.parse(val).oldData))
                 let str =''
                 for(let i =0;i<arr.length;i++){
                     if(Array.isArray(arr[i])){
@@ -139,6 +137,7 @@
             timeFilter(row,col,val){
                 let  timer = new Date(val).toLocaleDateString()+ ' '+ new Date(val).toLocaleTimeString('chinese',{hour12:false})
                 return timer
+
             },
             statusFilter(row,col,val){
                 for(let i=0;i<this.$constData.examineStatus.length;i++){
@@ -147,11 +146,27 @@
                     }
                 }
             },
+            //已取证
+            getShareBtn(row){
 
-            //撤回审批
-            delExamine(row){
-                console.log(row)
+                this.$confirm('是否将此家庭户的审批状态更改为已经取证？')
+                    .then(_ => {
+                        let cnt={
+                            examineId: row.id, // Long 任务编号
+                            status: this.$constData.examineStatus[6].key, // Byte 状态
+                        }
+                        this.$area.editExamineStatus(cnt,(res)=>{
+                            if(res.data.rc == this.$util.RC.SUCCESS){
+                                this.$message.success('操作成功')
+                                this.changeList()
+                            }else{
+                                this.$message.error('操作失败')
+                            }
+                        })
+                    })
+                    .catch(_ => {});
             },
+
             //审批详情
             infoBtn(row){
                 if(row.type == 1){
@@ -167,25 +182,26 @@
             },
 
             changeList(){
+
                 let cnt={
                     districtId: localStorage.getItem('orgId'), // Long 组织编号
                     type: this.type, // Byte 类型
                     status: this.isActive, // Byte 状态
                     count: this.count, // Integer
-                    offset: this.offset, // Integer
+                    offset: (this.page-1)*this.count, // Integer
                 }
                 this.getExamineByDisId(cnt)
 
             },
 
             changeTypeBtn(type){
-                this.type = type
                 this.page = 1
+                this.type = type
                 this.changeList()
             },
             activeBtn(active){
-                this.isActive = active
                 this.page = 1
+                this.isActive = active
                 this.changeList()
             },
 

@@ -87,6 +87,12 @@ const  menu =[
         ]
     },
     {
+        path:'/share',
+        title:'股权变更',
+        icon:'icon-toupiao1',
+        child:[]
+    },
+    {
         path:'/poll',
         title:'投票管理',
         icon:'icon-toupiao1',
@@ -100,14 +106,6 @@ const  menu =[
             {
                 path:'/examine',
                 title:'审批记录'
-            },
-            {
-                path:'/examineSeparateList',
-                title:'分户管理审批',
-            },
-            {
-                path:'/examineSeparate',
-                title:'股权变更审批',
             },
         ]
     },

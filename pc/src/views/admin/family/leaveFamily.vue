@@ -181,7 +181,7 @@
 
                 resArr: {},      //最终的提交数据
 
-
+               editFamilyMaster:false,
 
             }
         },
@@ -212,72 +212,97 @@
                         dataArr.push(this.pastData)
                         dataArr = dataArr.concat(this.newData)
                         let key = -1
-
-
-                        for (let i = 0; i < this.newData.length; i++) {
-                            for (let j = 0; j < this.newData[i].length; j++) {
-                                if (this.newData[i][j].familyMaster == '') {
+                        let sameKey = []
+                        console.log(dataArr)
+                        for (let i = 0; i < dataArr.length; i++) {
+                            let master= dataArr[i][0].familyMaster
+                            sameKey[i] = -1
+                            for (let j = 0; j < dataArr[i].length; j++) {
+                                if (dataArr[i][j].familyMaster == '') {
                                     //如果有户主没有设置
                                     key = i
                                 }
+                                //户主字段有值 但是户主被移到另外的组织了
+                                if(master ==dataArr[i][j].realName){
+                                    sameKey[i] = j    //找到户主
+
+                                }
+
                             }
                         }
+                        console.log(sameKey)
                         if (key != -1) {
-                            this.$message.error('请设置家庭户 ' + parseInt(key + 1) + '的户主')
+                            this.$message.error('请设置家庭户 ' + key + '的户主')
                         } else {
-                            for (let i = 0; i < dataArr.length; i++) {
-                                if (dataArr[i].length == 0) {
-                                    dataArr.splice(i, 1)
+                            let num = -1
+                            for(let i=0;i<sameKey.length;i++){
+                                if(sameKey[i] == -1){       //该户没有找到户主
+                                    num = i
                                 }
                             }
-                            this.resArr.oldData = this.oldData
-                            this.resArr.newData = dataArr
-                        }
+                            if(num == -1){
+                                for (let i = 0; i < dataArr.length; i++) {
+                                    if (dataArr[i].length == 0) {
+                                        dataArr.splice(i, 1)
+                                    }
+                                }
+                                this.resArr.oldData = this.oldData
+                                this.resArr.newData = dataArr
 
-                        //原数据打标记
-                        let pastArr = this.resArr.newData[0]
-                        let newArr =this.oldData   //有标记的原数据
-                        for(let i=0;i<newArr.length;i++){
-                            let isExist = false
-                            for(let j=0;j<pastArr.length;j++){
-                                if(newArr[i].id == pastArr[j].id){
-                                    isExist = true
+
+                                //原数据打标记
+                                let pastArr = this.resArr.newData[0]
+                                let newArr =this.oldData   //有标记的原数据
+                                for(let i=0;i<newArr.length;i++){
+                                    let isExist = false
+                                    for(let j=0;j<pastArr.length;j++){
+                                        if(newArr[i].id == pastArr[j].id){
+                                            isExist = true
+                                        }
+                                    }
+                                    if(isExist == true){
+                                        newArr[i].userTab = ''
+                                    }else{
+                                        newArr[i].userTab = this.$constData.tab[0].key
+                                    }
+
                                 }
-                            }
-                            if(isExist == true){
-                                newArr[i].userTab = ''
+                                this.resArr.newData[0] = newArr
+                                //新数据打标记(不包含第一个原数据家庭户)
+                                for(let i=1; i<this.resArr.newData.length;i++){
+                                    for(let j=0;j<this.resArr.newData[i].length;j++){
+                                        this.resArr.newData[i][j].userTab = this.$constData.tab[1].key
+                                    }
+                                }
+                                //组带操作的数据(是否修改户主与操作类型)
+                                let isEditFamilyMaster = ''
+                                if(this.oldData[0].familyMaster != this.pastData[0].familyMaster){
+                                    isEditFamilyMaster = 1
+                                }
+                                let obj = {
+                                    familyOperate:this.$constData.familyType[1].key,
+                                    editHouseholder:isEditFamilyMaster
+                                }
+                                this.resArr.ext = obj
+                                let cnt = {
+                                    orgId: localStorage.getItem('orgId'), // Long 组织编号
+                                    data: this.resArr, // String 修改数据  {oldData:[....],newData:[.....]}
+                                    type: this.$constData.examineType[1].key, // Byte 审核类型 分户申请
+                                    remark:'无'
+                                }
+                                this.$api.createExamine(cnt,(res)=>{
+                                    if(res.data.rc == this.$util.RC.SUCCESS){
+                                        this.$message.success('申请审批成功，等待组织或者区级审批')
+                                    }else{
+                                        this.$message.error('申请审批失败')
+                                    }
+                                })
+                                this.$router.push('/examine')
+
                             }else{
-                                newArr[i].userTab = this.$constData.tab[0].key
-                            }
-
-                        }
-                        this.resArr.newData[0] = newArr
-
-                        //新数据打标记(不包含第一个原数据家庭户)
-                        for(let i=1; i<this.resArr.newData.length;i++){
-                            for(let j=0;j<this.resArr.newData[i].length;j++){
-                                this.resArr.newData[i][j].userTab = this.$constData.tab[1].key
+                                this.$message.error('请将所有家庭户的户主设置正确，户主必须存在该家庭户中')
                             }
                         }
-
-                        //组带操作的数据(是否修改户主与操作类型)
-                        let isEditFamilyMaster = ''
-                        if(this.oldData[0].familyMaster != this.pastData[0].familyMaster){
-                            isEditFamilyMaster = 1
-                        }
-                        let obj = {
-                            familyOperate:this.$constData.familyType[1].key,
-                            editHouseholder:isEditFamilyMaster
-                        }
-                        this.resArr.ext = obj
-                        let cnt = {
-                            orgId: localStorage.getItem('orgId'), // Long 组织编号
-                            data: this.resArr, // String 修改数据  {oldData:[....],newData:[.....]}
-                            type: this.$constData.examineType[1].key, // Byte 审核类型 分户申请
-                        }
-                    console.log(cnt)
-
-
                     })
                     .catch(_ => {
                     });

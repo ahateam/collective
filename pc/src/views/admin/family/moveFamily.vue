@@ -251,7 +251,6 @@
                 removeModalShow: false,
 
 
-                editFamilyMaster:'',    //是否修改户主
                 pastDataSignArr:[], //带标记的家庭户1数据
                 pastData1SignArr:[],    //带标记的家庭户2数据
             }
@@ -286,6 +285,13 @@
                 })
 
             },
+            //设置户主
+            setPastMasterBtn(row){
+                for (let i = 0; i < this.pastData.length; i++) {
+                    this.pastData[i].familyMaster = row.realName
+                }
+            },
+
             //户2移除标记
             moveFamilySign2(row){
                 let obj = JSON.parse(JSON.stringify(row))
@@ -395,14 +401,16 @@
                         }
                         //户2移除标记
                         this.moveFamilySign2(row)
-                        let obj = this.pastData1[_index]
+                        let obj = JSON.parse(JSON.stringify(this.pastData1[_index]))
+
                         obj.familyMaster = this.pastData[0].familyMaster
                         obj.familyNumber = this.pastData[0].familyNumber
                         obj.shareCerNo = this.pastData[0].shareCerNo
                         this.pastData.push(obj)
                         this.pastData1.splice(_index,1)
                         //户1的移入标记
-                        this.addFamilySign1(row)
+                        this.addFamilySign1(obj)
+
                     }else{
                         let _index = -1
                         for(let i=0;i<this.pastData1.length;i++){
@@ -412,11 +420,12 @@
                         }
                         //户2移除标记
                         this.moveFamilySign2(row)
-                        let obj = this.pastData1[_index]
+                        let obj = JSON.parse(JSON.stringify(this.pastData1[_index]))
                         this.pastData.push(obj)
                         this.pastData1.splice(_index,1)
                         //户1的移入标记
-                        this.addFamilySign1(row)
+                        this.addFamilySign1(obj)
+
                     }
                 }else if(key == 1){ //户1移到户2
                     if(this.pastData1.length>0){
@@ -427,13 +436,15 @@
                             }
                         }
                         this.moveFamilySign1(row)
-                        let obj = this.pastData[_index]
+                        let obj = JSON.parse(JSON.stringify(this.pastData[_index]))
                         obj.familyMaster = this.pastData1[0].familyMaster
                         obj.familyNumber = this.pastData1[0].familyNumber
                         obj.shareCerNo = this.pastData1[0].shareCerNo
+
                         this.pastData1.push(obj)
+
                         this.pastData.splice(_index,1)
-                        this.addFamilySign2(row)
+                        this.addFamilySign2(obj)
 
                     }else{
                         let _index = -1
@@ -443,10 +454,11 @@
                             }
                         }
                         this.moveFamilySign1(row)
-                        let obj = this.pastData[_index]
+                        let obj = JSON.parse(JSON.stringify(this.pastData[_index]))
                         this.pastData1.push(obj)
                         this.pastData.splice(_index,1)
-                        this.addFamilySign2(row)
+                        this.addFamilySign2(obj)
+
                     }
 
                 }
@@ -458,7 +470,11 @@
                 //比较新旧数据 打标记
                 // 户1移除标记
                 let data = {}
-                data.ext={familyOperate:this.$constData.familyType[4].key,editHouseholder:this.editFamilyMaster}
+                let isEditFamilyMaster = ''
+                if(this.oldData[0].familyMaster != this.pastData[0].familyMaster){
+                    isEditFamilyMaster = 1
+                }
+                data.ext={familyOperate:this.$constData.familyType[4].key,editHouseholder:isEditFamilyMaster}
                 let arr =[]
                 arr.push(this.pastDataSignArr)
                 arr.push(this.pastData1SignArr)

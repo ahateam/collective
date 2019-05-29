@@ -46,9 +46,6 @@ const assetImportRes =()=>import('./views/admin/assets/assetImportRes')
 const assetErrorData =()=>import('./views/admin/assets/assetErrorData')
 
 const examine =()=>import('./views/admin/examine/examine')
-const examineSeparate =()=>import('./views/admin/examine/examineSeparate')
-const examineSeparateList =()=>import('./views/admin/examine/examineSeparateList')
-const examineShare = ()=>import('./views/admin/examine/examineShare')
 
 //分户管理
 const familyList =()=>import('./views/admin/family/familyList')
@@ -57,6 +54,9 @@ const addFamily = ()=>import('./views/admin/family/addFamily')
 const moveFamily =()=>import('./views/admin/family/moveFamily')
 const deleteFamily = ()=>import('./views/admin/family/deleteFamily')
 const createFamily = ()=>import('./views/admin/family/createFamily')
+//股权变更
+const share =()=>import('./views/admin/share/share')
+
 
 //演示系统
 const demoDashboard = ()=> import( './views/demo/home/dashboard')
@@ -251,21 +251,6 @@ export default new Router({
                     component:examine
                 },
                 {
-                    path:'/examineSeparate',
-                    name:'examineSeparate',
-                    component:examineSeparate
-                },
-                {
-                    path:'/examineSeparateList',
-                    name:'examineSeparateList',
-                    component:examineSeparateList
-                },
-                {
-                    path:'/examineShare',
-                    name:'examineShare',
-                    component:examineShare
-                },
-                {
                     path:'/asset',
                     name:'asset',
                     component:asset
@@ -324,6 +309,12 @@ export default new Router({
                     path:'/createFamily',
                     name:'createFamily',
                     component:createFamily
+                },
+
+                {
+                    path:'/share',
+                    name:'share',
+                    component:share
                 },
 
                 //演示系统

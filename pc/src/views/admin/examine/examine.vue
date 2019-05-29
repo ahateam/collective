@@ -3,8 +3,8 @@
         <el-row class="row-box" >
                 <el-col :span="24">
                     <div class="tab-box">
-                        <el-tag style="cursor: pointer;" @click.native="changeTypeBtn(1)" v-if="type == 1">分户申请</el-tag>
-                        <el-tag style="cursor: pointer;" type="info" @click.native="changeTypeBtn(1)" v-if="type != 1">分户申请</el-tag>
+                        <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="changeTypeBtn(1)" v-if="type == 1">分户申请</el-tag>
+                        <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click.native="changeTypeBtn(1)" v-if="type != 1">分户申请</el-tag>
                         <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="changeTypeBtn(2)" v-if="type == 2">股权变更</el-tag>
                         <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click.native="changeTypeBtn(2)" v-if="type != 2">股权变更</el-tag>
 
@@ -12,16 +12,10 @@
                 </el-col>
                 <el-col :span="24" style="margin-top: 10px">
                     <div class="tab-box">
-                        <el-tag style="cursor: pointer;" @click.native="activeBtn(0)" v-if="isActive == 0">等待组织审批人审批</el-tag>
-                        <el-tag style="cursor: pointer;" type="info" @click.native="activeBtn(0)" v-if="isActive != 0">等待组织审批人审批</el-tag>
-                        <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="activeBtn(1)" v-if="isActive == 1">等待区级审批</el-tag>
-                        <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click.native="activeBtn(1)" v-if="isActive != 1">等待区级审批</el-tag>
-                        <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="activeBtn(2)" v-if="isActive == 2">开始制证</el-tag>
-                        <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click.native="activeBtn(2)" v-if="isActive != 2">开始制证</el-tag>
-                        <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="activeBtn(3)" v-if="isActive == 3">制证成功</el-tag>
-                        <el-tag type="info" style="margin-left: 20px;cursor: pointer;" @click.native="activeBtn(3)" v-if="isActive != 3">制证成功</el-tag>
-                        <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="activeBtn(4)" v-if="isActive == 4">制证失败</el-tag>
-                        <el-tag type="info" style="margin-left: 20px;cursor: pointer;" @click.native="activeBtn(4)" v-if="isActive != 4">制证失败</el-tag>
+                        <div v-for="(item,index) in tabList" :key="index" style="float: left;">
+                            <el-tag style="margin-left: 20px;cursor: pointer;" @click.native="activeBtn(item.key)" v-if="isActive == item.key">{{item.val}}</el-tag>
+                            <el-tag style="margin-left: 20px;cursor: pointer;" type="info" @click.native="activeBtn(item.key)" v-if="isActive != item.key">{{item.val}}</el-tag>
+                        </div>
                     </div>
                 </el-col>
         </el-row>
@@ -88,7 +82,7 @@
                 count:10,
                 offset:0,
 
-
+                tabList:this.$constData.examineStatus,
                 isActive:0,
                 type:1,
 
@@ -115,7 +109,6 @@
 
 
             typeFilter(row,col,val){
-                console.log(val)
                 if(val == '1'){
                     return '分户审批'
                 }else if(val == '2'){
@@ -124,7 +117,6 @@
             },
             userFilter(row,col,val){
                 let arr = JSON.parse(val).oldData
-                console.log(arr)
                 let str =''
                 for(let i =0;i<arr.length;i++){
                     if(Array.isArray(arr[i])){
