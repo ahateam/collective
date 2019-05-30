@@ -46,6 +46,7 @@ const assetImportRes =()=>import('./views/admin/assets/assetImportRes')
 const assetErrorData =()=>import('./views/admin/assets/assetErrorData')
 
 const examine =()=>import('./views/admin/examine/examine')
+const examineInfo=()=>import('./views/admin/examine/examineInfo')
 
 //分户管理
 const familyList =()=>import('./views/admin/family/familyList')
@@ -249,6 +250,11 @@ export default new Router({
                     path:'/examine',
                     name:'examine',
                     component:examine
+                },
+                {
+                    path:'/examineInfo',
+                    name:'examineInfo',
+                    component:examineInfo
                 },
                 {
                     path:'/asset',

@@ -102,7 +102,6 @@
                     }else{
                         this.pageOver = false
                     }
-
                 })
             },
 
@@ -144,13 +143,33 @@
 
             //撤回审批
             delExamine(row){
-              console.log(row)
-
-
+                this.$confirm('确认撤回当前审批？再次审批需重新申请')
+                    .then(_ => {
+                        let cnt = {
+                            examineId: row.id, // Long 任务编号
+                        }
+                        this.$api.delExamine(cnt,(res)=>{
+                            if(res.data.rc == this.$util.RC.SUCCESS){
+                                this.$message.success('操作成功')
+                            }else{
+                                this.$message.error('操作失败')
+                            }
+                            this.changeList()
+                        })
+                    })
+                    .catch(_ => {});
             },
             //审批详情
             infoBtn(row){
-                console.log(row)
+                if(row.type == 1){
+                    this.$router.push({
+                        path:'/examineInfo',
+                        name:'examineInfo',
+                        params:{
+                            info:row
+                        }
+                    })
+                }
             },
 
             changeList(){

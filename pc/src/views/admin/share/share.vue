@@ -1,15 +1,26 @@
 <template>
     <div>
-        股权变更
+        啦啦啦
     </div>
 </template>
 
 <script>
     export default {
-        name: "share"
+        name: "share",
+        data(){
+            return{
+
+            }
+        },
+        methods:{
+
+        },
+        mounted(){
+
+        }
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>
