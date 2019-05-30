@@ -8,12 +8,7 @@
         </el-row>
 
         <el-row class="row-box1" >
-            <el-col :span="24">
-                <el-button type="primary" size="small"> - 移除户成员</el-button>
-            </el-col>
-            <p style="clear: both"></p>
-
-            <el-row class="row-box1">
+            <el-row class="row-box1" style="margin-top: 0px;padding-top:0px; ">
 
                 <el-row>
                     <el-col :span="24">
@@ -53,26 +48,90 @@
                                         prop="familyMaster"
                                         label="户主姓名">
                                 </el-table-column>
-                            </el-table>
-                            <el-table-column
-                                    label="操作"
-                                    width="200">
-                                <template slot-scope="scope">
-                                    <el-button @click="returnBtn(scope.row,index)" type="text" size="small"><span
-                                            style="color: #f60;font-size: 20px;padding: 0 20px;line-height: 20px"
-                                            class="iconfont icon-quxiao2"></span></el-button>
-                                    <el-button @click="setMasterBtn(scope.row,index)" type="text" size="small"
-                                               style="font-size: 16px;line-height: 20px">设置为户主
-                                    </el-button>
+                                <el-table-column
+                                        label="操作"
+                                        width="200">
+                                    <template slot-scope="scope">
+                                        <!--<el-button @click="delSeparateBtn(scope.row)" type="text" size="small"><span-->
+                                        <!--style="color: #f44;font-size: 20px"-->
+                                        <!--class="iconfont icon-quxiao1"></span></el-button>-->
+                                        <el-button @click="deleteguy" type="text" size="small"
+                                                   style="font-size: 16px;line-height: 20px">移除该成员
+                                        </el-button>
 
-                                </template>
-                            </el-table-column>
+                                    </template>
+                                </el-table-column>
+
+                            </el-table>
                         </template>
                     </el-col>
                 </el-row>
 
             </el-row>
 
+        </el-row>
+
+        <el-row class="row-box1" v-for="(item,index) in newData" :key="index">
+            <el-row>
+                <el-col :span="24">
+                      <span class="table-title">
+                            家庭户 {{index+1}}
+                      </span>
+                    <span class="table-master">
+                          家庭户主: <span v-if="item.length>0">{{item[0].familyMaster}}</span>
+                      </span>
+                    <span class="table-del" @click="delSeparate(item,index)">
+                            <i class="iconfont icon-19icon"></i>
+                    </span>
+                    <span class="table-add">
+                        <el-button type="success" size="mini" @click="removeModal(index)">移入成员</el-button>
+                    </span>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <template>
+                        <el-table
+                                :data="item"
+                                border
+                                style="width: 100%">
+                            <el-table-column
+                                    prop="familyNumber"
+                                    label="户序号">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="shareCerNo"
+                                    label="股权证编号">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="realName"
+                                    label="用户名">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="idNumber"
+                                    label="身份证">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="familyMaster"
+                                    label="户主姓名">
+                            </el-table-column>
+                            <el-table-column
+                                    label="操作"
+                                    width="200">
+                                <template slot-scope="scope">
+                                    <el-button @click="" type="text" size="small"><span
+                                            style="color: #f60;font-size: 20px;padding: 0 20px;line-height: 20px"
+                                            class="iconfont icon-quxiao2"></span></el-button>
+                                    <el-button @click="deleteguy" type="text" size="small"
+                                               style="font-size: 16px;line-height: 20px">移除该成员
+                                    </el-button>
+
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </template>
+                </el-col>
+            </el-row>
         </el-row>
 
         <el-row class="row-box1">
@@ -134,5 +193,12 @@
         line-height: 40px;
         color: #666;
         font-size: 16px
+    }
+
+    .table-master {
+        font-size: 14px;
+        margin-left: 20px;
+        line-height: 40px;
+        color: #666;
     }
 </style>

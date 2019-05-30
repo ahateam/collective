@@ -11,7 +11,7 @@
 
             <div>
                 <el-col :span="24">
-                    <el-button type="primary" size="small"> + 新增户成员</el-button>
+                    <el-button type="primary" size="small" @click="addMemberModal = true"> + 新增户成员</el-button>
                 </el-col>
             </div>
             <p style="clear: both"></p>
@@ -65,6 +65,92 @@
 
         </el-row>
 
+        <el-row class="row-box1" v-for="(item,index) in newData" :key="index">
+            <el-row>
+                <el-col :span="24">
+                      <span class="table-title">
+                            家庭户 {{index+1}}
+                      </span>
+                    <span class="table-master">
+                          家庭户主: <span v-if="item.length>0">{{item[0].familyMaster}}</span>
+                      </span>
+                    <span class="table-del" @click="delSeparate(item,index)">
+                            <i class="iconfont icon-19icon"></i>
+                    </span>
+                    <span class="table-add">
+                        <el-button type="success" size="mini" @click="removeModal(index)">移入成员</el-button>
+                    </span>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="24">
+                    <template>
+                        <el-table
+                                :data="item"
+                                border
+                                style="width: 100%">
+                            <el-table-column
+                                    prop="familyNumber"
+                                    label="户序号">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="shareCerNo"
+                                    label="股权证编号">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="realName"
+                                    label="用户名">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="idNumber"
+                                    label="身份证">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="familyMaster"
+                                    label="户主姓名">
+                            </el-table-column>
+                        </el-table>
+                    </template>
+                </el-col>
+            </el-row>
+        </el-row>
+
+        <el-dialog title="新增成员" :visible.sync="addMemberModal" width="60%">
+            <el-form>
+                <el-form-item label="成员名称" label-width="100px">
+                    <el-input v-model="name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号" label-width="100px">
+                    <el-input v-model="idNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="联系电话" label-width="100px">
+                    <el-input v-model="mobile" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="用户地址" label-width="100px">
+                    <el-input v-model="address" autocomplete="off"></el-input>
+                </el-form-item>
+
+                <el-form-item label="股份数" label-width="100px">
+                    <el-input v-model="shareAmount" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="投票权重" label-width="100px">
+                    <el-input v-model="weight" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="职务角色" label-width="100px">
+                    <template>
+                        <el-checkbox-group v-model="roles">
+                            <el-checkbox  v-for="(item,index) in roleList" :key="index" :label="item.roleId" >{{item.name}}</el-checkbox>
+                        </el-checkbox-group>
+                    </template>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addMemberModal = false">取 消</el-button>
+                <el-button type="primary" @click="addMemberBtn">确 定</el-button>
+            </div>
+        </el-dialog>
+
         <el-row class="row-box1">
 
 
@@ -80,6 +166,9 @@
         name: "addFamily",
         data() {
             return {
+
+                addMemberModal:false,
+
                 info: '',
                 pastData: [],    //动态改变的过去的数据
                 oldData: [],     //永不改变的过去的数据
