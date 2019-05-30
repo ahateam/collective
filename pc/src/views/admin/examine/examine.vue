@@ -115,19 +115,26 @@
                 }
             },
             userFilter(row,col,val){
-                let arr = JSON.parse(val).oldData
-                let str =''
-                for(let i =0;i<arr.length;i++){
-                    if(Array.isArray(arr[i])){
-                        for(let j=0;j<arr[i].length;j++){
-                            str = str+';'+arr[i][j].realName
+                console.log(row)
+                if(row.type == 1){
+                    let arr = JSON.parse(val).oldData
+                    let str =''
+                    for(let i =0;i<arr.length;i++){
+                        if(Array.isArray(arr[i])){
+                            for(let j=0;j<arr[i].length;j++){
+                                str = str+';'+arr[i][j].realName
+                            }
+                        }else {
+                            str = str+';'+arr[i].realName
                         }
-                    }else {
-                        str = str+';'+arr[i].realName
                     }
+                    str = str.substr(1)
+                    return str
+                }else if(row.type == 2){
+                    let str = JSON.parse(row.data).oldData[0].user.realName
+                    return str
                 }
-                str = str.substr(1)
-                return str
+
             },
             timeFilter(row,col,val){
                 let  timer = new Date(val).toLocaleDateString()+ ' '+ new Date(val).toLocaleTimeString('chinese',{hour12:false})
@@ -165,6 +172,14 @@
                     this.$router.push({
                         path:'/examineInfo',
                         name:'examineInfo',
+                        params:{
+                            info:row
+                        }
+                    })
+                }else if(row.type == 2){
+                    this.$router.push({
+                        path:'/examineShare',
+                        name:'examineShare',
                         params:{
                             info:row
                         }

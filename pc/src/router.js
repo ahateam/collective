@@ -47,6 +47,7 @@ const assetErrorData =()=>import('./views/admin/assets/assetErrorData')
 
 const examine =()=>import('./views/admin/examine/examine')
 const examineInfo=()=>import('./views/admin/examine/examineInfo')
+const examineShare=()=>import('./views/admin/examine/examineShare')
 
 //分户管理
 const familyList =()=>import('./views/admin/family/familyList')
@@ -57,7 +58,7 @@ const deleteFamily = ()=>import('./views/admin/family/deleteFamily')
 const createFamily = ()=>import('./views/admin/family/createFamily')
 //股权变更
 const share =()=>import('./views/admin/share/share')
-
+const shareUserList=()=>import('./views/admin/share/shareUserList')
 
 //演示系统
 const demoDashboard = ()=> import( './views/demo/home/dashboard')
@@ -257,6 +258,11 @@ export default new Router({
                     component:examineInfo
                 },
                 {
+                    path:'/examineShare',
+                    name:'examineShare',
+                    component:examineShare
+                },
+                {
                     path:'/asset',
                     name:'asset',
                     component:asset
@@ -321,6 +327,11 @@ export default new Router({
                     path:'/share',
                     name:'share',
                     component:share
+                },
+                {
+                    path:'/shareUserList',
+                    name:'shareUserList',
+                    component:shareUserList
                 },
 
                 //演示系统
