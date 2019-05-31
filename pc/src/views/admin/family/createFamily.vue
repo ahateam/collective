@@ -7,6 +7,7 @@
         </el-row>
 
         <el-row class="row-box1">
+            <!--item: [{user1}]   index:0   newData[index] = item  -->
             <el-row class="row-box1" v-for="(item,index) in newData" :key="index">
                 <el-row>
                     <el-col :span="24">
@@ -16,9 +17,6 @@
                         <span class="table-master">
                           家庭户主: <span v-if="item.length>0">{{item[0].familyMaster}}</span>
                       </span>
-                        <span class="table-del" @click="delSeparate(item,index)">
-                            <i class="iconfont icon-19icon"></i>
-                    </span>
                         <span class="table-add">
                         <el-button type="success" size="mini" @click="addUser()">新增成员</el-button>
                     </span>
@@ -28,7 +26,7 @@
                     <el-col :span="24">
                         <template>
                             <el-table
-                                    :data="tableData"
+                                    :data="item"
                                     border
                                     style="width: 100%">
                                 <el-table-column
@@ -122,7 +120,6 @@
         name: "createFamily",
         data() {
             return {
-                tableData: [],
 
                 newData: [],
                 addMemberModal: false,
@@ -135,6 +132,8 @@
                 shareAmount: '',
                 weight: '',
                 userInfo: {},
+                familyMaster:'',
+
 
                 //角色列表
                 roleList: [],
@@ -145,7 +144,40 @@
         },
         methods: {
             createBtn() {
-                console.log('222')
+                let key = -1
+                for(let i=0;i<this.newData[0].length;i++){
+                    if(this.newData[0][i].familyMaster == ''){
+                        key = i
+                    }
+                }
+                if(key!= -1){
+                    this.$message.error('请先设置户主')
+                }else{
+                    let data = {}
+
+                    let ext ={familyOperate:this.$constData.familyType[0].key}
+                    let oldData = []
+                    data.oldData = oldData
+                    data.ext = ext
+                    data.newData = this.newData
+
+                    let cnt ={
+                        orgId: localStorage.getItem('orgId'),
+                        data:data,
+                        type:this.$constData.examineType[1].key,
+                        remark:'无'
+                    }
+                    this.$api.createExamine(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.$message.success('新增操作成功，请等待审批')
+                        }else{
+                            this.$message.error('操作失败')
+                        }
+                        this.$router.push('/examine')
+                    })
+
+                }
+
             },
             //新增成员显示弹出框
             addUser() {
@@ -165,52 +197,60 @@
                 this.userInfo = {}
                 this.roles = []
             },
-
+            //添加成员
             addMemberBtn() {
-                if (this.name == '' || this.idNumber == '' || this.mobile == '' || this.address == '' || this.shareAmount == '' || this.weight == '') {
+                if (this.name == '' || this.idNumber == '' || this.mobile == '' || this.address == '' || this.shareAmount == '' || this.weight == '' || this.roles.length == 0) {
                     this.$message.error('请将用户信息输入完整')
                 } else if (this.idNumber.length < 16 || this.idNumber.length > 19) {
                     this.$message.error('身份证号输入错误')
                 } else if (this.mobile.length != 11) {
                     this.$message.error('用户手机号输入错误')
                 } else {
-
                     let cnt = {
-                        orgId: '',
-                        idNumber: ''
-                    }
+                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        idNumber:  this.idNumber, // String 身份证号码
+                    };
+
                     this.$api.getOrgUser(cnt, (res) => {
-                        if (res.data.rc == this.$util.RC.SUCCESS && res.data.idNumber.indexOf(this.idNumber) === -1) {
-                            this.userInfo.roles = this.roles
-                            this.userInfo.realName = this.name
-                            this.userInfo.idNumber = this.idNumber
-                            this.userInfo.mobile = this.mobile
-                            this.userInfo.address = this.address
-                            this.userInfo.shareAmount = this.shareAmount
-                            this.userInfo.weight = this.weight
-                            this.userInfo.shareCerHolder = this.shareCerHolder
-                            
-
-                            this.tableData.push(this.userInfo)
-
-
-                            this.setNull()
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            if(res.data.c == 0){
+                                this.userInfo.roles = this.roles
+                                this.userInfo.realName = this.name
+                                this.userInfo.idNumber = this.idNumber
+                                this.userInfo.mobile = this.mobile
+                                this.userInfo.address = this.address
+                                this.userInfo.shareAmount = this.shareAmount
+                                this.userInfo.weight = this.weight
+                                this.userInfo.shareCerHolder = this.shareCerHolder
+                                this.userInfo.familyMaster = this.familyMaster
+                                this.newData[0].push(this.userInfo)
+                                this.setNull()
+                            }else{
+                                    this.$message.error('该用户已经在当前组织，如果需要加入当前家庭户，请前往“成员移户”操作')
+                            }
+                        }else{
+                            this.$message.error('操作失败')
                         }
-                        else {
-                            this.$message.error('该用户已存在！')
-                        }
+
                     })
-
-
-
-
-
+                }
+            },
+            //设置户主
+            setMasterBtn(row,index){
+                this.familyMaster = row.realName
+                for(let i=0;i<this.newData[index].length;i++){
+                    let obj =JSON.parse(JSON.stringify(this.newData[index][i]))
+                    if(this.familyMaster ==this.newData[index][i].realName ){
+                        obj.shareCerHolder = true
+                    }
+                    obj.familyMaster = this.familyMaster
+                    this.newData[index].splice(i,1,obj)
                 }
             }
         },
         mounted() {
             let arr = []
-            this.newData.push(arr)      //this.newData =[[]]
+            this.newData.push(arr)      //this.newData =[[{user1},{user2}]]
 
 
             let cnt = {}

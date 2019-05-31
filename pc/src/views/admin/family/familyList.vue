@@ -47,7 +47,6 @@
                                 <el-button @click="separateBtn(scope.row)" type="text" size="small">选择分户</el-button>
                             </template>
                         </el-table-column>
-
                     </el-table>
                 </template>
                 <p>
@@ -195,8 +194,18 @@
             },
             separateBtn(row){
                 let routerPath = this.$route.params.routerPath
+                console.log(routerPath)
+                console.log(routerPath == this.$constData.familyType[2].val)
                 //分户
                 if(routerPath == this.$constData.familyType[1].val){
+                    this.$router.push({
+                        path:'/'+routerPath,
+                        name:''+routerPath,
+                        params:{
+                            info:row
+                        }
+                    })
+                }else if( routerPath == this.$constData.familyType[2].val){
                     this.$router.push({
                         path:'/'+routerPath,
                         name:''+routerPath,
