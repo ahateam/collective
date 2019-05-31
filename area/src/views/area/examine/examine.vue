@@ -120,8 +120,14 @@
                 }
             },
             userFilter(row,col,val){
+                let arr = []
                 if(row.type==1){
-                    let arr = JSON.parse(JSON.stringify(JSON.parse(val).oldData))
+                    if(JSON.parse(val).oldData.length ==0){
+                        arr = JSON.parse(val).newData
+                    }else{
+                        arr = JSON.parse(val).oldData
+                    }
+
                     let str =''
                     for(let i =0;i<arr.length;i++){
                         if(Array.isArray(arr[i])){

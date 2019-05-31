@@ -146,6 +146,8 @@
                 //角色列表
                 roleList: [],
                 roles: [],
+                groups:[102],
+                tags:'{}',
             }
         },
         methods:{
@@ -193,7 +195,7 @@
                     this.$api.getOrgUser(cnt, (res) => {
                         if(res.data.rc == this.$util.RC.SUCCESS){
                             if(res.data.c == 0){
-
+                                this.userInfo.orgId = localStorage.getItem('orgId')
                                 this.userInfo.roles = this.roles
                                 this.userInfo.realName = this.realName
                                 this.userInfo.idNumber = this.idNumber
@@ -206,7 +208,8 @@
                                 this.userInfo.userTab = this.$constData.tab[1].key
                                 this.userInfo.familyNumber = this.pastData[0].familyNumber
                                 this.userInfo.shareCerNo = this.pastData[0].shareCerNo
-
+                                this.userInfo.groups = this.groups
+                                this.userInfo.tags = this.tags
                                 this.pastData.push(this.userInfo)
                                 this.pastDataSign.push(this.userInfo)
 

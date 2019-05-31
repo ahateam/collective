@@ -138,8 +138,10 @@
                 //角色列表
                 roleList: [],
                 roles: [],
-
-
+                //分组列表
+                groupList:[],
+                groups:[102],
+                tags:'{}',
             }
         },
         methods: {
@@ -214,6 +216,8 @@
                     this.$api.getOrgUser(cnt, (res) => {
                         if(res.data.rc == this.$util.RC.SUCCESS){
                             if(res.data.c == 0){
+                                this.userInfo.userTab = this.$constData.tab[1].key
+                                this.userInfo.orgId = localStorage.getItem('orgId')
                                 this.userInfo.roles = this.roles
                                 this.userInfo.realName = this.name
                                 this.userInfo.idNumber = this.idNumber
@@ -223,6 +227,8 @@
                                 this.userInfo.weight = this.weight
                                 this.userInfo.shareCerHolder = this.shareCerHolder
                                 this.userInfo.familyMaster = this.familyMaster
+                                this.userInfo.groups = this.groups
+                                this.userInfo.tags = this.tags
                                 this.newData[0].push(this.userInfo)
                                 this.setNull()
                             }else{
@@ -261,7 +267,13 @@
                     this.roleList = []
                 }
             })
-
+            let cnt1= {
+                orgId: localStorage.getItem('orgId'), // Long 组织
+                groupId:100
+            }
+            this.$api.getTagGroupTree(cnt1,(res)=>{
+                console.log(JSON.parse(res.data.c))
+            })
         }
     }
 </script>

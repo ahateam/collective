@@ -478,24 +478,48 @@
                 let arr =[]
                 arr.push(this.pastDataSignArr)
                 arr.push(this.pastData1SignArr)
-                data.newData = arr
-                data.oldData = this.oldData
-                let cnt = {
-                    orgId: localStorage.getItem('orgId'),
-                    data:data,
-                    type:this.$constData.examineType[1].key,
-                    remark:'无'
-                }
-                console.log(cnt);
-                this.$api.createExamine(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('申请审批成功，等待组织或者区级审批')
-                    }else{
-                        this.$message.error('申请审批失败')
-                    }
-                })
-                this.$router.push('/examine')
 
+                let sameArr = []
+                sameArr.push(this.pastData)
+                sameArr.push(this.pastData1)
+                let sameKey =[]
+                for(let i=0;i<sameArr.length;i++){
+                    sameKey[i] = -1
+                    let master= sameArr[i][0].familyMaster
+                    for(let j=0;j<sameArr[i].length;j++){
+                        if(master ==sameArr[i][j].realName){
+                            sameKey[i] = j    //找到户主
+                        }
+                    }
+                }
+                console.log(sameKey)
+                let num = -1
+                for(let i=0;i<sameKey.length;i++){
+                    if(sameKey[i] == -1){       //该户没有找到户主
+                        num = i
+                    }
+                }
+                if(num != -1){
+                    this.$message.error('请将所有家庭户的户主设置正确，户主必须存在该家庭户中')
+                }else{
+                    data.newData = arr
+                    data.oldData = this.oldData
+                    let cnt = {
+                        orgId: localStorage.getItem('orgId'),
+                        data:data,
+                        type:this.$constData.examineType[1].key,
+                        remark:'无'
+                    }
+                    console.log(cnt);
+                    this.$api.createExamine(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.$message.success('申请审批成功，等待组织或者区级审批')
+                        }else{
+                            this.$message.error('申请审批失败')
+                        }
+                    })
+                    this.$router.push('/examine')
+                }
             }
         },
         created() {
