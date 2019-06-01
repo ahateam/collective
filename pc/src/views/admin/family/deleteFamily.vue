@@ -3,7 +3,9 @@
         <el-row class="row-box">
             <el-col :span="24">
                 <span class="title-box" style="line-height: 40px">移除户成员操作</span>
-                <el-button type="primary" size="small" style="float: right; margin-right: 50px" @click="changeFamilyBtn">更换家庭户</el-button>
+                <el-button type="primary" size="small" style="float: right; margin-right: 50px"
+                           @click="changeFamilyBtn">更换家庭户
+                </el-button>
             </el-col>
         </el-row>
 
@@ -100,35 +102,80 @@
         methods: {
             //移除户成员
             returnBtn(index) {
+
+                for (let i = 0; i < this.pastDataSign.length; i++) {
+                    if (this.pastDataSign[i].id == this.pastData[index].id) {
+                        let obj = JSON.parse(JSON.stringify(this.pastDataSign[i]))
+                        obj.userTab = this.$constData.tab[0].key
+                        this.pastDataSign[i] = obj
+                    }
+                }
                 this.pastData.splice(index, 1)
-                this.pastDataSign.splice(index, 1)
             },
+
             setMasterBtn(row) {
                 this.editFamilyMaster = 1
                 let master = row.realName
                 for (let i = 0; i < this.pastData.length; i++) {
                     this.pastData[i].familyMaster = master
                     this.pastData[i].shareCerHolder = false
-
-                    //标记
-                    this.pastDataSign[i].familyMaster = master
-                    this.pastDataSign[i].shareCerHolder = false
-
                     if (this.pastData[i].realName == master) {
                         this.pastData[i].shareCerHolder = true
-                    //标记
+                    }
+                }
+                //标记
+                for(let i=0;i<this.pastDataSign.length;i++){
+                    this.pastDataSign[i].familyMaster = master
+                    this.pastDataSign[i].shareCerHolder = false
+                    if (this.pastDataSign[i].realName == master) {
                         this.pastDataSign[i].shareCerHolder = true
                     }
                 }
             },
 
             //提交数据
-            deleteFamilyBtn(){
-                console.log(this.pastData)
+            deleteFamilyBtn() {
+                if (this.pastData.length == 0) {
+                    this.$message.error('家庭户必须至少有一个成员！')
+                } else {
+                    let master = this.pastData[0].familyMaster
+                    let _index = -1
+                    for (let i = 0; i < this.pastData.length; i++) {
+                        if (master == this.pastData[i].realName) {
+                            _index = i
+                        }
+                    }
+                    if (_index == -1) {
+                        this.$message.error('家庭户户主被移除，请重新设置户主')
+                    } else {
+                        let data = {}
+                        data.ext = {
+                            familyOperate: this.$constData.familyType[3].key,
+                            editHouseholder: this.editFamilyMaster
+                        }
+                        data.oldData = this.oldData
+                        data.newData = []
+                        data.newData.push(this.pastDataSign)
+                        let cnt = {
+                            orgId: localStorage.getItem('orgId'),
+                            data: data,
+                            type: this.$constData.examineType[1].key,
+                            remark: '无'
+                        }
+                        this.$api.createExamine(cnt, (res) => {
+                            if (res.data.rc == this.$util.RC.SUCCESS) {
+                                this.$message.success('操作成功')
+                            } else {
+                                this.$message.error('操作失败')
+                            }
+                            this.$router.push('/examine')
+                        })
+                    }
+                }
             },
 
 
-            changeFamilyBtn(){
+            changeFamilyBtn() {
                 this.$confirm('更换家庭户当前修改操作作废，是否确认更换？')
                     .then(() => {
                         this.$router.push({
