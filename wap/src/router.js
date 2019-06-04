@@ -74,6 +74,8 @@ const noticeList = ()=>import('./views/personal/notice/noticeList')
 const noticeInfo =()=>import('./views/personal/notice/noticeInfo')
 //我的审批
 const examine=()=>import('./views/personal/examine/examine')
+const shareInfo=()=>import('./views/personal/examine/shareInfo')
+const familyInfo=()=>import('./views/personal/examine/familyInfo')
 
 //我的消息
 const news = ()=>import('./views/personal/news/news')
@@ -408,6 +410,16 @@ export default new Router({
             path:'/examine',
             name:'examine',
             component:examine
+        },
+        {
+            path:'/familyInfo',
+            name:'familyInfo',
+            component:familyInfo
+        },
+        {
+            path:'/shareInfo',
+            name:'shareInfo',
+            component:shareInfo
         },
         //我的消息
         {

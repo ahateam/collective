@@ -2,21 +2,22 @@
     <div>
         <header-box title="我的公告"></header-box>
         <div class="main-box">
-            <van-list
-                    v-model="loading"
-                    :finished="finished"
-                    finished-text="没有更多公告了"
-                    @load="onLoad"
-            >
             <div class="list">
                 <div class="list-item"
                      v-for="(item,index) in list"
                      :key="index"
                      @click="infoBtn(item)">
-                  <span style="color: #f44;font-size: 2.5rem">·</span>  {{item.title}}
+                    <span style="color: #f44;font-size: 2.5rem">·</span>  {{item.title}}
                 </div>
             </div>
-            </van-list>
+            <!--<van-list-->
+                    <!--v-model="loading"-->
+                    <!--:finished="finished"-->
+                    <!--finished-text="没有更多公告了"-->
+                    <!--@load="onLoad"-->
+            <!--&gt;-->
+
+            <!--</van-list>-->
             <div class="footer-box">
                 <router-link to="/home">
                     <div class="create-btn" >返回首页</div>
@@ -37,8 +38,9 @@
         data(){
           return{
               userInfo:'',
-              count:10,
-              offset:0,
+              // count:10,
+              // offset:0,
+              // page:1,
               list:[],
               loading: false,
               finished: false
@@ -54,26 +56,26 @@
                         arr = []
                     }
                     this.list = this.list.concat(arr)
-                    this.loading = false;
-                    if(arr.length<this.count){
-                        this.finished = true;
-                    }
+                    // this.loading = false;
+                    // if(arr.length<this.count){
+                    //     this.finished = true;
+                    // }
                 })
             },
-            onLoad() {
-                // 异步更新数据
-                setTimeout(() => {
-                    this.page = this.page +1
-                    let cnt = {
-                        orgId: this.userInfo.orgId, // Long 组织编号
-                        roles: this.userInfo.orgRoles, // String 角色编号 [102,103,104]
-                        groups: this.userInfo.groups, // String 分组编号 [1111111,555555,111]
-                        count: this.count, // Integer
-                        offset: (this.page-1)*this.count, // Integer
-                    }
-                    this.getNoticeByRoleGroup(cnt)
-                }, 300);
-            },
+            // onLoad() {
+            //     // 异步更新数据
+            //     setTimeout(() => {
+            //         this.page = this.page +1
+            //         let cnt = {
+            //             orgId: this.userInfo.orgId, // Long 组织编号
+            //             roles: this.userInfo.orgRoles, // String 角色编号 [102,103,104]
+            //             groups: this.userInfo.groups, // String 分组编号 [1111111,555555,111]
+            //             count: this.count, // Integer
+            //             offset: (this.page-1)*this.count, // Integer
+            //         }
+            //         this.getNoticeByRoleGroup(cnt)
+            //     }, 300);
+            // },
             infoBtn(item){
                 this.$router.push({
                     path:'/noticeInfo',
@@ -91,8 +93,8 @@
                 orgId: this.userInfo.orgId, // Long 组织编号
                 roles: this.userInfo.orgRoles, // String 角色编号 [102,103,104]
                 groups: this.userInfo.groups, // String 分组编号 [1111111,555555,111]
-                count: this.count, // Integer
-                offset: this.offset, // Integer
+                // count: this.count, // Integer
+                // offset: this.offset, // Integer
             }
 
             this.getNoticeByRoleGroup(cnt)

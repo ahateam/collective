@@ -71,7 +71,7 @@ const status = { // zyxhj.economy.domain.Vote$STATUS
 };
 
 const permission =[
-    {key:100,val:'发起投票'},    {key:102,val:'职务管理'},
+    {key:100,val:'发起投票'},{key:102,val:'职务管理'},{key:104,val:'分户审批'},{key:105,val:'股权变更'},
 ]
 
 
@@ -81,7 +81,13 @@ const permission =[
 const examineType = [{key:0,val:'组织申请'},{key:1,val:'分户申请'},{key:2,val:'股权变更申请'}]
 const examineStatus = [{key:0,val:'等待组织审核'},{key:1,val:'组织审核通过'},{key:2,val:'区级初审通过'},{key:3,val:'审核成功'},{key:4,val:'审核失败'},{key:5,val:'等待取证'},{key:6,val:'已取证'} ]
 
-
+/**
+ * 分户常量
+ * */
+const tab = [{key:0,val:'移除'},{key:1,val:'移入'}]
+const familyType = [
+    {key:0,val:'createFamily'}, {key:1,val:'leaveFamily'}, {key:2,val:'addFamily'}, {key:3,val:'deleteFamily'}, {key:4,val:'moveFamily'},
+]
 
 
 export default {
@@ -94,5 +100,7 @@ export default {
     status,
     permission,
     examineType,
-    examineStatus
+    examineStatus,
+    tab,
+    familyType
 }
