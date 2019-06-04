@@ -3,7 +3,7 @@
         <header-box title="个人中心"></header-box>
         <div class="main-box">
             正在绑定微信用户信息...
-
+            <p>code: {{codeStr}}</p>
             <p>
                 {{wxUserInfo}}
             </p>
@@ -25,26 +25,9 @@
             }
         },
         mounted(){
-            let data = ''
-            let arr = []
-            let info = window.location.href
-            if(info.indexOf('code') >-1){
-                data = info.substr(info.indexOf('code'))
-                arr = data .split('&')
-                this.codeStr = arr[0]
-                this.codeStr = this.codeStr.substr(this.codeStr.indexOf('=')+1)
-                this.wxUserInfo =  this.$commen.getWXUserOpenId(this.$store.state.wxInfo.APPID,this.$store.state.wxInfo.SECRET,this.codeStr)
-
-
-
-            }
-
-
-
-
-
-
-
+            this.codeStr = this.$route.params.code
+            this.wxUserInfo =  this.$commen.getWXUserOpenId(this.$store.state.wxInfo.APPID,this.$store.state.wxInfo.SECRET,this.codeStr)
+            console.log(this.wxUserInfo)
         }
     }
 </script>

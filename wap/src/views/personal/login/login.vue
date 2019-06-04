@@ -162,9 +162,31 @@
             }
         },
         mounted(){
-            if(localStorage.getItem('userInfo') !=null){
-                this.$router.push('/choose')
+            let resUrl = window.location.href
+            let data =''
+            let codeStr = ''
+            if(resUrl.indexOf('code') >-1){
+                data = resUrl.substr(resUrl.indexOf('code'))
+                let arr = data .split('&')
+                codeStr = arr[0]
+                codeStr = codeStr.substr(codeStr.indexOf('=')+1)
             }
+            if(codeStr != '' && codeStr!= undefined && codeStr!=null){
+                this.$router.push({
+                    path:'/userWX',
+                    name:'userWX',
+                    params:{
+                        code:codeStr
+                    }
+                })
+            }else{
+                if(localStorage.getItem('userInfo') !=null){
+                    this.$router.push('/choose')
+                }
+            }
+
+
+
         }
     }
 </script>

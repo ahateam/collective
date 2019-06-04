@@ -117,7 +117,7 @@
             //获取微信用户信息
             getWXUserCode(){
                let  info=  this.$commen.getWXUserCode(this.$store.state.wxInfo.APPID,this.$store.state.wxInfo.REDIRECT_URI)
-               alert(info)
+              console.log(info)
             },
 
             updateBtn() {

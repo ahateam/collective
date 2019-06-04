@@ -87,10 +87,11 @@
                         let arr = []
 
                         for(let i=0;i<userInfo.permissions.length;i++){
-                            arr.push(userInfo.permissions[i].permissionId)
+                            arr.push(userInfo.permissions[i].id)
                         }
 
                         localStorage.setItem('permission',JSON.stringify(arr))
+
                         this.$router.push('/home')
                     }else{
                         Toast.fail({
@@ -142,7 +143,6 @@
                 level:4
             }
             this.getUserORGs(cnt)
-
 
         }
 

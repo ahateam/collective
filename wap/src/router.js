@@ -69,6 +69,16 @@ const editVote = ()=>import('./views/personal/voteManage/editVote')
 const createVoteOptionWork = ()=>import('./views/personal/voteManage/createVoteOptionWork')
 const createVoteOptionPeople = ()=>import('./views/personal/voteManage/createVoteOptionPeople')
 
+//公告列表
+const noticeList = ()=>import('./views/personal/notice/noticeList')
+const noticeInfo =()=>import('./views/personal/notice/noticeInfo')
+//我的审批
+const examine=()=>import('./views/personal/examine/examine')
+
+//我的消息
+const news = ()=>import('./views/personal/news/news')
+const newsInfo = ()=>import('./views/personal/news/newsInfo')
+
 //银行版
 const bankLogin =()=> import('./views/bank/login/login')
 const bankTellLogin =()=>import('./views/bank/login/tellLogin')
@@ -383,7 +393,33 @@ export default new Router({
             name:'createVoteOptionPeople',
             component:createVoteOptionPeople
         },
-
+        {
+            path:'/noticeList',
+            name:'noticeList',
+            component:noticeList
+        },
+        {
+            path:'/noticeInfo',
+            name:'noticeInfo',
+            component:noticeInfo
+        },
+        //我的审批
+        {
+            path:'/examine',
+            name:'examine',
+            component:examine
+        },
+        //我的消息
+        {
+            path:'/news',
+            name:'news',
+            component:news
+        },
+        {
+            path:'/newsInfo',
+            name:'newsInfo',
+            component:newsInfo
+        },
 
 
 

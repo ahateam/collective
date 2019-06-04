@@ -99,6 +99,17 @@ const  menu =[
         child:[]
     },
     {
+        path:'/noticeList',
+        title:'公告管理',
+        icon:'icon-toupiao1',
+        child:[
+            {
+                path:'/noticeList',
+                title:'公告列表'
+            }
+        ]
+    },
+    {
         path:'/examine',
         title:'审批管理',
         icon:'icon-toupiao1',

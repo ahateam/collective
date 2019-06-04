@@ -59,6 +59,10 @@ const createFamily = ()=>import('./views/admin/family/createFamily')
 //股权变更
 const share =()=>import('./views/admin/share/share')
 const shareUserList=()=>import('./views/admin/share/shareUserList')
+//公告管理
+const noticeList =()=>import('./views/admin/notice/noticeList')
+const noticeAdd =()=>import('./views/admin/notice/noticeAdd')
+const noticeInfo =()=>import('./views/admin/notice/noticeInfo')
 
 //演示系统
 const demoDashboard = ()=> import( './views/demo/home/dashboard')
@@ -332,6 +336,21 @@ export default new Router({
                     path:'/shareUserList',
                     name:'shareUserList',
                     component:shareUserList
+                },
+                {
+                    path:'/noticeList',
+                    name:'noticeList',
+                    component:noticeList
+                },
+                {
+                    path:'/noticeAdd',
+                    name:'noticeAdd',
+                    component:noticeAdd
+                },
+                {
+                    path:'/noticeInfo',
+                    name:'noticeInfo',
+                    component:noticeInfo
                 },
 
                 //演示系统

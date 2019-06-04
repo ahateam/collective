@@ -125,6 +125,59 @@
                         </div>
                     </div>
                 </router-link>
+
+                <router-link to="/noticeList">
+                    <div class="item-box">
+                        <div class="img-box1">
+                            <div class="i-box" style="background: rgb(244, 81, 108)">
+                                <van-icon name="idcard"/>
+                            </div>
+                        </div>
+                        <div class="text-box">
+                            <div class="item-text">
+                                我的公告
+                            </div>
+                            <div class="item-next">
+                                <van-icon name="arrow"/>
+                            </div>
+                        </div>
+                    </div>
+                </router-link>
+                <router-link to="/news">
+                    <div class="item-box">
+                        <div class="img-box1">
+                            <div class="i-box" style="background: rgb(244, 81, 108)">
+                                <van-icon name="idcard"/>
+                            </div>
+                        </div>
+                        <div class="text-box">
+                            <div class="item-text">
+                                我的消息
+                            </div>
+                            <div class="item-next">
+                                <van-icon name="arrow"/>
+                            </div>
+                        </div>
+                    </div>
+                </router-link>
+                <router-link to="/examine">
+                    <div class="item-box">
+                        <div class="img-box1">
+                            <div class="i-box" style="background: rgb(244, 81, 108)">
+                                <van-icon name="idcard"/>
+                            </div>
+                        </div>
+                        <div class="text-box">
+                            <div class="item-text">
+                                我的审批
+                            </div>
+                            <div class="item-next">
+                                <van-icon name="arrow"/>
+                            </div>
+                        </div>
+                    </div>
+                </router-link>
+
                 <!--<router-link to="/article">-->
                     <!--<div class="item-box">-->
                         <!--<div class="img-box1">-->

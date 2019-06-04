@@ -84,6 +84,11 @@ const familyType = [
     {key:0,val:'createFamily'}, {key:1,val:'leaveFamily'}, {key:2,val:'addFamily'}, {key:3,val:'deleteFamily'}, {key:4,val:'moveFamily'},
 ]
 
+/**
+ * 公告管理相关
+ */
+    const noticeType =[ {key:0,val:'会议公告'}, {key:1,val:'投票公告'}, {key:2,val:'其他公告'}]
+
 
 export default {
     share,
@@ -97,6 +102,7 @@ export default {
     examineType,
     examineStatus,
     tab,
-    familyType
+    familyType,
+    noticeType
 
 }
