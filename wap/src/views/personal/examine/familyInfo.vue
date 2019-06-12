@@ -135,6 +135,7 @@
             this.oldData = JSON.parse(this.info.data).oldData
             this.newData = JSON.parse(this.info.data).newData
             let permissions = JSON.parse(localStorage.getItem('user')).permissions
+            console.log(permissions)
             for(let i=0;i<permissions.length;i++){
                 if(permissions[i].id == 104){
                     this.isEdit = true

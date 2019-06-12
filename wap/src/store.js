@@ -14,7 +14,10 @@ export default new Vuex.Store({
             //农企助手
             APPID:'wx547972e25ec85006',
             SECRET:'0406d93e33c3400e3b4b673ea86a2679',
-            REDIRECT_URI:'http://jiti.test.3ch.org.cn/wap/index.html'
+            // REDIRECT_URI:'http://jiti.test.3ch.org.cn/wap/index.html',   //测试地址
+            REDIRECT_URI:'http://jiti.online.3ch.org.cn/wap/index.html',       //正式地址
+            wxStatus:0,         //0:微信登录  1:微信绑定
+            wxCode:''
         },
 
     },

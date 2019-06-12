@@ -85,13 +85,10 @@
                         localStorage.setItem('orgInfo',user)
                         let userInfo = this.$util.tryParseJson(res.data.c)
                         let arr = []
-
                         for(let i=0;i<userInfo.permissions.length;i++){
                             arr.push(userInfo.permissions[i].id)
                         }
-
                         localStorage.setItem('permission',JSON.stringify(arr))
-
                         this.$router.push('/home')
                     }else{
                         Toast.fail({

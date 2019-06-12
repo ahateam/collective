@@ -213,13 +213,15 @@
                     orgId: this.info.orgId, // Long 组织编号
                     status: this.$constData.examineStatus[2].key, // Byte 状态
                 }
-                this.$area.editExamine(cnt, (res) => {
+                console.log(cnt)
+                this.$area.examineShareCerNo(cnt, (res) => {
+                    console.log(JSON.parse(res.data.c))
                     if (res.data.rc == this.$util.RC.SUCCESS) {
                         this.$message.success('操作成功')
                     } else {
                         this.$message.error('操作失败')
                     }
-                    this.$router.push('/areaExamine')
+                    // this.$router.push('/areaExamine')
                 })
 
             },

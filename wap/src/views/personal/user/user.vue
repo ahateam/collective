@@ -66,12 +66,21 @@
                         {{userInfo.weight}}
                     </div>
                 </div>
-                <div class="user-item" @click="wxBtn">
+
+                <div class="user-item" @click="wxBtn" v-if="isOpenId == false">
                     <div class="item-title">
                         绑定微信
                     </div>
                     <div class="item-text">
                        <span > 未绑定（点击绑定）</span>
+                    </div>
+                </div>
+                <div class="user-item" @click="wxDelBtn" v-if="isOpenId == true">
+                    <div class="item-title">
+                        微信解绑
+                    </div>
+                    <div class="item-text">
+                        <span > 已绑定（点击解绑）</span>
                     </div>
                 </div>
             </div>
@@ -85,7 +94,7 @@
 <script>
     import HeaderBox from '@/components/head/headerBox'
     import { Dialog } from 'vant'
-
+    import { Toast } from 'vant';
     export default {
         name: "user",
         components: {
@@ -99,7 +108,10 @@
                 mobile: '',
                 idNumber: '',
                 weight: '',
-                shareAmount:''
+                shareAmount:'',
+
+                isOpenId:false,
+
             }
         },
         methods: {
@@ -116,8 +128,10 @@
             },
             //获取微信用户信息
             getWXUserCode(){
-               let  info=  this.$commen.getWXUserCode(this.$store.state.wxInfo.APPID,this.$store.state.wxInfo.REDIRECT_URI)
-              console.log(info)
+                this.$store.state.wxInfo.wxStatus = 1
+               let info=  this.$commen.getWXUserCode(this.$store.state.wxInfo.APPID,this.$store.state.wxInfo.REDIRECT_URI)
+                Toast(info);
+                console.log(info)
             },
 
             updateBtn() {
@@ -126,6 +140,29 @@
             loginBtn() {
                 localStorage.clear()
                 this.$router.push('/login')
+            },
+            wxDelBtn(){
+                Dialog.confirm({
+                    title: '微信解绑',
+                    message: '是否确认解除微信绑定，解绑微信后将不能使用微信登录与接收微信消息通知'
+                }).then(() => {
+                    let cnt = {
+                        userId: this.userInfo.id, // Long 用户id
+                    }
+                    this.$api.removeOpenId(cnt,(res)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            Toast.success('微信解绑成功')
+                            this.userInfo.openId = ''
+                            localStorage.setItem('user',JSON.stringify(this.userInfo))
+                            this.$router.push('/page')
+                        }else{
+                            Toast.fail('操作失败')
+                        }
+                    })
+                }).catch(() => {
+                    // on cancel
+                });
+
             }
         },
         mounted() {
@@ -138,6 +175,14 @@
 
            let orgRoles = this.userInfo.orgRoles
             console.log(this.userInfo)
+
+            if(this.userInfo.openId == undefined || this.userInfo.openId == ''){
+                this.isOpenId = false
+            }else{
+                this.isOpenId = true
+            }
+
+
             let cnt = {}
             this.$api.getSysORGUserRoles(cnt, (res)=> {
                 let arr = JSON.parse(res.data.c)

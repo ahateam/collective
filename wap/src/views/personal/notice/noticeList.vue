@@ -88,11 +88,16 @@
         },
         mounted(){
             this.userInfo = JSON.parse(localStorage.getItem('orgInfo'))
-
+            let groups =[]
+            if(this.userInfo.groups == undefined || this.userInfo.groups=='' ||this.userInfo.groups.length ==0){
+                groups[0] =102
+            }else{
+                groups = this.userInfo.groups
+            }
             let cnt = {
                 orgId: this.userInfo.orgId, // Long 组织编号
                 roles: this.userInfo.orgRoles, // String 角色编号 [102,103,104]
-                groups: this.userInfo.groups, // String 分组编号 [1111111,555555,111]
+                groups: groups, // String 分组编号 [1111111,555555,111]
                 // count: this.count, // Integer
                 // offset: this.offset, // Integer
             }

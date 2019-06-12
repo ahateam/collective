@@ -10,7 +10,7 @@ const  menu =[
     {
         path:'/mechanism',
         title:'机构管理',
-        icon:'icon-bangong-jigou',
+        icon:'icon-jigou',
         child:[
             {
                 path:'/applyMech',
@@ -27,13 +27,13 @@ const  menu =[
     {
         path:'/permission',
         title:'权限管理',
-        icon:'icon-yonghu',
+        icon:'icon-quanxian',
         child:[]
     },
     {
         path:'/memberList',
         title:'成员管理',
-        icon:'icon-yonghu',
+        icon:'icon-nav_user',
         child:[
 
             {
@@ -57,7 +57,7 @@ const  menu =[
     {
         path:'/leaveFamily',
         title:'分户管理',
-        icon:'icon-toupiao1',
+        icon:'icon-zhuzhaifenhuyanshouxxhdpi',
         child:[
             {
                 path:'/leaveFamily',
@@ -89,7 +89,7 @@ const  menu =[
     {
         path:'/share',
         title:'股权变更',
-        icon:'icon-toupiao1',
+        icon:'icon-xinxibiangeng',
         child:[]
     },
     {
@@ -101,7 +101,7 @@ const  menu =[
     {
         path:'/noticeList',
         title:'公告管理',
-        icon:'icon-toupiao1',
+        icon:'icon-gonggao1',
         child:[
             {
                 path:'/noticeList',
@@ -112,7 +112,7 @@ const  menu =[
     {
         path:'/examine',
         title:'审批管理',
-        icon:'icon-toupiao1',
+        icon:'icon-shenpi',
         child:[
             {
                 path:'/examine',
@@ -150,7 +150,7 @@ const  lowMenu=[
     {
         path:'/mechanism',
         title:'机构管理',
-        icon:'icon-bangong-jigou',
+        icon:'icon-jigou',
         child:[
             {
                 path:'/applyMech',

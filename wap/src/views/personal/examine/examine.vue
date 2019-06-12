@@ -102,11 +102,25 @@
                     }, 300);
             },
             titleFilter(item){
-                if(this.type == 0){
-                    let str = JSON.parse(item.data).newData[0][0].familyMaster
+                console.log(item)
+                console.log(JSON.parse(item.data).newData)
+                if(item.type == 1){
+                    let str =''
+                    if(JSON.parse(item.data).newData[0][0].familyMaster == undefined){
+                        str='暂无'
+                    }else{
+                        str = JSON.parse(item.data).newData[0][0].familyMaster
+                    }
+
                     return '家庭户户主： '+str
                 }else{
-                    let str = JSON.parse(item.data).newData[0].user.realName
+                    let str = ''
+                    if(   JSON.parse(item.data).newData[0].user.realName == undefined){
+                        str ='暂无'
+                    }else {
+                        str = JSON.parse(item.data).newData[0].user.realName
+                    }
+
                     return '股权变更用户： '+str
                 }
 

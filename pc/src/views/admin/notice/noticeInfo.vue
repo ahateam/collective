@@ -120,7 +120,7 @@
                     }
                     let cnt = {
                         noticeId:this.info.id,
-                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        orgId: parseInt(localStorage.getItem('orgId')), // Long 组织编号
                         noticeTitle: this.noticeTitle, // String 公告名称
                         noticeContent: this.noticeContent, // String 公告内容
                         type: this.type, // Byte 类型

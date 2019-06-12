@@ -97,6 +97,7 @@
                     }else{
                         this.tableData = []
                     }
+                    console.log(this.tableData)
                     if(this.tableData.length<this.count){
                         this.pageOver = true
                     }else{
@@ -115,7 +116,8 @@
                 }
             },
             userFilter(row,col,val){
-                console.log(row)
+
+
                 let arr = []
                 if(row.type == 1){
                     if(JSON.parse(val).oldData.length ==0){
@@ -137,7 +139,13 @@
                     str = str.substr(1)
                     return str
                 }else if(row.type == 2){
-                    let str = JSON.parse(row.data).oldData[0].user.realName
+                    console.log(JSON.parse(row.data).oldData)
+                    let str =''
+                    if(JSON.parse(row.data).oldData.length ==0){
+                        str ='暂无'
+                    }else {
+                        str = JSON.parse(row.data).oldData[0].user.realName
+                    }
                     return str
                 }
 
@@ -208,10 +216,12 @@
             changeTypeBtn(type){
                 this.type = type
                 this.page = 1
+                this.tableData = []
                 this.changeList()
             },
             activeBtn(active){
                 this.isActive = active
+                this.tableData = []
                 this.page = 1
                 this.changeList()
             },

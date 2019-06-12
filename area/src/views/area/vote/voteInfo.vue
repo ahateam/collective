@@ -82,6 +82,7 @@
         methods: {
             //分页
             changePage(page){
+                this.list =[]
                 this.page = page
 
                 this.showUserList = true
@@ -120,7 +121,7 @@
 
             },
             optionInfo(info){
-
+                this.list =[]
                 this.page= 1
                 this.showUserList = true
                 this.optionId =  info.id

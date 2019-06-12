@@ -85,7 +85,7 @@ const  areaMenu=[
     {
         path:'/areaUser',
         title:'管理员管理',
-        icon:'icon-bangong-jigou',
+        icon:'icon-nav_user',
         child:[
             {
                 path:'/areaUser',
@@ -101,7 +101,7 @@ const  areaMenu=[
     {
         path:'/areaExamine',
         title:'审批管理',
-        icon:'icon-bangong-jigou',
+        icon:'icon-shenpi',
         child:[
             {
                 path:'/areaExamine',
@@ -110,9 +110,20 @@ const  areaMenu=[
         ]
     },
     {
+        path:'/areaPrintBook',
+        title:'打印证书',
+        icon:'icon-shenpi',
+        child:[
+            {
+                path:'/areaPrintBook',
+                title:'证书模板'
+            }
+        ]
+    },
+    {
         path:'/areaBank',
         title:'银行金融',
-        icon:'icon-zichan1',
+        icon:'icon-zichan',
         child:[]
     },
     {
@@ -169,7 +180,7 @@ const  cityMenu=[
     {
         path:'/areaUser',
         title:'管理员管理',
-        icon:'icon-bangong-jigou',
+        icon:'icon-nav_user',
         child:[
             {
                 path:'/areaUser',
@@ -214,7 +225,7 @@ const  proMenu=[
     {
         path:'/areaUser',
         title:'管理员管理',
-        icon:'icon-bangong-jigou',
+        icon:'icon-nav_user',
         child:[
             {
                 path:'/areaUser',

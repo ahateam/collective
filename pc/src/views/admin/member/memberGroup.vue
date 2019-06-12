@@ -54,7 +54,7 @@
                         <el-button type="primary" size="mini" @click="addModal" style="margin-top: 6px">移入成员</el-button>
                         <el-button type="primary" size="mini"  @click="loadExcl" style="margin-top: 6px">用户表模板下载</el-button>
                         <!--<el-button type="primary" size="mini" @click="importUserModal =true" style="margin-top: 6px">批量导入</el-button>-->
-                        <el-button type="warning" size="mini" @click="delMore" style="margin-top: 6px">移除职位</el-button>
+                        <!--<el-button type="warning" size="mini" @click="delMore" style="margin-top: 6px">移除职位</el-button>-->
                     </el-col>
                     <el-col :span="12">
                         <el-input placeholder="请输入用户姓名" v-model="searchData" >
@@ -224,10 +224,10 @@
 
 
                     <el-form-item label="户序号" label-width="100px">
-                        <el-input v-model="familyNumberInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
+                        <el-input v-model="familyNumberInfo" autocomplete="off" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="户主姓名" label-width="100px">
-                        <el-input v-model="familyMasterInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
+                        <el-input v-model="familyMasterInfo" autocomplete="off" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="用户住址" label-width="100px">
                         <el-input v-model="addressInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
@@ -235,17 +235,17 @@
 
 
                     <el-form-item label="证书编号" label-width="100px">
-                        <el-input v-model="shareCerNoInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
+                        <el-input v-model="shareCerNoInfo" autocomplete="off" disabled></el-input>
                     </el-form-item>
 
                     <el-form-item label="是否持证人" label-width="100px">
                         <template>
-                            <el-radio v-model="shareCerHolderInfo" :label="true"   :disabled="editMember !=1">是</el-radio>
-                            <el-radio v-model="shareCerHolderInfo" :label="false"   :disabled="editMember !=1">否</el-radio>
+                            <el-radio v-model="shareCerHolderInfo" :label="true"   disabled>是</el-radio>
+                            <el-radio v-model="shareCerHolderInfo" :label="false"   disabled>否</el-radio>
                         </template>
                     </el-form-item>
                     <el-form-item label="股份数" label-width="100px">
-                        <el-input v-model="shareAmountInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
+                        <el-input v-model="shareAmountInfo" autocomplete="off" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="选举权重" label-width="100px">
                         <el-input v-model="weightInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
@@ -794,7 +794,7 @@
             },
             //修改用户信息
             editORGUserBtn(){
-                if(this.addressInfo == '' || this.shareAmountInfo == '' || this.weightInfo == '' || this.rolesInfo.length == 0) {
+                if(this.addressInfo == '' ||this.weightInfo == '' || this.rolesInfo.length == 0) {
                     this.$message.error('请输入完整的用户信息')
                 }else{
                     let cnt = {

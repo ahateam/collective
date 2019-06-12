@@ -172,7 +172,7 @@
                 <el-button class="button-new-tag" @click="addOption" style="margin-top: 8px">+新增选项</el-button>
             </el-row>
             <div slot="footer" class="dialog-footer">
-                <router-link to="/poll">  <el-button type="primary" >确认完成选项操作</el-button></router-link>
+               <el-button type="primary" @click="pushWXBtn">确认完成选项操作</el-button>
             </div>
         </el-dialog>
 
@@ -199,7 +199,7 @@
             </el-row>
 
             <div slot="footer" class="dialog-footer">
-              <router-link to="/poll">  <el-button type="primary" >确认完成选项操作</el-button></router-link>
+                <el-button type="primary" @click="pushWXBtn">确认完成选项操作</el-button>
             </div>
         </el-dialog>
     </div>
@@ -307,6 +307,18 @@
             },
 
             //普通事件层
+            //创建投票之后发送微信通知
+            pushWXBtn(){
+                let cnt = {
+                    orgId: parseInt(localStorage.getItem('orgId')), // Long 组织编号
+                    voteId: this.voteInfo.id, // Long 投票id
+                }
+                this.$api.sendVoteMessage(cnt,(res)=>{
+                    console.log(res)
+                })
+                this.$router.push('/poll')
+            },
+
             //下拉失败通过率的默认值设置
             templateBtn(val) {
                 if (val == '0') {

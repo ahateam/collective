@@ -59,7 +59,7 @@
                     <div class="item-box">
                         <div class="img-box1">
                             <div class="i-box">
-                                <van-icon name="idcard"/>
+                                <i class="iconfont icon-toupiao1"></i>
                             </div>
                         </div>
                         <div class="text-box">
@@ -76,7 +76,7 @@
                     <div class="item-box">
                         <div class="img-box1">
                             <div class="i-box" style="background: rgb(54, 163, 247)">
-                                <van-icon name="idcard"/>
+                                <i class="iconfont icon-tongyongzichan"></i>
                             </div>
                         </div>
                         <div class="text-box">
@@ -94,7 +94,7 @@
                     <div class="item-box">
                         <div class="img-box1">
                             <div class="i-box" style="background: #ff976a">
-                                <van-icon name="idcard"/>
+                                <i class="iconfont icon-qian"></i>
                             </div>
                         </div>
                         <div class="text-box">
@@ -111,8 +111,8 @@
                 <router-link to="/mech">
                     <div class="item-box">
                         <div class="img-box1">
-                            <div class="i-box" style="background: rgb(244, 81, 108)">
-                                <van-icon name="idcard"/>
+                            <div class="i-box" style="background: #5bc0de">
+                                <i class="iconfont icon-jigou"></i>
                             </div>
                         </div>
                         <div class="text-box">
@@ -129,8 +129,8 @@
                 <router-link to="/noticeList">
                     <div class="item-box">
                         <div class="img-box1">
-                            <div class="i-box" style="background: rgb(244, 81, 108)">
-                                <van-icon name="idcard"/>
+                            <div class="i-box" style="background: #f0ad4e">
+                                <i class="iconfont icon-gonggao1"></i>
                             </div>
                         </div>
                         <div class="text-box">
@@ -148,7 +148,7 @@
                     <div class="item-box">
                         <div class="img-box1">
                             <div class="i-box" style="background: rgb(244, 81, 108)">
-                                <van-icon name="idcard"/>
+                                <i class="iconfont icon-shenpi"></i>
                             </div>
                         </div>
                         <div class="text-box">
@@ -186,8 +186,8 @@
                         <router-link to="/voteManage">
                             <div class="item-box">
                                 <div class="img-box1">
-                                    <div class="i-box" style="background: #E6A23C">
-                                        <van-icon name="idcard"/>
+                                    <div class="i-box" style="background: #337ab7">
+                                        <i class="iconfont icon-toupiao2"></i>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -206,7 +206,7 @@
                             <div class="item-box">
                                 <div class="img-box1">
                                     <div class="i-box" style="background: #ff976a">
-                                        <van-icon name="idcard"/>
+                                        <i class="iconfont icon-nav_user"></i>
                                     </div>
                                 </div>
                                 <div class="text-box">

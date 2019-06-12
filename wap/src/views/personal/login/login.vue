@@ -39,6 +39,9 @@
                 <div class="text-box" @click="tellBtn">
                     根据手机号--选择账号登陆
                 </div>
+                <div class="text-box" @click="wxLoginBtn">
+                    <i class="iconfont icon-wechat"></i> 三方微信登录（已经绑定微信账户）
+                </div>
                 <div class="form-btn" @click="formBtn">
                     立 即 登 录
                 </div>
@@ -159,29 +162,81 @@
                         }
                     })
                 }
+            },
+            wxLoginBtn(){
+                this.$store.state.wxInfo.wxStatus = 0
+                let info = this.$commen.getWXUserCode(this.$store.state.wxInfo.APPID,this.$store.state.wxInfo.REDIRECT_URI)
+                Toast(info);
+
+
             }
         },
         mounted(){
             let resUrl = window.location.href
-            let data =''
-            let codeStr = ''
+            let data = ''
+            let codeStr =''
             if(resUrl.indexOf('code') >-1){
                 data = resUrl.substr(resUrl.indexOf('code'))
                 let arr = data .split('&')
                 codeStr = arr[0]
                 codeStr = codeStr.substr(codeStr.indexOf('=')+1)
+               this.$store.state.wxInfo.wxCode = codeStr
+                console.log( this.$store.state.wxInfo.wxCode)
             }
-            if(codeStr != '' && codeStr!= undefined && codeStr!=null){
+
+            if( localStorage.getItem('userInfo') !=null && this.$store.state.wxInfo.wxCode != '' &&  this.$store.state.wxInfo.wxCode!= undefined &&  this.$store.state.wxInfo.wxCode!=null){
                 this.$router.push({
                     path:'/userWX',
                     name:'userWX',
                     params:{
-                        code:codeStr
+                        code:this.$store.state.wxInfo.wxCode
                     }
                 })
             }else{
-                if(localStorage.getItem('userInfo') !=null){
+                if(localStorage.getItem('userInfo') !=null && this.$store.state.wxInfo.wxStatus == 0){
                     this.$router.push('/choose')
+                }else if(localStorage.getItem('userInfo') !=null && this.$store.state.wxInfo.wxStatus == 1){
+                    this.$router.push('/user')
+                }else{
+
+                    if(this.$store.state.wxInfo.wxCode != '' &&  this.$store.state.wxInfo.wxCode!= undefined){
+                        let cnt ={
+                            code:this.$store.state.wxInfo.wxCode
+                        }
+                        this.$api.getAccessToken(cnt,(res)=>{
+                            if(res.data.rc == this.$util.RC.SUCCESS){
+                                console.log(this.$util.tryParseJson(res.data.c))
+                                let openId = this.$util.tryParseJson(res.data.c).openId
+                                Toast.loading({
+                                    mask: true,
+                                    message: '验证中...'
+                                });
+                                let cnt = {
+                                    openId: openId, // String 微信id
+                                };
+                                console.log(cnt)
+                                this.$api.loginByOpenId(cnt,(res)=>{
+                                    if(res.data.rc == this.$util.RC.SUCCESS){
+                                        let data = this.$util.tryParseJson(res.data.c,{})
+                                        localStorage.setItem('userInfo',JSON.stringify(data))
+                                        Toast.success({
+                                            durationL:200,
+                                            message:'登录成功'
+                                        })
+                                        this.$router.push('/choose')
+                                    }else{
+                                        Toast.fail({
+                                            duration:200,
+                                            message:'登录失败，请先进入用户信息页面绑定微信后登录'
+                                        })
+                                    }
+                                })
+
+
+                            }
+
+                        })
+                    }
                 }
             }
 
@@ -384,5 +439,16 @@
         color: #fff;
         font-size: 1.4rem;
     }
+    .wx-btn{
+        margin-top: 2rem;
+        width: auto;
+        height: 3rem;
+        text-align: center;
+    }
+    .wx-btn i{
+        font-size: 3rem;
+        color: #fff;
+    }
+
 
 </style>

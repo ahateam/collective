@@ -10,11 +10,12 @@ import util from 'ahaapi'
 import VCharts from 'v-charts'
 import area from './data/api/area'
 import bank from './data/api/bank'
-
+import Print from 'vue-print-nb'
 
 
 Vue.use(ElementUI)
 Vue.use(VCharts)
+Vue.use(Print)
 
 Vue.config.productionTip = false
 Vue.prototype.$constData = constData

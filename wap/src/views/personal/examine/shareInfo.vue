@@ -116,7 +116,7 @@
                     orgId: JSON.parse(localStorage.getItem('user')).orgId, // Long 组织编号
                     status: 1, // Byte 状态
                 }
-                this.$api.editExamine(cnt,(res)=>{
+                this.$api.examineShareCerNo(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         Toast.success('审批成功，请等待区级审批')
                     }else{
