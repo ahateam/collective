@@ -444,6 +444,7 @@
 
                     }
                     console.log(this.chartData)
+
                 })
 
             })

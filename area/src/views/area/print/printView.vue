@@ -2,7 +2,7 @@
     <div >
         <el-row class="row-box" >
             <el-col :span="24">
-                <el-button type="primary" class="nav-btn">导入证书模板</el-button>
+                <el-button type="primary" class="nav-btn" @click="changeFamily">重新选择家庭户</el-button>
             </el-col>
         </el-row>
         <el-row class="row-box1">
@@ -15,13 +15,13 @@
                         <div class="item-box"
                              v-for="(item,index) in list"
                              :key="index"
-                            @click="setBtn(item.id)">
+                             @click="setBtn(item.id)">
                             <div class="item-img">
                                 <img :src="item.src" alt="">
                             </div>
                             <div class="item-text">
                                 <div class="item-address">
-                                        {{item.seat}}
+                                    {{item.seat}}
                                 </div>
                                 <div class="item-info">
                                     {{item.info}}
@@ -37,59 +37,44 @@
 
 <script>
     export default {
-        name: "printBook",
+        name: "printView",
         data(){
             return{
-                list:[]
-            }
-        },
-        methods:{
-            setBtn(id){
-                if(id ==1){
-                    this.$router.push({
-                        path:'/areaPrintTemplate',
-                        name:'areaPrintTemplate',
-                        params:{
-                            id:id
-                        }
-                    })
-                }else if(id ==2){
-                    this.$router.push({
-                        path:'/areaPrintTemplate1',
-                        name:'areaPrintTemplate1',
-                        params:{
-                            id:id
-                        }
-                    })
-                }else if (id ==3){
-                    this.$router.push({
-                        path:'/areaPrintTemplate2',
-                        name:'areaPrintTemplate2',
-                        params:{
-                            id:id
-                        }
-                    })
-                } else if (id ==4) {
-                    this.$router.push({
-                        path:'/areaPrintTemplate3',
-                        name:'areaPrintTemplate3',
-                        params:{
-                            id:id
-                        }
-                    })
-                }else if(id==5){
-                    this.$router.push({
-                        path:'/areaPrintTemplate4',
-                        name:'areaPrintTemplate4',
-                        params:{
-                            id:id
-                        }
-                    })
-                }
+                familyData:'',
+
+                orgList:[],
+                org:'',
+
+                list:[],
 
             }
         },
+        methods:{
+            changeFamily(){
+                localStorage.setItem('print','')
+                this.$router.push('/areaFamilyList')
+            },
+            setBtn(id){
+                if(id ==1){
+                    this.$router.push('/areaPrintViewInfo')
+                }else if(id ==2){
+                    this.$router.push('/areaPrintViewInfo1')
+                }else if(id ==3){
+                    this.$router.push('/areaPrintViewInfo2')
+                }else if(id ==4){
+                    this.$router.push('/areaPrintViewInfo3')
+                }else if(id ==5){
+                    this.$router.push('/areaPrintViewInfo4')
+                }
+            }
+        },
         mounted(){
+
+            if(localStorage.getItem('print') == undefined || localStorage.getItem('print') == '') {
+                this.$message.error('信息失效，重新选择')
+                this.$router.push('/areaFamilyList')
+            }
+
             this.list = [
                 {
                     id:1,
@@ -122,6 +107,9 @@
                     info:'抵押情况登记页'
                 },
             ]
+
+
+
         }
     }
 </script>

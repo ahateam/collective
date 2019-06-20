@@ -16,6 +16,7 @@ import bank from './assets/api/util/bank'
 
 Vue.use(Vant)
 
+
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.prototype.$util = util
@@ -23,6 +24,7 @@ Vue.prototype.$constData = constData
 Vue.prototype.$api = api
 Vue.prototype.$bank = bank
 Vue.prototype.$commen = commen
+
 
 new Vue({
     router,

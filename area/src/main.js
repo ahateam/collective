@@ -11,7 +11,7 @@ import VCharts from 'v-charts'
 import area from './data/api/area'
 import bank from './data/api/bank'
 import Print from 'vue-print-nb'
-
+import commen from './data/commen'
 
 Vue.use(ElementUI)
 Vue.use(VCharts)
@@ -22,7 +22,7 @@ Vue.prototype.$constData = constData
 Vue.prototype.$util = util
 Vue.prototype.$area = area
 Vue.prototype.$bank = bank
-
+Vue.prototype.$commen = commen
 
 
 new Vue({

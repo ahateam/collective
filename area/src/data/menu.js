@@ -117,6 +117,10 @@ const  areaMenu=[
             {
                 path:'/areaPrintBook',
                 title:'证书模板'
+            },
+            {
+                path:'/areaPrintView',
+                title:'打印证书'
             }
         ]
     },

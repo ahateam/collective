@@ -151,7 +151,7 @@
                     this.getFamilyAll(cnt)
                 } else {
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'),
+                        orgId: localStorage.getItem('org Id'),
                         content: this.searchData,
                         count: this.count, // Integer <选填> 查询数
                         offset: (this.page - 1) * this.count, // Integer <选填> 开始位置

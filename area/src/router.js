@@ -45,7 +45,19 @@ const areaExamineShare =()=>import('./views/area/examine/examineShare')
 
 const areaPrintBook =()=>import('./views/area/print/printBook')
 const areaPrintInfo =()=>import('./views/area/print/printInfo')
+const areaPrintTemplate =()=>import('./views/area/print/printTemplate')
+const areaPrintTemplate1 =()=>import('./views/area/print/printTemplate1')
+const areaPrintTemplate2 =()=>import('./views/area/print/printTemplate2')
+const areaPrintTemplate3 =()=>import('./views/area/print/printTemplate3')
+const areaPrintTemplate4 =()=>import('./views/area/print/printTemplate4')
 
+const areaPrintView =()=>import('./views/area/print/printView')
+const areaFamilyList = ()=>import('./views/area/user/familyList')
+const areaPrintViewInfo = ()=>import('./views/area/print/printPage/printViewInfo')
+const areaPrintViewInfo1 = ()=>import('./views/area/print/printPage/printViewInfo1')
+const areaPrintViewInfo2 = ()=>import('./views/area/print/printPage/printViewInfo2')
+const areaPrintViewInfo3 = ()=>import('./views/area/print/printPage/printViewInfo3')
+const areaPrintViewInfo4 = ()=>import('./views/area/print/printPage/printViewInfo4')
 
 Vue.use(Router)
 
@@ -237,8 +249,67 @@ export default new Router({
                 path:'/areaPrintInfo',
                 name:'areaPrintInfo',
                 component:areaPrintInfo
+            },
+            {
+                path:'/areaPrintTemplate',
+                name:'areaPrintTemplate',
+                component:areaPrintTemplate
+            },
+            {
+                path:'/areaPrintTemplate1',
+                name:'areaPrintTemplate1',
+                component:areaPrintTemplate1
+            },
+            {
+                path:'/areaPrintTemplate2',
+                name:'areaPrintTemplate2',
+                component:areaPrintTemplate2
+            },
+            {
+                path:'/areaPrintTemplate3',
+                name:'areaPrintTemplate3',
+                component:areaPrintTemplate3
+            },
+            {
+                path:'/areaPrintTemplate4',
+                name:'areaPrintTemplate4',
+                component:areaPrintTemplate4
+            },
+            {
+                path:'/areaPrintView',
+                name:'areaPrintView',
+                component:areaPrintView
+            },
+            {
+                path:'/areaFamilyList',
+                name:'areaFamilyList',
+                component:areaFamilyList
+            },
+            {
+                path:'/areaPrintViewInfo',
+                name:'areaPrintViewInfo',
+                component:areaPrintViewInfo
+            },
+            {
+                path:'/areaPrintViewInfo1',
+                name:'areaPrintViewInfo1',
+                component:areaPrintViewInfo1
+            },
+            {
+                path:'/areaPrintViewInfo2',
+                name:'areaPrintViewInfo2',
+                component:areaPrintViewInfo2
+            },
+            {
+                path:'/areaPrintViewInfo3',
+                name:'areaPrintViewInfo3',
+                component:areaPrintViewInfo3
+            },
+            {
+                path:'/areaPrintViewInfo4',
+                name:'areaPrintViewInfo4',
+                component:areaPrintViewInfo4
             }
-
         ]
     },
   ]

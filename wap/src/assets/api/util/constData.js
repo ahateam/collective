@@ -8,6 +8,10 @@
 //  vote:普通用户投票时用到的表决信息，包含meetInfo voteInfo
 
 //userPosition：修改用户职务时，所传的用户信息对象
+/**
+* 版本号
+* */
+const VERSION = 104
 
 /**
  *股东类型
@@ -102,5 +106,6 @@ export default {
     examineType,
     examineStatus,
     tab,
-    familyType
+    familyType,
+    VERSION
 }

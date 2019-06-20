@@ -25,6 +25,7 @@
         padding-bottom: 2rem;
       }
       </style>
+    <script src="http://jiti.online.3ch.org.cn/app/version.js"></script>
   </head>
   <body>
     <noscript>
@@ -34,7 +35,11 @@
     <!-- built files will be auto injected -->
 
     <script>
+
+
+
         document.addEventListener('plusready', function(a) { //等待plus ready后再调用5+ API：
+
             //// 在这里调用5+ API
             var first = null;
             plus.key.addEventListener('backbutton', function() { //监听返回键
@@ -52,7 +57,12 @@
                         plus.runtime.quit(); //退出应用
                     }
                 }
+
+
             }, false);
+
+
+
         });
     </script>
   </body>
