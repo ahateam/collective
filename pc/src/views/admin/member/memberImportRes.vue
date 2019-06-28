@@ -11,16 +11,21 @@
                 <p>
                     <span class="info-text">
                          任务数据总量：<span style="color: #f44;"> {{sum}} 条</span>；
-                        已完成导入数据总量：<span style="color: #f44;"> {{success}} 条</span>；
+                        已完成导入数据总量：<span style="color: #f44;"> {{success+errorData}} 条</span>；
                     </span>
                 </p>
                 <p>
                     <span class="info-text">
                             创建任务时间：<span style="color: #f44;">{{   new Date(info.createTime ).toLocaleDateString()+ ' '+new Date(info.createTime ).toLocaleTimeString('chinese',{hour12:false})}}</span>；
-                    任务状态：<span v-if="status == 0" style="color: #468847">正在进行导入</span>
-                    <span v-if="status == 1" style="color: #1483d8">已完成导入</span>
-                    <span v-if="status == 2" style="color: #f44">等待导入</span>
-                    ；错误数据条数：<span style="color: #f44;"> {{errorData}} 条</span>
+                    任务状态：<span v-if="status == 0" style="color: #468847">等待上传文件</span>
+                        <span v-else-if="status == 1" style="color: #468847">文件已就绪</span>
+                        <span v-else-if="status == 2" style="color: #468847">准备导入</span>
+                        <span v-else-if="status == 3" style="color: #468847">正在导入</span>
+                        <span v-else-if="status == 4" style="color: #468847">导入完成</span>
+
+
+                    ；错误数据条数：<span style="color: #f44;"> {{errorData}} 条</span>；
+                        成功数据条数：<span style="color: #468847;"> {{success}} 条</span>
                     </span>
                 </p>
             </el-col>
@@ -59,7 +64,7 @@
 
             </el-col>
             <el-col :span="24" style="margin: 15px 0">
-                <el-button type="primary" style="float: right" @click="assetErrorBtn" v-if="status ==1"> 查看错误数据报告</el-button>
+                <el-button type="primary" style="float: right" @click="assetErrorBtn" v-if="status ==4"> 查看错误数据报告</el-button>
             </el-col>
         </el-row>
 
@@ -88,7 +93,7 @@
                 errorData:0,
                 info:'',
                 timer:'',
-                status:2,
+                status:0,
             }
         },
         methods:{
@@ -127,32 +132,28 @@
             },
             //反复调用获取进度条
             getPropressData(){
-                if(this.status != 1 ){
+                if(this.status != '4' ){
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织id
-                        userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
-                        importTaskId: this.info.id, // Long 导入任务id
+                        taskId: this.info.id, // Long 导入任务id
                     }
-                    this.$api.getORGUserImportTask(cnt,(res)=>{
-                        this.sum = this.$util.tryParseJson(res.data.c).sum
-                        this.success = this.$util.tryParseJson(res.data.c).success
-                        this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
+                    this.$api.getImportTask(cnt,(res)=>{
+                        this.sum = this.$util.tryParseJson(res.data.c).amount
+                        this.success = this.$util.tryParseJson(res.data.c).successCount
+                        this.errorData =  this.$util.tryParseJson(res.data.c).failureCount
                         this.status = this.$util.tryParseJson(res.data.c).status
-                        this.propressData = parseFloat(((this.success/this.sum)*100).toFixed(2))
+                        this.propressData = parseFloat((((this.success+this.errorData)/this.sum)*100).toFixed(2))
                     })
                 }else{
                     clearInterval(this.timer)
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织id
-                        userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
-                        importTaskId: this.info.id, // Long 导入任务id
+                        taskId: this.info.id, // Long 导入任务id
                     }
-                    this.$api.getORGUserImportTask(cnt,(res)=>{
-                        this.sum = this.$util.tryParseJson(res.data.c).sum
-                        this.success = this.$util.tryParseJson(res.data.c).success
-                        this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
+                    this.$api.getImportTask(cnt,(res)=>{
+                        this.sum = this.$util.tryParseJson(res.data.c).amount
+                        this.success = this.$util.tryParseJson(res.data.c).successCount
+                        this.errorData =  this.$util.tryParseJson(res.data.c).failureCount
                         this.status = this.$util.tryParseJson(res.data.c).status
-                        this.propressData = parseFloat(((this.success/this.sum)*100).toFixed(2))
+                        this.propressData = parseFloat((((this.success+this.errorData)/this.sum)*100).toFixed(2))
                         localStorage.setItem('taskInfo',res.data.c)
 
 
@@ -163,6 +164,7 @@
             //执行批量导入
             importBtn(){
                 let arr = []
+
                 for(let i = 0;i<this.tableData.length;i++){
                     arr.push(this.tableData[i].url)
                 }
@@ -193,23 +195,20 @@
             this.list()
 
             let cnt = {
-                orgId: orgId, // Long 组织编号
-                userId: JSON.parse(localStorage.getItem('orgUser')).id,
-                importTaskId: this.info.id, // Long 导入任务id
+                taskId: this.info.id, // Long 导入任务id
             }
 
-            this.$api.getORGUserImportTask(cnt,(res)=>{
+            this.$api.getImportTask(cnt,(res)=>{
                 if(res.data.rc == this.$util.RC.SUCCESS){
-                    this.success = this.$util.tryParseJson(res.data.c).success
-                    this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
+                    this.success = this.$util.tryParseJson(res.data.c).successCount
+                    this.errorData =  this.$util.tryParseJson(res.data.c).failureCount
                     this.status = this.$util.tryParseJson(res.data.c).status
-                    this.sum =  this.$util.tryParseJson(res.data.c).sum
-                    if(this.status == 2){
+                    this.sum =  this.$util.tryParseJson(res.data.c).amount
+                    if(this.status == '1'){
                         let cnt1 ={
-                            orgId: orgId, // Long 组织编号
                             importTaskId: this.info.id, // Long 导入任务id
                         }
-                        this.$api.importORGUser(cnt1,(res1)=>{
+                        this.$api.importOrgUser(cnt1,(res1)=>{
                             if(res1.data.rc == this.$util.RC.SUCCESS){
                                 this.getPropressData()
                             }

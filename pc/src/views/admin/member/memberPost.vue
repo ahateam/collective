@@ -710,7 +710,7 @@
             },
             //修改用户信息
             editORGUserBtn(){
-                let that = this
+
                 if(this.addressInfo == ''  || this.weightInfo == '' || this.rolesInfo.length == 0) {
                     this.$message.error('请输入完整的用户信息')
                 }else{
@@ -730,6 +730,7 @@
                         familyNumber:this.familyNumberInfo,
                         familyMaster:this.familyMasterInfo
                     }
+                    // console.log(cnt)
                     this.editORGUser(cnt)
                 }
             },

@@ -8,7 +8,7 @@
         <el-row class="row-box1">
             <el-row>
                 <el-col :span="24">
-                    <div class="title-change" >
+                    <div class="title-change">
                         <div class="title">
                             常用资料选择：
                         </div>
@@ -31,22 +31,39 @@
                                 </div>
                             </div>
 
-                            <div class="tags">
-                                <div class="item-tag">
-                                    <span style="float: left">
+                            <div class="family-box">
+                                <div class="family-btn-box">
+                                    <div class="family-title">
                                         家庭户基本资料：
-                                    </span>
-                                    <div class="list">
-                                        <el-tag v-for="(item,index) in tags.userInfo"
-                                                :key="index"
-                                                style="cursor: pointer"
-                                                class="tag-box"
-                                                @click="setValBtn(item,'user')">
-                                            {{item.printingName}}
-                                        </el-tag>
+                                        <el-button type="primary" size="mini" class="family-btn" @click="addUserBtn">
+                                            新增家庭用户
+                                        </el-button>
+                                    </div>
+                                </div>
+                                <div class="family-content-box" v-if="newUserList.length!=0">
+                                    <div class="family-user-list">
+                                        <div v-for="(item,index) in newUserList">
+                                            <el-tag type="warning" :class="userActive==index?'user-tag-active':'user-tag'" @click="changeUserBtn(index)">
+                                                用户{{index+1}}
+                                            </el-tag>
+                                        </div>
+                                    </div>
+
+                                    <div style="width: auto;margin-top: 20px;line-height: 25px;margin-bottom: 10px">
+                                        <div class="list">
+                                            <el-tag v-for="(item1,index1) in newUserList[userActive]"
+                                                    :key="index1"
+                                                    style="cursor: pointer"
+                                                    class="tag-box"
+                                                    @click="setValBtn(item1,'user',userActive)">
+                                                用户{{userActive+1}}.{{item1.printingName}}
+                                            </el-tag>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="tags">
                                 <div class="item-tag">
                                     <span style="float: left">
@@ -60,7 +77,7 @@
                                             style="cursor: pointer;"
                                             :disable-transitions="false"
                                             @close="handleClose(tag)"
-                                            @click="setValBtn(tag)" >
+                                            @click="setValBtn(tag)">
                                         {{tag.printingName}}
                                     </el-tag>
                                     <el-input
@@ -73,7 +90,8 @@
                                             @blur="handleInputConfirm"
                                     >
                                     </el-input>
-                                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新增常用值</el-button>
+                                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新增常用值
+                                    </el-button>
 
                                 </div>
                             </div>
@@ -91,6 +109,8 @@
                     <el-button type="danger" @click="delChildBtn">撤 回</el-button>
                 </el-col>
             </el-row>
+
+
             <el-row style="margin-top: 20px">
                 <el-col :span="24">
                     <div class="box-bg">
@@ -111,7 +131,7 @@
                                                     <p>抵押</p><p>金额</p>
                                                 </div>
                                                 <div class="item-th-td" style="width: 14mm;height: 15mm;border-right: 1px solid #aaa;padding-top: 2mm">
-                                                   <p> 抵押</p><p>股份</p><p>数</p>
+                                                    <p> 抵押</p><p>股份</p><p>数</p>
                                                 </div>
                                                 <div class="item-th-td" style="width: 37mm;height: 17mm;line-height: 17mm;border-right: 1px solid #aaa">
                                                     股份权所有人
@@ -170,11 +190,13 @@
                                         @clicked="changeChild(index)"
                                         @deactivated="cancelActive(index)"
                                         @resizing="changeSize($event,index)"
-                                        @dragging ="changePosition($event,index)"
+                                        @dragging="changePosition($event,index)"
                                 >
                                     <span style="font-size: 4mm;color: #333;font-family: FangSong">{{item.text.printingName}}</span>
                                 </VueDragResize>
                             </div>
+
+
                         </div>
                     </div>
                 </el-col>
@@ -189,15 +211,15 @@
     import VueDragResize from 'vue-drag-resize'
 
     export default {
-        name: "printTemplate2",
-        data(){
-            return{
+        name: "printTemplate",
+        data() {
+            return {
                 //判断是否是修改操作
-                isEdit:false,
-                templateInfo:'',
+                isEdit: false,
+                templateInfo: '',
 
-                id:'',
-                tags:[],
+                id: '',
+                tags: [],
                 dynamicTags: [],
                 inputVisible: false,
                 inputValue: '',
@@ -205,15 +227,20 @@
 
 
                 //节点移动相关
-                dragArr:[],
-                _index:1,
+                dragArr: [],
+                _index: -1,
+
+                //处理批量用户相关
+                newUserList: [],
+                userActive:-1,
+
             }
         },
-        components:{
+        components: {
             VueDragResize
         },
-        methods:{
-            choseBtn(){
+        methods: {
+            choseBtn() {
 
                 console.log('2222')
             },
@@ -223,64 +250,78 @@
             },
             showInput() {
                 this.inputVisible = true;
-                this.$nextTick( ()=> {
+                this.$nextTick(() => {
                     this.$refs.saveTagInput.$refs.input.focus();
                 });
             },
             handleInputConfirm() {
                 let inputValue = this.inputValue;
                 if (inputValue) {
-                    this.dynamicTags.push(inputValue);
+                    let obj ={
+                        key:0,
+                        isConstant:0,
+                        printingName:inputValue,
+                        printing:''
+                    }
+                    this.dynamicTags.push(obj);
                 }
                 this.inputVisible = false;
                 this.inputValue = '';
             },
 
             //选中当前节点 修改值
-            setValBtn(tag,parma) {
+            setValBtn(tag, parma='', _index=-1) {
 
                 if (this._index != -1) {
                     let obj = JSON.parse(JSON.stringify(this.dragArr[this._index]))
-                    obj.text = tag
+                    obj.text = JSON.parse(JSON.stringify(tag))
                     obj.parma = parma
+                    if(_index != -1){
+                        obj.index = _index
+                        let key =_index+1
+                        let str =tag.printingName+ key
+                        obj.text.printingName= str
+                    }
+
+
                     this.dragArr.splice(this._index, 1, obj)
                 }
             },
-
             //单击选中节点
-            changeChild(index){
+            changeChild(index) {
                 this._index = index
-                for(let i=0;i<this.dragArr.length;i++){
-                    if( this.dragArr[i].isActive == true){
+                for (let i = 0; i < this.dragArr.length; i++) {
+                    if (this.dragArr[i].isActive == true) {
                         this.dragArr[i].isActive = false
                     }
                 }
                 this.dragArr[index].isActive = true
             },
             //节点改变宽高相关
-            changeSize(newRect,index) {
+            changeSize(newRect, index) {
                 this.dragArr[index].rect = newRect
             },
             //节点变化位置
-            changePosition(newRect,index){
+            changePosition(newRect, index) {
                 this.dragArr[index].rect = newRect
             },
             //点击节点外触发取消所有的选中样式
-            cancelActive(index){
+            cancelActive(index) {
                 this.dragArr[index].isActive = false
             },
 
 
             //新增打印项
-            addChild(){
-                let obj  ={
-                    text:{key:-1,isConstant:0,printingName:'请选择对应的变量或值',printing:''},
-                    parma:'',
-                    rect:{  left:500, top:100, width:200, height:40},
-                    isActive:true,
+            addChild() {
+                let obj = {
+                    text: {key: -1, isConstant: 0, printingName: '请选择对应的变量或值', printing: ''},
+                    parma: '',
+                    index: -1,
+                    rect: {left: 500, top: 100, width: 200, height: 20},
+                    isActive: true,
                 }
-                for(let i=0;i<this.dragArr.length;i++){
-                    if( this.dragArr[i].isActive == true){
+                for (let i = 0; i < this.dragArr.length; i++) {
+                    if (this.dragArr[i].isActive == true) {
                         this.dragArr[i].isActive = false
                     }
                 }
@@ -289,81 +330,94 @@
             },
 
 
-
-
-
             //撤回按钮
-            delChildBtn(){
-                if(this.dragArr.length>0){
-                    this.dragArr.splice(this.dragArr.length-1,1)
-                }else{
+            delChildBtn() {
+                if (this.dragArr.length > 0) {
+                    this.dragArr.splice(this.dragArr.length - 1, 1)
+                } else {
                     this.$message.error('请先添加至少一个打印项！')
                 }
             },
-
             //保存为打印模板
-            createPrint(){
-                let cnt ={
+            createPrint() {
+                let cnt = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
                     data: JSON.stringify(this.dragArr), // String 模板数据
                     type: this.$constData.printType[3].key, // Byte 模板类型
                     page: 1, // Byte 左右页  1为左  2为右
                 }
-                this.$area.createPrintingTemplate(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
+                this.$area.createPrintingTemplate(cnt, (res) => {
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
                         this.$message.success('操作成功')
-                    }else{
+                    } else {
                         this.$message.error('/操作失败')
                     }
                     this.$router.push('/areaPrintBook')
                 })
             },
             //保存修改信息
-            editPrint(){
-                let cnt ={
-                    prTeId:this.templateInfo.id,
+            editPrint() {
+                let cnt = {
+                    prTeId: this.templateInfo.id,
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
                     data: JSON.stringify(this.dragArr), // String 模板数据
                     type: this.$constData.printType[3].key, // Byte 模板类型
-                    page: 1, // Byte 左右页  1为左  2为右
+                    page:1, // Byte 左右页  1为左  2为右
                 }
-                this.$area.editPrintingTemplate(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
+
+                console.log(cnt)
+                this.$area.editPrintingTemplate(cnt, (res) => {
+                    if (res.data.rc == this.$util.RC.SUCCESS) {
                         this.$message.success('操作成功')
-                    }else{
+                    } else {
                         this.$message.error('/操作失败')
                     }
                     this.$router.push('/areaPrintBook')
                 })
-            }
-        },
-        mounted(){
 
+            },
+
+            //新增家庭用户批量变量
+            addUserBtn() {
+                this.newUserList.push(this.tags.userInfo)
+                console.log(this.tags.userInfo);
+
+                this.userActive = this.newUserList.length-1
+            },
+            //选中其他用户
+            changeUserBtn(_index){
+                this.userActive = _index
+            }
+
+        },
+        mounted() {
 
             this.dynamicTags = JSON.parse(JSON.stringify(this.$constData.printConstant))
-            this.$area.getPrintingType({},(res)=>{
-                if(res.data.rc == this.$util.RC.SUCCESS){
+            this.$area.getPrintingType({}, (res) => {
+                if (res.data.rc == this.$util.RC.SUCCESS) {
                     this.tags = this.$util.tryParseJson(res.data.c)
-                }else{
+                } else {
                     this.tags = []
                 }
 
+                console.log(this.tags)
             })
 
-            let cnt ={
+
+            let cnt = {
                 orgId: localStorage.getItem('orgId'), // Long 组织编号
                 type: this.$constData.printType[3].key, // Byte 打印模板类型
                 page: 1, // Byte 页码  1左 2右
             }
-            this.$area.getPrintingTemplateByType(cnt,(res)=>{
-                if(res.data.rc == this.$util.RC.SUCCESS){
-                    if(JSON.parse(res.data.c) == null){
-                        this.templateInfo =''
+            this.$area.getPrintingTemplateByType(cnt, (res) => {
+                if (res.data.rc == this.$util.RC.SUCCESS) {
+                    if (JSON.parse(res.data.c) == null) {
+                        this.templateInfo = ''
                         this.isEdit = false
-                    }else{
+                    } else {
                         this.isEdit = true
                         this.templateInfo = JSON.parse(res.data.c)
-                        this.dragArr =JSON.parse(this.templateInfo.data)
+                        this.dragArr = JSON.parse(this.templateInfo.data)
                     }
                 }
                 console.log(this.templateInfo)
@@ -382,32 +436,213 @@
             display: none;
         }
     }
-    .nav-btn{
+
+    .nav-btn {
         float: left;
         margin-left: 15px;
     }
-    .row-box{
+
+    .row-box {
         background: #fff;
-        padding:15px 0;
+        padding: 15px 0;
     }
-    .row-box1{
+
+    .row-box1 {
         margin-top: 20px;
         padding: 15px;
         background: #fff;
     }
-    .col-title{
+
+    .col-title {
         padding-left: 10px;
         line-height: 20px;
         color: #666;
         font-size: 16px;
     }
-    .box-bg{
+
+    .box-bg {
         margin: 0 auto;
         position: relative;
         width: 280mm;
         height: 200mm;
         border: 1px solid #aaa;
     }
+
+    .bg {
+        position: absolute;
+        width: 280mm;
+        height: 200mm;
+        top: 0;
+        left: 0;
+        z-index: 100;
+    }
+
+    .title-change {
+        width: auto;
+        padding: 10px;
+        border: 1px solid #eee;
+        border-radius: 5px
+    }
+
+
+
+
+
+
+
+    .content-box {
+        width: 280mm;
+        height: 200mm;
+        z-index: 1100;
+        position: relative;
+    }
+
+
+
+
+
+
+    .table-footer {
+        height: 41mm;
+        width: 120mm;
+        border: 1px solid #aaa;
+        border-top: none;
+
+    }
+
+    .table-footer-left {
+        float: left;
+        width: 55mm;
+        height: 41mm;
+        border-right: 1px solid #aaa;
+    }
+
+    .table-footer-right {
+        float: left;
+        width: 62mm;
+        height: 41mm;
+
+    }
+
+    .footer-title {
+        width: auto;
+        font-size: 3mm;
+        margin-top: 2mm;
+        margin-left: 2mm;
+    }
+
+    .footer-chapter {
+        margin-top: 17mm;
+        width: auto;
+        margin-right: 4mm;
+        text-align: right;
+        font-size: 3mm;
+    }
+
+    .footer-time {
+        width: auto;
+        text-align: right;
+        margin-right: 2mm;
+        margin-top: 6mm;
+
+    }
+
+    .footer-time1 {
+        width: auto;
+        padding-left: 20mm;
+
+        margin-top: 6mm;
+
+    }
+
+
+    .title-tags {
+        width: auto;
+
+    }
+
+    .tags {
+        width: auto;
+        margin-top: 10px;
+        line-height: 40px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .item-tag {
+        width: auto;
+        height: 40px;
+    }
+
+    .tag-box:hover {
+        background: #409eff;
+        color: #fff;
+    }
+
+    .tag-box:active {
+        background: #66b1ff;
+        color: #fff;
+    }
+
+    .family-box {
+        margin: 10px 0;
+
+    }
+
+    .family-btn-box {
+        width: auto;
+    }
+
+    .family-title {
+        line-height: 25px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .family-btn {
+        margin-left: 15px;
+    }
+
+    .family-content-box {
+        width: auto;
+        margin-top: 10px;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        height: 100px;
+    }
+
+    .family-user-list {
+        width: auto;
+        line-height: 30px;
+        height: 30px;
+    }
+
+    .user-tag {
+        float: left;
+        cursor: pointer;
+        margin-left: 20px;
+    }
+
+    .user-tag:hover {
+        background: #e6a23c;
+        color: #fff;
+    }
+
+    .user-tag:active {
+        background: #e6a23c;
+
+        color: #fff;
+    }
+
+    .user-tag-active {
+        float: left;
+        cursor: pointer;
+        background: #e6a23c;
+        color: #fff;
+        margin-left: 15px;
+    }
+
     .bg{
         position: absolute;
         width: 280mm;
@@ -570,82 +805,5 @@
         border: 1px solid #aaa;
         border-top: none;
     }
-    .table-footer{
-        height: 41mm;
-        width: 120mm;
-        border: 1px solid #aaa;
-        border-top: none;
-
-    }
-    .table-footer-left{
-        float: left;
-        width: 55mm;
-        height: 41mm;
-        border-right: 1px solid #aaa;
-    }
-    .table-footer-right{
-        float: left;
-        width: 62mm;
-        height: 41mm;
-
-    }
-    .footer-title{
-        width: auto;
-        font-size: 3mm;
-        margin-top: 2mm;
-        margin-left:2mm ;
-    }
-    .footer-chapter{
-        margin-top: 17mm;
-        width: auto;
-        margin-right: 4mm;
-        text-align: right;
-        font-size: 3mm;
-    }
-    .footer-time{
-        width: auto;
-        text-align: right;
-        margin-right: 2mm;
-        margin-top: 6mm;
-
-    }
-    .footer-time1{
-        width: auto;
-        padding-left: 20mm;
-
-        margin-top: 6mm;
-
-    }
-
-    .content-box{
-        width: 280mm;
-        height: 200mm;
-        z-index: 1100;
-        position: relative;
-    }
-    .title-tags {
-        width: auto;
-
-    }
-    .tags{
-        width: auto;
-        margin-top: 10px;
-        line-height: 40px;
-        font-size: 14px;
-        color: #666;
-    }
-    .item-tag{
-        width: auto;
-        height: 40px;
-    }
-    .tag-box:hover{
-        background: #409eff;
-        color: #fff;
-    }
-    .tag-box:active{
-        background: #66b1ff;
-        color: #fff;
-    }
-
 
 </style>

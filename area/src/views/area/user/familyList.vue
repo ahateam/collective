@@ -229,7 +229,7 @@
             },
             //选中分户 跳转页面
             separateBtn(row){
-                let info = {org:this.org,user:row}
+                let info = {org:this.org,family:row}
                 localStorage.setItem('print','')
                 localStorage.setItem('print',JSON.stringify(info))
                 this.$router.push('/areaPrintView')

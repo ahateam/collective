@@ -8,45 +8,12 @@
         <el-row class="row-box1">
             <el-row>
                 <el-col :span="24">
-                    <div class="title-change" >
+                    <div class="title-change">
                         <div class="title">
                             常用资料选择：
                         </div>
                         <div class="title-tags">
 
-                            <div class="tags">
-                                <div class="item-tag">
-                                    <span style="float: left">
-                                        合作社基本资料：
-                                    </span>
-                                    <div class="list">
-                                        <el-tag v-for="(item,index) in tags.orgInfo"
-                                                :key="index"
-                                                style="cursor: pointer"
-                                                class="tag-box"
-                                                @click="setValBtn(item,'org')">
-                                            {{item.printingName}}
-                                        </el-tag>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tags">
-                                <div class="item-tag">
-                                    <span style="float: left">
-                                        家庭户基本资料：
-                                    </span>
-                                    <div class="list">
-                                        <el-tag v-for="(item,index) in tags.userInfo"
-                                                :key="index"
-                                                style="cursor: pointer"
-                                                class="tag-box"
-                                                @click="setValBtn(item,'user')">
-                                            {{item.printingName}}
-                                        </el-tag>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="tags">
                                 <div class="item-tag">
                                     <span style="float: left">
@@ -86,8 +53,7 @@
                 <el-col :span="24" style="text-align: right">
                     <el-button type="primary" @click="addChild">新增打印项</el-button>
                     <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
-                    <el-button type="success" @click="createPrint" v-if="isEdit == false">保存为打印模板</el-button>
-                    <el-button type="success" @click="editPrint" v-if="isEdit == true">保存为打印模板</el-button>
+
                     <el-button type="danger" @click="delChildBtn">撤 回</el-button>
                 </el-col>
             </el-row>
@@ -193,7 +159,6 @@
         data(){
             return{
                 //判断是否是修改操作
-                isEdit:false,
                 templateInfo:'',
 
                 id:'',
@@ -207,6 +172,12 @@
                 //节点移动相关
                 dragArr:[],
                 _index:1,
+
+                //变量匹配所需
+                org:'',
+                family:'',
+                familyUserList:[],
+                printInfo:''
             }
         },
         components:{
@@ -230,7 +201,13 @@
             handleInputConfirm() {
                 let inputValue = this.inputValue;
                 if (inputValue) {
-                    this.dynamicTags.push(inputValue);
+                    let obj ={
+                        key:0,
+                        isConstant:0,
+                        printingName:inputValue,
+                        printing:''
+                    }
+                    this.dynamicTags.push(obj);
                 }
                 this.inputVisible = false;
                 this.inputValue = '';
@@ -301,54 +278,94 @@
                 }
             },
 
-            //保存为打印模板
-            createPrint(){
-                let cnt ={
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
-                    data: JSON.stringify(this.dragArr), // String 模板数据
-                    type: this.$constData.printType[3].key, // Byte 模板类型
-                    page: 1, // Byte 左右页  1为左  2为右
+            //匹配变量常量
+            getOrgInfo(){
+                let orgId =  this.printInfo.org
+                this.family = this.printInfo.family
+                let cnt = {
+                    orgId : orgId
                 }
-                this.$area.createPrintingTemplate(cnt,(res)=>{
+                this.$area.getORGById(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('操作成功')
+                        this.org = this.$util.tryParseJson(res.data.c)
                     }else{
-                        this.$message.error('/操作失败')
+                        this.org = ''
                     }
-                    this.$router.push('/areaPrintBook')
+
+                    let cnt1={
+                        familyNumber: this.family.familyNumber,
+                        orgId: orgId
+                    }
+                    this.$area.getFamilyUserByFamilyNumber(cnt1,(res1)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.familyUserList = this.$util.tryParseJson(res1.data.c)
+                        }else{
+                            this.familyUserList = []
+                        }
+                        this.getDataVar()
+                    })
+
+
+
+
                 })
             },
-            //保存修改信息
-            editPrint(){
-                let cnt ={
-                    prTeId:this.templateInfo.id,
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
-                    data: JSON.stringify(this.dragArr), // String 模板数据
-                    type: this.$constData.printType[3].key, // Byte 模板类型
-                    page: 1, // Byte 左右页  1为左  2为右
-                }
-                this.$area.editPrintingTemplate(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('操作成功')
-                    }else{
-                        this.$message.error('/操作失败')
+
+            getDataVar(){
+
+                let dataArr = []
+
+                for(let i=0;i<this.dragArr.length;i++){
+                    //org user 已经用parma区分 key区分前端变量
+
+                    //无后端变量
+                    if(this.dragArr[i].parma == undefined || this.dragArr[i].parma == ''){
+                        if(this.dragArr[i].text.key ==1){   //前端变量--当前日期 （key==-1为静态值不用管）
+                            let data = this.$commen.getDateStr()
+                            let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                            obj.text.printingName = data
+                            dataArr.push(obj)
+                        }
+                    }else {     //后端变量
+                        if(this.dragArr[i].parma == 'org'){     //对应org信息
+                            let str = this.dragArr[i].text.printing
+                            let data = this.org[str]
+                            let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                            obj.text.printingName = data
+                            dataArr.push(obj)
+
+                        }else if( this.dragArr[i].parma =='user'){  //对应familyUserList信息
+
+
+
+                            if( this.dragArr[i].index< this.familyUserList.length){
+                                //遍历roles判断是否为集体经济组织成员
+
+
+                                let str = this.dragArr[i].text.printing
+                                console.log(str)
+                                let _index = this.dragArr[i].index
+                                let data = this.familyUserList[_index][str]
+                                let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                                obj.text.printingName = data
+                                dataArr.push(obj)
+                            }
+                        }
                     }
-                    this.$router.push('/areaPrintBook')
-                })
+                }
+
+                this.dragArr = dataArr
             }
+
+
+
         },
         mounted(){
 
 
-            this.dynamicTags = JSON.parse(JSON.stringify(this.$constData.printConstant))
-            this.$area.getPrintingType({},(res)=>{
-                if(res.data.rc == this.$util.RC.SUCCESS){
-                    this.tags = this.$util.tryParseJson(res.data.c)
-                }else{
-                    this.tags = []
-                }
 
-            })
+            this.printInfo = JSON.parse(localStorage.getItem('print'))
+            this.dynamicTags = []
 
             let cnt ={
                 orgId: localStorage.getItem('orgId'), // Long 组织编号
@@ -359,15 +376,12 @@
                 if(res.data.rc == this.$util.RC.SUCCESS){
                     if(JSON.parse(res.data.c) == null){
                         this.templateInfo =''
-                        this.isEdit = false
                     }else{
-                        this.isEdit = true
                         this.templateInfo = JSON.parse(res.data.c)
                         this.dragArr =JSON.parse(this.templateInfo.data)
+                        this.getOrgInfo()
                     }
                 }
-                console.log(this.templateInfo)
-
             })
         }
     }

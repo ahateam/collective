@@ -195,13 +195,15 @@
                         userId: JSON.parse(localStorage.getItem('orgUser')).id,
                         url: arr, // String excel文件url
                         importTaskId: this.info.id, // Long 导入任务id
+                        skipRowCount:this.$constData.importData.userImport.skipRowCount,
+                        colCount:this.$constData.importData.userImport.colCount
                     }
 
                     setTimeout(()=>{
                         this.$router.push('/memberImportRes')
                     },60000)
 
-                    this.$api.importORGUserRecord(cnt,(res)=>{
+                    this.$api.importRecord(cnt,(res)=>{
                         loading.close()
 
                         if(res.data.rc == this.$util.RC.SUCCESS){

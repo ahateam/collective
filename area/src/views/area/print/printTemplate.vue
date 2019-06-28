@@ -227,7 +227,6 @@
                         printingName:inputValue,
                         printing:''
                     }
-
                     this.dynamicTags.push(obj);
                 }
                 this.inputVisible = false;
@@ -241,21 +240,11 @@
                     let obj = JSON.parse(JSON.stringify(this.dragArr[this._index]))
                     obj.text = tag
                     obj.parma = parma
+                    if(parma =='user'){
+                        obj.index = 0
+                    }
                     this.dragArr.splice(this._index,1,obj)
                 }
-
-               // if(this._index != -1){
-               //
-               // }else{
-               //     let obj  ={
-               //         text:{key:-1,isConstant:0,printingName:tag.printingName,printing:tag.printing},
-               //         parma:parma,
-               //         rect:{  left:500, top:100, width:200, height:40},
-               //         isActive:true,
-               //     }
-               //     this.dragArr.push(obj)
-               //     this._index = this.dragArr.length
-               // }
 
 
             },
@@ -289,7 +278,8 @@
                 let obj  ={
                     text:{key:-1,isConstant:0,printingName:'请选择对应的变量或值',printing:''},
                     parma:'',
-                    rect:{  left:500, top:100, width:200, height:40},
+                    index:-1,
+                    rect:{  left:500, top:100, width:200, height:20},
                     isActive:true,
                 }
                 for(let i=0;i<this.dragArr.length;i++){

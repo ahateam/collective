@@ -169,8 +169,11 @@
 
                 //变量匹配所需
                 org:'',
-                user:'',
+                family:'',
+                familyUserList:[],
                 printInfo:''
+
+
             }
         },
         components:{
@@ -191,6 +194,7 @@
                     this.$refs.saveTagInput.$refs.input.focus();
                 });
             },
+
             handleInputConfirm() {
                 let inputValue = this.inputValue;
                 if (inputValue) {
@@ -271,7 +275,7 @@
             //匹配变量常量
             getOrgInfo(){
                 let orgId =  this.printInfo.org
-                this.user = this.printInfo.family
+                this.family = this.printInfo.family
                 let cnt = {
                     orgId : orgId
                 }
@@ -281,8 +285,23 @@
                     }else{
                         this.org = ''
                     }
-                    console.log(this.org)
-                    this.getDataVar()
+
+                    let cnt1={
+                        familyNumber: this.family.familyNumber,
+                        orgId: orgId
+                    }
+                    this.$area.getFamilyUserByFamilyNumber(cnt1,(res1)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.familyUserList = this.$util.tryParseJson(res1.data.c)
+                        }else{
+                            this.familyUserList = []
+                        }
+                        this.getDataVar()
+                    })
+
+
+
+
                 })
             },
 
@@ -294,7 +313,6 @@
                     //无后端变量
                     if(this.dragArr[i].parma == undefined || this.dragArr[i].parma == ''){
                             if(this.dragArr[i].text.key ==1){   //前端变量--当前日期 （key==-1为静态值不用管）
-
                                 let data = this.$commen.getDateStr()
                                 let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
                                 obj.text.printingName = data
@@ -302,32 +320,21 @@
                             }
                     }else {     //后端变量
                         if(this.dragArr[i].parma == 'org'){     //对应org信息
-
                             let str = this.dragArr[i].text.printing
                             let data = this.org[str]
                             let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
                             obj.text.printingName = data
                             this.dragArr.splice(i,1,obj)
-
-
-
-                        }else if( this.dragArr[i].parma =='user'){  //对应user信息
-
-                            console.log(     this.user)
-                            console.log('2222')
+                        }else if( this.dragArr[i].parma =='user'){  //对应familyUserList信息
                             let str = this.dragArr[i].text.printing
-                            let data = this.user[str]
+                            let _index = this.dragArr[i].index
+                            let data = this.familyUserList[_index][str]
                             let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
                             obj.text.printingName = data
                             this.dragArr.splice(i,1,obj)
-
                         }
                     }
-
-
                 }
-
-               console.log(this.dragArr)
             }
 
         },
@@ -337,8 +344,6 @@
 
 
             this.printInfo = JSON.parse(localStorage.getItem('print'))
-
-
             this.dynamicTags = []
 
 

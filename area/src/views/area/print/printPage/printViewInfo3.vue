@@ -8,45 +8,12 @@
         <el-row class="row-box1">
             <el-row>
                 <el-col :span="24">
-                    <div class="title-change" >
+                    <div class="title-change">
                         <div class="title">
                             常用资料选择：
                         </div>
                         <div class="title-tags">
 
-                            <div class="tags">
-                                <div class="item-tag">
-                                    <span style="float: left">
-                                        合作社基本资料：
-                                    </span>
-                                    <div class="list">
-                                        <el-tag v-for="(item,index) in tags.orgInfo"
-                                                :key="index"
-                                                style="cursor: pointer"
-                                                class="tag-box"
-                                                @click="setValBtn(item,'org')">
-                                            {{item.printingName}}
-                                        </el-tag>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tags">
-                                <div class="item-tag">
-                                    <span style="float: left">
-                                        家庭户基本资料：
-                                    </span>
-                                    <div class="list">
-                                        <el-tag v-for="(item,index) in tags.userInfo"
-                                                :key="index"
-                                                style="cursor: pointer"
-                                                class="tag-box"
-                                                @click="setValBtn(item,'user')">
-                                            {{item.printingName}}
-                                        </el-tag>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="tags">
                                 <div class="item-tag">
                                     <span style="float: left">
@@ -86,18 +53,18 @@
                 <el-col :span="24" style="text-align: right">
                     <el-button type="primary" @click="addChild">新增打印项</el-button>
                     <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
-                    <el-button type="success" @click="createPrint" v-if="isEdit == false">保存为打印模板</el-button>
-                    <el-button type="success" @click="editPrint" v-if="isEdit == true">保存为打印模板</el-button>
                     <el-button type="danger" @click="delChildBtn">撤 回</el-button>
                 </el-col>
             </el-row>
+
+
             <el-row style="margin-top: 20px">
                 <el-col :span="24">
                     <div class="box-bg">
                         <div class="bg">
                             <div class="box-left">
 
-                            </div>
+                        </div>
                             <div class="box-right">
                                 <div class="box-edit">
                                     <div class="info-title">
@@ -209,15 +176,18 @@
                                         @clicked="changeChild(index)"
                                         @deactivated="cancelActive(index)"
                                         @resizing="changeSize($event,index)"
-                                        @dragging ="changePosition($event,index)"
+                                        @dragging="changePosition($event,index)"
                                 >
                                     <span style="font-size: 4mm;color: #333;font-family: FangSong">{{item.text.printingName}}</span>
                                 </VueDragResize>
                             </div>
+
+
                         </div>
                     </div>
                 </el-col>
             </el-row>
+
 
         </el-row>
     </div>
@@ -227,31 +197,38 @@
     import VueDragResize from 'vue-drag-resize'
 
     export default {
-        name: "printTemplate3",
-        data(){
-            return{
-                //判断是否是修改操作
-                isEdit:false,
-                templateInfo:'',
+        name: "printTemplate",
+        data() {
+            return {
 
-                id:'',
-                tags:[],
+                templateInfo: '',
+
+                id: '',
+                tags: [],
                 dynamicTags: [],
                 inputVisible: false,
                 inputValue: '',
-                userList:[{},{},{},{},{},{},{},{},{},{}],
+                userList: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 
 
                 //节点移动相关
-                dragArr:[],
-                _index:1,
+                dragArr: [],
+                _index: -1,
+
+                //变量匹配所需
+                org:'',
+                family:'',
+                familyUserList:[],
+                printInfo:''
+
+
             }
         },
-        components:{
+        components: {
             VueDragResize
         },
-        methods:{
-            choseBtn(){
+        methods: {
+            choseBtn() {
 
                 console.log('2222')
             },
@@ -261,64 +238,78 @@
             },
             showInput() {
                 this.inputVisible = true;
-                this.$nextTick( ()=> {
+                this.$nextTick(() => {
                     this.$refs.saveTagInput.$refs.input.focus();
                 });
             },
             handleInputConfirm() {
                 let inputValue = this.inputValue;
                 if (inputValue) {
-                    this.dynamicTags.push(inputValue);
+                    let obj ={
+                        key:0,
+                        isConstant:0,
+                        printingName:inputValue,
+                        printing:''
+                    }
+                    this.dynamicTags.push(obj);
                 }
                 this.inputVisible = false;
                 this.inputValue = '';
             },
 
             //选中当前节点 修改值
-            setValBtn(tag,parma) {
+            setValBtn(tag, parma='', _index=-1) {
 
                 if (this._index != -1) {
                     let obj = JSON.parse(JSON.stringify(this.dragArr[this._index]))
-                    obj.text = tag
+                    obj.text = JSON.parse(JSON.stringify(tag))
                     obj.parma = parma
+                    if(_index != -1){
+                        obj.index = _index
+                        let key =_index+1
+                        let str =tag.printingName+ key
+                        obj.text.printingName= str
+                    }
+
+
                     this.dragArr.splice(this._index, 1, obj)
                 }
             },
-
             //单击选中节点
-            changeChild(index){
+            changeChild(index) {
                 this._index = index
-                for(let i=0;i<this.dragArr.length;i++){
-                    if( this.dragArr[i].isActive == true){
+                for (let i = 0; i < this.dragArr.length; i++) {
+                    if (this.dragArr[i].isActive == true) {
                         this.dragArr[i].isActive = false
                     }
                 }
                 this.dragArr[index].isActive = true
             },
             //节点改变宽高相关
-            changeSize(newRect,index) {
+            changeSize(newRect, index) {
                 this.dragArr[index].rect = newRect
             },
             //节点变化位置
-            changePosition(newRect,index){
+            changePosition(newRect, index) {
                 this.dragArr[index].rect = newRect
             },
             //点击节点外触发取消所有的选中样式
-            cancelActive(index){
+            cancelActive(index) {
                 this.dragArr[index].isActive = false
             },
 
 
             //新增打印项
-            addChild(){
-                let obj  ={
-                    text:{key:-1,isConstant:0,printingName:'请选择对应的变量或值',printing:''},
-                    parma:'',
-                    rect:{  left:500, top:100, width:200, height:40},
-                    isActive:true,
+            addChild() {
+                let obj = {
+                    text: {key: -1, isConstant: 0, printingName: '请选择对应的变量或值', printing: ''},
+                    parma: '',
+                    index: -1,
+                    rect: {left: 500, top: 100, width: 200, height: 20},
+                    isActive: true,
                 }
-                for(let i=0;i<this.dragArr.length;i++){
-                    if( this.dragArr[i].isActive == true){
+                for (let i = 0; i < this.dragArr.length; i++) {
+                    if (this.dragArr[i].isActive == true) {
                         this.dragArr[i].isActive = false
                     }
                 }
@@ -327,88 +318,119 @@
             },
 
 
-
-
-
-
-
-
             //撤回按钮
-            delChildBtn(){
-                if(this.dragArr.length>0){
-                    this.dragArr.splice(this.dragArr.length-1,1)
-                }else{
+            delChildBtn() {
+                if (this.dragArr.length > 0) {
+                    this.dragArr.splice(this.dragArr.length - 1, 1)
+                } else {
                     this.$message.error('请先添加至少一个打印项！')
                 }
             },
 
-            //保存为打印模板
-            createPrint(){
-                let cnt ={
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
-                    data: JSON.stringify(this.dragArr), // String 模板数据
-                    type: this.$constData.printType[2].key, // Byte 模板类型
-                    page: 2, // Byte 左右页  1为左  2为右
+
+            //匹配变量常量
+            getOrgInfo(){
+                let orgId =  this.printInfo.org
+                this.family = this.printInfo.family
+                let cnt = {
+                    orgId : orgId
                 }
-                this.$area.createPrintingTemplate(cnt,(res)=>{
+                this.$area.getORGById(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('操作成功')
+                        this.org = this.$util.tryParseJson(res.data.c)
                     }else{
-                        this.$message.error('/操作失败')
+                        this.org = ''
                     }
-                    this.$router.push('/areaPrintBook')
+
+                    let cnt1={
+                        familyNumber: this.family.familyNumber,
+                        orgId: orgId
+                    }
+                    this.$area.getFamilyUserByFamilyNumber(cnt1,(res1)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.familyUserList = this.$util.tryParseJson(res1.data.c)
+                        }else{
+                            this.familyUserList = []
+                        }
+                        this.getDataVar()
+                    })
+
+
+
+
                 })
             },
-            //保存修改信息
-            editPrint(){
-                let cnt ={
-                    prTeId:this.templateInfo.id,
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
-                    data: JSON.stringify(this.dragArr), // String 模板数据
-                    type: this.$constData.printType[2].key, // Byte 模板类型
-                    page: 2, // Byte 左右页  1为左  2为右
-                }
-                this.$area.editPrintingTemplate(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('操作成功')
-                    }else{
-                        this.$message.error('/操作失败')
+
+            getDataVar(){
+
+                let dataArr = []
+
+                for(let i=0;i<this.dragArr.length;i++){
+                    //org user 已经用parma区分 key区分前端变量
+
+                    //无后端变量
+                    if(this.dragArr[i].parma == undefined || this.dragArr[i].parma == ''){
+                        if(this.dragArr[i].text.key ==1){   //前端变量--当前日期 （key==-1为静态值不用管）
+                            let data = this.$commen.getDateStr()
+                            let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                            obj.text.printingName = data
+                            dataArr.push(obj)
+                        }
+                    }else {     //后端变量
+                        if(this.dragArr[i].parma == 'org'){     //对应org信息
+                            let str = this.dragArr[i].text.printing
+                            let data = this.org[str]
+                            let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                            obj.text.printingName = data
+                            dataArr.push(obj)
+
+                        }else if( this.dragArr[i].parma =='user'){  //对应familyUserList信息
+
+
+
+                            if( this.dragArr[i].index< this.familyUserList.length){
+                                //遍历roles判断是否为集体经济组织成员
+
+
+                                let str = this.dragArr[i].text.printing
+                                console.log(str)
+                                let _index = this.dragArr[i].index
+                                let data = this.familyUserList[_index][str]
+                                let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                                obj.text.printingName = data
+                                dataArr.push(obj)
+                            }
+                        }
                     }
-                    this.$router.push('/areaPrintBook')
-                })
-            }
-        },
-        mounted(){
-
-
-
-            this.dynamicTags = JSON.parse(JSON.stringify(this.$constData.printConstant))
-            this.$area.getPrintingType({},(res)=>{
-                if(res.data.rc == this.$util.RC.SUCCESS){
-                    this.tags = this.$util.tryParseJson(res.data.c)
-                }else{
-                    this.tags = []
                 }
 
-            })
+                this.dragArr = dataArr
+            }
 
-            let cnt ={
+        },
+        mounted() {
+
+            this.printInfo = JSON.parse(localStorage.getItem('print'))
+            this.dynamicTags = []
+
+
+
+            let cnt = {
                 orgId: localStorage.getItem('orgId'), // Long 组织编号
                 type: this.$constData.printType[2].key, // Byte 打印模板类型
                 page: 2, // Byte 页码  1左 2右
             }
-            this.$area.getPrintingTemplateByType(cnt,(res)=>{
-                if(res.data.rc == this.$util.RC.SUCCESS){
-                    if(JSON.parse(res.data.c) == null){
-                        this.templateInfo =''
-                        this.isEdit = false
-                    }else{
-                        this.isEdit = true
+
+            this.$area.getPrintingTemplateByType(cnt, (res) => {
+                if (res.data.rc == this.$util.RC.SUCCESS) {
+                    if (JSON.parse(res.data.c) == null) {
+                        this.templateInfo = ''
+                    } else {
                         this.templateInfo = JSON.parse(res.data.c)
-                        this.dragArr =JSON.parse(this.templateInfo.data)
+                        this.dragArr = JSON.parse(this.templateInfo.data)
+                        this.getOrgInfo()
                     }
                 }
-                console.log(this.templateInfo)
 
             })
         }
@@ -424,33 +446,39 @@
             display: none;
         }
     }
-    .nav-btn{
+
+    .nav-btn {
         float: left;
         margin-left: 15px;
     }
-    .row-box{
+
+    .row-box {
         background: #fff;
-        padding:15px 0;
+        padding: 15px 0;
     }
-    .row-box1{
+
+    .row-box1 {
         margin-top: 20px;
         padding: 15px;
         background: #fff;
     }
-    .col-title{
+
+    .col-title {
         padding-left: 10px;
         line-height: 20px;
         color: #666;
         font-size: 16px;
     }
-    .box-bg{
+
+    .box-bg {
         margin: 0 auto;
         position: relative;
         width: 280mm;
         height: 200mm;
         border: 1px solid #aaa;
     }
-    .bg{
+
+    .bg {
         position: absolute;
         width: 280mm;
         height: 200mm;
@@ -458,7 +486,8 @@
         left: 0;
         z-index: 100;
     }
-    .box-val{
+
+    .box-val {
         position: absolute;
         cursor: pointer;
         width: 280mm;
@@ -467,48 +496,56 @@
         left: 0;
         z-index: 1000;
     }
-    .box-left{
+
+    .box-left {
         float: left;
         width: 138mm;
         height: 200mm;
         border-right: 1px solid #aaa;
-        background:#ddd ;
-
+        background: #ddd;
     }
-    .box-right{
+
+    .box-right {
         float: left;
         width: 138mm;
         height: 200mm;
         cursor: pointer;
 
     }
-    .box-edit{
+
+    .box-edit {
         width: auto;
         height: 200mm;
     }
-    .title-change{
+
+    .title-change {
         width: auto;
         padding: 10px;
         border: 1px solid #eee;
         border-radius: 5px
     }
-    .title{
+
+    .title {
         color: #666;
         font-size: 16px;
         line-height: 30px;
     }
-    .list{
+
+    .list {
         float: left;
         margin-left: 20px;
     }
-    .list-item{
-        float:left;
+
+    .list-item {
+        float: left;
         margin-left: 10px;
         margin-top: 10px;
     }
+
     .el-tag + .el-tag {
         margin-left: 10px;
     }
+
     .button-new-tag {
         margin-left: 10px;
         height: 32px;
@@ -516,89 +553,103 @@
         padding-top: 0;
         padding-bottom: 0;
     }
+
     .input-new-tag {
         width: 90px;
         margin-left: 10px;
         vertical-align: bottom;
     }
 
-    .info-title{
+    .info-title {
         padding-top: 15mm;
         width: auto;
         color: #333;
         font-size: 6mm;
         text-align: center;
     }
-    .info-number{
+
+    .info-number {
         margin-top: 11mm;
         font-size: 4mm;
         color: #333;
         margin-left: 70mm;
 
     }
-    .info-name{
+
+    .info-name {
         width: 105mm;
         margin: 0 auto;
         margin-top: 15mm;
         height: 5mm;
     }
-    .book-title{
+
+    .book-title {
         float: left;
         width: 30mm;
 
-        font-size:5mm;
+        font-size: 5mm;
         color: #666;
         height: 50px;
     }
-    .book-val{
+
+    .book-val {
         float: left;
-        width:75mm;
+        width: 75mm;
         height: 5mm;
         border-bottom: 1px dashed #333;
     }
-    .info-time{
+
+    .info-time {
         margin-left: 58mm;
         margin-top: 30mm;
     }
-    .content-box{
+
+    .content-box {
         width: 280mm;
         height: 200mm;
         z-index: 1100;
         position: relative;
     }
-    .info-table{
+
+    .info-table {
         width: 120mm;
-        margin:  0 auto;
+        margin: 0 auto;
         margin-top: 6mm;
 
     }
-    .table-header{
+
+    .table-header {
         width: 120mm;
         height: 17mm;
     }
-    .item-row{
+
+    .item-row {
         width: 120mm;
         height: 11mm;
         border: 1px solid #aaa;
 
     }
-    .item-box{
+
+    .item-box {
         float: left;
         font-size: 3mm;
         color: #333;
         text-align: center;
     }
-    .item-row1{
+
+    .item-row1 {
         width: 120mm;
         height: 6mm;
         border: 1px solid #aaa;
         border-top: none;
     }
-    p{
+
+    p {
         margin: 0;
         padding: 0;
     }
-    .item-th{
+
+    .item-th {
         width: 120mm;
         height: 17mm;
         border: 1px solid #aaa;
@@ -606,93 +657,168 @@
         overflow: hidden;
 
     }
-    .item-th-td{
+
+    .item-th-td {
         float: left;
         font-size: 3mm;
         color: #333;
         text-align: center;
         overflow: hidden;
     }
-    .item-tr{
+
+    .item-tr {
         width: 120mm;
         height: 8mm;
         border: 1px solid #aaa;
         border-top: none;
     }
-    .table-footer{
+
+    .table-footer {
         height: 41mm;
         width: 120mm;
         border: 1px solid #aaa;
         border-top: none;
 
     }
-    .table-footer-left{
+
+    .table-footer-left {
         float: left;
         width: 55mm;
         height: 41mm;
         border-right: 1px solid #aaa;
     }
-    .table-footer-right{
+
+    .table-footer-right {
         float: left;
         width: 62mm;
         height: 41mm;
 
     }
-    .footer-title{
+
+    .footer-title {
         width: auto;
         font-size: 3mm;
         margin-top: 2mm;
-        margin-left:2mm ;
+        margin-left: 2mm;
     }
-    .footer-chapter{
+
+    .footer-chapter {
         margin-top: 17mm;
         width: auto;
         margin-right: 4mm;
         text-align: right;
         font-size: 3mm;
     }
-    .footer-time{
+
+    .footer-time {
         width: auto;
         text-align: right;
         margin-right: 2mm;
         margin-top: 6mm;
 
     }
-    .footer-time1{
+
+    .footer-time1 {
         width: auto;
         padding-left: 20mm;
 
         margin-top: 6mm;
 
     }
-    .content-box{
+
+    .content-box {
         width: 280mm;
         height: 200mm;
         z-index: 1100;
         position: relative;
     }
+
     .title-tags {
         width: auto;
 
     }
-    .tags{
+
+    .tags {
         width: auto;
         margin-top: 10px;
         line-height: 40px;
         font-size: 14px;
         color: #666;
     }
-    .item-tag{
+
+    .item-tag {
         width: auto;
         height: 40px;
     }
-    .tag-box:hover{
+
+    .tag-box:hover {
         background: #409eff;
         color: #fff;
     }
-    .tag-box:active{
+
+    .tag-box:active {
         background: #66b1ff;
         color: #fff;
     }
+
+    .family-box {
+        margin: 10px 0;
+
+    }
+
+    .family-btn-box {
+        width: auto;
+    }
+
+    .family-title {
+        line-height: 25px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .family-btn {
+        margin-left: 15px;
+    }
+
+    .family-content-box {
+        width: auto;
+        margin-top: 10px;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        height: 100px;
+    }
+
+    .family-user-list {
+        width: auto;
+        line-height: 30px;
+        height: 30px;
+    }
+
+    .user-tag {
+        float: left;
+        cursor: pointer;
+        margin-left: 20px;
+    }
+
+    .user-tag:hover {
+        background: #e6a23c;
+        color: #fff;
+    }
+
+    .user-tag:active {
+        background: #e6a23c;
+
+        color: #fff;
+    }
+
+    .user-tag-active {
+        float: left;
+        cursor: pointer;
+        background: #e6a23c;
+        color: #fff;
+        margin-left: 15px;
+    }
+
 
 </style>
