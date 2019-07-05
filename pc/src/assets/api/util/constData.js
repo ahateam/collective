@@ -87,7 +87,7 @@ const familyType = [
 /**
  * 公告管理相关
  */
-    const noticeType =[ {key:0,val:'会议公告'}, {key:1,val:'投票公告'}, {key:2,val:'其他公告'}]
+    const noticeType =[ {key:0,val:'会议公告'}, {key:1,val:'投票公告'}, {key:2,val:'三方链接公告'}]
 
 /** 导入表格常量**/
 const importData = {userImport:{skipRowCount:1,colCount:17},assetImport:{skipRowCount:2,colCount:38}}

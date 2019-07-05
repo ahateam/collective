@@ -3,58 +3,28 @@
         <home-header></home-header>
         <div class="main-box">
             <div class="nav-box">
-                <div class="nav-img-box"  @click="userBtn">
-                    <div class="nav-user-img">
-                        <img src="../../../assets/image/headImage.png" alt="">
-                    </div>
-                    <div class="nav-user-info">
-                        <div class="nav-user-name">
-                            {{realName}}
-                        </div>
-                        <div class="nav-user-tell">
-                            {{mobile}}
-                        </div>
-                        <div class="nav-user-card">
-                            {{idNumber}}
-                        </div>
-                    </div>
-
-                </div>
-                <!--<div class="nav-lable-box">-->
-                    <!--<div class="nav-item-box"  @click="userBtn">-->
-                        <!--<div class="nav-item-title">机构职务</div>-->
-                        <!--<div class="nav-item-content">{{userPost}}</div>-->
-                    <!--</div>-->
-                    <!--<div class="nav-item-box"  @click="userBtn">-->
-                        <!--<div class="nav-item-title">股份数</div>-->
-                        <!--<div class="nav-item-content">{{shareAmount}}</div>-->
-                    <!--</div>-->
-                    <!--<router-link to="/voteMeet">-->
-                        <!--<div class="nav-item-box">-->
-                            <!--<div class="nav-item-title">进行中会议</div>-->
-                            <!--<div class="nav-item-content">{{startedNums}}</div>-->
-                        <!--</div>-->
-                    <!--</router-link>-->
-                <!--</div>-->
+                <van-swipe :autoplay="3000" indicator-color="white">
+                    <van-swipe-item v-for="(item,index) in swiperData" :key="index" >
+                        <img :src="item.image" alt="" style="width: 100%;height: 20rem " @click="checkBtn(item)">
+                    </van-swipe-item>
+                </van-swipe>
+                <span v-if="list.length>0">
+                     <van-notice-bar
+                             v-if="newNotice.type !=2"
+                             :text="newNotice.title+' '+newNotice.content"
+                             @click="jumpBtn(newNotice)"
+                             left-icon="volume-o"
+                     />
+                    <van-notice-bar
+                            v-if="newNotice.type ==2"
+                            :text="newNotice.title"
+                            left-icon="volume-o"
+                            @click="jumpBtn(newNotice)"
+                    />
+                </span>
             </div>
-            <div class="item">
-                <!--<router-link to="/voteMeet">-->
-                    <!--<div class="item-box">-->
-                        <!--<div class="img-box1">-->
-                            <!--<div class="i-box">-->
-                                <!--<van-icon name="idcard"/>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="text-box">-->
-                            <!--<div class="item-text">-->
-                                <!--我的会议-->
-                            <!--</div>-->
-                            <!--<div class="item-next">-->
-                                <!--<van-icon name="arrow"/>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</router-link>-->
+            <div :class=" list.length>0?'item box-top':'item' " >
+
                 <router-link to="/poll">
                     <div class="item-box">
                         <div class="img-box1">
@@ -162,23 +132,7 @@
                     </div>
                 </router-link>
 
-                <!--<router-link to="/article">-->
-                    <!--<div class="item-box">-->
-                        <!--<div class="img-box1">-->
-                            <!--<div class="i-box" style="background: rgb(244, 81, 108)">-->
-                                <!--<van-icon name="idcard"/>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="text-box">-->
-                            <!--<div class="item-text">-->
-                                <!--通知公告-->
-                            <!--</div>-->
-                            <!--<div class="item-next">-->
-                                <!--<van-icon name="arrow"/>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</router-link>-->
+
 
 
                 <div v-for="(item,index) in userInfo.permissions" v-if="userInfo.permissions.length>0" :key="index">
@@ -219,10 +173,29 @@
                                 </div>
                             </div>
                         </router-link>
+
+
+
                     </div>
                 </div>
 
-
+                <router-link to="/user">
+                    <div class="item-box">
+                        <div class="img-box1">
+                            <div class="i-box" style="background:#ff976a">
+                                <i class="iconfont icon-fl-renyuan"></i>
+                            </div>
+                        </div>
+                        <div class="text-box">
+                            <div class="item-text">
+                                个人信息
+                            </div>
+                            <div class="item-next">
+                                <van-icon name="arrow"/>
+                            </div>
+                        </div>
+                    </div>
+                </router-link>
 
 
                    <!--<router-link to="/file">-->
@@ -250,12 +223,15 @@
 </template>
 
 <script>
+
     import HomeHeader from '@/components/head/homeHeader'
+    /** 在 index.html 进行全局引入广告列表*/
+    const swiperData = window.globalConfig.swiperData
 
     export default {
         name: "home",
         components: {
-            HomeHeader
+            HomeHeader,
         },
         data() {
             return {
@@ -275,19 +251,70 @@
                 userPost:'',
                 startedNums:0,
                 root:false,
+
+                swiperData:[],
+                list:[],
+                newNotice:{}
             }
         },
          methods:{
-             userBtn(){
-                 this.$router.push('/user')
+             checkBtn(item){
+                 this.$commen.jumpUrl(item.url)
+             },
+
+             getNoticeByRoleGroup(cnt){
+                 this.$api.getNoticeByRoleGroup(cnt,(res)=>{
+                     let arr = []
+                     if(res.data.rc == this.$util.RC.SUCCESS){
+                         arr = this.$util.tryParseJson(res.data.c)
+                     }else{
+                         arr = []
+                     }
+                     this.list = this.list.concat(arr)
+                    if(this.list.length == 0){
+                        this.newNotice = []
+                    }else{
+                        this.newNotice =   this.list[this.list.length-1]
+                    }
+                 })
+             },
+             getNotice(){
+                 this.userInfo = JSON.parse(localStorage.getItem('orgInfo'))
+                 let groups =[]
+                 if(this.userInfo.groups == undefined || this.userInfo.groups=='' ||this.userInfo.groups.length ==0){
+                     groups[0] =102
+                 }else{
+                     groups = this.userInfo.groups
+                 }
+                 let cnt = {
+                     orgId: this.userInfo.orgId, // Long 组织编号
+                     roles: this.userInfo.orgRoles, // String 角色编号 [102,103,104]
+                     groups: groups, // String 分组编号 [1111111,555555,111]
+                 }
+
+                 this.getNoticeByRoleGroup(cnt)
+             },
+             jumpBtn(info){
+                 if(info.type ==2){
+                     this.$commen.jumpUrl(info.content)
+                 }else{
+                     this.$router.push({
+                         path:'/noticeInfo',
+                         name:'noticeInfo',
+                         params:{
+                             info:info
+                         }
+                     })
+                 }
              }
          }  ,
         created(){
+            this.swiperData = swiperData
+            console.log( window.globalConfig)
             localStorage.setItem('voteInfo', '')  //新增表决所需全局变量
             localStorage.setItem('vote','')     //用户表决所需的全局变量
             let userObj = JSON.parse(localStorage.getItem('userInfo'))  //只有用户信息
             let orgObj =  JSON.parse(localStorage.getItem('orgInfo'))   //只有用户的组织信息
-
             let user = Object.assign(userObj,orgObj)
             localStorage.setItem('user',JSON.stringify(user))
 
@@ -295,17 +322,15 @@
             mounted() {
                 this.addVoteId = this.$constData.permission[0].key
                 this.editPostId = this.$constData.permission[1].key
-
                 this.userInfo = JSON.parse(localStorage.getItem('user'))
-                console.log(this.userInfo.permissions)
-
-
                 this.realName = this.userInfo.realName
                 this.mobile = this.userInfo.mobile
                 this.idNumber = this.userInfo.idNumber
                 this.shareAmount = this.userInfo.shareAmount
 
                 this.userPost = '暂无职务'
+
+                this.getNotice()
 
         }
     }
@@ -515,5 +540,8 @@
     .item-next i {
         font-size: 1.6rem;
         color: #666;
+    }
+    .box-top{
+        margin-top: 40px;
     }
 </style>

@@ -25,7 +25,8 @@
         padding-bottom: 2rem;
       }
       </style>
-    <script src="http://jiti.online.3ch.org.cn/app/version.js"></script>
+
+    <script src="http://jiti-online.oss-cn-hangzhou.aliyuncs.com/app/version.js"></script>
   </head>
   <body>
     <noscript>
@@ -39,8 +40,7 @@
 
 
         document.addEventListener('plusready', function(a) { //等待plus ready后再调用5+ API：
-
-            //// 在这里调用5+ API
+            // 在这里调用5+ API
             var first = null;
             plus.key.addEventListener('backbutton', function() { //监听返回键
                 //首次按键，提示‘再按一次退出应用’
@@ -57,8 +57,6 @@
                         plus.runtime.quit(); //退出应用
                     }
                 }
-
-
             }, false);
 
 

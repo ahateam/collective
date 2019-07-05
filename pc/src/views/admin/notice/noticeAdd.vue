@@ -37,7 +37,7 @@
                     <el-input
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 10}"
-                            placeholder="请输入公告内容"
+                            placeholder="请输入公告内容（若选择三方外链公告请输入一个有效网址）"
                             v-model="noticeContent">
                     </el-input>
                 </el-col>

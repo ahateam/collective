@@ -77,13 +77,18 @@
             //     }, 300);
             // },
             infoBtn(item){
-                this.$router.push({
-                    path:'/noticeInfo',
-                    name:'noticeInfo',
-                    params:{
-                        info:item
-                    }
-                })
+                if(item.type ==2){
+                    this.$commen.jumpUrl(item.content)
+                }else{
+                    this.$router.push({
+                        path:'/noticeInfo',
+                        name:'noticeInfo',
+                        params:{
+                            info:item
+                        }
+                    })
+                }
+
             }
         },
         mounted(){

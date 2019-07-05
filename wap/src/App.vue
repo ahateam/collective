@@ -5,7 +5,7 @@
 </template>
 
 <script>
-
+    /** 在index.html 进行了全局引入线上版本号*/
     const Version = window.globalConfig.version
 
     import { Dialog } from 'vant';
@@ -17,7 +17,7 @@
             },false)
         },
         created(){
-            var VERSION = 105
+            var VERSION = 106
             var ua = navigator.userAgent.toLowerCase()
             document.addEventListener('plusready',function() {
                 let uuid= plus.device.uuid
@@ -27,7 +27,7 @@
                             title: '版本更新',
                             message: '有新版本更新啦，赶紧下载吧'
                         }).then(() => {
-                            window.location.href = Version.ios
+                            plus.runtime.openURL(Version.ios)
                         });
                     }
                 }else if(ua.match(/Android/i) == "android"){
@@ -37,8 +37,6 @@
                             title: '版本更新',
                             message: '有新版本更新啦，赶紧下载吧'
                         }).then(() => {
-
-
                             plus.runtime.openURL(Version.android)
                         });
                     }

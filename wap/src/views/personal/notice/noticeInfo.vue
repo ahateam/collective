@@ -15,7 +15,7 @@
             </div>
             <div class="footer-box">
                 <router-link to="/noticeList">
-                    <div class="create-btn">返回上一页</div>
+                    <div class="create-btn">返回公告列表</div>
                 </router-link>
             </div>
 
