@@ -104,12 +104,15 @@
                         type: 'error'
                     });
                 } else {
+
                     let cnt = {
                         mobile: this.mobile,
                         realName: this.realName,
                         idNumber: this.idNumber,
                         pwd: this.pwd,
                     }
+
+
                     this.$area.registeUser(cnt, (res) => {
 
                         if (res.data.rc == this.$util.RC.SUCCESS) {

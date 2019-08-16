@@ -25,6 +25,13 @@ const areaManageApplyMech = ()=>import('./views/area/mech/manageApplyMech')
 const areaManageMech = ()=>import('./views/area/mech/manageMech')
 const areaMechInfo = ()=>import('./views/area/mech/mechInfo')
 const areaEditMech = ()=>import('./views/area/mech/editMech')
+const childAdmin = ()=>import('./views/area/mech/childAdmin')
+const childInfo = ()=>import('./views/area/mech/childInfo')
+const addChild = ()=>import('./views/area/mech/addChild')
+const memberImportInfo = ()=>import('./views/area/mech/memberImportInfo')
+const memberImport = ()=>import('./views/area/mech/memberImport')
+const assetImport = ()=>import('./views/area/mech/assetImport')
+const assetImportInfo = ()=>import('./views/area/mech/assetImportInfo')
 
 const areaAsset = ()=>import('./views/area/asset/asset')
 const areaAssetsInfo = ()=>import('./views/area/asset/assetsInfo')
@@ -145,9 +152,44 @@ export default new Router({
                 component: areaChildMech
             },
             {
+                path: '/childAdmin',
+                name: 'childAdmin',
+                component: childAdmin
+            },
+            {
+                path: '/childInfo',
+                name: 'childInfo',
+                component: childInfo
+            },
+            {
+                path: '/addChild',
+                name: 'addChild',
+                component: addChild
+            },
+            {
                 path:'/areaAddMech',
                 name:'areaAddMech',
                 component:areaAddMech
+            },//memberImportInfo
+            {
+                path:'/memberImportInfo',
+                name:'memberImportInfo',
+                component:memberImportInfo
+            },
+            {
+                path:'/memberImport',
+                name:'memberImport',
+                component:memberImport
+            },
+            {
+                path:'/assetImport',
+                name:'assetImport',
+                component:assetImport
+            },
+            {
+                path:'/assetImportInfo',
+                name:'assetImportInfo',
+                component:assetImportInfo
             },
             {
                 path:'/areaManageApplyMech',

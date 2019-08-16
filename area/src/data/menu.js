@@ -70,6 +70,10 @@ const  areaMenu=[
 
             {
                 path:'/areaChildMech',
+                title:'下级机构申请'
+            },
+            {
+                path:'/childAdmin',
                 title:'下级机构管理'
             },
             {
