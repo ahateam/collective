@@ -17,7 +17,7 @@
             },false)
         },
         created(){
-            var VERSION = 106
+            var VERSION = 107
             var ua = navigator.userAgent.toLowerCase()
             document.addEventListener('plusready',function() {
                 let uuid= plus.device.uuid

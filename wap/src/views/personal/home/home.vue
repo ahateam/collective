@@ -23,201 +23,202 @@
                     />
                 </span>
             </div>
-            <div :class=" list.length>0?'item box-top':'item' " >
+                <div :class=" list.length>0?'item box-top':'item' " >
 
-                <router-link to="/poll">
-                    <div class="item-box">
-                        <div class="img-box1">
-                            <div class="i-box">
-                                <i class="iconfont icon-toupiao1"></i>
-                            </div>
-                        </div>
-                        <div class="text-box">
-                            <div class="item-text">
-                                我的投票
-                            </div>
-                            <div class="item-next">
-                                <van-icon name="arrow"/>
-                            </div>
-                        </div>
-                    </div>
-                </router-link>
-                <router-link to="/list">
-                    <div class="item-box">
-                        <div class="img-box1">
-                            <div class="i-box" style="background: rgb(54, 163, 247)">
-                                <i class="iconfont icon-tongyongzichan"></i>
-                            </div>
-                        </div>
-                        <div class="text-box">
-                            <div class="item-text">
-                                集体资产
-                            </div>
-                            <div class="item-next">
-                                <van-icon name="arrow"/>
-                            </div>
-                        </div>
-
-                    </div>
-                </router-link>
-                <router-link to="/listBonus">
-                    <div class="item-box">
-                        <div class="img-box1">
-                            <div class="i-box" style="background: #ff976a">
-                                <i class="iconfont icon-qian"></i>
-                            </div>
-                        </div>
-                        <div class="text-box">
-                            <div class="item-text">
-                                我的分红
-                            </div>
-                            <div class="item-next">
-                                <van-icon name="arrow"/>
-                            </div>
-                        </div>
-                    </div>
-                </router-link>
-
-                <router-link to="/mech">
-                    <div class="item-box">
-                        <div class="img-box1">
-                            <div class="i-box" style="background: #5bc0de">
-                                <i class="iconfont icon-jigou"></i>
-                            </div>
-                        </div>
-                        <div class="text-box">
-                            <div class="item-text">
-                                我的机构
-                            </div>
-                            <div class="item-next">
-                                <van-icon name="arrow"/>
-                            </div>
-                        </div>
-                    </div>
-                </router-link>
-
-                <router-link to="/noticeList">
-                    <div class="item-box">
-                        <div class="img-box1">
-                            <div class="i-box" style="background: #f0ad4e">
-                                <i class="iconfont icon-gonggao1"></i>
-                            </div>
-                        </div>
-                        <div class="text-box">
-                            <div class="item-text">
-                                我的公告
-                            </div>
-                            <div class="item-next">
-                                <van-icon name="arrow"/>
-                            </div>
-                        </div>
-                    </div>
-                </router-link>
-
-                <router-link to="/examine">
-                    <div class="item-box">
-                        <div class="img-box1">
-                            <div class="i-box" style="background: rgb(244, 81, 108)">
-                                <i class="iconfont icon-shenpi"></i>
-                            </div>
-                        </div>
-                        <div class="text-box">
-                            <div class="item-text">
-                                我的审批
-                            </div>
-                            <div class="item-next">
-                                <van-icon name="arrow"/>
-                            </div>
-                        </div>
-                    </div>
-                </router-link>
-
-
-
-
-                <div v-for="(item,index) in userInfo.permissions" v-if="userInfo.permissions.length>0" :key="index">
-                    <div v-if="item.id !=undefined &&item.id == addVoteId">
-                        <router-link to="/voteManage">
-                            <div class="item-box">
-                                <div class="img-box1">
-                                    <div class="i-box" style="background: #337ab7">
-                                        <i class="iconfont icon-toupiao2"></i>
-                                    </div>
-                                </div>
-                                <div class="text-box">
-                                    <div class="item-text">
-                                        发起投票
-                                    </div>
-                                    <div class="item-next">
-                                        <van-icon name="arrow"/>
-                                    </div>
+                    <router-link to="/poll">
+                        <div class="item-box">
+                            <div class="img-box1">
+                                <div class="i-box">
+                                    <i class="iconfont icon-toupiao1"></i>
                                 </div>
                             </div>
-                        </router-link>
-                    </div>
-                    <div v-if="item.id !=undefined &&item.id == editPostId">
-                        <router-link to="/position">
-                            <div class="item-box">
-                                <div class="img-box1">
-                                    <div class="i-box" style="background: #ff976a">
-                                        <i class="iconfont icon-nav_user"></i>
-                                    </div>
+                            <div class="text-box">
+                                <div class="item-text">
+                                    我的投票
                                 </div>
-                                <div class="text-box">
-                                    <div class="item-text">
-                                        职务管理
-                                    </div>
-                                    <div class="item-next">
-                                        <van-icon name="arrow"/>
-                                    </div>
+                                <div class="item-next">
+                                    <van-icon name="arrow"/>
                                 </div>
                             </div>
-                        </router-link>
+                        </div>
+                    </router-link>
+                    <router-link to="/list">
+                        <div class="item-box">
+                            <div class="img-box1">
+                                <div class="i-box" style="background: rgb(54, 163, 247)">
+                                    <i class="iconfont icon-tongyongzichan"></i>
+                                </div>
+                            </div>
+                            <div class="text-box">
+                                <div class="item-text">
+                                    集体资产
+                                </div>
+                                <div class="item-next">
+                                    <van-icon name="arrow"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </router-link>
+                    <router-link to="/listBonus">
+                        <div class="item-box">
+                            <div class="img-box1">
+                                <div class="i-box" style="background: #ff976a">
+                                    <i class="iconfont icon-qian"></i>
+                                </div>
+                            </div>
+                            <div class="text-box">
+                                <div class="item-text">
+                                    我的分红
+                                </div>
+                                <div class="item-next">
+                                    <van-icon name="arrow"/>
+                                </div>
+                            </div>
+                        </div>
+                    </router-link>
+
+                    <router-link to="/mech">
+                        <div class="item-box">
+                            <div class="img-box1">
+                                <div class="i-box" style="background: #5bc0de">
+                                    <i class="iconfont icon-jigou"></i>
+                                </div>
+                            </div>
+                            <div class="text-box">
+                                <div class="item-text">
+                                    我的机构
+                                </div>
+                                <div class="item-next">
+                                    <van-icon name="arrow"/>
+                                </div>
+                            </div>
+                        </div>
+                    </router-link>
+
+                    <router-link to="/noticeList">
+                        <div class="item-box">
+                            <div class="img-box1">
+                                <div class="i-box" style="background: #f0ad4e">
+                                    <i class="iconfont icon-gonggao1"></i>
+                                </div>
+                            </div>
+                            <div class="text-box">
+                                <div class="item-text">
+                                    我的公告
+                                </div>
+                                <div class="item-next">
+                                    <van-icon name="arrow"/>
+                                </div>
+                            </div>
+                        </div>
+                    </router-link>
+
+                    <router-link to="/examine">
+                        <div class="item-box">
+                            <div class="img-box1">
+                                <div class="i-box" style="background: rgb(244, 81, 108)">
+                                    <i class="iconfont icon-shenpi"></i>
+                                </div>
+                            </div>
+                            <div class="text-box">
+                                <div class="item-text">
+                                    我的审批
+                                </div>
+                                <div class="item-next">
+                                    <van-icon name="arrow"/>
+                                </div>
+                            </div>
+                        </div>
+                    </router-link>
 
 
 
+
+                    <div v-for="(item,index) in userInfo.permissions" v-if="userInfo.permissions.length>0" :key="index">
+                        <div v-if="item.id !=undefined &&item.id == addVoteId">
+                            <router-link to="/voteManage">
+                                <div class="item-box">
+                                    <div class="img-box1">
+                                        <div class="i-box" style="background: #337ab7">
+                                            <i class="iconfont icon-toupiao2"></i>
+                                        </div>
+                                    </div>
+                                    <div class="text-box">
+                                        <div class="item-text">
+                                            发起投票
+                                        </div>
+                                        <div class="item-next">
+                                            <van-icon name="arrow"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </router-link>
+                        </div>
+                        <div v-if="item.id !=undefined &&item.id == editPostId">
+                            <router-link to="/position">
+                                <div class="item-box">
+                                    <div class="img-box1">
+                                        <div class="i-box" style="background: #ff976a">
+                                            <i class="iconfont icon-nav_user"></i>
+                                        </div>
+                                    </div>
+                                    <div class="text-box">
+                                        <div class="item-text">
+                                            职务管理
+                                        </div>
+                                        <div class="item-next">
+                                            <van-icon name="arrow"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </router-link>
+
+
+
+                        </div>
                     </div>
+
+                    <router-link to="/user">
+                        <div class="item-box">
+                            <div class="img-box1">
+                                <div class="i-box" style="background:#ff976a">
+                                    <i class="iconfont icon-fl-renyuan"></i>
+                                </div>
+                            </div>
+                            <div class="text-box">
+                                <div class="item-text">
+                                    个人信息
+                                </div>
+                                <div class="item-next">
+                                    <van-icon name="arrow"/>
+                                </div>
+                            </div>
+                        </div>
+                    </router-link>
+
+
+                    <!--<router-link to="/file">-->
+                    <!--<div class="item-box">-->
+                    <!--<div class="img-box1">-->
+                    <!--<div class="i-box" style="background: #4cae4c">-->
+                    <!--<van-icon name="idcard"/>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="text-box">-->
+                    <!--<div class="item-text">-->
+                    <!--文件管理-->
+                    <!--</div>-->
+                    <!--<div class="item-next">-->
+                    <!--<van-icon name="arrow"/>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</router-link>-->
+
                 </div>
 
-                <router-link to="/user">
-                    <div class="item-box">
-                        <div class="img-box1">
-                            <div class="i-box" style="background:#ff976a">
-                                <i class="iconfont icon-fl-renyuan"></i>
-                            </div>
-                        </div>
-                        <div class="text-box">
-                            <div class="item-text">
-                                个人信息
-                            </div>
-                            <div class="item-next">
-                                <van-icon name="arrow"/>
-                            </div>
-                        </div>
-                    </div>
-                </router-link>
-
-
-                   <!--<router-link to="/file">-->
-                       <!--<div class="item-box">-->
-                           <!--<div class="img-box1">-->
-                               <!--<div class="i-box" style="background: #4cae4c">-->
-                                   <!--<van-icon name="idcard"/>-->
-                               <!--</div>-->
-                           <!--</div>-->
-
-                           <!--<div class="text-box">-->
-                               <!--<div class="item-text">-->
-                                   <!--文件管理-->
-                               <!--</div>-->
-                               <!--<div class="item-next">-->
-                                   <!--<van-icon name="arrow"/>-->
-                               <!--</div>-->
-                           <!--</div>-->
-                       <!--</div>-->
-                   <!--</router-link>-->
-
-            </div>
         </div>
     </div>
 </template>
@@ -341,7 +342,7 @@
 
     .nav-box {
            width: 100%;
-           height: 14rem;
+           height: 20rem;
            background-image: url("../../../assets/image/banner.jpg");
            background-position: center;
            background-size: cover;

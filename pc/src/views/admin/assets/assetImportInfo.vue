@@ -220,6 +220,8 @@
             delBtn(info){
                 this.delete(info.name)
             },
+
+
             //导入文件上传相关
             //关闭弹出框，重置上传的文件的相关变量
             closeBtn() {
@@ -291,6 +293,7 @@
                 this.fileData = ev.target.files
                 this.fileName = this.fileData[0].name
             },
+
             handleClose(done) {
                 done();
             },
