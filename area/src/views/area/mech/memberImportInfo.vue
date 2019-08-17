@@ -137,6 +137,7 @@
                     let result = await client.list({
                         prefix: this.address,
                     });
+                    console.log(this.address    )
                     if(result.objects == undefined || result.objects.length ==0){
                         this.tableData = []
                     }else{
@@ -188,15 +189,14 @@
                     const loading = this.$loading({lock: true, text: '正在执行批量数据上传...', spinner: 'el-icon-loading'})
                     let arr = []
 
-
                     for(let i = 0;i<this.tableData.length;i++){
                         arr.push(this.tableData[i].url)
                     }
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        orgId: this.mechInfo.orgId, // Long 组织编号
                         userId: JSON.parse(localStorage.getItem('orgUser')).id,
                         url: arr, // String excel文件url
-                        importTaskId: this.info.id, // Long 导入任务id
+                        importTaskId: this.mechInfo.id, // Long 导入任务id
                         skipRowCount:this.$constData.importData.userImport.skipRowCount,
                         colCount:this.$constData.importData.userImport.colCount
                     }
@@ -205,11 +205,9 @@
                         this.$router.push('/memberImportRes')
                     },60000)
 
-                    this.$api.importRecord(cnt,(res)=>{
+                    this.$area.importRecord(cnt,(res)=>{
                         loading.close()
-
                         if(res.data.rc == this.$util.RC.SUCCESS){
-
                             this.$message.success('准备执行批量数据写入......')
                             this.$router.push('/memberImportRes')
                         }else{
@@ -313,18 +311,13 @@
             },
         },
         mounted(){
-            let a = this.$route.params.info
-            this.mechInfo = a
+            this.mechInfo = JSON.parse(localStorage.getItem('taskInfo'))
             console.log(this.mechInfo)
-            // this.orgName = localStorage.getItem('orgName')
-            // let orgId = localStorage.getItem('orgId')
-            // this.info = JSON.parse(localStorage.getItem('taskInfo'))
-            //
-            // if(this.info.id == undefined || this.info.id == ''){
-            //     this.$message.error('信息失效，返回上一页')
-            //     this.$router.push('/assetImport')
-            // }
-            // this.address = 'user/'+orgId+'/'+this.info.id+'/'
+            if(this.mechInfo.id == undefined || this.mechInfo.id == ''){
+                this.$message.error('信息失效，返回上一页')
+                this.$router.push('/childAdmin')
+            }
+            this.address = 'user/'+this.mechInfo.orgId+'/'+ this.mechInfo.id+'/'
             this.list()
         }
     }

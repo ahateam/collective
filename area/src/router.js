@@ -30,8 +30,12 @@ const childInfo = ()=>import('./views/area/mech/childInfo')
 const addChild = ()=>import('./views/area/mech/addChild')
 const memberImportInfo = ()=>import('./views/area/mech/memberImportInfo')
 const memberImport = ()=>import('./views/area/mech/memberImport')
+const memberImportRes = ()=>import('./views/area/mech/memberImportRes')
+const memberErrorData= ()=>import('./views/area/mech/memberErrorData')
 const assetImport = ()=>import('./views/area/mech/assetImport')
 const assetImportInfo = ()=>import('./views/area/mech/assetImportInfo')
+const assetImportRes = ()=>import('./views/area/mech/assetImportRes')
+const assetErrorData = ()=>import('./views/area/mech/assetErrorData')
 
 const areaAsset = ()=>import('./views/area/asset/asset')
 const areaAssetsInfo = ()=>import('./views/area/asset/assetsInfo')
@@ -182,6 +186,16 @@ export default new Router({
                 component:memberImport
             },
             {
+                path:'/memberImportRes',
+                name:'memberImportRes',
+                component:memberImportRes
+            },
+            {
+                path:'/memberErrorData',
+                name:'memberErrorData',
+                component:memberErrorData
+            },
+            {
                 path:'/assetImport',
                 name:'assetImport',
                 component:assetImport
@@ -190,6 +204,16 @@ export default new Router({
                 path:'/assetImportInfo',
                 name:'assetImportInfo',
                 component:assetImportInfo
+            },
+            {
+                path:'/assetImportRes',
+                name:'assetImportRes',
+                component:assetImportRes
+            },
+            {
+                path:'/assetErrorData',
+                name:'assetErrorData',
+                component:assetErrorData
             },
             {
                 path:'/areaManageApplyMech',

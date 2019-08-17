@@ -40,6 +40,11 @@ const printType = [{key:0,val:'成员股权证'},{key:1,val:'初始登记'},{key
  * */
 const printConstant =[{key:1,isConstant:1,printingName:'当天日期',printing:''}]
 
+/** 导入表格常量**/
+const importData = {userImport:{skipRowCount:1,colCount:17},assetImport:{skipRowCount:2,colCount:38}}
+
+// const
+
 export default {
     grade,
     orgLevel,
@@ -47,5 +52,6 @@ export default {
     examineType,
     examineStatus,
     printConstant,
-    printType
+    printType,
+    importData
 }

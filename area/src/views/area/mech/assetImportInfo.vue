@@ -47,7 +47,7 @@
                                 <!--<el-button @click="setBtn(scope.row)" type="text" size="small">查看任务报告</el-button>-->
                                 <!--<el-button type="text" size="small">编辑</el-button>-->
                                 <el-button @click="downLoadBtn(scope.row)" type="text" size="small">下载</el-button>
-                                <el-button type="text" size="small" @click="delBtn(scope.row)"><span style="color: #f44;">删除</span></el-button>
+<!--                                <el-button type="text" size="small" @click="delBtn(scope.row)"><span style="color: #f44;">删除</span></el-button>-->
                             </template>
                         </el-table-column>
                     </el-table>
@@ -123,7 +123,8 @@
                 num:0,          //上传进度
                 multipleSelection:[],
                 address:'',     //导入地址
-                info:''
+                info:'',
+                size:'',
 
             }
         },
@@ -185,27 +186,28 @@
                 }else{
                     const loading = this.$loading({lock: true, text: '正在执行批量数据上传...', spinner: 'el-icon-loading'})
                     let arr = []
-
-
                     for(let i = 0;i<this.tableData.length;i++){
                         arr.push(this.tableData[i].url)
                     }
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        orgId: this.info.orgId, // Long 组织编号
                         userId: JSON.parse(localStorage.getItem('orgUser')).id,
                         url: arr, // String excel文件url
                         importTaskId: this.info.id, // Long 导入任务id
+                        skipRowCount: this.$constData.importData.assetImport.skipRowCount, // Integer 第几行开始
+                        colCount: this.$constData.importData.assetImport.colCount, // Integer 总列数
                     }
-                    this.$api.importAssetsRecord(cnt,(res)=>{
+
+
+                    this.$area.importRecord(cnt,(res)=>{
                         loading.close()
                         if(res.data.rc == this.$util.RC.SUCCESS){
-
                             this.$message.success('准备执行批量数据写入......')
                             this.$router.push('/assetImportRes')
                         }else{
                             loading.close()
                             this.$message.error('数据批量上传失败...')
-                            this.$router.push('/assetImport')
+                            this.$router.push('/childAdmin')
                         }
                     })
                 }
@@ -230,15 +232,15 @@
                 this.url = ''
             },
             //讲已经导入到oss的文件传递给服务端进行数据库导入
-            importAssetsFile(){
-                if(this.url != '' || this.url != undefined){
-                    let cnt = {
-                        orgId:localStorage.getItem('orgId'),
-                        url:this.url
-                    }
-                    this.importAssets(cnt)
-                }
-            },
+            // importAssetsFile(){
+            //     if(this.url != '' || this.url != undefined){
+            //         let cnt = {
+            //             orgId:localStorage.getItem('orgId'),
+            //             url:this.url
+            //         }
+            //         this.importAssets(cnt)
+            //     }
+            // },
             //进度条
             getProgress(p) {
                 this.num = p
@@ -274,7 +276,17 @@
                         }
                     }).then(res => {
                         //导入资产
-                        this.$router.push('/page')
+                        this.loadData = false
+                        this.fileData = []
+                        this.fileName = ''
+                        this.size = ''
+                        // this.$router.push('/page')
+                        this.importModal = false
+                        this.num = 0
+
+                        this.list()
+
+
                     }).catch(err => {
                         console.log(result)
                         console.log(err)
@@ -305,16 +317,13 @@
             },
         },
         mounted(){
-            this.orgName = localStorage.getItem('orgName')
-            let orgId = localStorage.getItem('orgId')
             this.info = JSON.parse(localStorage.getItem('taskInfo'))
-
+            console.log(this.info)
             if(this.info.id == undefined || this.info.id == ''){
                 this.$message.error('信息失效，返回上一页')
                 this.$router.push('/assetImport')
             }
-            this.address = 'asset/'+orgId+'/'+this.info.id+'/'
-
+            this.address = 'asset/'+this.info.orgId+'/'+this.info.id+'/'
             this.list()
         }
     }

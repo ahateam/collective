@@ -41,8 +41,8 @@
                             <el-button @click="infoBtn(scope.row)" type="text" size="small">详情</el-button>
                             <el-button @click="del(scope.row)" type="text" size="small" style="color: #f44">删除
                             </el-button>
-                            <el-button type="primary" @click="memberImport(scope.row)">导入成员</el-button>
-                            <el-button type="primary" @click="assetImport(scope.row)">导入资产</el-button>
+                            <el-button type="primary" size="mini" @click="memberImport(scope.row)">导入成员</el-button>
+                            <el-button type="primary" size="mini" @click="assetImport(scope.row)">导入资产</el-button>
                         </template>
                     </el-table-column>
 
@@ -151,12 +151,11 @@
         },
         mounted(){
             let cnt = {
-                areaId: localStorage.getItem('orgId'),
-                examine:this.isActive,
+                superiorId: localStorage.getItem('orgId'),
                 count: this.count,
                 offset: this.offset,
             }
-            this.$area.getORGExamine(cnt, (res)=> {
+            this.$area.getORGs(cnt, (res)=> {
                 this.tableData = this.$util.tryParseJson(res.data.c)
                 console.log(this.tableData)
 

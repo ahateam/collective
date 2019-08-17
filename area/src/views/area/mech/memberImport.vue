@@ -173,20 +173,21 @@
 
             addImportBtn() {
                 let cnt = {
-                    orgId: this.mechInfo.orgId,
+                    orgId: this.mechInfo.id,
                     userId: JSON.parse(localStorage.getItem('userId')),
                     title: this.name,
                     type: 0
                 }
                 this.$area.createImportTask(cnt, (res) => {
                     if (res.data.rc == this.$util.RC.SUCCESS) {
+                        this.name = ''
                         this.$message.success('创建任务成功')
                     } else {
                         this.$message.error('创建任务失败')
                     }
 
                     let cnt = {
-                        orgId: this.mechInfo.orgId,
+                        orgId: this.mechInfo.id,
                         offset: this.offset,
                         count: this.count
                     }
@@ -197,21 +198,21 @@
             infoBtn(info) {
                 localStorage.setItem('taskInfo', JSON.stringify(info))
                 console.log(localStorage.getItem('taskInfo'))
-                this.$router.push({
-                    path: '/memberImportInfo',
-                    name: 'memberImportInfo',
-                    params: {info: info},
-                })
+                this.$router.push('/memberImportInfo')
             }
         },
         mounted() {
             localStorage.setItem('taskInfo', '')
             const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
-            let a = this.$route.params.info
-            this.mechInfo = a
+            this.mechInfo = this.$route.params.info
+            if( !this.mechInfo){
+                this.$router.push('/childAdmin')
+            }
+
             console.log(this.mechInfo)
             let cnt = {
-                orgId: this.mechInfo.orgId,
+                orgId: this.mechInfo.id,
+                type:0,
                 offset: this.offset,
                 count: this.count
             }
