@@ -29,32 +29,32 @@
                     </div>
                 </el-col>
             </el-col>
-            <el-col :span="24">
-                <el-col :span="4">
-                    <div class="title-box">管理机构上级（可选）:</div>
-                </el-col>
-                <el-col :span="18">
-                    <div class="text-box">
-                        <el-select
-                                v-model="superiorId"
-                                filterable
-                                remote
-                                reserve-keyword
-                                placeholder="请输入上级机构名称"
-                                :remote-method="getOrgByNameAndLevelBtn"
-                                :loading="loading"
-                                @focus="superiorBtn">
-                            <el-option
-                                    v-for="(item,index) in superiorList"
-                                    :key="index"
-                                    :label="item.name"
-                                    :value="item.id">
-                            </el-option>
-                        </el-select>
-                        <span style="line-height: 40px;font-size: 1.4rem;color: #666;margin-left: 20px">(若暂无上级，可不选，等待上级开通后再次申请即可)</span>
-                    </div>
-                </el-col>
-            </el-col>
+<!--            <el-col :span="24">-->
+<!--                <el-col :span="4">-->
+<!--                    <div class="title-box">管理机构上级（可选）:</div>-->
+<!--                </el-col>-->
+<!--                <el-col :span="18">-->
+<!--                    <div class="text-box">-->
+<!--                        <el-select-->
+<!--                                v-model="superiorId"-->
+<!--                                filterable-->
+<!--                                remote-->
+<!--                                reserve-keyword-->
+<!--                                placeholder="请输入上级机构名称"-->
+<!--                                :remote-method="getOrgByNameAndLevelBtn"-->
+<!--                                :loading="loading"-->
+<!--                                @focus="superiorBtn">-->
+<!--                            <el-option-->
+<!--                                    v-for="(item,index) in superiorList"-->
+<!--                                    :key="index"-->
+<!--                                    :label="item.name"-->
+<!--                                    :value="item.id">-->
+<!--                            </el-option>-->
+<!--                        </el-select>-->
+<!--                        <span style="line-height: 40px;font-size: 1.4rem;color: #666;margin-left: 20px">(若暂无上级，可不选，等待上级开通后再次申请即可)</span>-->
+<!--                    </div>-->
+<!--                </el-col>-->
+<!--            </el-col>-->
             <el-col :span="24">
                 <div class="row-box2">
                     <el-col :span="4">
@@ -234,16 +234,16 @@
         },
         methods: {
             //ajax请求封装层
-            // 创建组织申请
-            createORGApply(cnt){
-                this.$area.createORGApply(cnt,(res)=>{
+            // 创建下级机构
+            createSubOrg(cnt){
+                this.$area.createSubOrg(cnt,(res)=>{
                     if (res.data.rc == this.$util.RC.SUCCESS) {
                         this.$message({
                             showClose: true,
-                            message: '申请成功，等待审核',
+                            message: '创建成功',
                             type: 'success'
                         });
-                        this.$router.push('/areaManageApplyMech')
+                        this.$router.push('/childAdmin')
 
                     }else{
                         this.$message({
@@ -412,25 +412,26 @@
                         type: 'error'
                     })
                 } else {
+                    let orgId = localStorage.getItem('orgId')
+                    this.superiorId = JSON.parse(orgId)
                     if(this.superiorId == '' || this.superiorId == undefined){
                         this.superiorId = 1
                     }
                     let cnt = {
-                        userId:localStorage.getItem('userId'),
-                        name: this.mechName,
-                        code: this.mechCode,
-                        province: this.province,
-                        city: this.city,
-                        district: this.district,
-                        address: this.mechAddress,
-                        imgOrg: this.mechCodeImgUrl,
-                        imgAuth: this.mechGrantImgUrl,
-                        shareAmount: this.shareAmount,
-                        level: this.level,
-                        superiorId: this.superiorId,
+                        name: this.mechName,// String 组织名称
+                        code: this.mechCode,// String 组织机构代码
+                        province: this.province, // Long <选填> 省
+                        city: this.city, // Long <选填> 市
+                        district: this.district,// Long <选填> 区
+                        address: this.mechAddress, // String 街道地址
+                        imgOrg: this.mechCodeImgUrl,// String <选填> 组织机构证书图片地址
+                        imgAuth: this.mechGrantImgUrl,// String <选填> 组织授权证书图片地址
+                        shareAmount: this.shareAmount, // Integer <选填> 总股份数
+                        level: this.level,// Byte 等级
+                        superiorId: this.superiorId,// Long <选填> 上级组织id
                     };
                     console.log(cnt)
-                    this.createORGApply(cnt)
+                    this.createSubOrg(cnt)
                 }
             }
         },
@@ -450,6 +451,8 @@
             this.address = '/mechanism/'+year+month+day+'/'
             this.levelList = this.$constData.orgLevel
             this.level =   this.levelList[3].key
+
+            this.superiorId = localStorage.getItem('orgId')
         },
     }
 </script>

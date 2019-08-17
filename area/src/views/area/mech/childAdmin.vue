@@ -39,7 +39,7 @@
                             label="操作">
                         <template slot-scope="scope">
                             <el-button @click="infoBtn(scope.row)" type="text" size="small">详情</el-button>
-                            <el-button @click="del(scope.row)" type="text" size="small" style="color: #f44">删除
+                            <el-button @click="open(scope.row)" type="text" size="small" style="color: #f44">删除
                             </el-button>
                             <el-button type="primary" size="mini" @click="memberImport(scope.row)">导入成员</el-button>
                             <el-button type="primary" size="mini" @click="assetImport(scope.row)">导入资产</el-button>
@@ -92,12 +92,11 @@
                 this.page = page
                 let offset = (page-1)*this.count
                 let cnt = {
-                    areaId: localStorage.getItem('mechId'),
-                    examine:this.isActive,
+                    superiorId: localStorage.getItem('orgId'),
                     count: this.count, // Integer
                     offset: offset, // Integer
                 }
-                this.$area.getORGExamine(cnt, (res)=> {
+                this.$area.getORGs(cnt, (res)=> {
                     this.tableData = JSON.parse(res.data.c)
                     if(this.tableData.length < this.count){
                         this.pageOver = true
@@ -106,8 +105,46 @@
                     }
                 })
             },
-            del(row){
-                console.log(row)
+            open(row) {
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.delSubOrg(row)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            delSubOrg(row){
+                let that = this
+                let cnt = {
+                    orgId: row.id, // Long 组织id
+                };
+                that.$area.delSubOrg(cnt,(res)=>{
+                    console.log(res)
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    let cnt = {
+                        superiorId: localStorage.getItem('orgId'),
+                        count: that.count,
+                        offset: that.offset,
+                    }
+                    that.$area.getORGs(cnt, (res)=> {
+                        that.tableData = that.$util.tryParseJson(res.data.c)
+                        console.log(that.tableData)
+                        if(that.tableData.length < that.count){
+                            that.pageOver = true
+                        }else{
+                            that.pageOver = false
+                        }
+                    })
+                })
             },
 
             // statusFliter(row,col,value){

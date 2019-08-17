@@ -45,26 +45,27 @@
                             border
                             style="width: 100%">
                         <el-table-column
-                                prop="familyNumber"
+                                prop="Col0"
                                 label="户序号">
                         </el-table-column>
                         <el-table-column
-                                prop="realName"
+                                prop="Col1"
                                 label="姓名">
                         </el-table-column>
                         <el-table-column
-                                prop="mobile"
+                                prop="Col3"
                                 label="手机号">
                         </el-table-column>
                         <el-table-column
-                                prop="address"
+                                prop="Col6"
                                 label="地址">
                         </el-table-column>
 
                         <el-table-column
-                                prop="errorReason"
+                                prop="result"
                                 label="错误原因"
-                                :formatter="errorFilter">
+                                >
+<!--                            :formatter="errorFilter"-->
                         </el-table-column>
                     </el-table>
                 </template>
@@ -102,9 +103,8 @@
             getFailImportRecord(cnt){
                 this.$area.getFailImportRecord(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.tableData = this.$util.tryParseJson(res.data.c)
-                        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-                        console.log(this.tableData)
+                        this.tableData = this.$util.tryParseJson(res.data.c).list
+
                     }else{
                         this.tableData = []
                     }
