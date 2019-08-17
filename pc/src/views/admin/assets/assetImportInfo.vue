@@ -195,8 +195,11 @@
                         userId: JSON.parse(localStorage.getItem('orgUser')).id,
                         url: arr, // String excel文件url
                         importTaskId: this.info.id, // Long 导入任务id
+                        skipRowCount: this.$constData.importData.assetImport.skipRowCount, // Integer 第几行开始
+                        colCount: this.$constData.importData.assetImport.colCount, // Integer 总列数
                     }
-                    this.$api.importAssetsRecord(cnt,(res)=>{
+
+                    this.$api.importRecord(cnt,(res)=>{
                         loading.close()
                         if(res.data.rc == this.$util.RC.SUCCESS){
 

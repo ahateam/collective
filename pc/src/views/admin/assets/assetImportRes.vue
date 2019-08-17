@@ -59,7 +59,7 @@
 
             </el-col>
             <el-col :span="24" style="margin: 15px 0">
-                <el-button type="primary" style="float: right" @click="assetErrorBtn" v-if="status ==1"> 查看错误数据报告</el-button>
+                <el-button type="primary" style="float: right" @click="assetErrorBtn" v-if="status ==4"> 查看错误数据报告</el-button>
             </el-col>
         </el-row>
 
@@ -127,33 +127,35 @@
             },
             //反复调用获取进度条
             getPropressData(){
-                if(this.status != 1 ){
-                        let cnt = {
-                            orgId: localStorage.getItem('orgId'), // Long 组织id
-                            userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
-                            importTaskId: this.info.id, // Long 导入任务id
-                        }
-                        this.$api.getAssetImportTask(cnt,(res)=>{
-                            this.sum = this.$util.tryParseJson(res.data.c).sum
-                            this.success = this.$util.tryParseJson(res.data.c).success
-                            this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
-                            this.status = this.$util.tryParseJson(res.data.c).status
-                            this.propressData = parseFloat(((this.success/this.sum)*100).toFixed(2))
-                        })
+                if(this.status != '4' ){
+                    let cnt = {
+                        taskId: this.info.id, // Long 导入任务id
+                    }
+                    this.$api.getImportTask(cnt,(res)=>{
+                        let data = this.$util.tryParseJson(res.data.c)
+                        console.log('----------data-----------')
+                        console.log(data)
+                        this.sum = data.amount
+                        this.success = data.successCount
+                        this.errorData =  data.failureCount
+                        this.status = data.status
+                        this.propressData = parseFloat((((this.success+this.errorData)/this.sum)*100).toFixed(2))
+                    })
                 }else{
                     clearInterval(this.timer)
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织id
-                        userId:  JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
-                        importTaskId: this.info.id, // Long 导入任务id
+                        taskId: this.info.id, // Long 导入任务id
                     }
-                    this.$api.getAssetImportTask(cnt,(res)=>{
-                        this.sum = this.$util.tryParseJson(res.data.c).sum
-                        this.success = this.$util.tryParseJson(res.data.c).success
-                        this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
-                        this.status = this.$util.tryParseJson(res.data.c).status
-                        this.propressData = parseFloat(((this.success/this.sum)*100).toFixed(2))
+                    this.$api.getImportTask(cnt,(res)=>{
+                        let data  = this.$util.tryParseJson(res.data.c)
+                        this.sum = data.amount
+                        this.success = data.successCount
+                        this.errorData =  data.failureCount
+                        this.status = data.status
+                        this.propressData = parseFloat((((this.success+this.errorData)/this.sum)*100).toFixed(2))
                         localStorage.setItem('taskInfo',res.data.c)
+
+
                     })
                 }
             },
@@ -182,8 +184,6 @@
             this.info = JSON.parse(localStorage.getItem('taskInfo'))
 
 
-
-
             if(this.info.id == undefined || this.info.id ==  ''){
                 this.$message.error('信息失效')
                 this.$router.push('/assetImport')
@@ -194,20 +194,18 @@
             this.list()
 
             let cnt = {
-                orgId: orgId, // Long 组织编号
-                userId: JSON.parse(localStorage.getItem('orgUser')).id,
-                importTaskId: this.info.id, // Long 导入任务id
+                taskId: this.info.id, // Long 导入任务id
             }
 
-            this.$api.getAssetImportTask(cnt,(res)=>{
+            this.$api.getImportTask(cnt,(res)=>{
                 if(res.data.rc == this.$util.RC.SUCCESS){
-                    this.success = this.$util.tryParseJson(res.data.c).success
-                    this.errorData =  this.$util.tryParseJson(res.data.c).notCompletion
-                    this.status = this.$util.tryParseJson(res.data.c).status
-                    this.sum =  this.$util.tryParseJson(res.data.c).sum
-                    if(this.status == 2){
+                    let data = this.$util.tryParseJson(res.data.c)
+                    this.success = data.successCount
+                    this.errorData =  data.failureCount
+                    this.status = data.status
+                    this.sum =  data.amount
+                    if(this.status == '1'){
                         let cnt1 ={
-                            orgId: orgId, // Long 组织编号
                             importTaskId: this.info.id, // Long 导入任务id
                         }
                         this.$api.importAsset(cnt1,(res1)=>{
@@ -222,9 +220,6 @@
             })
 
            this.timer = setInterval(this.getPropressData,5000)
-
-
-
 
         },
         beforeDestroy(){

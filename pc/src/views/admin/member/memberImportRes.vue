@@ -137,10 +137,11 @@
                         taskId: this.info.id, // Long 导入任务id
                     }
                     this.$api.getImportTask(cnt,(res)=>{
-                        this.sum = this.$util.tryParseJson(res.data.c).amount
-                        this.success = this.$util.tryParseJson(res.data.c).successCount
-                        this.errorData =  this.$util.tryParseJson(res.data.c).failureCount
-                        this.status = this.$util.tryParseJson(res.data.c).status
+                        let data = this.$util.tryParseJson(res.data.c)
+                        this.sum = data.amount
+                        this.success = data.successCount
+                        this.errorData =  data.failureCount
+                        this.status = data.status
                         this.propressData = parseFloat((((this.success+this.errorData)/this.sum)*100).toFixed(2))
                     })
                 }else{
@@ -149,10 +150,11 @@
                         taskId: this.info.id, // Long 导入任务id
                     }
                     this.$api.getImportTask(cnt,(res)=>{
-                        this.sum = this.$util.tryParseJson(res.data.c).amount
-                        this.success = this.$util.tryParseJson(res.data.c).successCount
-                        this.errorData =  this.$util.tryParseJson(res.data.c).failureCount
-                        this.status = this.$util.tryParseJson(res.data.c).status
+                        let data  = this.$util.tryParseJson(res.data.c)
+                        this.sum = data.amount
+                        this.success = data.successCount
+                        this.errorData =  data.failureCount
+                        this.status = data.status
                         this.propressData = parseFloat((((this.success+this.errorData)/this.sum)*100).toFixed(2))
                         localStorage.setItem('taskInfo',res.data.c)
 
@@ -200,10 +202,11 @@
 
             this.$api.getImportTask(cnt,(res)=>{
                 if(res.data.rc == this.$util.RC.SUCCESS){
-                    this.success = this.$util.tryParseJson(res.data.c).successCount
-                    this.errorData =  this.$util.tryParseJson(res.data.c).failureCount
-                    this.status = this.$util.tryParseJson(res.data.c).status
-                    this.sum =  this.$util.tryParseJson(res.data.c).amount
+                    let data = this.$util.tryParseJson(res.data.c)
+                    this.success = data.successCount
+                    this.errorData =  data.failureCount
+                    this.status = data.status
+                    this.sum =  data.amount
                     if(this.status == '1'){
                         let cnt1 ={
                             importTaskId: this.info.id, // Long 导入任务id

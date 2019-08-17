@@ -45,26 +45,25 @@
                             border
                             style="width: 100%">
                         <el-table-column
-                                prop="familyNumber"
+                                prop="Col0"
                                 label="户序号">
                         </el-table-column>
                         <el-table-column
-                                prop="realName"
+                                prop="Col1"
                                 label="姓名">
                         </el-table-column>
                         <el-table-column
-                                prop="mobile"
+                                prop="Col3"
                                 label="手机号">
                         </el-table-column>
                         <el-table-column
-                                prop="address"
+                                prop="Col6"
                                 label="地址">
                         </el-table-column>
 
                         <el-table-column
-                                prop="errorReason"
-                                label="错误原因"
-                                :formatter="errorFilter">
+                                prop="result"
+                                label="错误原因">
                         </el-table-column>
                     </el-table>
                 </template>
@@ -102,11 +101,10 @@
             getFailImportRecord(cnt){
                 this.$api.getFailImportRecord(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.tableData = this.$util.tryParseJson(res.data.c)
+                        this.tableData = this.$util.tryParseJson(res.data.c).list
                     }else{
                         this.tableData = []
                     }
-                    console.log(this.tableData)
                     if(this.tableData.length <this.count){
                         this.pageOver = true
                     }else{
@@ -123,13 +121,6 @@
                 }
                 this.getFailImportRecord(cnt)
             },
-            errorFilter(row,col,val){
-                if(val == '' || val == undefined || val== null || row.errorFilter == undefined){
-                    return '未知错误'
-                }else{
-                    return val
-                }
-            }
         },
         mounted(){
             this.info = JSON.parse(localStorage.getItem('taskInfo'))

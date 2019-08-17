@@ -18,11 +18,11 @@
                             border
                             style="width: 100%">
                         <el-table-column
-                                prop="name"
+                                prop="title"
                                 label="任务标题">
                         </el-table-column>
                         <el-table-column
-                                prop="sum"
+                                prop="amount"
                                 label="总数据量">
                         </el-table-column>
                         <el-table-column
@@ -34,9 +34,9 @@
                                 label="导入进度"
                                 >
                             <template slot-scope="scope">
-                                <span v-if="scope.row.sum == 0">0</span>
+                                <span v-if="scope.row.amount == 0">0</span>
                                 <span v-else>
-                                    {{((scope.row.success /scope.row.sum)*100).toFixed(2)}}%
+                                    {{((scope.row.successCount /scope.row.amount)*100).toFixed(2)}}%
                                 </span>
                             </template>
                         </el-table-column>
@@ -50,9 +50,10 @@
                                 fixed="right"
                                 label="操作">
                             <template slot-scope="scope">
-                                <el-button @click="infoBtn(scope.row)" type="text" size="small" v-if="scope.row.status == '2'">导入数据表</el-button>
-                                <el-button @click="infoResBtn(scope.row)" type="text" size="small" v-if="scope.row.status != '2' ">查看任务报告</el-button>
-                                <el-button @click="infoErrorBtn(scope.row)" type="text" size="small" v-if="scope.row.status == '1' "><span style="color: #f44;">查看失败数据</span></el-button>
+                                <el-button @click="infoBtn(scope.row)" type="text" size="small" v-if="scope.row.status == '0'">导入数据表</el-button>
+                                <el-button @click="infoResBtn(scope.row)" type="text" size="small" v-if="scope.row.status == '3' ">查看任务报告</el-button>
+                                <el-button @click="infoErrorBtn(scope.row)" type="text" size="small" v-if="scope.row.status == '4' "><span style="color: #f44;">查看失败数据</span></el-button>
+
                                 <!--<el-button type="text" size="small">编辑</el-button>-->
                             </template>
                         </el-table-column>
@@ -72,7 +73,6 @@
                 <el-form-item label="导入任务标题" label-width="120px">
                     <el-input v-model="name" autocomplete="off"></el-input>
                 </el-form-item>
-
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addImportShow = false">取 消</el-button>
@@ -97,13 +97,14 @@
             }
         },
         methods:{
-            getAssetImportTasks(cnt){
-                this.$api.getAssetImportTasks(cnt,(res)=>{
+            getListImportTask(cnt){
+                this.$api.getListImportTask(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         this.tableData = this.$util.tryParseJson(res.data.c)
                     }else{
                         this.tableData = []
                     }
+                    console.log(this.tableData)
                     if(this.tableData.length < this.count){
                         this.pageOver =true
                     }else{
@@ -117,13 +118,19 @@
                 return timer.toLocaleDateString()+ ' '+timer.toLocaleTimeString('chinese',{hour12:false})
             },
             statusFilter(row,col,val){
+                console.log(val)
                 if(val == '0'){
-                     return '正在导入'
+                    return '等待上传文件'
                 }else if(val == '1'){
+                    return '文件已就绪'
+                }else if(val == '2'){
+                    return '准备导入'
+                }else if(val == '3'){
+                    return '正在导入'
+                }else if( val=='4'){
                     return '导入完成'
-                }else {
-                    return '等待导入'
                 }
+
             },
 
 
@@ -155,9 +162,10 @@
                 let cnt = {
                     orgId:localStorage.getItem('orgId'),
                     userId:JSON.parse(localStorage.getItem('orgUser')).id,
-                    name:this.name
+                    title:this.name,
+                    type:1,
                 }
-                this.$api.createAssetImportTask(cnt,(res)=>{
+                this.$api.createImportTask(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         this.$message.success('创建任务成功')
                     }else{
@@ -177,11 +185,11 @@
             const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let cnt = {
                 orgId:localStorage.getItem('orgId'),
-                userId:JSON.parse(localStorage.getItem('orgUser')).id,
+                type:1,
                 offset:this.offset,
                 count:this.count
             }
-            this.getAssetImportTasks(cnt)
+            this.getListImportTask(cnt)
             loading.close()
         }
     }

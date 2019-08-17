@@ -50,6 +50,8 @@
                                 fixed="right"
                                 label="操作">
                             <template slot-scope="scope">
+
+
                                 <el-button @click="infoBtn(scope.row)" type="text" size="small" v-if="scope.row.status == '0'">导入数据表</el-button>
                                 <el-button @click="infoResBtn(scope.row)" type="text" size="small" v-if="scope.row.status == '3' ">查看任务报告</el-button>
                                 <el-button @click="infoErrorBtn(scope.row)" type="text" size="small" v-if="scope.row.status == '4' "><span style="color: #f44;">查看失败数据</span></el-button>
@@ -190,7 +192,7 @@
             const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let cnt = {
                 orgId:localStorage.getItem('orgId'),
-
+                type:0,
                 offset:this.offset,
                 count:this.count
             }

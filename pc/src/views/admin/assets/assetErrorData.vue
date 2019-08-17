@@ -10,17 +10,22 @@
             <el-col :span="24">
                 <p>
                     <span class="info-text">
-                         任务数据总量：<span style="color: #f44;"> {{info.sum}} 条</span>；
-                        已完成导入数据总量：<span style="color: #f44;"> {{info.success}} 条</span>；
+                         任务数据总量：<span style="color: #f44;"> {{info.amount}} 条</span>；
+                        已完成导入数据总量：<span style="color: #f44;"> {{info.successCount}} 条</span>；
                     </span>
                 </p>
                 <p>
                     <span class="info-text">
                             创建任务时间：<span style="color: #f44;">{{   new Date(info.createTime ).toLocaleDateString()+ ' '+new Date(info.createTime ).toLocaleTimeString('chinese',{hour12:false})}}</span>；
-                    任务状态：<span v-if="info.status == 0" style="color: #468847">正在进行导入</span>
-                    <span v-if="info.status == 1" style="color: #1483d8">已完成导入</span>
-                    <span v-if="info.status == 2" style="color: #f44">等待导入</span>
-                    ；错误数据条数：<span style="color: #f44;"> {{info.notCompletion}} 条</span>
+                    任务状态：
+                      <span v-if="info.status == 0" style="color: #468847">等待上传文件</span>
+                        <span v-else-if="info.status == 1" style="color: #468847">文件已就绪</span>
+                        <span v-else-if="info.status == 2" style="color: #468847">准备导入</span>
+                        <span v-else-if="info.status == 3" style="color: #468847">正在导入</span>
+                        <span v-else-if="info.status == 4" style="color: #468847">导入完成</span>
+
+
+                    ；错误数据条数：<span style="color: #f44;"> {{info.failureCount}} 条</span>
                     </span>
                 </p>
             </el-col>
@@ -38,23 +43,23 @@
                             border
                             style="width: 100%">
                         <el-table-column
-                                prop="name"
+                                prop="Col1"
                                 label="资产名称">
                         </el-table-column>
                         <el-table-column
-                                prop="sn"
+                                prop="Col2"
                                 label="资产编号">
                         </el-table-column>
                         <el-table-column
-                                prop="estateType"
+                                prop="Col4"
                                 label="资产类型">
                         </el-table-column>
                         <el-table-column
-                                prop="location"
+                                prop="Col7"
                                 label="资产地址">
                         </el-table-column>
                         <el-table-column
-                                prop="errorReason"
+                                prop=" result "
                                 label="错误原因"
                                 >
                         </el-table-column>
@@ -92,10 +97,10 @@
             }
         },
         methods:{
-            getNotcompletionRecord(cnt){
-                this.$api.getNotcompletionRecord(cnt,(res)=>{
+            getFailImportRecord(cnt){
+                this.$api.getFailImportRecord(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.tableData = this.$util.tryParseJson(res.data.c)
+                        this.tableData = this.$util.tryParseJson(res.data.c).list
                     }else{
                         this.tableData = []
                     }
@@ -110,44 +115,44 @@
             changePage(page){
                 this.page = page
                 let cnt = {
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
                     importTaskId: this.info.id, // Long 导入任务id
                     count: this.count, // Integer
                     offset:(this.page-1)*this.count, // Integer
                 }
-                this.getNotcompletionRecord(cnt)
+                this.getFailImportRecord(cnt)
             },
-            errorFilter(row,col,val){
-                if(val == '' || val == undefined || val== null || row.errorFilter == undefined){
-                    return '未知错误'
-                }else{
-                    return val
-                }
-            }
+
+
 
         },
         mounted(){
             this.info = JSON.parse(localStorage.getItem('taskInfo'))
 
             let cnt = {
-                orgId: localStorage.getItem('orgId'), // Long 组织编号
                 importTaskId: this.info.id, // Long 导入任务id
                 count: this.count, // Integer
                 offset: this.offset, // Integer
             }
-            this.getNotcompletionRecord(cnt)
-            this.percentageData = parseFloat(((this.info.success/this.info.sum)*100).toFixed(2))
-            let cnt1 = {
-                orgId: localStorage.getItem('orgId'), // Long 组织id
-                userId: JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
-                importTaskId: this.info.id, // Long 导入任务id
-            }
-            this.$api.getAssetImportTask(cnt1,(res1)=>{
-                if(res1.data.rc == this.$util.RC.SUCCESS){
-                    this.info = this.$util.tryParseJson(res1.data.c)
-                    this.percentageData = parseFloat(((this.info.success/this.info.sum)*100).toFixed(2))
-                }
-            })
+
+            this.getFailImportRecord(cnt)
+
+            console.log(this.info);
+
+            this.percentageData = parseFloat((((this.info.failureCount+this.info.successCount)/this.info.amount)*100).toFixed(2))
+
+
+
+            // let cnt1 = {
+            //     orgId: localStorage.getItem('orgId'), // Long 组织id
+            //     userId: JSON.parse(localStorage.getItem('orgUser')).id, // Long 用户id
+            //     importTaskId: this.info.id, // Long 导入任务id
+            // }
+            // this.$api.getAssetImportTask(cnt1,(res1)=>{
+            //     if(res1.data.rc == this.$util.RC.SUCCESS){
+            //         this.info = this.$util.tryParseJson(res1.data.c)
+            //         this.percentageData = parseFloat(((this.info.success/this.info.sum)*100).toFixed(2))
+            //     }
+            // })
 
         }
     }
