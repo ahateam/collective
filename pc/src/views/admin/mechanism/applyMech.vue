@@ -55,7 +55,7 @@
                 width="30%">
             <span>是否确认取消申请</span>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button @click="delShow = false">取 消</el-button>
     <el-button type="primary" @click="delBtn">确认取消申请</el-button>
   </span>
         </el-dialog>
