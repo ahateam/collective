@@ -509,6 +509,7 @@
 
                 this.$api.getORGUsers(cnt2, (res)=> {
                     let userList = this.$util.tryParseJson(res.data.c)
+					this.userData = []
                     for(let i=0;i< userList.length;i++){
                         if(userList[i].user.realName != '' && userList[i].user.realName != undefined){
                             this.userData.push(userList[i].user)
