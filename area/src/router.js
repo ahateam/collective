@@ -62,14 +62,7 @@ const areaPrintTemplate =()=>import('./views/area/print/printTemplate')
 const areaPrintTemplateView =()=>import('./views/area/print/printTemplateView')
 const areaPrintView =()=>import('./views/area/print/printView')
 const areaFamilyList = ()=>import('./views/area/user/familyList')
-
-
-const areaPrintViewInfo = ()=>import('./views/area/print/component/huichuan/templateView/printViewInfo')
-const areaPrintViewInfo1 = ()=>import('./views/area/print/component/huichuan/templateView/printViewInfo1')
-const areaPrintViewInfo2 = ()=>import('./views/area/print/component/huichuan/templateView/printViewInfo2')
-const areaPrintViewInfo3 = ()=>import('./views/area/print/component/huichuan/templateView/printViewInfo3')
-const areaPrintViewInfo4 = ()=>import('./views/area/print/component/huichuan/templateView/printViewInfo4')
-
+const areaPrintViewInfo =()=> import('./views/area/print/printViewInfo')
 
 
 Vue.use(Router)
@@ -313,6 +306,7 @@ export default new Router({
                 name:'areaPrintBook',
                 component:areaPrintBook
             },
+
             {
                 path:'/areaPrintInfo',
                 name:'areaPrintInfo',
@@ -345,26 +339,7 @@ export default new Router({
                 name:'areaPrintViewInfo',
                 component:areaPrintViewInfo
             },
-            {
-                path:'/areaPrintViewInfo1',
-                name:'areaPrintViewInfo1',
-                component:areaPrintViewInfo1
-            },
-            {
-                path:'/areaPrintViewInfo2',
-                name:'areaPrintViewInfo2',
-                component:areaPrintViewInfo2
-            },
-            {
-                path:'/areaPrintViewInfo3',
-                name:'areaPrintViewInfo3',
-                component:areaPrintViewInfo3
-            },
-            {
-                path:'/areaPrintViewInfo4',
-                name:'areaPrintViewInfo4',
-                component:areaPrintViewInfo4
-            }
+
         ]
     },
   ]

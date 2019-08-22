@@ -55,25 +55,25 @@ const printBookList = {
             info:'成员股权证首页'
         },
         {
-            id:'hc1',
+            id:'hc2',
             src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/2.jpg',
             seat:'右侧',
             info:'初始登记页'
         },
         {
-            id:'hc1',
+            id:'hc3',
             src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
             seat:'左侧',
             info:'变更登记页1'
         },
         {
-            id:'hc1',
+            id:'hc4',
             src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
             seat:'右侧',
             info:'变更登记页2'
         },
         {
-            id:'hc1',
+            id:'hc5',
             src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/4.jpg',
             seat:'左侧',
             info:'抵押情况登记页'

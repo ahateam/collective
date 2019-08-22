@@ -6,14 +6,46 @@
             </el-col>
         </el-row>
         <el-row class="row-box1">
+
             <el-row>
                 <el-col :span="24"><span class="col-title">选择打印模板进行打印</span></el-col>
             </el-row>
-            <el-row >
+            <el-row class="row-box" >
+                <el-col :span="24">
+                    <el-button type="primary" class="nav-btn" size="small" @click="isActive=0" v-if="isActive ==0">贵州省证书</el-button>
+                    <el-button  class="nav-btn" size="small" @click="isActive=0" v-else>贵州省证书</el-button>
+
+                    <el-button  type="primary" class="nav-btn" size="small" @click="isActive =1" v-if="isActive ==1">遵义汇川区证书</el-button>
+                    <el-button  class="nav-btn" size="small" @click="isActive =1" v-else>遵义汇川区证书</el-button>
+                </el-col>
+            </el-row>
+            <el-row  v-if="isActive==0">
                 <el-col :span="24">
                     <div class="list-box">
                         <div class="item-box"
-                             v-for="(item,index) in list"
+                             v-for="(item,index) in list.guizhou"
+                             :key="index"
+                             @click="setBtn(item.id)">
+                            <div class="item-img">
+                                <img :src="item.src" alt="">
+                            </div>
+                            <div class="item-text">
+                                <div class="item-address">
+                                    {{item.seat}}
+                                </div>
+                                <div class="item-info">
+                                    {{item.info}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-row  v-else>
+                <el-col :span="24">
+                    <div class="list-box">
+                        <div class="item-box"
+                             v-for="(item,index) in list.huichuan"
                              :key="index"
                              @click="setBtn(item.id)">
                             <div class="item-img">
@@ -44,8 +76,8 @@
 
                 orgList:[],
                 org:'',
-
-                list:[],
+                isActive:0,
+                list:this.$constData.printBookList
 
             }
         },
@@ -56,8 +88,8 @@
             },
             setBtn(id){
                 this.$router.push({
-                    path:'/areaPrintTemplateView',
-                    name:'areaPrintTemplateView',
+                    path:'/areaPrintViewInfo',
+                    name:'areaPrintViewInfo',
                     params:{
                         id:id
                     }
@@ -72,39 +104,6 @@
                 this.$message.error('信息失效，重新选择')
                 this.$router.push('/areaFamilyList')
             }
-
-            this.list = [
-                {
-                    id:1,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/1.jpg',
-                    seat:'右侧',
-                    info:'成员股权证首页'
-                },
-                {
-                    id:2,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/2.jpg',
-                    seat:'右侧',
-                    info:'初始登记页'
-                },
-                {
-                    id:3,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
-                    seat:'左侧',
-                    info:'变更登记页1'
-                },
-                {
-                    id:4,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
-                    seat:'右侧',
-                    info:'变更登记页2'
-                },
-                {
-                    id:5,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/4.jpg',
-                    seat:'左侧',
-                    info:'抵押情况登记页'
-                },
-            ]
 
 
 

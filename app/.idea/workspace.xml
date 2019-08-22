@@ -1,32 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1e493353-f097-4d4c-8496-766311fe8ef3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/guizhou/template/gzTemplate.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/guizhou/template/gzTemplate1.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/guizhou/template/gzTemplate2.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/guizhou/template/gzTemplate3.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/guizhou/template/gzTemplate4.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/template/printTemplate.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../area/src/views/area/print/printTemplateView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/data/api/url.js" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/data/api/url.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/data/constData.js" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/data/constData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printBook.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/printBook.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printPage/printViewInfo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/templateView/printViewInfo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printPage/printViewInfo1.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/templateView/printViewInfo1.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printPage/printViewInfo2.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/templateView/printViewInfo2.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printPage/printViewInfo3.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/templateView/printViewInfo3.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printPage/printViewInfo4.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/templateView/printViewInfo4.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printTemplate.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/printTemplate.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printTemplate1.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/template/printTemplate1.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printTemplate2.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/template/printTemplate2.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printTemplate3.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/template/printTemplate3.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printTemplate4.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/component/huichuan/template/printTemplate4.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../area/src/views/area/print/printView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../area/src/views/area/print/printView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pc/src/assets/api/util/url.js" beforeDir="false" afterPath="$PROJECT_DIR$/../pc/src/assets/api/util/url.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../wap/src/assets/api/util/url.js" beforeDir="false" afterPath="$PROJECT_DIR$/../wap/src/assets/api/util/url.js" afterDir="false" />
-    </list>
+    <list default="true" id="1e493353-f097-4d4c-8496-766311fe8ef3" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -40,6 +15,7 @@
     <session id="1365217056">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -55,7 +31,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1701" />
@@ -108,16 +84,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1566390601193</updated>
-      <workItem from="1566390602984" duration="131000" />
+      <workItem from="1566390602984" duration="448000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="131000" />
+    <option name="totallyTimeSpent" value="448000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />

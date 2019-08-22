@@ -71,6 +71,8 @@
         },
         mounted(){
             this.checkIndex = this.$route.params.id
+
+            console.log(this.checkIndex)
         }
 
     }
