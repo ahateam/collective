@@ -55,17 +55,15 @@
                 this.$router.push('/areaFamilyList')
             },
             setBtn(id){
-                if(id ==1){
-                    this.$router.push('/areaPrintViewInfo')
-                }else if(id ==2){
-                    this.$router.push('/areaPrintViewInfo1')
-                }else if(id ==3){
-                    this.$router.push('/areaPrintViewInfo2')
-                }else if(id ==4){
-                    this.$router.push('/areaPrintViewInfo3')
-                }else if(id ==5){
-                    this.$router.push('/areaPrintViewInfo4')
-                }
+                this.$router.push({
+                    path:'/areaPrintTemplateView',
+                    name:'areaPrintTemplateView',
+                    params:{
+                        id:id
+                    }
+                })
+
+
             }
         },
         mounted(){

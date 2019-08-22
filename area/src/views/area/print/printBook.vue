@@ -2,18 +2,23 @@
     <div >
         <el-row class="row-box" >
             <el-col :span="24">
-                <el-button type="primary" class="nav-btn">导入证书模板</el-button>
+                <el-button type="primary" class="nav-btn" size="small" @click="isActive=0" v-if="isActive ==0">贵州省证书</el-button>
+                <el-button  class="nav-btn" size="small" @click="isActive=0" v-else>贵州省证书</el-button>
+
+                <el-button  type="primary" class="nav-btn" size="small" @click="isActive =1" v-if="isActive ==1">遵义汇川区证书</el-button>
+                <el-button  class="nav-btn" size="small" @click="isActive =1" v-else>遵义汇川区证书</el-button>
             </el-col>
         </el-row>
         <el-row class="row-box1">
             <el-row>
-                <el-col :span="24"><span class="col-title">选择打印模板进行打印</span></el-col>
+                <el-col :span="24"><span class="col-title">选择证书页进行模板配置</span></el-col>
             </el-row>
-            <el-row >
+
+            <el-row v-if="isActive == 0" >
                 <el-col :span="24">
                     <div class="list-box">
                         <div class="item-box"
-                             v-for="(item,index) in list"
+                             v-for="(item,index) in list.guizhou"
                              :key="index"
                             @click="setBtn(item.id)">
                             <div class="item-img">
@@ -22,6 +27,28 @@
                             <div class="item-text">
                                 <div class="item-address">
                                         {{item.seat}}
+                                </div>
+                                <div class="item-info">
+                                    {{item.info}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-row v-else >
+                <el-col :span="24">
+                    <div class="list-box">
+                        <div class="item-box"
+                             v-for="(item,index) in list.huichuan"
+                             :key="index"
+                             @click="setBtn(item.id)">
+                            <div class="item-img">
+                                <img :src="item.src" alt="">
+                            </div>
+                            <div class="item-text">
+                                <div class="item-address">
+                                    {{item.seat}}
                                 </div>
                                 <div class="item-info">
                                     {{item.info}}
@@ -40,88 +67,23 @@
         name: "printBook",
         data(){
             return{
-                list:[]
+                list:this.$constData.printBookList,
+                isActive:0
             }
         },
         methods:{
             setBtn(id){
-                if(id ==1){
-                    this.$router.push({
-                        path:'/areaPrintTemplate',
-                        name:'areaPrintTemplate',
-                        params:{
-                            id:id
-                        }
-                    })
-                }else if(id ==2){
-                    this.$router.push({
-                        path:'/areaPrintTemplate1',
-                        name:'areaPrintTemplate1',
-                        params:{
-                            id:id
-                        }
-                    })
-                }else if (id ==3){
-                    this.$router.push({
-                        path:'/areaPrintTemplate2',
-                        name:'areaPrintTemplate2',
-                        params:{
-                            id:id
-                        }
-                    })
-                } else if (id ==4) {
-                    this.$router.push({
-                        path:'/areaPrintTemplate3',
-                        name:'areaPrintTemplate3',
-                        params:{
-                            id:id
-                        }
-                    })
-                }else if(id==5){
-                    this.$router.push({
-                        path:'/areaPrintTemplate4',
-                        name:'areaPrintTemplate4',
-                        params:{
-                            id:id
-                        }
-                    })
-                }
-
+                this.$router.push({
+                    path:'/areaPrintTemplate',
+                    name:'areaPrintTemplate',
+                    params:{
+                        id:id
+                    }
+                })
             }
         },
         mounted(){
-            this.list = [
-                {
-                    id:1,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/1.jpg',
-                    seat:'右侧',
-                    info:'成员股权证首页'
-                },
-                {
-                    id:2,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/2.jpg',
-                    seat:'右侧',
-                    info:'初始登记页'
-                },
-                {
-                    id:3,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
-                    seat:'左侧',
-                    info:'变更登记页1'
-                },
-                {
-                    id:4,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
-                    seat:'右侧',
-                    info:'变更登记页2'
-                },
-                {
-                    id:5,
-                    src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/4.jpg',
-                    seat:'左侧',
-                    info:'抵押情况登记页'
-                },
-            ]
+
         }
     }
 </script>
