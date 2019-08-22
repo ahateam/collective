@@ -317,7 +317,13 @@
             let userObj = JSON.parse(localStorage.getItem('userInfo'))  //只有用户信息
             let orgObj =  JSON.parse(localStorage.getItem('orgInfo'))   //只有用户的组织信息
             let user = Object.assign(userObj,orgObj)
-            localStorage.setItem('user',JSON.stringify(user))
+			//
+			let userInfo = JSON.parse(localStorage.getItem('user'))
+			if(userInfo==null){//user是否已经存在，若存在就不重新赋值
+				localStorage.setItem('user',JSON.stringify(user))
+			}
+			//
+            //localStorage.setItem('user',JSON.stringify(user))
 
         },
             mounted() {
