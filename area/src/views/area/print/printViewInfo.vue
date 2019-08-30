@@ -6,13 +6,18 @@
         <template v-else-if="checkIndex == 'hc2'">
             <areaPrintViewInfo1></areaPrintViewInfo1>
         </template>
+
         <template v-else-if="checkIndex == 'hc3'">
+            <areaPrintViewInfo1Back></areaPrintViewInfo1Back>
+        </template>
+
+        <template v-else-if="checkIndex == 'hc4'">
             <areaPrintViewInfo2></areaPrintViewInfo2>
         </template>
-        <template v-else-if="checkIndex == 'hc4'">
+        <template v-else-if="checkIndex == 'hc5'">
             <areaPrintViewInfo3></areaPrintViewInfo3>
         </template>
-        <template v-else-if="checkIndex == 'hc5'">
+        <template v-else-if="checkIndex == 'hc6'">
             <areaPrintViewInfo4></areaPrintViewInfo4>
         </template>
 
@@ -37,6 +42,7 @@
 <script>
     import areaPrintViewInfo from './component/huichuan/templateView/printViewInfo'
     import areaPrintViewInfo1 from './component/huichuan/templateView/printViewInfo1'
+    import areaPrintViewInfo1Back from './component/huichuan/templateView/printViewInfo1back'
     import areaPrintViewInfo2 from './component/huichuan/templateView/printViewInfo2'
     import areaPrintViewInfo3 from './component/huichuan/templateView/printViewInfo3'
     import areaPrintViewInfo4 from './component/huichuan/templateView/printViewInfo4'
@@ -58,6 +64,7 @@
         components:{
             areaPrintViewInfo,
             areaPrintViewInfo1,
+            areaPrintViewInfo1Back,
             areaPrintViewInfo2,
             areaPrintViewInfo3,
             areaPrintViewInfo4,

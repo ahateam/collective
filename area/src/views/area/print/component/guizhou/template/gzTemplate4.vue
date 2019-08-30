@@ -103,12 +103,18 @@
                 </el-col>
             </el-row>
             <el-row style="margin-top: 20px">
-                <el-col :span="24" style="text-align: right">
-                    <el-button type="primary" @click="addChild">新增打印项</el-button>
-                    <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
-                    <el-button type="success" @click="createPrint" v-if="isEdit == false">保存为打印模板</el-button>
-                    <el-button type="success" @click="editPrint" v-if="isEdit == true">保存为打印模板</el-button>
-                    <el-button type="danger" @click="delChildBtn">撤 回</el-button>
+                <el-col :span="24">
+
+                    <div style="float:right;text-align: right">
+                        <el-button type="primary" @click="addChild">新增打印项</el-button>
+                        <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
+                        <el-button type="success" @click="createPrint" v-if="isEdit == false">保存为打印模板</el-button>
+                        <el-button type="success" @click="editPrint" v-if="isEdit == true">保存为打印模板</el-button>
+                        <el-button type="danger" @click="delChildBtn">撤 回</el-button>
+                    </div>
+                    <div style="float:right;margin-right:40px;height:40px;line-height:40px">
+                        <text-panel @changeStyle="getChangeStyle" :fontStyle="fontStyle"></text-panel>
+                    </div>
                 </el-col>
             </el-row>
 
@@ -189,7 +195,7 @@
                                         @resizing="changeSize($event,index)"
                                         @dragging="changePosition($event,index)"
                                 >
-                                    <span style="font-size: 4mm;color: #333;font-family: FangSong">{{item.text.printingName}}</span>
+                                    <span :style="item.fontStyle">{{item.text.printingName}}</span>
                                 </VueDragResize>
                             </div>
 
@@ -206,7 +212,7 @@
 
 <script>
     import VueDragResize from 'vue-drag-resize'
-
+    import TextPanel from '@/components/textPanel/TextPanel'
     export default {
         name: "printTemplate",
         data() {
@@ -230,11 +236,12 @@
                 //处理批量用户相关
                 newUserList: [],
                 userActive: -1,
-
+                fontStyle: {fontFamily: "FangSong", fontSize: "4mm"},
             }
         },
         components: {
-            VueDragResize
+            VueDragResize,
+            TextPanel
         },
         methods: {
             choseBtn() {
@@ -316,6 +323,7 @@
                     parma: '',
                     index: -1,
                     rect: {left: 500, top: 100, width: 200, height: 20},
+                    fontStyle: JSON.parse(JSON.stringify(this.fontStyle)),
                     isActive: true,
                 }
                 for (let i = 0; i < this.dragArr.length; i++) {
@@ -385,6 +393,13 @@
             //选中其他用户
             changeUserBtn(_index) {
                 this.userActive = _index
+            },
+            /** 获取节点最新的样式信息 */
+            getChangeStyle(styleObj) {
+                this.fontStyle = styleObj
+                if (this._index != -1) {
+                    this.dragArr[this._index].fontStyle = JSON.parse(JSON.stringify(this.fontStyle))
+                }
             }
 
         },

@@ -33,7 +33,7 @@ const examineStatus = [{key:0,val:'等待组织审核'},{key:1,val:'组织审核
 /**
  * 打印的股权证的页面分类
  * */
-const printType = [{key:0,val:'成员股权证'},{key:1,val:'初始登记'},{key:2,val:'变更登记'},{key:3,val:'抵押情况登记'},{key:4,val:'贵州省股东基本信息登记'},{key:5,val:'贵州省股权登记'},{key:6,val:'贵州省股权变更登记'},{key:7,val:'贵州省收益分配领取记录'}]
+const printType = [{key:0,val:'成员股权证'},{key:1,val:'初始登记'},{key:2,val:'变更登记'},{key:3,val:'抵押情况登记'},{key:4,val:'贵州省股东基本信息登记'},{key:5,val:'贵州省股权登记'},{key:6,val:'贵州省股权变更登记'},{key:7,val:'贵州省收益分配领取记录'},{key:8,val:'汇川初始登记副本'}]
 
 /**
  * 选择打印变量的前端定义变量
@@ -62,18 +62,24 @@ const printBookList = {
         },
         {
             id:'hc3',
+            src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/2.jpg',
+            seat:'右侧',
+            info:'初始登记页（成员超10人）'
+        },
+        {
+            id:'hc4',
             src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
             seat:'左侧',
             info:'变更登记页1'
         },
         {
-            id:'hc4',
+            id:'hc5',
             src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
             seat:'右侧',
             info:'变更登记页2'
         },
         {
-            id:'hc5',
+            id:'hc6',
             src:'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/4.jpg',
             seat:'左侧',
             info:'抵押情况登记页'

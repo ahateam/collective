@@ -2,7 +2,7 @@
     <div>
         <el-row class="row-box">
             <el-col :span="24">
-                <span class="col-title"> 股权证书首页打印</span>
+                <span class="col-title"> 股权证书初始登记页</span>
             </el-col>
         </el-row>
         <el-row class="row-box1">
@@ -42,8 +42,10 @@
                                 </div>
                                 <div class="family-content-box" v-if="newUserList.length!=0">
                                     <div class="family-user-list">
-                                        <div v-for="(item,index) in newUserList">
-                                            <el-tag type="warning" :class="userActive==index?'user-tag-active':'user-tag'" @click="changeUserBtn(index)">
+                                        <div v-for="(item,index) in newUserList" :key="index">
+                                            <el-tag type="warning"
+                                                    :class="userActive==index?'user-tag-active':'user-tag'"
+                                                    @click="changeUserBtn(index)">
                                                 用户{{index+1}}
                                             </el-tag>
                                         </div>
@@ -127,19 +129,22 @@
                             <div class="box-right">
                                 <div class="box-edit">
                                     <div class="info-title">
-                                        变 更 登 记
+                                        初 始 登 记 页（副本：成员超10人）
                                     </div>
                                     <div class="info-table">
                                         <div class="table-header">
                                             <div class="item-row">
-                                                <div class="item-box" style="width: 19mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
+                                                <div class="item-box"
+                                                     style="width: 19mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
                                                     <p>持证人</p>
                                                     <p> (户代表)</p>
                                                 </div>
-                                                <div class="item-box"  style="width: 20mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
+                                                <div class="item-box"
+                                                     style="width: 20mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-box" style="width: 10mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
+                                                <div class="item-box"
+                                                     style="width: 10mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
                                                     <p> 家庭</p>
                                                     <p>住址</p>
                                                 </div>
@@ -148,43 +153,54 @@
                                                 </div>
                                             </div>
                                             <div class="item-row1">
-                                                <div class="item-box" style="width: 120mm;text-align: center;height: 6mm;line-height: 6mm">
+                                                <div class="item-box"
+                                                     style="width: 120mm;text-align: center;height: 6mm;line-height: 6mm">
                                                     户内成员股东情况
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="table-center">
                                             <div class="item-th">
-                                                <div class="item-th-td" style="width: 21mm;height: 16mm;line-height: 16mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 21mm;height: 16mm;line-height: 16mm;border-right: 1px solid #aaa">
                                                     姓名
                                                 </div>
-                                                <div class="item-th-td" style="width: 19mm;height: 15mm;line-height:5mm;padding-top: 1mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 19mm;height: 15mm;line-height:5mm;padding-top: 1mm;border-right: 1px solid #aaa">
                                                     是否属于集体经济组织成员
                                                 </div>
-                                                <div class="item-th-td" style="width: 45mm;height: 16mm;line-height: 16mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 45mm;height: 16mm;line-height: 16mm;border-right: 1px solid #aaa">
                                                     身份证号码
                                                 </div>
-                                                <div class="item-th-td" style="width: 16mm;height: 13mm;line-height: 5mm;padding-top: 3mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 16mm;height: 13mm;line-height: 5mm;padding-top: 3mm;border-right: 1px solid #aaa">
                                                     持股数 <p>(股)</p>
                                                 </div>
-                                                <div class="item-th-td" style="width: 16mm;height: 16mm;line-height: 16mm">
+                                                <div class="item-th-td"
+                                                     style="width: 16mm;height: 16mm;line-height: 16mm">
                                                     备注
                                                 </div>
                                             </div>
-                                            <div class="item-tr"  v-for="(item,index) in userList" :key="index">
-                                                <div class="item-th-td" style="width: 21mm;height: 8mm;line-height: 8mm;border-right: 1px solid #aaa">
+                                            <div class="item-tr" v-for="(item,index) in userList" :key="index">
+                                                <div class="item-th-td"
+                                                     style="width: 21mm;height: 8mm;line-height: 8mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-th-td" style="width: 19mm;height: 8mm;line-height:8mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 19mm;height: 8mm;line-height:8mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-th-td" style="width: 45mm;height: 8mm;line-height: 8mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 45mm;height: 8mm;line-height: 8mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-th-td" style="width: 16mm;height: 8mm;line-height:8mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 16mm;height: 8mm;line-height:8mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-th-td" style="width: 16mm;height: 8mm;line-height: 8mm">
+                                                <div class="item-th-td"
+                                                     style="width: 16mm;height: 8mm;line-height: 8mm">
 
                                                 </div>
                                             </div>
@@ -215,7 +231,6 @@
                                         </div>
 
 
-
                                     </div>
                                 </div>
 
@@ -232,6 +247,7 @@
                                         :x="item.rect.left"
                                         :y="item.rect.top"
                                         :isActive="item.isActive"
+
                                         @clicked="changeChild(index)"
                                         @deactivated="cancelActive(index)"
                                         @resizing="changeSize($event,index)"
@@ -255,6 +271,7 @@
 <script>
     import VueDragResize from 'vue-drag-resize'
     import TextPanel from '@/components/textPanel/TextPanel'
+
     export default {
         name: "printTemplate",
         data() {
@@ -277,19 +294,21 @@
 
                 //处理批量用户相关
                 newUserList: [],
-                userActive:-1,
+                userActive: -1,
+
                 fontStyle: {fontFamily: "FangSong", fontSize: "4mm"},
             }
         },
+
         components: {
             VueDragResize,
             TextPanel
         },
         methods: {
             choseBtn() {
-
                 console.log('2222')
             },
+
             //tags操作
             handleClose(tag) {
                 this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -303,11 +322,11 @@
             handleInputConfirm() {
                 let inputValue = this.inputValue;
                 if (inputValue) {
-                    let obj ={
-                        key:0,
-                        isConstant:0,
-                        printingName:inputValue,
-                        printing:''
+                    let obj = {
+                        key: 0,
+                        isConstant: 0,
+                        printingName: inputValue,
+                        printing: ''
                     }
                     this.dynamicTags.push(obj);
                 }
@@ -315,20 +334,20 @@
                 this.inputValue = '';
             },
 
+
             //选中当前节点 修改值
-            setValBtn(tag, parma='', _index=-1) {
+            setValBtn(tag, parma = '', _index = -1) {
 
                 if (this._index != -1) {
                     let obj = JSON.parse(JSON.stringify(this.dragArr[this._index]))
                     obj.text = JSON.parse(JSON.stringify(tag))
                     obj.parma = parma
-                    if(_index != -1){
+                    if (_index != -1) {
                         obj.index = _index
-                        let key =_index+1
-                        let str =tag.printingName+ key
-                        obj.text.printingName= str
+                        let key = _index + 1
+                        let str = tag.printingName + key
+                        obj.text.printingName = str
                     }
-
 
                     this.dragArr.splice(this._index, 1, obj)
                 }
@@ -359,6 +378,7 @@
 
             //新增打印项
             addChild() {
+
                 let obj = {
                     text: {key: -1, isConstant: 0, printingName: '请选择对应的变量或值', printing: ''},
                     parma: '',
@@ -367,6 +387,7 @@
                     fontStyle: JSON.parse(JSON.stringify(this.fontStyle)),
                     isActive: true,
                 }
+                console.log(obj)
                 for (let i = 0; i < this.dragArr.length; i++) {
                     if (this.dragArr[i].isActive == true) {
                         this.dragArr[i].isActive = false
@@ -390,7 +411,7 @@
                 let cnt = {
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
                     data: JSON.stringify(this.dragArr), // String 模板数据
-                    type: this.$constData.printType[2].key, // Byte 模板类型
+                    type: this.$constData.printType[8].key, // Byte 模板类型
                     page: 2, // Byte 左右页  1为左  2为右
                 }
                 this.$area.createPrintingTemplate(cnt, (res) => {
@@ -408,8 +429,8 @@
                     prTeId: this.templateInfo.id,
                     orgId: localStorage.getItem('orgId'), // Long 组织编号
                     data: JSON.stringify(this.dragArr), // String 模板数据
-                    type: this.$constData.printType[2].key, // Byte 模板类型
-                    page:2, // Byte 左右页  1为左  2为右
+                    type: this.$constData.printType[8].key, // Byte 模板类型
+                    page: 2, // Byte 左右页  1为左  2为右
                 }
 
                 console.log(cnt)
@@ -429,12 +450,13 @@
                 this.newUserList.push(this.tags.userInfo)
                 console.log(this.tags.userInfo);
 
-                this.userActive = this.newUserList.length-1
+                this.userActive = this.newUserList.length - 1
             },
             //选中其他用户
-            changeUserBtn(_index){
+            changeUserBtn(_index) {
                 this.userActive = _index
             },
+
             /** 获取节点最新的样式信息 */
             getChangeStyle(styleObj) {
                 this.fontStyle = styleObj
@@ -460,10 +482,12 @@
 
             let cnt = {
                 orgId: localStorage.getItem('orgId'), // Long 组织编号
-                type: this.$constData.printType[2].key, // Byte 打印模板类型
+                type: this.$constData.printType[8].key, // Byte 打印模板类型
                 page: 2, // Byte 页码  1左 2右
             }
             this.$area.getPrintingTemplateByType(cnt, (res) => {
+                console.log('222222222222')
+                console.log(res)
                 if (res.data.rc == this.$util.RC.SUCCESS) {
                     if (JSON.parse(res.data.c) == null) {
                         this.templateInfo = ''
@@ -474,7 +498,7 @@
                         this.dragArr = JSON.parse(this.templateInfo.data)
                     }
                 }
-                console.log(this.templateInfo)
+                console.log(JSON.parse(this.templateInfo.data))
 
             })
         }
@@ -554,7 +578,6 @@
         width: 138mm;
         height: 200mm;
         cursor: pointer;
-
     }
 
     .box-edit {

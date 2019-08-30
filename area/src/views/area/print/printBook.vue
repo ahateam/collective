@@ -73,6 +73,7 @@
         },
         methods:{
             setBtn(id){
+                console.log(id)
                 this.$router.push({
                     path:'/areaPrintTemplate',
                     name:'areaPrintTemplate',

@@ -42,8 +42,10 @@
                                 </div>
                                 <div class="family-content-box" v-if="newUserList.length!=0">
                                     <div class="family-user-list">
-                                        <div v-for="(item,index) in newUserList">
-                                            <el-tag type="warning" :class="userActive==index?'user-tag-active':'user-tag'" @click="changeUserBtn(index)">
+                                        <div v-for="(item,index) in newUserList" :key="index">
+                                            <el-tag type="warning"
+                                                    :class="userActive==index?'user-tag-active':'user-tag'"
+                                                    @click="changeUserBtn(index)">
                                                 用户{{index+1}}
                                             </el-tag>
                                         </div>
@@ -101,12 +103,18 @@
                 </el-col>
             </el-row>
             <el-row style="margin-top: 20px">
-                <el-col :span="24" style="text-align: right">
-                    <el-button type="primary" @click="addChild">新增打印项</el-button>
-                    <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
-                    <el-button type="success" @click="createPrint" v-if="isEdit == false">保存为打印模板</el-button>
-                    <el-button type="success" @click="editPrint" v-if="isEdit == true">保存为打印模板</el-button>
-                    <el-button type="danger" @click="delChildBtn">撤 回</el-button>
+                <el-col :span="24">
+
+                    <div style="float:right;text-align: right">
+                        <el-button type="primary" @click="addChild">新增打印项</el-button>
+                        <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
+                        <el-button type="success" @click="createPrint" v-if="isEdit == false">保存为打印模板</el-button>
+                        <el-button type="success" @click="editPrint" v-if="isEdit == true">保存为打印模板</el-button>
+                        <el-button type="danger" @click="delChildBtn">撤 回</el-button>
+                    </div>
+                    <div style="float:right;margin-right:40px;height:40px;line-height:40px">
+                        <text-panel @changeStyle="getChangeStyle" :fontStyle="fontStyle"></text-panel>
+                    </div>
                 </el-col>
             </el-row>
 
@@ -239,12 +247,13 @@
                                         :x="item.rect.left"
                                         :y="item.rect.top"
                                         :isActive="item.isActive"
+
                                         @clicked="changeChild(index)"
                                         @deactivated="cancelActive(index)"
                                         @resizing="changeSize($event,index)"
                                         @dragging="changePosition($event,index)"
                                 >
-                                    <span style="font-size: 4mm;color: #333;font-family: FangSong">{{item.text.printingName}}</span>
+                                    <span :style="item.fontStyle">{{item.text.printingName}}</span>
                                 </VueDragResize>
                             </div>
 
@@ -261,6 +270,7 @@
 
 <script>
     import VueDragResize from 'vue-drag-resize'
+    import TextPanel from '@/components/textPanel/TextPanel'
 
     export default {
         name: "printTemplate",
@@ -284,18 +294,21 @@
 
                 //处理批量用户相关
                 newUserList: [],
-                userActive:-1,
+                userActive: -1,
 
+                fontStyle: {fontFamily: "FangSong", fontSize: "4mm"},
             }
         },
+
         components: {
-            VueDragResize
+            VueDragResize,
+            TextPanel
         },
         methods: {
             choseBtn() {
-
                 console.log('2222')
             },
+
             //tags操作
             handleClose(tag) {
                 this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -309,11 +322,11 @@
             handleInputConfirm() {
                 let inputValue = this.inputValue;
                 if (inputValue) {
-                    let obj ={
-                        key:0,
-                        isConstant:0,
-                        printingName:inputValue,
-                        printing:''
+                    let obj = {
+                        key: 0,
+                        isConstant: 0,
+                        printingName: inputValue,
+                        printing: ''
                     }
                     this.dynamicTags.push(obj);
                 }
@@ -323,19 +336,18 @@
 
 
             //选中当前节点 修改值
-            setValBtn(tag, parma='', _index=-1) {
+            setValBtn(tag, parma = '', _index = -1) {
 
                 if (this._index != -1) {
                     let obj = JSON.parse(JSON.stringify(this.dragArr[this._index]))
                     obj.text = JSON.parse(JSON.stringify(tag))
                     obj.parma = parma
-                    if(_index != -1){
+                    if (_index != -1) {
                         obj.index = _index
-                        let key =_index+1
-                        let str =tag.printingName+ key
-                        obj.text.printingName= str
+                        let key = _index + 1
+                        let str = tag.printingName + key
+                        obj.text.printingName = str
                     }
-
 
                     this.dragArr.splice(this._index, 1, obj)
                 }
@@ -366,13 +378,16 @@
 
             //新增打印项
             addChild() {
+
                 let obj = {
                     text: {key: -1, isConstant: 0, printingName: '请选择对应的变量或值', printing: ''},
                     parma: '',
                     index: -1,
                     rect: {left: 500, top: 100, width: 200, height: 20},
+                    fontStyle: JSON.parse(JSON.stringify(this.fontStyle)),
                     isActive: true,
                 }
+                console.log(obj)
                 for (let i = 0; i < this.dragArr.length; i++) {
                     if (this.dragArr[i].isActive == true) {
                         this.dragArr[i].isActive = false
@@ -435,11 +450,19 @@
                 this.newUserList.push(this.tags.userInfo)
                 console.log(this.tags.userInfo);
 
-                this.userActive = this.newUserList.length-1
+                this.userActive = this.newUserList.length - 1
             },
             //选中其他用户
-            changeUserBtn(_index){
+            changeUserBtn(_index) {
                 this.userActive = _index
+            },
+
+            /** 获取节点最新的样式信息 */
+            getChangeStyle(styleObj) {
+                this.fontStyle = styleObj
+                if (this._index != -1) {
+                    this.dragArr[this._index].fontStyle = JSON.parse(JSON.stringify(this.fontStyle))
+                }
             }
 
         },
@@ -473,7 +496,7 @@
                         this.dragArr = JSON.parse(this.templateInfo.data)
                     }
                 }
-                console.log(this.templateInfo)
+                console.log(JSON.parse(this.templateInfo.data))
 
             })
         }

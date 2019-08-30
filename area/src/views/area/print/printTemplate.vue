@@ -7,12 +7,15 @@
             <areaPrintTemplate1></areaPrintTemplate1>
         </template>
         <template v-else-if="checkIndex == 'hc3'">
-            <areaPrintTemplate2></areaPrintTemplate2>
+            <areaPrintTemplate1Back></areaPrintTemplate1Back>
         </template>
         <template v-else-if="checkIndex == 'hc4'">
-            <areaPrintTemplate3></areaPrintTemplate3>
+            <areaPrintTemplate2></areaPrintTemplate2>
         </template>
         <template v-else-if="checkIndex == 'hc5'">
+            <areaPrintTemplate3></areaPrintTemplate3>
+        </template>
+        <template v-else-if="checkIndex == 'hc6'">
             <areaPrintTemplate4></areaPrintTemplate4>
         </template>
 
@@ -38,6 +41,7 @@
 
     import areaPrintTemplate from './component/huichuan/template/printTemplate'
     import areaPrintTemplate1 from './component/huichuan/template/printTemplate1'
+    import areaPrintTemplate1Back from './component/huichuan/template/printTemplate1back'
     import areaPrintTemplate2 from './component/huichuan/template/printTemplate2'
     import areaPrintTemplate3 from './component/huichuan/template/printTemplate3'
     import areaPrintTemplate4 from './component/huichuan/template/printTemplate4'
@@ -59,6 +63,7 @@
         components:{
             areaPrintTemplate,
             areaPrintTemplate1,
+            areaPrintTemplate1Back,
             areaPrintTemplate2,
             areaPrintTemplate3,
             areaPrintTemplate4,

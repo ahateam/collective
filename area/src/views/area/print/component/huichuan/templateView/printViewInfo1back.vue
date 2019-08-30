@@ -17,56 +17,6 @@
                             <div class="tags">
                                 <div class="item-tag">
                                     <span style="float: left">
-                                        合作社基本资料：
-                                    </span>
-                                    <div class="list">
-                                        <el-tag v-for="(item,index) in tags.orgInfo"
-                                                :key="index"
-                                                style="cursor: pointer"
-                                                class="tag-box"
-                                                @click="setValBtn(item,'org')">
-                                            {{item.printingName}}
-                                        </el-tag>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="family-box">
-                                <div class="family-btn-box">
-                                    <div class="family-title">
-                                        家庭户基本资料：
-                                        <el-button type="primary" size="mini" class="family-btn" @click="addUserBtn">
-                                            新增家庭用户
-                                        </el-button>
-                                    </div>
-                                </div>
-                                <div class="family-content-box" v-if="newUserList.length!=0">
-                                    <div class="family-user-list">
-                                        <div v-for="(item,index) in newUserList">
-                                            <el-tag type="warning" :class="userActive==index?'user-tag-active':'user-tag'" @click="changeUserBtn(index)">
-                                                用户{{index+1}}
-                                            </el-tag>
-                                        </div>
-                                    </div>
-
-                                    <div style="width: auto;margin-top: 20px;line-height: 25px;margin-bottom: 10px">
-                                        <div class="list">
-                                            <el-tag v-for="(item1,index1) in newUserList[userActive]"
-                                                    :key="index1"
-                                                    style="cursor: pointer"
-                                                    class="tag-box"
-                                                    @click="setValBtn(item1,'user',userActive)">
-                                                用户{{userActive+1}}.{{item1.printingName}}
-                                            </el-tag>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="tags">
-                                <div class="item-tag">
-                                    <span style="float: left">
                                         自定义相关资料：
                                     </span>
                                     <el-tag
@@ -77,7 +27,7 @@
                                             style="cursor: pointer;"
                                             :disable-transitions="false"
                                             @close="handleClose(tag)"
-                                            @click="setValBtn(tag)">
+                                            @click="setValBtn(tag)" >
                                         {{tag.printingName}}
                                     </el-tag>
                                     <el-input
@@ -90,8 +40,7 @@
                                             @blur="handleInputConfirm"
                                     >
                                     </el-input>
-                                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新增常用值
-                                    </el-button>
+                                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新增常用值</el-button>
 
                                 </div>
                             </div>
@@ -102,12 +51,9 @@
             </el-row>
             <el-row style="margin-top: 20px">
                 <el-col :span="24">
-
                     <div style="float:right;text-align: right">
                         <el-button type="primary" @click="addChild">新增打印项</el-button>
                         <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
-                        <el-button type="success" @click="createPrint" v-if="isEdit == false">保存为打印模板</el-button>
-                        <el-button type="success" @click="editPrint" v-if="isEdit == true">保存为打印模板</el-button>
                         <el-button type="danger" @click="delChildBtn">撤 回</el-button>
                     </div>
                     <div style="float:right;margin-right:40px;height:40px;line-height:40px">
@@ -127,19 +73,22 @@
                             <div class="box-right">
                                 <div class="box-edit">
                                     <div class="info-title">
-                                        变 更 登 记
+                                        初 始 登 记 页（副本：成员超10人）
                                     </div>
                                     <div class="info-table">
                                         <div class="table-header">
                                             <div class="item-row">
-                                                <div class="item-box" style="width: 19mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
+                                                <div class="item-box"
+                                                     style="width: 19mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
                                                     <p>持证人</p>
                                                     <p> (户代表)</p>
                                                 </div>
-                                                <div class="item-box"  style="width: 20mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
+                                                <div class="item-box"
+                                                     style="width: 20mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-box" style="width: 10mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
+                                                <div class="item-box"
+                                                     style="width: 10mm;height: 9mm;padding: 1mm;border-right: 1px solid #aaa">
                                                     <p> 家庭</p>
                                                     <p>住址</p>
                                                 </div>
@@ -148,43 +97,54 @@
                                                 </div>
                                             </div>
                                             <div class="item-row1">
-                                                <div class="item-box" style="width: 120mm;text-align: center;height: 6mm;line-height: 6mm">
+                                                <div class="item-box"
+                                                     style="width: 120mm;text-align: center;height: 6mm;line-height: 6mm">
                                                     户内成员股东情况
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="table-center">
                                             <div class="item-th">
-                                                <div class="item-th-td" style="width: 21mm;height: 16mm;line-height: 16mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 21mm;height: 16mm;line-height: 16mm;border-right: 1px solid #aaa">
                                                     姓名
                                                 </div>
-                                                <div class="item-th-td" style="width: 19mm;height: 15mm;line-height:5mm;padding-top: 1mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 19mm;height: 15mm;line-height:5mm;padding-top: 1mm;border-right: 1px solid #aaa">
                                                     是否属于集体经济组织成员
                                                 </div>
-                                                <div class="item-th-td" style="width: 45mm;height: 16mm;line-height: 16mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 45mm;height: 16mm;line-height: 16mm;border-right: 1px solid #aaa">
                                                     身份证号码
                                                 </div>
-                                                <div class="item-th-td" style="width: 16mm;height: 13mm;line-height: 5mm;padding-top: 3mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 16mm;height: 13mm;line-height: 5mm;padding-top: 3mm;border-right: 1px solid #aaa">
                                                     持股数 <p>(股)</p>
                                                 </div>
-                                                <div class="item-th-td" style="width: 16mm;height: 16mm;line-height: 16mm">
+                                                <div class="item-th-td"
+                                                     style="width: 16mm;height: 16mm;line-height: 16mm">
                                                     备注
                                                 </div>
                                             </div>
-                                            <div class="item-tr"  v-for="(item,index) in userList" :key="index">
-                                                <div class="item-th-td" style="width: 21mm;height: 8mm;line-height: 8mm;border-right: 1px solid #aaa">
+                                            <div class="item-tr" v-for="(item,index) in userList" :key="index">
+                                                <div class="item-th-td"
+                                                     style="width: 21mm;height: 8mm;line-height: 8mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-th-td" style="width: 19mm;height: 8mm;line-height:8mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 19mm;height: 8mm;line-height:8mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-th-td" style="width: 45mm;height: 8mm;line-height: 8mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 45mm;height: 8mm;line-height: 8mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-th-td" style="width: 16mm;height: 8mm;line-height:8mm;border-right: 1px solid #aaa">
+                                                <div class="item-th-td"
+                                                     style="width: 16mm;height: 8mm;line-height:8mm;border-right: 1px solid #aaa">
 
                                                 </div>
-                                                <div class="item-th-td" style="width: 16mm;height: 8mm;line-height: 8mm">
+                                                <div class="item-th-td"
+                                                     style="width: 16mm;height: 8mm;line-height: 8mm">
 
                                                 </div>
                                             </div>
@@ -215,7 +175,6 @@
                                         </div>
 
 
-
                                     </div>
                                 </div>
 
@@ -237,6 +196,7 @@
                                         @resizing="changeSize($event,index)"
                                         @dragging="changePosition($event,index)"
                                 >
+
                                     <span :style="item.fontStyle">{{item.text.printingName}}</span>
                                 </VueDragResize>
                             </div>
@@ -259,8 +219,7 @@
         name: "printTemplate",
         data() {
             return {
-                //判断是否是修改操作
-                isEdit: false,
+
                 templateInfo: '',
 
                 id: '',
@@ -275,10 +234,14 @@
                 dragArr: [],
                 _index: -1,
 
-                //处理批量用户相关
-                newUserList: [],
-                userActive:-1,
+                //变量匹配所需
+                org:'',
+                family:'',
+                familyUserList:[],
+                printInfo:'',
                 fontStyle: {fontFamily: "FangSong", fontSize: "4mm"},
+
+
             }
         },
         components: {
@@ -385,55 +348,92 @@
                     this.$message.error('请先添加至少一个打印项！')
                 }
             },
-            //保存为打印模板
-            createPrint() {
+
+
+            //匹配变量常量
+            getOrgInfo(){
+                let orgId =  this.printInfo.org
+                this.family = this.printInfo.family
                 let cnt = {
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
-                    data: JSON.stringify(this.dragArr), // String 模板数据
-                    type: this.$constData.printType[2].key, // Byte 模板类型
-                    page: 2, // Byte 左右页  1为左  2为右
+                    orgId : orgId
                 }
-                this.$area.createPrintingTemplate(cnt, (res) => {
-                    if (res.data.rc == this.$util.RC.SUCCESS) {
-                        this.$message.success('操作成功')
-                    } else {
-                        this.$message.error('/操作失败')
+                this.$area.getORGById(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.org = this.$util.tryParseJson(res.data.c)
+                    }else{
+                        this.org = ''
                     }
-                    this.$router.push('/areaPrintBook')
+
+                    let cnt1={
+                        familyNumber: this.family.familyNumber,
+                        orgId: orgId
+                    }
+                    this.$area.getFamilyUserByFamilyNumber(cnt1,(res1)=>{
+                        if(res.data.rc == this.$util.RC.SUCCESS){
+                            this.familyUserList = this.$util.tryParseJson(res1.data.c)
+                        }else{
+                            this.familyUserList = []
+                        }
+                        this.getDataVar()
+                    })
+
+
+
+
+
                 })
             },
-            //保存修改信息
-            editPrint() {
-                let cnt = {
-                    prTeId: this.templateInfo.id,
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
-                    data: JSON.stringify(this.dragArr), // String 模板数据
-                    type: this.$constData.printType[2].key, // Byte 模板类型
-                    page:2, // Byte 左右页  1为左  2为右
+
+            getDataVar(){
+
+                let dataArr = []
+                console.log(this.dragArr)
+                for(let i=0;i<this.dragArr.length;i++){
+                    //org user 已经用parma区分 key区分前端变量
+
+                    //无后端变量
+                    if(this.dragArr[i].parma == undefined || this.dragArr[i].parma == ''){  //前端变量
+                        if(this.dragArr[i].text.key ==1){   //前端变量--当前日期 （key==-1为静态值不用管）
+                            let data = this.$commen.getDateStr()
+                            let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                            obj.text.printingName = data
+                            dataArr.push(obj)
+
+                        }else{      //前端的常量
+                            let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                            dataArr.push(obj)
+                        }
+                    }else {     //后端变量
+                        if(this.dragArr[i].parma == 'org'){     //对应org信息
+                            let str = this.dragArr[i].text.printing
+                            let data = this.org[str]
+                            let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                            obj.text.printingName = data
+                            dataArr.push(obj)
+
+                        }else if( this.dragArr[i].parma =='user'){  //对应familyUserList信息
+                            if( this.dragArr[i].index< this.familyUserList.length){
+                                //遍历roles判断是否为集体经济组织成员
+
+
+                                let str = this.dragArr[i].text.printing
+
+                                let _index = this.dragArr[i].index
+                                let data = this.familyUserList[_index][str]
+                                let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
+                                obj.text.printingName = data
+                                dataArr.push(obj)
+
+                            }
+                        }
+                    }
+
                 }
 
-                console.log(cnt)
-                this.$area.editPrintingTemplate(cnt, (res) => {
-                    if (res.data.rc == this.$util.RC.SUCCESS) {
-                        this.$message.success('操作成功')
-                    } else {
-                        this.$message.error('/操作失败')
-                    }
-                    this.$router.push('/areaPrintBook')
-                })
-
-            },
-
-            //新增家庭用户批量变量
-            addUserBtn() {
-                this.newUserList.push(this.tags.userInfo)
-                console.log(this.tags.userInfo);
-
-                this.userActive = this.newUserList.length-1
-            },
-            //选中其他用户
-            changeUserBtn(_index){
-                this.userActive = _index
+                this.dragArr = dataArr
+                console.log('-------------------------')
+                console.log(dataArr)
+                console.log(  this.dragArr)
             },
             /** 获取节点最新的样式信息 */
             getChangeStyle(styleObj) {
@@ -446,35 +446,27 @@
         },
         mounted() {
 
-            this.dynamicTags = JSON.parse(JSON.stringify(this.$constData.printConstant))
-            this.$area.getPrintingType({}, (res) => {
-                if (res.data.rc == this.$util.RC.SUCCESS) {
-                    this.tags = this.$util.tryParseJson(res.data.c)
-                } else {
-                    this.tags = []
-                }
+            this.printInfo = JSON.parse(localStorage.getItem('print'))
+            this.dynamicTags = []
 
-                console.log(this.tags)
-            })
 
 
             let cnt = {
                 orgId: localStorage.getItem('orgId'), // Long 组织编号
-                type: this.$constData.printType[2].key, // Byte 打印模板类型
+                type: this.$constData.printType[8].key, // Byte 打印模板类型
                 page: 2, // Byte 页码  1左 2右
             }
+
             this.$area.getPrintingTemplateByType(cnt, (res) => {
                 if (res.data.rc == this.$util.RC.SUCCESS) {
                     if (JSON.parse(res.data.c) == null) {
                         this.templateInfo = ''
-                        this.isEdit = false
                     } else {
-                        this.isEdit = true
                         this.templateInfo = JSON.parse(res.data.c)
                         this.dragArr = JSON.parse(this.templateInfo.data)
+                        this.getOrgInfo()
                     }
                 }
-                console.log(this.templateInfo)
 
             })
         }
@@ -554,7 +546,6 @@
         width: 138mm;
         height: 200mm;
         cursor: pointer;
-
     }
 
     .box-edit {

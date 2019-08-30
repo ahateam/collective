@@ -50,11 +50,15 @@
                 </el-col>
             </el-row>
             <el-row style="margin-top: 20px">
-                <el-col :span="24" style="text-align: right">
-                    <el-button type="primary" @click="addChild">新增打印项</el-button>
-                    <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
-
-                    <el-button type="danger" @click="delChildBtn">撤 回</el-button>
+                <el-col :span="24">
+                    <div style="float:right;text-align: right">
+                        <el-button type="primary" @click="addChild">新增打印项</el-button>
+                        <el-button type="primary" v-print="'#printBox'">打印预览</el-button>
+                        <el-button type="danger" @click="delChildBtn">撤 回</el-button>
+                    </div>
+                    <div style="float:right;margin-right:40px;height:40px;line-height:40px">
+                        <text-panel @changeStyle="getChangeStyle" :fontStyle="fontStyle"></text-panel>
+                    </div>
                 </el-col>
             </el-row>
             <el-row style="margin-top: 20px">
@@ -138,7 +142,7 @@
                                         @resizing="changeSize($event,index)"
                                         @dragging ="changePosition($event,index)"
                                 >
-                                    <span style="font-size: 4mm;color: #333;font-family: FangSong">{{item.text.printingName}}</span>
+                                    <span :style="item.fontStyle">{{item.text.printingName}}</span>
                                 </VueDragResize>
                             </div>
                         </div>
@@ -153,7 +157,7 @@
 
 <script>
     import VueDragResize from 'vue-drag-resize'
-
+    import TextPanel from '@/components/textPanel/TextPanel'
     export default {
         name: "printTemplate2",
         data(){
@@ -177,11 +181,14 @@
                 org:'',
                 family:'',
                 familyUserList:[],
-                printInfo:''
+                printInfo:'',
+                fontStyle: {fontFamily: "FangSong", fontSize: "4mm"},
+
             }
         },
         components:{
-            VueDragResize
+            VueDragResize,
+            TextPanel
         },
         methods:{
             choseBtn(){
@@ -254,6 +261,7 @@
                     text:{key:-1,isConstant:0,printingName:'请选择对应的变量或值',printing:''},
                     parma:'',
                     rect:{  left:500, top:100, width:200, height:40},
+                    fontStyle: JSON.parse(JSON.stringify(this.fontStyle)),
                     isActive:true,
                 }
                 for(let i=0;i<this.dragArr.length;i++){
@@ -305,25 +313,26 @@
                         this.getDataVar()
                     })
 
-
-
-
                 })
             },
 
             getDataVar(){
 
                 let dataArr = []
-
+                console.log(this.dragArr)
                 for(let i=0;i<this.dragArr.length;i++){
                     //org user 已经用parma区分 key区分前端变量
 
                     //无后端变量
-                    if(this.dragArr[i].parma == undefined || this.dragArr[i].parma == ''){
+                    if(this.dragArr[i].parma == undefined || this.dragArr[i].parma == ''){  //前端变量
                         if(this.dragArr[i].text.key ==1){   //前端变量--当前日期 （key==-1为静态值不用管）
                             let data = this.$commen.getDateStr()
                             let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
                             obj.text.printingName = data
+                            dataArr.push(obj)
+
+                        }else{      //前端的常量
+                            let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
                             dataArr.push(obj)
                         }
                     }else {     //后端变量
@@ -335,26 +344,35 @@
                             dataArr.push(obj)
 
                         }else if( this.dragArr[i].parma =='user'){  //对应familyUserList信息
-
-
-
                             if( this.dragArr[i].index< this.familyUserList.length){
                                 //遍历roles判断是否为集体经济组织成员
 
 
                                 let str = this.dragArr[i].text.printing
-                                console.log(str)
+
                                 let _index = this.dragArr[i].index
                                 let data = this.familyUserList[_index][str]
                                 let obj = JSON.parse(JSON.stringify(this.dragArr[i]))
                                 obj.text.printingName = data
                                 dataArr.push(obj)
+
                             }
                         }
                     }
+
                 }
 
                 this.dragArr = dataArr
+                console.log('-------------------------')
+                console.log(dataArr)
+                console.log(  this.dragArr)
+            },
+            /** 获取节点最新的样式信息 */
+            getChangeStyle(styleObj) {
+                this.fontStyle = styleObj
+                if (this._index != -1) {
+                    this.dragArr[this._index].fontStyle = JSON.parse(JSON.stringify(this.fontStyle))
+                }
             }
 
 
