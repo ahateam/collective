@@ -120,7 +120,7 @@
 </template>
 
 <script>
-    import menu from '@/assets/menu/menu'
+    import menu from '@/data/menu/menu'
     export default {
         name: "home",
         components: {},

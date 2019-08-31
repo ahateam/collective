@@ -75,7 +75,7 @@
 </template>
 
 <script>
-    import ossAuth from '@/assets/api/oss/ossAuth'
+    import ossAuth from '@/data/api/oss/ossAuth'
 
     let client = ossAuth.client
     export default {

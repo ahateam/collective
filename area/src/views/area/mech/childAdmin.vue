@@ -41,8 +41,10 @@
                             <el-button @click="infoBtn(scope.row)" type="text" size="small">详情</el-button>
                             <el-button @click="open(scope.row)" type="text" size="small" style="color: #f44">删除
                             </el-button>
+                            <el-button type="primary" size="mini" @click="showMemberList(scope.row)">查看成员</el-button>
                             <el-button type="primary" size="mini" @click="memberImport(scope.row)">导入成员</el-button>
                             <el-button type="primary" size="mini" @click="assetImport(scope.row)">导入资产</el-button>
+
                         </template>
                     </el-table-column>
 
@@ -185,6 +187,16 @@
                     params:{info:row},
                 })
             },
+            /** 跳转下级机构成员列表页*/
+            showMemberList(row){
+                this.$router.push({
+                    path:'/areaChildMemberList',
+                    name:'areaChildMemberList',
+                    params:{
+                        info:row
+                    }
+                })
+            }
         },
         mounted(){
             let cnt = {

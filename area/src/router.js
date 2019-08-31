@@ -26,6 +26,7 @@ const areaManageMech = ()=>import('./views/area/mech/manageMech')
 const areaMechInfo = ()=>import('./views/area/mech/mechInfo')
 const areaEditMech = ()=>import('./views/area/mech/editMech')
 const childAdmin = ()=>import('./views/area/mech/childAdmin')
+const areaChildMemberList = ()=>import('./views/area/mech/childMemberList')
 const childInfo = ()=>import('./views/area/mech/childInfo')
 const addChild = ()=>import('./views/area/mech/addChild')
 const memberImportInfo = ()=>import('./views/area/mech/memberImportInfo')
@@ -46,6 +47,7 @@ const areaBank = ()=>import('./views/area/bank/bank')
 const areaAddBank = ()=>import('./views/area/bank/addBank')
 const areaSetAdminBank = ()=>import('./views/area/bank/setAdminBank')
 const  areaSetChildUser = ()=>import('./views/area/user/setChildUser')
+
 
 const areaUser = ()=>import('./views/area/user/user')
 const areaChildUser =()=>import('./views/area/user/childUser')
@@ -280,6 +282,11 @@ export default new Router({
                 path:'/areaChildUser',
                 name:'areaChildUser',
                 component:areaChildUser
+            },
+            {
+                path:'/areaChildMemberList',
+                name:'areaChildMemberList',
+                component:areaChildMemberList
             },
             {
                 path:'/areaSetChildUser',

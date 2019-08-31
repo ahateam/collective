@@ -16,11 +16,11 @@
             </el-col>
             <el-col :span="19" style="border-left: 1px solid #ddd">
                 <el-row>
-                  <el-col :span="12">
-                      <!--<el-button type="primary" size="mini" @click="addMemberModal = true" style="margin-top: 6px">添加成员</el-button>-->
-                      <el-button type="primary" size="mini"  @click="loadExcl" style="margin-top: 6px">用户表模板下载</el-button>
-                      <!--<el-button type="warning" size="mini" @click="delMore" style="margin-top: 6px">移除职位</el-button>-->
-                  </el-col>
+                    <el-col :span="12">
+                        <!--<el-button type="primary" size="mini" @click="addMemberModal = true" style="margin-top: 6px">添加成员</el-button>-->
+                        <!--<el-button type="primary" size="mini"  @click="loadExcl" style="margin-top: 6px">用户表模板下载</el-button>-->
+                        <!--<el-button type="warning" size="mini" @click="delMore" style="margin-top: 6px">移除职位</el-button>-->
+                    </el-col>
 
                     <el-col :span="12">
                         <el-input placeholder="请输入用户姓名" v-model="searchData" >
@@ -37,7 +37,8 @@
                                     :data="tableData"
                                     tooltip-effect="dark"
                                     style="width: 100%"
-                                    @selection-change="handleSelectionChange">
+
+                                >
                                 <el-table-column
                                         type="selection"
                                         width="55">
@@ -61,7 +62,7 @@
                                 </el-table-column>
                                 <el-table-column
                                         label="操作"
-                                       >
+                                >
                                     <template slot-scope="scope">
                                         <el-button @click="infoBtn(scope.row)" type="text" size="small">基础信息</el-button>
                                         <el-button @click="infoPostBtn(scope.row)" type="text" size="small">职务信息</el-button>
@@ -81,130 +82,38 @@
             </el-col>
         </el-row>
 
-        <!--批量导入成员-->
-        <el-dialog
-                title="导入成员"
-                :visible.sync="importUserModal"
-                width="30%"
-                :before-close="handleClose"
-                center
-                @close="closeBtn">
-            <span>
-                        <div class="file-msg">
-                            目前只支持后缀为 '.xlsx'的Excl文件.
-                        </div>
-                        <div class="file-box">
-                            <span class="icon-box"><i class="el-icon-upload"></i></span> <span class="icon-text">上传文件</span>
-                             <input type="file" class="input-file-box" @change="fileBtn($event)">
-                        </div>
 
-                        <div class="fine-name" v-if="fileName != ''">
-                            文件名：{{fileName}}
-                        </div>
-
-                        <div class="line" v-if="num >0 && num<100">
-                            <div class="line-title">上传进度:</div>
-                            <div class="line-box">
-                                <el-progress :percentage="num"></el-progress>
-                            </div>
-                        </div>
-
-                        <div class="line" v-if="num == 100">
-                            <div class="line-title">上传进度:</div>
-                            <div class="line-text">
-                                上传成功！
-                            </div>
-                        </div>
-
-
-
-            </span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="importUserModal = false">取 消</el-button>
-                <el-button type="primary"   @click="doUpload" v-loading.fullscreen.lock="loadData" element-loading-text="正在努力上传，五千以上数据大约等待1分钟...">确认导入数据</el-button>
-            </span>
-        </el-dialog>
-        <!--新增成员-->
-        <el-dialog title="新增成员" :visible.sync="addMemberModal" width="60%">
-            <el-form>
-                <el-form-item label="成员名称" label-width="100px">
-                    <el-input v-model="name" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号" label-width="100px">
-                    <el-input v-model="idNumber" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="联系电话" label-width="100px">
-                    <el-input v-model="mobile" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="用户地址" label-width="100px">
-                    <el-input v-model="address" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="户序号" label-width="100px">
-                    <el-input v-model="familyNumber" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="户主姓名" label-width="100px">
-                    <el-input v-model="familyMaster" autocomplete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="股权证书编号" label-width="100px">
-                    <el-input v-model="shareCerNo" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="是否持证人" label-width="100px">
-                    <template>
-                        <el-radio v-model="shareCerHolder" :label="true"   >是</el-radio>
-                        <el-radio v-model="shareCerHolder" :label="false"  >否</el-radio>
-                    </template>
-                </el-form-item>
-                <el-form-item label="股份数" label-width="100px">
-                    <el-input v-model="shareAmount" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="投票权重" label-width="100px">
-                    <el-input v-model="weight" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="职务角色" label-width="100px">
-                    <template>
-                        <el-checkbox-group v-model="roles">
-                            <el-checkbox  v-for="(item,index) in roleList" :key="index" :label="item.roleId" >{{item.name}}</el-checkbox>
-                        </el-checkbox-group>
-                    </template>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="addMemberModal = false">取 消</el-button>
-                <el-button type="primary" @click="addMemberBtn">确 定</el-button>
-            </div>
-        </el-dialog>
         <!--成员基本信息-->
         <el-dialog title="成员基本信息" :visible.sync="memberInfoModal">
-           <el-row style="margin-bottom: 20px">
-               <el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =1">编辑基本信息</el-button>
-               <el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =2">修改身份证号</el-button>
-           </el-row>
+            <!--<el-row style="margin-bottom: 20px">-->
+                <!--<el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =1">编辑基本信息</el-button>-->
+                <!--<el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =2">修改身份证号</el-button>-->
+            <!--</el-row>-->
             <el-row>
                 <el-form>
                     <el-form-item label="用户姓名" label-width="100px">
-                        <el-input v-model="realNameInfo" autocomplete="off"  :disabled="editMember != 1"></el-input>
+                        <el-input v-model="realNameInfo" autocomplete="off"  readonly></el-input>
                     </el-form-item>
                     <el-form-item label="身份证号" label-width="100px">
-                        <el-input v-model="idNumberInfo" autocomplete="off"  :disabled="editMember != 2"></el-input>
+                        <el-input v-model="idNumberInfo" autocomplete="off" readonly></el-input>
                     </el-form-item>
                     <el-form-item label="手机号码" label-width="100px">
-                        <el-input v-model="mobileInfo" autocomplete="off"  :disabled="editMember != 1"></el-input>
+                        <el-input v-model="mobileInfo" autocomplete="off"  readonly></el-input>
                     </el-form-item>
                 </el-form>
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="memberInfoModal = false">取 消</el-button>
                 <el-button type="primary" @click="memberInfoModal=false"  v-if="editMember ==0">返回列表</el-button>
-                <el-button type="primary" @click="editUserBtn" v-if="editMember ==1">确认修改</el-button>
-                <el-button type="primary" @click="editUserNumber" v-if="editMember ==2">确认修改</el-button>
+                <!--<el-button type="primary" @click="editUserBtn" v-if="editMember ==1">确认修改</el-button>-->
+                <!--<el-button type="primary" @click="editUserNumber" v-if="editMember ==2">确认修改</el-button>-->
             </div>
         </el-dialog>
         <!--成员职位信息-->
         <el-dialog title="成员职务信息" :visible.sync="memberPostInfoModal">
-            <el-row style="margin-bottom: 20px">
-                <el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =1">编辑基本信息</el-button>
-            </el-row>
+            <!--<el-row style="margin-bottom: 20px">-->
+                <!--<el-button type="primary" icon="el-icon-edit" size="mini" style="float: right;margin-right: 30px" @click="editMember =1">编辑基本信息</el-button>-->
+            <!--</el-row>-->
             <el-row>
                 <el-form>
 
@@ -250,16 +159,14 @@
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="memberPostInfoModal = false">取 消</el-button>
-                <el-button type="primary" @click="memberPostInfoModal=false":disabled="editMember ==0">返回列表</el-button>
-                <el-button type="primary" @click="editORGUserBtn" v-if="editMember ==1">确认修改</el-button>
+                <el-button type="primary" @click="memberPostInfoModal=false" >返回列表</el-button>
+                <!--<el-button type="primary" @click="editORGUserBtn" v-if="editMember ==1">确认修改</el-button>-->
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import ossAuth from '@/assets/api/oss/ossAuth'
-    let client = ossAuth.client
 
     export default {
 
@@ -327,15 +234,17 @@
                 groupsInfo:[],
                 familyNumberInfo:'',            //户序号
                 familyMasterInfo:'',            //户主姓名
+
                 //搜索相关
                 searchData:'',
+                orgId:'',
             }
         },
         methods: {
             //ajax请求层
             //根据姓名模糊搜索用户列表
             getORGUsersLikeRealName(cnt){
-                this.$api.getORGUsersLikeRealName(cnt,(res)=>{
+                this.$area.getORGUsersLikeRealName(cnt,(res)=>{
                     this.tableData =this.$util.tryParseJson(res.data.c)
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
@@ -346,29 +255,29 @@
             },
             //创建组织用户
             createORGUser(cnt){
-              this.$api.createORGUser(cnt,(res)=>{
-                  if(res.data.rc == this.$util.RC.SUCCESS){
-                      this.$message.success('新增用户成功')
-                  }else{
-                      this.$message.error('新增失败')
-                  }
-                  this.$router.push('/page')
-              })
+                this.$api.createORGUser(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        this.$message.success('新增用户成功')
+                    }else{
+                        this.$message.error('新增失败')
+                    }
+                    this.$router.push('/page')
+                })
             },
             //获取组织成员列表
             getORGUserByRole(cnt){
-              this.$api.getORGUserByRole(cnt,(res)=>{
-                  this.tableData = this.$util.tryParseJson(res.data.c)
-                  if (this.tableData.length < this.count) {
-                      this.pageOver = true
-                  } else {
-                      this.pageOver = false
-                  }
-              })
+                this.$area.getORGUserByRole(cnt,(res)=>{
+                    this.tableData = this.$util.tryParseJson(res.data.c)
+                    if (this.tableData.length < this.count) {
+                        this.pageOver = true
+                    } else {
+                        this.pageOver = false
+                    }
+                })
             },
             //获取组织类所有的用户信息
             getORGUsers(cnt){
-                this.$api.getORGUsers(cnt,(res)=>{
+                this.$area.getORGUsers(cnt,(res)=>{
                     this.tableData = this.$util.tryParseJson(res.data.c)
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
@@ -413,8 +322,12 @@
             },
             //请求系统角色列表
             getSysORGUserRoles(cnt){
-                this.$api.getSysORGUserRoles(cnt,(res)=>{
-                    this.roleList =this.$util.tryParseJson(res.data.c)
+                this.$area.getSysORGUserRoles(cnt,(res)=>{
+                   let roleList =this.$util.tryParseJson(res.data.c)
+                    roleList = roleList.splice(0,roleList.length-2)
+                    console.log(roleList)
+                    this.roleList= roleList
+
                 })
             },
 
@@ -422,7 +335,6 @@
             //普通事件层
             //搜索用户
             searchBtn(){
-                let that = this
                 if(this.searchData == ''){
                     this.$message.error('请输入查找的用户姓名')
                 }else{
@@ -430,7 +342,7 @@
                     this.page = 1
                     this.roleActive = ''
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'),
+                        orgId: this.orgId,
                         realName: this.searchData,
                         count: this.count, // Integer
                         offset: this.offset, // Integer
@@ -438,139 +350,10 @@
                     this.getORGUsersLikeRealName(cnt)
                 }
             },
-            loadExcl() {
-                window.location.href = this.$baseURL+"用户模板.xlsx"
-            },
-            //导入用户文件上传相关
-            //关闭弹出框，重置上传的文件的相关变量
-            closeBtn() {
-                this.fileName = ''
-                this.fileData = []
-                this.url = ''
-            },
-            //讲已经导入到oss的文件传递给服务端进行数据库导入
-            importUsers() {
-                if (this.url != '' || this.url != undefined) {
-                    let cnt = {
-                        orgId: localStorage.getItem('orgId'),
-                        url: this.url
-                    }
-                    this.$api.importORGUsers(cnt,  (res)=> {
-                        this.loadData = false
-                        this.$message.success('导入完成，稍后刷新')
-                        this.$router.push('/page')
-                    })
-                }
-            },
-            //进度条
-            getProgress(p) {
-                this.num = p
-            },
-            //开始导入到oss
-            doUpload() {
-                this.loadData = true
-                let files = []
-                files[0] = this.fileData[0]
 
-                // this.$emit('getProgress', 0)
-                this.getProgress(0)
-                let file = files
-                this.size = file[0].size
-                let tmpName = encodeURIComponent(file[0].name)
-                tmpName = this.importAddress + tmpName
 
-                console.log(tmpName)
 
-                this.multipartUpload(tmpName, file[0])
-            },
-            //分片上传
-            multipartUpload(upName, upFile) {
-                //Vue中封装的分片上传方法（详见官方文档）
-                let _this = this
-                const progress = async function (p) {
-                    //项目中需获取进度条，故调用进度回调函数（详见官方文档）
-                    // _this.$emit('getProgress', Math.round(p * 100))
-                    _this.getProgress(Math.round(p * 100))
-                }
-                try {
-                    let result = client.multipartUpload(upName, upFile, {
-                        progress,
-                        meta: {
-                            year: 2017,
-                            people: 'test'
-                        }
-                    }).then(res => {
-                        //导入用户
-                        let address = res.res.requestUrls[0]
-                        let _index =address.indexOf('?')
-                        console.log(_index)
-                        if(_index == -1){
-                            _this.url = address
-                            _this.importUsers()
-                        }else{
-                            _this.url = address.substring(0,_index)
-                            _this.importUsers()
-                        }
 
-                    }).catch(err => {
-                        console.log(result)
-                        console.log(err)
-                    });
-
-                } catch (e) {
-                    // 捕获超时异常
-                    if (e.code === 'ConnectionTimeoutError') {
-                        console.log("Woops,超时啦!");
-                    }
-                    console.log(e)
-                }
-            },
-            // 获取文件名显示
-            fileBtn(ev) {
-                this.fileData = ev.target.files
-                this.fileName = this.fileData[0].name
-            },
-            handleClose(done) {
-                done();
-            },
-            delMore() {
-                console.log(this.multipleSelection)
-            },
-
-            //新增用户
-            addMemberBtn() {
-                if(this.name == '' || this.idNumber == '' || this.mobile == '' ){
-                    this.$message.error('请输入完整的用户基础信息')
-                }else{
-                    let groups = [102]
-                    let tags = {
-                        tags:['无']
-                    }
-                    let cnt = {
-                        orgId:localStorage.getItem('orgId'),
-                        mobile: this.mobile, // String 手机号
-                        realName: this.name, // String 姓名（实名）
-                        idNumber: this.idNumber, // String 身份证号
-                        address:this.address,
-                        shareCerNo:this.shareCerNo,
-                        shareCerImg:'无',
-                        shareCerHolder:this.shareCerHolder,
-                        shareAmount:this.shareAmount,
-                        weight:this.weight,
-                        roles:this.roles,
-                        groups:JSON.stringify(groups),
-                        tags:JSON.stringify(tags),
-                        familyNumber:this.familyNumber,
-                        familyMaster:this.familyMaster
-                    }
-                    this.createORGUser(cnt)
-                }
-
-            },
-
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
 
 
             //过滤用户职务
@@ -595,7 +378,6 @@
 
             //更换职务请求用户列表
             roleChange(info) {
-                let that = this
                 this.searchData = ''
                 this.roleActive = info
                 this.count = 10
@@ -603,7 +385,7 @@
                 this.page = 1
                 let roles = [info.roleId]
                 let cnt = {
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
+                    orgId: this.orgId, // Long 组织编号
                     roles: roles, // JSONArray <选填> 角色权限列表,JSONArray格式
                     count: this.count, // Integer
                     offset: this.offset, // Integer
@@ -628,7 +410,7 @@
                 if (this.roleActive != '') {
                     let roles = [this.roleActive.roleId]
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        orgId: this.orgId, // Long 组织编号
                         roles:roles, // JSONArray <选填> 角色权限列表,JSONArray格式
                         count: this.count, // Integer
                         offset: offset, // Integer
@@ -636,23 +418,23 @@
                     //请求对应的角色列表
                     this.getORGUserByRole(cnt)
                 } else {
-                        if(this.searchData == ''){
-                            let cnt = {
-                                orgId: localStorage.getItem('orgId'),
-                                offset: offset,
-                                count: this.count
-                            }
-                            this.getORGUsers(cnt)
-                        }else{
-                            let cnt = {
-                                orgId: localStorage.getItem('orgId'),
-                                realName: this.searchData,
-                                count: this.count, // Integer
-                                offset:offset, // Integer
-                            };
-                            this.getORGUsersLikeRealName(cnt)
+                    if(this.searchData == ''){
+                        let cnt = {
+                            orgId:this.orgId,
+                            offset: offset,
+                            count: this.count
                         }
+                        this.getORGUsers(cnt)
+                    }else{
+                        let cnt = {
+                            orgId: this.orgId,
+                            realName: this.searchData,
+                            count: this.count, // Integer
+                            offset:offset, // Integer
+                        };
+                        this.getORGUsersLikeRealName(cnt)
                     }
+                }
 
             },
 
@@ -675,6 +457,7 @@
                 this.familyNumberInfo = this.memberInfo.orgUser.familyNumber
                 this.familyMasterInfo = this.memberInfo.orgUser.familyMaster
                 if(this.memberInfo.orgUser.groups != undefined || this.memberInfo.orgUser.groups != ''){
+                    console.log('11111111111')
                     this.groupsInfo = JSON.parse(this.memberInfo.orgUser.groups)
                 }else {
                     this.groupsInfo = []
@@ -696,63 +479,24 @@
                 this.editMember =0
 
             },
-            //修改用户基本信息
-            editUserBtn(){
-                let that = this
-                let cnt = {
-                    userId: this.userIdInfo,
-                    mobile:this.mobileInfo,
-                    realName:this.realNameInfo,
-                }
-                this.editUser(cnt)
-            },
-            //修改用户信息
-            editORGUserBtn(){
-
-                if(this.addressInfo == ''  || this.weightInfo == '' || this.rolesInfo.length == 0) {
-                    this.$message.error('请输入完整的用户信息')
-                }else{
-                    let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织编号
-                        userId: this.userIdInfo, // Long 用户编号
-                        address: this.addressInfo, // String 地址
-                        shareCerNo: this.shareCerNoInfo, // String 股权证书编号
-                        // shareCerImg: this.shareCerImgInfo, // String 股权证书图片地址
-                        shareCerImg:'无', // String 股权证书图片地址
-                        shareCerHolder: this.shareCerHolderInfo, // Boolean 是否持证人
-                        shareAmount: this.shareAmountInfo, // Integer 股份数
-                        weight: this.weightInfo, // Integer 选举权重
-                        roles: this.rolesInfo, // JSONArray 角色（股东，董事长，经理等）
-                        groups:this.groupsInfo,
-                        tags: this.tagsInfo, // JSONObject 标签，包含groups,tags,以及其它自定义分组标签列表
-                        familyNumber:this.familyNumberInfo,
-                        familyMaster:this.familyMasterInfo
-                    }
-                    // console.log(cnt)
-                    this.editORGUser(cnt)
-                }
-            },
-            //修改用户身份证号
-            editUserNumber(){
-                let that = this
-                let cnt = {
-                    adminUsreId: localStorage.getItem('userId'),
-                    userId: this.userIdInfo,
-                    IdNumber: this.idNumberInfo,
-                };
-                this.editUserIdNumber(cnt)
-            },
+        },
+        created(){
+            if(this.$route.params.info == '' || this.$route.params.info == undefined){
+                this.$message.error('信息失效重新选择机构')
+                this.$router.push('/childAdmin')
+            }
         },
         mounted(){
             const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
-            let orgId = localStorage.getItem('orgId')
-            this.importAddress = 'user/'+orgId+'/'
+            this.orgId = this.$route.params.info.id
+
+            this.importAddress = 'user/'+ this.orgId+'/'
             let cnt ={}
             // 请求职位列表
             this.getSysORGUserRoles(cnt)
             //请求所有组织用户
             let cnt1 = {
-                orgId: localStorage.getItem('orgId'),
+                orgId: this.orgId,
                 count: this.count,
                 offset: this.offset
             }
@@ -760,15 +504,15 @@
 
 
             //获取所有分组列表
-            this.$api.getORGUserSysTagGroups(cnt, (res)=> {
+            this.$area.getORGUserSysTagGroups(cnt, (res)=> {
                 let data = this.$util.tryParseJson(res.data.c)
                 this.grandId = data[0].groupId
                 let cnt2 = {
-                    orgId: localStorage.getItem('orgId'), // Long 组织编号
+                    orgId:this.orgId, // Long 组织编号
                     groupId:this.grandId, // Long 分组编号
                 };
 
-                this.$api.getTagGroupTree(cnt2, (res)=> {
+                this.$area.getTagGroupTree(cnt2, (res)=> {
                     if (res.data.rc == this.$util.RC.SUCCESS) {
                         let groupData = this.$util.tryParseJson(res.data.c)
                         if (groupData == '{}' || groupData== {}) {
