@@ -182,9 +182,10 @@
 
             //执行批量导入
             importBtn(){
+			
                 console.log(this.tableData);
                 if(this.tableData.length == 0){
-                    this.$message.error('请先上传资产文件...')
+                    this.$message.error('请先上传成员文件...')
                 }else{
                     const loading = this.$loading({lock: true, text: '正在执行批量数据上传...', spinner: 'el-icon-loading'})
                     let arr = []
@@ -192,14 +193,19 @@
                     for(let i = 0;i<this.tableData.length;i++){
                         arr.push(this.tableData[i].url)
                     }
+					
+			
+			
                     let cnt = {
                         orgId: this.mechInfo.orgId, // Long 组织编号
-                        userId: JSON.parse(localStorage.getItem('orgUser')).id,
+                        userId: localStorage.getItem('userId'),
                         url: arr, // String excel文件url
                         importTaskId: this.mechInfo.id, // Long 导入任务id
                         skipRowCount:this.$constData.importData.userImport.skipRowCount,
                         colCount:this.$constData.importData.userImport.colCount
                     }
+					
+					console.log(cnt)
 
                     setTimeout(()=>{
                         this.$router.push('/memberImportRes')
