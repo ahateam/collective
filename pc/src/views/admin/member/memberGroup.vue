@@ -917,6 +917,7 @@
             // 请求职位列表
             this.$api.getSysORGUserRoles(cnt,  (res3)=> {
                 this.roleList =this.$util.tryParseJson(res3.data.c)
+                this.roleList.splice(this.roleList.length-2)
             })
 
             //请求所有组织用户

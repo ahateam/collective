@@ -8,8 +8,14 @@
                     </el-col>
                     <el-col :span="24" >
 
-                        <div :class=" item.name == roleActive.name?'post-list post-active':'post-list'"  v-for="(item,index) in roleList" :key="index" @click="roleChange(item)">
-                            {{item.name}}
+                        <div :class=" item.name == roleActive.name?'post-list post-active':'post-list'"
+                             v-for="(item,index) in newRoleList" :key="index" @click="roleChange(item,index)">
+                            <div style="float: left">
+                                {{item.name}}
+                            </div>
+                            <div v-if="item.size" class="item-num">
+                                {{item.size}}
+                            </div>
                         </div>
                     </el-col>
                 </template>
@@ -135,16 +141,22 @@
                             <el-radio v-model="shareCerHolderInfo" :label="false"   disabled>否</el-radio>
                         </template>
                     </el-form-item>
-					
-					<el-form-item label="是否组织成员" label-width="100px">
-					    <template>
-					        <el-radio v-model="isOrgUser" :label="true"   disabled>是</el-radio>
-					        <el-radio v-model="isOrgUser" :label="false"   disabled>否</el-radio>
-					    </template>
-					</el-form-item>
-					
+
+                    <el-form-item label="是否组织成员" label-width="100px" >
+                        <template>
+                            <el-radio v-model="isOrgUser" :label="true"   disabled>组织成员</el-radio>
+                            <el-radio v-model="isOrgUser" :label="false"  disabled>外部成员</el-radio>
+                        </template>
+                    </el-form-item>
+
                     <el-form-item label="股份数" label-width="100px">
                         <el-input v-model="shareAmountInfo" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="资源股" label-width="100px">
+                        <el-input v-model="resourceShares" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="资产股" label-width="100px">
+                        <el-input v-model="assetShares" autocomplete="off" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="选举权重" label-width="100px">
                         <el-input v-model="weightInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
@@ -217,6 +229,7 @@
 
 
                 //职务角色列表
+                newRoleList: [{name:'外部成员',orgId:100,roleId:1},{name:'组织成员',orgId:100,roleId:2}],                //角色列表
                 roleList:[],                //角色列表
                 roleActive:'',              //选中的角色
 
@@ -235,7 +248,6 @@
                 shareCerNoInfo:'',              //股权证书编号
                 shareCerImgInfo:'',             //股权证书图片地址
                 shareCerHolderInfo:'',          //是否持证人
-				isOrgUser:'',
                 shareAmountInfo:'',             //股份数
                 weightInfo:'',                  //选举权重
                 rolesInfo:[],                       //用户角色id 列表
@@ -243,7 +255,9 @@
                 groupsInfo:[],
                 familyNumberInfo:'',            //户序号
                 familyMasterInfo:'',            //户主姓名
-
+                assetShares:'',                   //资产股
+                resourceShares:'',                  //资源股
+                isOrgUser:true,                 //是否是组织成员
                 //搜索相关
                 searchData:'',
                 orgId:'',
@@ -254,7 +268,10 @@
             //根据姓名模糊搜索用户列表
             getORGUsersLikeRealName(cnt){
                 this.$area.getORGUsersLikeRealName(cnt,(res)=>{
-                    this.tableData =this.$util.tryParseJson(res.data.c)
+                    this.tableData = []
+                    let data = this.$util.tryParseJson(res.data.c)
+                    this.tableData =   this.tableData.concat(data)
+
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -262,21 +279,13 @@
                     }
                 })
             },
-            //创建组织用户
-            createORGUser(cnt){
-                this.$api.createORGUser(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('新增用户成功')
-                    }else{
-                        this.$message.error('新增失败')
-                    }
-                    this.$router.push('/page')
-                })
-            },
             //获取组织成员列表
             getORGUserByRole(cnt){
                 this.$area.getORGUserByRole(cnt,(res)=>{
-                    this.tableData = this.$util.tryParseJson(res.data.c)
+                    this.tableData = []
+                    let data = this.$util.tryParseJson(res.data.c)
+                    this.tableData =   this.tableData.concat(data)
+
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -287,7 +296,9 @@
             //获取组织类所有的用户信息
             getORGUsers(cnt){
                 this.$area.getORGUsers(cnt,(res)=>{
-                    this.tableData = this.$util.tryParseJson(res.data.c)
+                    this.tableData = []
+                    let data = this.$util.tryParseJson(res.data.c)
+                    this.tableData =   this.tableData.concat(data)
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -295,47 +306,16 @@
                     }
                 })
             },
-            //修改用户基本信息
-            editUser(cnt){
-                this.$api.editUser(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('修改成功')
-                    }else{
-                        this.$message.error('修改失败')
-                    }
-                    this.$router.push('/page')
-                })
-            },
-            //修改组织用户信息-职务修改
-            editORGUser(cnt){
-                this.$api.editORGUser(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('修改成功')
-                    }else{
-                        this.$message.error('修改失败')
-                    }
-                    this.$router.push('/page')
-                })
-            },
-            //修改成员的身份证号码
-            editUserIdNumber(cnt){
-                this.$api.editUserIdNumber(cnt,(res)=>{
-                    if(res.data.rc == this.$util.RC.SUCCESS){
-                        this.$message.success('修改成功')
-                        this.$router.push('/page')
-                    }else{
-                        this.$message.error('修改失败')
-                        this.$router.push('/page')
-                    }
-                })
-            },
+
             //请求系统角色列表
             getSysORGUserRoles(cnt){
                 this.$area.getSysORGUserRoles(cnt,(res)=>{
-                   let roleList =this.$util.tryParseJson(res.data.c)
-                    roleList = roleList.splice(0,roleList.length-2)
-                    console.log(roleList)
-                    this.roleList= roleList
+
+
+                    this.roleList =this.$util.tryParseJson(res.data.c)
+                    this.roleList.splice(this.roleList.length-2,2)
+                    this.newRoleList = this.newRoleList.concat(this.roleList)
+
 
                 })
             },
@@ -383,66 +363,163 @@
 
 
             },
+            //请求外部/组织人员列表
+            getOrgUserListByIsOrgUser(cnt,key){
+                this.$area.getOrgUserListByIsOrgUser(cnt,(res)=>{
 
+                    this.tableData = []
+                    let data = this.$util.tryParseJson(res.data.c)
+                    this.tableData =   this.tableData.concat(data.ORGUser)
+                    this.newRoleList[key].size =data.size
+                    if (this.tableData.length < this.count) {
+                        this.pageOver = true
+                    } else {
+                        this.pageOver = false
+                    }
+                })
+            },
+            //获取职务对应的人数
+            getCountsByRoles(cnt,key,name){
+                this.$area.getCountsByRoles(cnt,(res)=>{
+                    if(res.data.rc == this.$util.RC.SUCCESS){
+                        let obj = this.$util.tryParseJson(res.data.c)
+                        this.newRoleList[key].size =obj[name]
+                    }
+                })
+            },
 
             //更换职务请求用户列表
-            roleChange(info) {
+            roleChange(info,index) {
                 this.searchData = ''
                 this.roleActive = info
                 this.count = 10
                 this.offset = 0
                 this.page = 1
-                let roles = [info.roleId]
-                let cnt = {
-                    orgId: this.orgId, // Long 组织编号
-                    roles: roles, // JSONArray <选填> 角色权限列表,JSONArray格式
-                    count: this.count, // Integer
-                    offset: this.offset, // Integer
-                };
-                //请求对应的角色列表
-                this.getORGUserByRole(cnt)
+                if(info.roleId == 1){   //外部成员
+                    let cnt = {
+                        orgId: this.orgId, // Long 组织编号
+                        isOrgUser: false, // Boolean 内部为true,外部为false
+                        count: this.count, // Integer
+                        offset: this.offset, // Integer
+                    };
+                    this.getOrgUserListByIsOrgUser(cnt,index)
+
+                }else if(info.roleId == 2){ //组织成员
+                    let cnt = {
+                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        isOrgUser: true, // Boolean 内部为true,外部为false
+                        count: this.count, // Integer
+                        offset: this.offset, // Integer
+                    };
+                    this.getOrgUserListByIsOrgUser(cnt,index)
+
+                }else{
+                    let roles = [info.roleId]
+                    let cnt = {
+                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        roles: roles, // JSONArray <选填> 角色权限列表,JSONArray格式
+                        count: this.count, // Integer
+                        offset: this.offset, // Integer
+                    };
+                    let cnt1 = {
+                        orgId: localStorage.getItem('orgId'), // Long 组织id
+                        roles: roles, // JSONArray 职务编号数组
+                    }
+                    this.getCountsByRoles(cnt1,index,info.roleId)
+                    this.getORGUserByRole(cnt)
+                }
 
             },
             //上一页下一页
             changePage(key) {
-                let that = this
-
                 if (key == 0) {   //上一页
                     this.page = this.page - 1
                 } else {          //下一页
                     this.page = this.page + 1
                 }
                 let offset = (this.page - 1) * this.count
-
-
                 //请求所有的用户的分页
-                if (this.roleActive != '') {
-                    let roles = [this.roleActive.roleId]
-                    let cnt = {
-                        orgId: this.orgId, // Long 组织编号
-                        roles:roles, // JSONArray <选填> 角色权限列表,JSONArray格式
-                        count: this.count, // Integer
-                        offset: offset, // Integer
-                    };
-                    //请求对应的角色列表
-                    this.getORGUserByRole(cnt)
-                } else {
-                    if(this.searchData == ''){
-                        let cnt = {
-                            orgId:this.orgId,
-                            offset: offset,
-                            count: this.count
-                        }
-                        this.getORGUsers(cnt)
-                    }else{
+                if (this.roleActive == '') {        //没有选中的职务
+                    if(this.searchData ==''){       //没有选中职务 并且没有搜索的数据
                         let cnt = {
                             orgId: this.orgId,
+                            count: this.count,
+                            offset:offset
+                        }
+                        this.getORGUsers(cnt)
+                    }else{                          //没有选中的职务 有搜索值
+                        let cnt = {
+                            orgId:this.orgId,
                             realName: this.searchData,
                             count: this.count, // Integer
                             offset:offset, // Integer
                         };
                         this.getORGUsersLikeRealName(cnt)
                     }
+                } else {                        //有选中的职务
+
+                    let info = this.roleActive
+                    if(info.roleId == 1){   //外部成员
+                        let cnt = {
+                            orgId: this.orgId, // Long 组织编号
+                            isOrgUser: false, // Boolean 内部为true,外部为false
+                            count: this.count, // Integer
+                            offset: offset, // Integer
+                        };
+                        this.getOrgUserListByIsOrgUser(cnt,0)
+
+                    }else if(info.roleId == 2){ //组织成员
+                        let cnt = {
+                            orgId: this.orgId, // Long 组织编号
+                            isOrgUser: true, // Boolean 内部为true,外部为false
+                            count: this.count, // Integer
+                            offset: offset, // Integer
+                        };
+                        this.getOrgUserListByIsOrgUser(cnt,1)
+
+                    }else{                  //其他职务
+                        let roles = [info.roleId]
+                        let cnt = {
+                            orgId: this.orgId, // Long 组织编号
+                            roles: roles, // JSONArray <选填> 角色权限列表,JSONArray格式
+                            count: this.count, // Integer
+                            offset: offset, // Integer
+                        };
+                        let cnt1 = {
+                            orgId: this.orgId, // Long 组织id
+                            roles: roles, // JSONArray 职务编号数组
+                        }
+                        let _index = -1
+                        this.newRoleList.forEach((item,key)=>{
+                            if(item.name == this.roleActive.name ){
+                                _index = key
+                            }
+                        })
+
+                        this.getCountsByRoles(cnt1,_index,info.roleId)
+                        this.getORGUserByRole(cnt)
+                    }
+
+
+
+
+
+
+
+                //     if(this.searchData == ''){
+                //         this.$message.error('请输入用户的姓名')
+                //     }else{
+                //
+                //
+                //
+                //         let cnt = {
+                //             orgId: this.orgId,
+                //             realName: this.searchData,
+                //             count: this.count, // Integer
+                //             offset:offset, // Integer
+                //         };
+                //         this.getORGUsersLikeRealName(cnt)
+                //     }
                 }
 
             },
@@ -456,6 +533,11 @@
                 this.addressInfo = this.memberInfo.orgUser.address
                 this.shareCerNoInfo = this.memberInfo.orgUser.shareCerNo
                 this.shareCerImgInfo = this.memberInfo.orgUser.shareCerImg
+                this.isOrgUser = this.memberInfo.orgUser.isOrgUser
+                this.assetShares = this.memberInfo.orgUser.assetShares
+                this.resourceShares = this.memberInfo.orgUser.resourceShares
+
+
                 this.shareCerHolderInfo = this.memberInfo.orgUser.shareCerHolder
 				if(this.memberInfo.orgUser.isOrgUser === '是' || this.memberInfo.orgUser.isOrgUser === '1'){
 					this.isOrgUser = true;
@@ -724,6 +806,14 @@
         color: #333;
         font-weight: 600;
         background: rgb(236,245,255);
+    }
+    .item-num{
+        float: right;
+        color: #666;
+        font-size: 12px;
+        font-weight: 500;
+        background: rgba(230,162,60,.1);
+        padding: 0 5px;
     }
 
 </style>

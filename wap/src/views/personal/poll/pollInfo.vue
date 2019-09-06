@@ -15,12 +15,10 @@
                     </div>
                     <div class="vote-item-text">
                         <div class="vote-item-status">
-
                             <span style="color:#40c9c6" v-if="status == '-1'">表决未完成</span>
                             <span v-if="status =='0'" style="color: #909399">表决失效</span>
                             <span v-if="status =='1'" style="color: #67C23A">表决成功</span>
                             <span v-if="status =='2'" style="color: #F56C6C">表决失败</span>
-
 
                         </div>
                         <div class="vote-item-title-box">
@@ -254,7 +252,7 @@
                 let  passData = parseInt(this.quorum *(parseInt(this.info.effectiveRatio)/100))+1
                 let  failData = parseInt(this.quorum *(parseInt(this.info.failureRatio)/100))+1
 
-                if(this.waiver >=failData){     //无效
+                if(this.waiver >=failData  ){     //无效
                     this.status = 0
                 }else{                          //有效
                     let   successType = 0  //默认是不成功
@@ -400,6 +398,7 @@
             this.activeNums = this.info.choiceCount
             this.template = this.info.template
             let data = JSON.parse(localStorage.getItem('vote'))
+
             let obj = {
                 voteId: this.info.id
             }
@@ -419,14 +418,18 @@
                     this.voteDetail = info
                     this.ticketCount = info.ticketCount
                     this.quorum = info.vote.quorum
+
                     for(let i=0;i<info.ops.length;i++){
                         if(info.ops[i].title == '弃权'){
                             this.waiver  =   this.waiver +info.ops[i].ballotCount
                         }
                         this.opsNum = this.opsNum+info.ops[i].ballotCount
                     }
+
                 }
             })
+
+
             this.$api.getVoteOptions(cnt,  (res)=> {
 
                 this.voteOption = this.$util.tryParseJson(res.data.c)
@@ -438,17 +441,24 @@
                 }
 
                 this.$api.getVoteTicket( cnt1,  (res1)=> {
+
                     if (res1.data.rc == this.$util.RC.SUCCESS) {
+
                         if (JSON.parse(res1.data.c) == null) {        //未投票的
                             this.voteShow = false
                             this.subBtnShow = true                 //显示投票按钮
+
                             for (let i = 0; i < this.voteOption.length + 1; i++) {
                                 this.optionActive.push(false)
                             }
-                        } else {                  //已经投过票的
+
+                        } else {
+
+                            //已经投过票的
                             for (let i = 0; i < this.voteOption.length + 1; i++) { //默认未投票展示
                                 this.optionActive.push(false)
                             }
+
                             this.voteShow = true
                             this.subBtnShow = false                //隐藏投票按钮
                             let selection = JSON.parse(JSON.parse(res1.data.c).selection)
