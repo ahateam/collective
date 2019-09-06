@@ -135,6 +135,14 @@
                             <el-radio v-model="shareCerHolderInfo" :label="false"   disabled>否</el-radio>
                         </template>
                     </el-form-item>
+					
+					<el-form-item label="是否组织成员" label-width="100px">
+					    <template>
+					        <el-radio v-model="isOrgUser" :label="true"   disabled>是</el-radio>
+					        <el-radio v-model="isOrgUser" :label="false"   disabled>否</el-radio>
+					    </template>
+					</el-form-item>
+					
                     <el-form-item label="股份数" label-width="100px">
                         <el-input v-model="shareAmountInfo" autocomplete="off" disabled></el-input>
                     </el-form-item>
@@ -227,6 +235,7 @@
                 shareCerNoInfo:'',              //股权证书编号
                 shareCerImgInfo:'',             //股权证书图片地址
                 shareCerHolderInfo:'',          //是否持证人
+				isOrgUser:'',
                 shareAmountInfo:'',             //股份数
                 weightInfo:'',                  //选举权重
                 rolesInfo:[],                       //用户角色id 列表
@@ -448,6 +457,12 @@
                 this.shareCerNoInfo = this.memberInfo.orgUser.shareCerNo
                 this.shareCerImgInfo = this.memberInfo.orgUser.shareCerImg
                 this.shareCerHolderInfo = this.memberInfo.orgUser.shareCerHolder
+				if(this.memberInfo.orgUser.isOrgUser === '是' || this.memberInfo.orgUser.isOrgUser === '1'){
+					this.isOrgUser = true;
+				}else{
+					this.isOrgUser = false;
+				}
+				console.log("isOrgUser========"+this.memberInfo.orgUser.isOrgUser );
                 this.shareAmountInfo = this.memberInfo.orgUser.shareAmount
                 this.weightInfo = this.memberInfo.orgUser.weight
                 this.rolesInfo = JSON.parse(this.memberInfo.orgUser.roles)
