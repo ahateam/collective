@@ -108,6 +108,26 @@
                         </div>
                     </el-col>
                 </el-col>
+            <el-col :span="24">
+                <el-col :span="6">
+                    <div class="title-box">总资源股:</div>
+                </el-col>
+                <el-col :span="18">
+                    <div class="text-box">
+                        {{info.resourceShares}}
+                    </div>
+                </el-col>
+            </el-col>
+            <el-col :span="24">
+                <el-col :span="6">
+                    <div class="title-box">总资产股:</div>
+                </el-col>
+                <el-col :span="18">
+                    <div class="text-box">
+                        {{info.assetShares}}
+                    </div>
+                </el-col>
+            </el-col>
                 <el-col :span="24">
                     <el-col :span="6">
                         <div class="title-box">机构证书:</div>
@@ -218,7 +238,7 @@
                 this.page = page
                 let offset = (page-1)*this.count
                 let cnt = {
-                    areaId: localStorage.getItem('mechId'),
+                    areaId:  localStorage.getItem('orgId'),
                     examine:this.isActive,
                     count: this.count, // Integer
                     offset: offset, // Integer
@@ -310,6 +330,8 @@
                         examine: this.examine,
                         superiorId:localStorage.getItem('orgId'),
                         updateDistrict: this.info.updateDistrict, // Boolean 组织id
+                        resourceShares:this.info.resourceShares,
+                        assetShares:this.info.assetShares
                     }
                     this.$area.upORGApply(cnt,(res)=> {
                         if(res.data.rc == this.$util.RC.SUCCESS){

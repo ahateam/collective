@@ -280,7 +280,9 @@
                     this.$area.setShareCerNo(cnt,(res)=>{
                         if(res.data.rc == this.$util.RC.SUCCESS){
                             for(let i=0;i<this.newData[this._index].length;i++){
-                                this.newData[this._index][i].shareCerNo = this.number
+
+                                this.$set( this.newData[this._index][i],'shareCerNo',this.number)
+
                             }
                             this._index = ''
                             this.editShareNumberShow =false

@@ -88,16 +88,35 @@
                 <el-form-item label="身份证号" label-width="100px">
                     <el-input v-model="idNumber" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="性别" label-width="100px" >
+                    <template>
+                        <el-radio v-model="sex" :label="0"  >男</el-radio>
+                        <el-radio v-model="sex" :label="1" >女</el-radio>
+                    </template>
+                </el-form-item>
                 <el-form-item label="联系电话" label-width="100px">
                     <el-input v-model="mobile" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="是否组织成员" label-width="100px" >
+                    <template>
+                        <el-radio v-model="isOrgUser" :label="true"   >组织成员</el-radio>
+                        <el-radio v-model="isOrgUser" :label="false"  >外部成员</el-radio>
+                    </template>
                 </el-form-item>
                 <el-form-item label="用户地址" label-width="100px">
                     <el-input v-model="address" autocomplete="off"></el-input>
                 </el-form-item>
 
                 <el-form-item label="股份数" label-width="100px">
-                    <el-input v-model="shareAmount" autocomplete="off"></el-input>
+                    <el-input type="number" v-model="shareAmount" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="资源股" label-width="100px">
+                    <el-input type="number" v-model="resourceShares" autocomplete="off" ></el-input>
+                </el-form-item>
+                <el-form-item label="资产股" label-width="100px">
+                    <el-input  type="number" v-model="assetShares" autocomplete="off" ></el-input>
+                </el-form-item>
+
                 <el-form-item label="投票权重" label-width="100px">
                     <el-input v-model="weight" autocomplete="off"></el-input>
                 </el-form-item>
@@ -142,6 +161,11 @@
                 shareAmount: '',
                 weight: '',
                 userInfo: {},
+                sex:'',
+                familyMaster:'',
+                assetShares:'',
+                resourceShares:'',
+                isOrgUser:true,
 
                 //角色列表
                 roleList: [],
@@ -178,6 +202,10 @@
                 this.shareCerHolder = false
                 this.userInfo = {}
                 this.roles = []
+                this.sex =0
+                this.assetShares = ''
+                this.resourceShares=''
+                this.isOrgUser=true
             },
             addMemberBtn() {
                 if (this.realName == '' || this.idNumber == '' || this.mobile == '' || this.address == '' || this.shareAmount == '' || this.weight == '' || this.roles.length == 0) {
@@ -210,6 +238,12 @@
                                 this.userInfo.shareCerNo = this.pastData[0].shareCerNo
                                 this.userInfo.groups = this.groups
                                 this.userInfo.tags = this.tags
+
+                                this.userInfo.sex =this.sex
+                                this.userInfo.assetShares = this.assetShares
+                                this.userInfo.resourceShares=this.resourceShares
+                                this.userInfo.isOrgUser=this.isOrgUser
+
                                 this.pastData.push(this.userInfo)
                                 this.pastDataSign.push(this.userInfo)
 

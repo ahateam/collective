@@ -159,7 +159,8 @@
                     orgId:localStorage.getItem('orgId'),
                     userId:JSON.parse(localStorage.getItem('orgUser')).id,
                     offset:(this.page-1)*this.count,
-                    count:this.count
+                    count:this.count,
+                    type:0,
                 }
                 this.getListImportTask(cnt)
             },

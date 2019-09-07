@@ -781,6 +781,8 @@
                         tags: this.tagsInfo, // JSONObject 标签，包含groups,tags,以及其它自定义分组标签列表
                         familyNumber:this.familyNumberInfo,
                         familyMaster:this.familyMasterInfo
+
+
                     }
                     // console.log(cnt)
                     this.editORGUser(cnt)

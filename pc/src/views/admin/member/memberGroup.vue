@@ -237,7 +237,12 @@
                     <el-form-item label="证书编号" label-width="100px">
                         <el-input v-model="shareCerNoInfo" autocomplete="off" disabled></el-input>
                     </el-form-item>
-
+                    <el-form-item label="是否组织成员" label-width="100px" >
+                        <template>
+                            <el-radio v-model="isOrgUser" :label="true"   :disabled="editMember !=1">组织成员</el-radio>
+                            <el-radio v-model="isOrgUser" :label="false"  :disabled="editMember !=1">外部成员</el-radio>
+                        </template>
+                    </el-form-item>
                     <el-form-item label="是否持证人" label-width="100px">
                         <template>
                             <el-radio v-model="shareCerHolderInfo" :label="true"   disabled>是</el-radio>
@@ -245,8 +250,15 @@
                         </template>
                     </el-form-item>
                     <el-form-item label="股份数" label-width="100px">
-                        <el-input v-model="shareAmountInfo" autocomplete="off" disabled></el-input>
+                        <el-input   type="number" v-model="shareAmountInfo" autocomplete="off" disabled></el-input>
                     </el-form-item>
+                    <el-form-item label="资源股" label-width="100px">
+                        <el-input   type="number" v-model="resourceShares" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="资产股" label-width="100px">
+                        <el-input  type="number"  v-model="assetShares" autocomplete="off" disabled></el-input>
+                    </el-form-item>
+
                     <el-form-item label="选举权重" label-width="100px">
                         <el-input v-model="weightInfo" autocomplete="off" :disabled="editMember !=1"></el-input>
                     </el-form-item>
@@ -381,7 +393,9 @@
                 groupsInfo:[],
                 familyNumberInfo:'',            //户序号
                 familyMasterInfo:'',            //户主名
-
+                assetShares:'',                   //资产股
+                resourceShares:'',                  //资源股
+                isOrgUser:true,                 //是否是组织成员
 
 
                 //分组操作-穿梭框相关
@@ -748,6 +762,10 @@
                 this.rolesInfo = JSON.parse(this.memberInfo.orgUser.roles)
                 this.tagsInfo = this.memberInfo.orgUser.tags
                 this.memberPostInfoModal = true
+                this.isOrgUser = this.memberInfo.orgUser.isOrgUser
+                this.assetShares = this.memberInfo.orgUser.assetShares
+                this.resourceShares = this.memberInfo.orgUser.resourceShares
+
 
 
                 this.familyNumberInfo = this.memberInfo.orgUser.familyNumber
@@ -804,6 +822,9 @@
                         address: this.addressInfo, // String 地址
                         shareCerNo: this.shareCerNoInfo, // String 股权证书编号
                         // shareCerImg: this.shareCerImgInfo, // String 股权证书图片地址
+                        assetShares:this.assetShares,
+                        resourceShares:this.resourceShares,
+                        isOrgUser:this.isOrgUser,
                         shareCerImg:'无', // String 股权证书图片地址
                         shareCerHolder: this.shareCerHolderInfo, // Boolean 是否持证人
                         shareAmount: this.shareAmountInfo, // Integer 股份数

@@ -203,7 +203,7 @@
                   if (this.searchData.length == 0) {
                       this.page = 1
                       let cnt = {
-                          orgId: localStorage.getItem('orgId'),
+                          orgId: this.org,
                           count: this.count, // Integer <选填> 查询数
                           offset: this.offset, // Integer <选填> 开始位置
                       }
@@ -212,7 +212,7 @@
                       this.page = 1
                       this.pageOver = false
                       let cnt = {
-                          orgId: localStorage.getItem('orgId'),
+                          orgId:this.org,
                           content: this.searchData,
                           count: this.count,
                           offset: this.offset
