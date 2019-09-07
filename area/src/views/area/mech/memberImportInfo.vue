@@ -21,7 +21,7 @@
                 </p>
             </el-col>
             <el-col :span="24" style="margin: 15px 0">
-                <el-button type="primary" @click="importModal =true">上传表格</el-button>
+                <el-button type="primary" v-if=" !tableData.length " @click="importModal =true">上传表格</el-button>
             </el-col>
             <el-col :span="24" >
                 <template>
@@ -131,6 +131,16 @@
         },
         methods:{
 
+            /*设置默认的导入文件变量*/
+            setNull(){
+                this.importModal = false
+                this.url = ''
+                this.num = 0
+                this.fileName = ''
+                this.fileData = []
+            },
+
+
             //异步方法-请求该组织下的该任务下的excl列表
             async list () {
                 try{
@@ -182,7 +192,7 @@
 
             //执行批量导入
             importBtn(){
-			
+
                 console.log(this.tableData);
                 if(this.tableData.length == 0){
                     this.$message.error('请先上传成员文件...')
@@ -193,9 +203,9 @@
                     for(let i = 0;i<this.tableData.length;i++){
                         arr.push(this.tableData[i].url)
                     }
-					
-			
-			
+
+
+
                     let cnt = {
                         orgId: this.mechInfo.orgId, // Long 组织编号
                         userId: localStorage.getItem('userId'),
@@ -204,7 +214,7 @@
                         skipRowCount:this.$constData.importData.userImport.skipRowCount,
                         colCount:this.$constData.importData.userImport.colCount
                     }
-					
+
 					console.log(cnt)
 
                     setTimeout(()=>{
@@ -287,7 +297,8 @@
                         }
                     }).then(res => {
                         //导入资产
-                        this.$router.push('/page')
+                        _this.list()
+                        _this.setNull()
                     }).catch(err => {
                         console.log(result)
                         console.log(err)
@@ -315,6 +326,7 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
+
         },
         mounted(){
             this.mechInfo = JSON.parse(localStorage.getItem('taskInfo'))

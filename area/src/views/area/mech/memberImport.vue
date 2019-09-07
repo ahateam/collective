@@ -113,8 +113,7 @@
                     } else {
                         this.tableData = []
                     }
-                    console.log('ssss')
-                    console.log(this.tableData)
+
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -178,6 +177,7 @@
                     title: this.name,
                     type: 0
                 }
+
                 this.$area.createImportTask(cnt, (res) => {
                     if (res.data.rc == this.$util.RC.SUCCESS) {
                         this.name = ''
@@ -188,6 +188,7 @@
 
                     let cnt = {
                         orgId: this.mechInfo.id,
+                        type:0,
                         offset: this.offset,
                         count: this.count
                     }
