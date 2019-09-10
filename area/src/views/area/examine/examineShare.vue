@@ -34,6 +34,14 @@
                             </div>
                             <div class="info-box">
                                 <div class="title">
+                                    股东总资源股：
+                                </div>
+                                <div class="content">
+                                    {{oldData[0].orgUser.resourceShares}}
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <div class="title">
                                     股东用户身份证号：
                                 </div>
                                 <div class="content">
@@ -63,6 +71,15 @@
                                     {{oldData[0].orgUser.shareAmount}}
                                 </div>
                             </div>
+                            <div class="info-box">
+                                <div class="title">
+                                    股东用户总资产股：
+                                </div>
+                                <div class="content">
+                                    {{oldData[0].orgUser.assetShares}}
+                                </div>
+                            </div>
+
                             <div class="info-box">
                                 <div class="title">
                                     股东用户股权证：
@@ -107,6 +124,14 @@
                                 </div>
                             </div>
                             <div class="info-box">
+                                <div class="title" style="color: #f44;">
+                                    股东用户总资源股：
+                                </div>
+                                <div class="content" style="color: #f44;">
+                                    {{newData[0].orgUser.resourceShares}}
+                                </div>
+                            </div>
+                            <div class="info-box">
                                 <div class="title">
                                     股东用户身份证号：
                                 </div>
@@ -135,6 +160,14 @@
                                 </div>
                                 <div class="content" style="color: #f44;">
                                     {{newData[0].orgUser.shareAmount}}
+                                </div>
+                            </div>
+                            <div class="info-box" style="color: #f44;">
+                                <div class="title" style="color: #f44;">
+                                    股东用户总资产股：
+                                </div>
+                                <div class="content" style="color: #f44;">
+                                    {{newData[0].orgUser.assetShares}}
                                 </div>
                             </div>
                             <div class="info-box">
@@ -221,7 +254,7 @@
                     } else {
                         this.$message.error('操作失败')
                     }
-                    // this.$router.push('/areaExamine')
+                    this.$router.push('/areaExamine')
                 })
 
             },

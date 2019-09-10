@@ -136,17 +136,17 @@
                         <el-input v-model="shareCerNoInfo" autocomplete="off" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="是否持证人" label-width="100px">
-                        <template>
-                            <el-radio v-model="shareCerHolderInfo" :label="true"   disabled>是</el-radio>
-                            <el-radio v-model="shareCerHolderInfo" :label="false"   disabled>否</el-radio>
-                        </template>
+                        <el-radio-group v-model="shareCerHolderInfo" disabled>
+                            <el-radio :label="true">是</el-radio>
+                            <el-radio :label="false">否</el-radio>
+                        </el-radio-group>
                     </el-form-item>
 
                     <el-form-item label="是否组织成员" label-width="100px" >
-                        <template>
-                            <el-radio v-model="isOrgUser" :label="true"   disabled>组织成员</el-radio>
-                            <el-radio v-model="isOrgUser" :label="false"  disabled>外部成员</el-radio>
-                        </template>
+                        <el-radio-group v-model="isOrgUser" disabled>
+                            <el-radio :label="true">组织成员</el-radio>
+                            <el-radio :label="false">外部成员</el-radio>
+                        </el-radio-group>
                     </el-form-item>
 
                     <el-form-item label="股份数" label-width="100px">
@@ -371,6 +371,7 @@
                     let data = this.$util.tryParseJson(res.data.c)
                     this.tableData =   this.tableData.concat(data.ORGUser)
                     this.newRoleList[key].size =data.size
+                    console.log(this.tableData)
                     if (this.tableData.length < this.count) {
                         this.pageOver = true
                     } else {
@@ -406,7 +407,7 @@
 
                 }else if(info.roleId == 2){ //组织成员
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        orgId: this.orgId, // Long 组织编号
                         isOrgUser: true, // Boolean 内部为true,外部为false
                         count: this.count, // Integer
                         offset: this.offset, // Integer
@@ -416,18 +417,19 @@
                 }else{
                     let roles = [info.roleId]
                     let cnt = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织编号
+                        orgId:this.orgId, // Long 组织编号
                         roles: roles, // JSONArray <选填> 角色权限列表,JSONArray格式
                         count: this.count, // Integer
                         offset: this.offset, // Integer
                     };
                     let cnt1 = {
-                        orgId: localStorage.getItem('orgId'), // Long 组织id
+                        orgId: this.orgId, // Long 组织id
                         roles: roles, // JSONArray 职务编号数组
                     }
                     this.getCountsByRoles(cnt1,index,info.roleId)
                     this.getORGUserByRole(cnt)
                 }
+
 
             },
             //上一页下一页
@@ -539,12 +541,7 @@
 
 
                 this.shareCerHolderInfo = this.memberInfo.orgUser.shareCerHolder
-				if(this.memberInfo.orgUser.isOrgUser === '是' || this.memberInfo.orgUser.isOrgUser === '1'){
-					this.isOrgUser = true;
-				}else{
-					this.isOrgUser = false;
-				}
-				console.log("isOrgUser========"+this.memberInfo.orgUser.isOrgUser );
+
                 this.shareAmountInfo = this.memberInfo.orgUser.shareAmount
                 this.weightInfo = this.memberInfo.orgUser.weight
                 this.rolesInfo = JSON.parse(this.memberInfo.orgUser.roles)
@@ -559,6 +556,7 @@
                 }else {
                     this.groupsInfo = []
                 }
+                console.log(  this.isOrgUser)
 
 
             },

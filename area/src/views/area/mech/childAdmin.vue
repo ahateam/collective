@@ -206,6 +206,8 @@
             }
             this.$area.getORGs(cnt, (res)=> {
                 this.tableData = this.$util.tryParseJson(res.data.c)
+                console.log('-----------------------')
+                console.log(res)
                 console.log(this.tableData)
 
                 if(this.tableData.length < this.count){

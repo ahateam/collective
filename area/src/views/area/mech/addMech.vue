@@ -116,6 +116,7 @@
                     </el-col>
                 </div>
             </el-col>
+
             <el-col :span="24">
                 <div class="row-box2">
                     <el-col :span="4">
@@ -123,7 +124,31 @@
                     </el-col>
                     <el-col :span="18">
                         <div class="text-box">
-                            <el-input v-model="shareAmount" placeholder="请输入组织机构总股份数"></el-input>
+                            <el-input type="number" v-model="shareAmount" placeholder="请输入组织机构总股份数"></el-input>
+                        </div>
+                    </el-col>
+                </div>
+            </el-col>
+            <el-col :span="24">
+                <div class="row-box2">
+                    <el-col :span="4">
+                        <div class="title-box">资源股（可选）:</div>
+                    </el-col>
+                    <el-col :span="18">
+                        <div class="text-box">
+                            <el-input  type="number" v-model="resourceShares" placeholder="请输入组织机构总资源股"></el-input>
+                        </div>
+                    </el-col>
+                </div>
+            </el-col>
+            <el-col :span="24">
+                <div class="row-box2">
+                    <el-col :span="4">
+                        <div class="title-box">资产股（可选）:</div>
+                    </el-col>
+                    <el-col :span="18">
+                        <div class="text-box">
+                            <el-input  type="number" v-model="assetShares" placeholder="请输入组织机构总资产股"></el-input>
                         </div>
                     </el-col>
                 </div>
@@ -214,6 +239,11 @@
                 districtList:[],
                 superiorList:[],
                 level:'',               //机构等级',
+
+                resourceShares:'',
+                assetShares:'',
+
+
             }
         },
         watch:{
@@ -428,6 +458,8 @@
                         shareAmount: this.shareAmount,
                         level: this.level,
                         superiorId: this.superiorId,
+                        resourceShares:this.resourceShares,
+                        assetShares:this.assetShares
                 };
                     console.log(cnt)
                     this.createORGApply(cnt)

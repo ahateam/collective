@@ -34,6 +34,14 @@
                             </div>
                             <div class="info-box">
                                 <div class="title">
+                                    股东用户资源股：
+                                </div>
+                                <div class="content">
+                                    {{oldData[0].orgUser.resourceShares}}
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <div class="title">
                                     股东用户身份证号：
                                 </div>
                                 <div class="content">
@@ -61,6 +69,14 @@
                                 </div>
                                 <div class="content">
                                     {{oldData[0].orgUser.shareAmount}}
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <div class="title">
+                                    股东用户资产股：
+                                </div>
+                                <div class="content">
+                                    {{oldData[0].orgUser.assetShares }}
                                 </div>
                             </div>
                             <div class="info-box">
@@ -108,6 +124,14 @@
                             </div>
                             <div class="info-box">
                                 <div class="title">
+                                    股东用户资源股：
+                                </div>
+                                <div class="content">
+                                    {{newData[0].orgUser.resourceShares}}
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <div class="title">
                                     股东用户身份证号：
                                 </div>
                                 <div class="content">
@@ -135,6 +159,14 @@
                                 </div>
                                 <div class="content">
                                     {{newData[0].orgUser.shareAmount}}
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <div class="title">
+                                    股东用户资产股：
+                                </div>
+                                <div class="content">
+                                    {{newData[0].orgUser.assetShares }}
                                 </div>
                             </div>
                             <div class="info-box">

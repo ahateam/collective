@@ -59,6 +59,26 @@
             </el-col>
             <el-col :span="24">
                 <el-col :span="4">
+                    <div class="title-box">机构总资源股:</div>
+                </el-col>
+                <el-col :span="18">
+                    <div class="text-box">
+                        {{info.resourceShares}}
+                    </div>
+                </el-col>
+            </el-col>
+            <el-col :span="24">
+                <el-col :span="4">
+                    <div class="title-box">机构总资产股:</div>
+                </el-col>
+                <el-col :span="18">
+                    <div class="text-box">
+                        {{info.assetShares}}
+                    </div>
+                </el-col>
+            </el-col>
+            <el-col :span="24">
+                <el-col :span="4">
                     <div class="title-box">集体经济代码证:</div>
                 </el-col>
                 <el-col :span="18">

@@ -41,23 +41,26 @@
                                     </div>
                                 </div>
                                 <div class="family-content-box" v-if="newUserList.length!=0">
-                                    <div class="family-user-list">
+                                    <div class="family-user-list" style="overflow: hidden">
                                         <div v-for="(item,index) in newUserList">
-                                            <el-tag type="warning" :class="userActive==index?'user-tag-active':'user-tag'" @click="changeUserBtn(index)">
+                                            <el-tag type="warning"
+                                                    :class="userActive==index?'user-tag-active':'user-tag'"
+                                                    style="margin: 10px"
+                                                    @click="changeUserBtn(index)">
                                                 用户{{index+1}}
                                             </el-tag>
                                         </div>
                                     </div>
 
-                                    <div style="width: auto;margin-top: 20px;line-height: 25px;margin-bottom: 10px">
+                                    <div style="width: auto;line-height: 25px;margin-bottom: 10px;overflow: hidden">
                                         <div class="list">
                                             <el-tag v-for="(item1,index1) in newUserList[userActive]"
                                                     :key="index1"
-                                                    style="cursor: pointer"
+                                                    style="cursor: pointer;margin: 10px;"
                                                     class="tag-box"
                                                     @click="setValBtn(item1,'user',userActive)">
                                                 用户{{userActive+1}}.{{item1.printingName}}
-                                            </el-tag>
+                                            </el-tag><div style="clear: both"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -772,13 +775,12 @@
         padding: 5px 10px;
         border: 1px solid #ddd;
         border-radius: 5px;
-        height: 100px;
     }
 
     .family-user-list {
         width: auto;
         line-height: 30px;
-        height: 30px;
+        padding: 10px;
     }
 
     .user-tag {

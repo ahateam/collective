@@ -33,6 +33,14 @@
                             </div>
                             <div class="info-box">
                                 <div class="title">
+                                    股东用户资源股：
+                                </div>
+                                <div class="content">
+                                    {{resourceShares}}
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <div class="title">
                                     股东用户身份证号：
                                 </div>
                                 <div class="content">
@@ -66,6 +74,14 @@
                             </div>
                             <div class="info-box">
                                 <div class="title">
+                                    股东用户资产股：
+                                </div>
+                                <div class="content">
+                                    {{assetShares}}
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <div class="title">
                                     股东用户股权证：
                                 </div>
                                 <div class="content">
@@ -86,8 +102,14 @@
         </el-row>
         <el-dialog title="修改该股东股权" :visible.sync="dialogFormVisible">
             <el-form>
-                <el-form-item label="新的股份数" label-width="150px">
-                    <el-input v-model="shareNumber" autocomplete="off"></el-input>
+                <el-form-item label="新的股份总数" label-width="150px">
+                    <el-input  type="number" v-model="shareNumber" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="资源股份总数" label-width="150px">
+                    <el-input  type="number"  v-model="resourceShares" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="资产股份总数" label-width="150px">
+                    <el-input  type="number"  v-model="assetShares" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -109,7 +131,8 @@
                 roleList:[],
                 dialogFormVisible:false,
                 shareNumber:'',
-
+                resourceShares:'',
+                assetShares:'',
             }
         },
         methods: {
@@ -123,9 +146,13 @@
                     data.oldData = []
                     data.newData = []
                     data.oldData[0] = this.info
+
                     let obj = JSON.parse(JSON.stringify(this.info))
                     obj.orgUser.shareAmount = parseFloat(this.shareNumber)
+                    obj.orgUser.resourceShares = parseFloat(this.resourceShares)
+                    obj.orgUser.assetShares = parseFloat(this.assetShares)
                     data.newData[0] = obj
+
                     this.$confirm('是否将新的股份数提交审批？')
                         .then(_ => {
                             let cnt = {
@@ -197,7 +224,10 @@
             this.info = this.$route.params.info
              if(this.info != undefined && this.info != ''){
                  this.shareNumber = this.info.orgUser.shareAmount
+                 this.resourceShares = this.info.orgUser.resourceShares
+                 this.assetShares = this.info.orgUser.assetShares
                   let cnt ={}
+                  console.log(this.info.orgUser)
                   // 请求职位列表
                   this.getSysORGUserRoles(cnt)
              }

@@ -93,6 +93,30 @@
             <el-col :span="24">
                 <div class="row-box2">
                     <el-col :span="4">
+                        <div class="title-box">总资源股:</div>
+                    </el-col>
+                    <el-col :span="18">
+                        <div class="text-box">
+                            <el-input  type="number" v-model="resourceShares" placeholder="请输入组织机构总资源股"></el-input>
+                        </div>
+                    </el-col>
+                </div>
+            </el-col>
+            <el-col :span="24">
+                <div class="row-box2">
+                    <el-col :span="4">
+                        <div class="title-box">总资产股:</div>
+                    </el-col>
+                    <el-col :span="18">
+                        <div class="text-box">
+                            <el-input  type="number" v-model="assetShares" placeholder="请输入组织机构总资产股"></el-input>
+                        </div>
+                    </el-col>
+                </div>
+            </el-col>
+            <el-col :span="24">
+                <div class="row-box2">
+                    <el-col :span="4">
                         <div class="title-box">集体经济代码证:</div>
                     </el-col>
                     <el-col :span="18">
@@ -170,7 +194,8 @@
 
                 shareAmount: '',        //总股份数
                 address:'' ,             //oss地址
-
+                assetShares:'',
+                resourceShares:'',
 
                 provinceList:[],
                 cityList:[],
@@ -384,10 +409,12 @@
                         address: this.mechAddress,
                         imgOrg: this.mechCodeImgUrl,
                         imgAuth: this.mechGrantImgUrl,
-                        shareAmount: this.shareAmount,
+                        shareAmount: Number(this.shareAmount),
                         level: this.level,
                         superiorId: this.superiorId,
-                        updateDistrict:this.isEditpro
+                        updateDistrict:this.isEditpro,
+                        resourceShares:Number(this.resourceShares),
+                        assetShares:Number(this.assetShares)
                     };
                     Object.assign(cnt,obj)
                     console.log(cnt)
@@ -419,7 +446,8 @@
             this.shareAmount = this.info.shareAmount
             this.mechCodeImgUrl = this.info.imgOrg
             this.mechGrantImgUrl = this.info.imgAuth
-
+            this.resourceShares = this.info.resourceShares
+            this.assetShares = this.info.assetShares
 
             //拼接oss地址前缀
             let date = new Date()

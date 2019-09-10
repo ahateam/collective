@@ -13,7 +13,7 @@ let client = new OSS({
     accessKeySecret: '89EMlXLsP13H8mWKIvdr4iM1OvdVxs',
     //测试服
     bucket: 'jiti-img-test'
-    //正式服
+    // 正式服
     // bucket: 'jitijingji-test1'
 });
 

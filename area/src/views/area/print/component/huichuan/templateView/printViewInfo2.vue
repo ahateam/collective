@@ -806,7 +806,7 @@
         padding: 5px 10px;
         border: 1px solid #ddd;
         border-radius: 5px;
-        height: 100px;
+
     }
 
     .family-user-list {
