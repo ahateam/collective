@@ -161,7 +161,7 @@
                 })
 
             },
-            //
+            
             getVoteOptions(cnt){
               this.$api.getVoteOptions(cnt,(res)=>{
                   if(res.data.rc == this.$util.RC.SUCCESS){

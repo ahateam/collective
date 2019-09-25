@@ -185,7 +185,7 @@
                 mechCode: '',
                 superiorId:'',
                 loading: false,
-
+                orgId:'',
                 mechCodeImg: '',
                 mechGrantImg: '',
 
@@ -399,6 +399,7 @@
                     }
 
                     let cnt = {
+
                         orgExamineId:this.info.id,
                         userId:localStorage.getItem('userId'),
                         name: this.mechName,
@@ -411,7 +412,8 @@
                         imgAuth: this.mechGrantImgUrl,
                         shareAmount: Number(this.shareAmount),
                         level: this.level,
-                        superiorId: this.superiorId,
+                        superiorId: localStorage.getItem('orgId'),
+                        orgId:this.orgId,
                         updateDistrict:this.isEditpro,
                         resourceShares:Number(this.resourceShares),
                         assetShares:Number(this.assetShares)
@@ -428,8 +430,9 @@
 
             this.info = this.$route.params.info
             this.isMech = this.$route.params.isMech
+            console.log('1111111')
             console.log(this.info)
-
+            this.orgId = this.info.id
 
             this.mechName = this.info.name
             this.level = this.info.level

@@ -136,6 +136,7 @@
                                     rows="1"
                                     autosize
                             />
+
                             <van-collapse-item title="四至边界" name="4" v-if="info.boundary!= '{}'">
                                 <van-cell-group>
                                     <van-field

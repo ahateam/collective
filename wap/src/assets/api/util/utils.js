@@ -122,11 +122,6 @@ api.getVoteDetail = function (cnt,callback) {
 api.getVoteOptions = function (cnt,callback) {
     util.call(baseUrl+'/vote/getVoteOptions', cnt, callback)
 }
-//获取用户的选票
-api.getVoteTicket = function (cnt,callback) {
-    util.call(baseUrl+'/vote/getVoteTicket', cnt, callback)
-}
-
 
 //用户投票
 api.vote = function (cnt,callback) {

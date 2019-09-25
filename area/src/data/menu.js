@@ -114,7 +114,7 @@ const  areaMenu=[
         ]
     },
     {
-        path:'/areaPrintBook',
+        path:'',
         title:'打印证书',
         icon:'icon-shenpi',
         child:[
@@ -125,6 +125,10 @@ const  areaMenu=[
             {
                 path:'/areaPrintView',
                 title:'打印证书'
+            },
+            {
+                path:'/exportList',
+                title:'批量导出'
             }
         ]
     },

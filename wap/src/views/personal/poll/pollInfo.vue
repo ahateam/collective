@@ -19,7 +19,6 @@
                             <span v-if="status =='0'" style="color: #909399">表决失效</span>
                             <span v-if="status =='1'" style="color: #67C23A">表决成功</span>
                             <span v-if="status =='2'" style="color: #F56C6C">表决失败</span>
-
                         </div>
                         <div class="vote-item-title-box">
                             {{info.title}}
@@ -440,8 +439,8 @@
                     userId: JSON.parse(localStorage.getItem('user')).id
                 }
 
-                this.$api.getVoteTicket( cnt1,  (res1)=> {
 
+                this.$api.getVoteTicket( cnt1,  (res1)=> {
                     if (res1.data.rc == this.$util.RC.SUCCESS) {
 
                         if (JSON.parse(res1.data.c) == null) {        //未投票的

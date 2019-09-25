@@ -11,7 +11,6 @@
             @load="onLoad(0)"
           >
 
-
             <div v-if="voteList.length>0">
               <div v-for="(item,index) in voteList" :key="index">
                 <div class="vote-item-box">

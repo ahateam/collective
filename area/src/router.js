@@ -66,6 +66,11 @@ const areaPrintView =()=>import('./views/area/print/printView')
 const areaFamilyList = ()=>import('./views/area/user/familyList')
 const areaPrintViewInfo =()=> import('./views/area/print/printViewInfo')
 
+//批量打印数据导出
+const exportList = ()=>import('./views/area/export/exportList')
+
+
+
 
 Vue.use(Router)
 
@@ -346,6 +351,11 @@ export default new Router({
                 name:'areaPrintViewInfo',
                 component:areaPrintViewInfo
             },
+            {
+                path:'/exportList',
+                name:'exportList',
+                component:exportList
+            }
 
         ]
     },

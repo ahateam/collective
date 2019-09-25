@@ -88,7 +88,7 @@
           }
         },
         methods:{
-            onLoad() {          //分页加载
+            onLoad() {
                 // 异步更新数据
                     this.offset = this.offset+this.count
                     let orgId = JSON.parse(localStorage.getItem('user')).orgId
@@ -245,7 +245,7 @@
                     groupId:102
                 }
                 let obj={
-                    keyword: "全部资产"
+                    keyword: "全部资产",
                 }
                 this.groups.unshift(obj1)
                 this.groups.unshift(obj)
