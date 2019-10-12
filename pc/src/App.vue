@@ -9,4 +9,7 @@
     text-decoration:none;
     color:#333;
   }
+  .clear-box{
+    clear: both;
+  }
 </style>

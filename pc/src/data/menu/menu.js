@@ -21,6 +21,11 @@ const  menu =[
                 path:'/mechanism',
                 title:'机构管理',
                 icon:'',
+            },
+            {
+                path:'/editSuperiorOrg',
+                title:'更换上级',
+                icon:''
             }
         ]
     },

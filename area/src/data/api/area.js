@@ -359,7 +359,18 @@ api.createExportTask = function (cnt,callback) {
 api.createExportTask = function (cnt,callback) {
     util.call(baseUrl+'/export/createExportTask ', cnt, callback)
 }
+//获取批量导出的任务列表
+api.getExportTaskLikeTitle = function (cnt,callback) {
+    util.call(baseUrl+'/export/getExportTaskLikeTitle ', cnt, callback)
+}
 
-
+//执行导入
+api.downLoadExcel = function (cnt,callback) {
+    util.call(baseUrl+'/export/downLoadExcel ', cnt, callback)
+}
+//获取导出任务详情
+api.getExportTaskById = function (cnt,callback) {
+    util.call(baseUrl+'/export/getExportTaskById ', cnt, callback)
+}
 export default api
 

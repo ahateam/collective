@@ -1,0 +1,4 @@
+别名：jitiapp
+打包的私钥：Aa123456Aa
+应用签名:5c3f382bc0e4781e8aff45961d328c43
+应用包名：com.xhj.jiti

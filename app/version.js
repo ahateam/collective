@@ -1,8 +1,8 @@
 
     var Version ={
-        version:106,
-        android:"http://jiti-online.oss-cn-hangzhou.aliyuncs.com/app/106/android/jiti.apk",
-        ios:"http://jiti-online.oss-cn-hangzhou.aliyuncs.com/app/106/ios/jiti.ipa"
+        version:109,
+        android:"http://jiti-online.oss-cn-hangzhou.aliyuncs.com/app/109/android/jiti.apk",
+        ios:"http://jiti-online.oss-cn-hangzhou.aliyuncs.com/app/109/ios/jiti.ipa"
     }
 
    var swiperData=[

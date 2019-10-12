@@ -468,7 +468,6 @@
                 }
                 this.$api.getORGDistrict(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
-
                         this.provinceList.push( this.$util.tryParseJson(res.data.c).province)
                         this.cityList.push(this.$util.tryParseJson(res.data.c).city)
                         this.districtList.push(this.$util.tryParseJson(res.data.c).district)

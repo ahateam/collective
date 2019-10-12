@@ -76,7 +76,8 @@
                     } else {
                         this.tableData = []
                     }
-
+                        console.log(JSON.parse(localStorage.getItem('orgUser')))
+                         console.log(this.tableData)
                     if(this.tableData.length <this.count){
                         this.pageOver =true
                     }else{
@@ -143,7 +144,10 @@
                 level:this.$constData.orgLevel[3].key,
                 userId:localStorage.getItem('userId')
             }
+
             this.getUserORGs(cnt)
+
+       
             loading.close()
         }
     }

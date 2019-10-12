@@ -349,6 +349,7 @@
 
             let info = JSON.parse(localStorage.getItem('voteInfo'))
             console.log(info)
+            
             this.voteId = info.id
             this.template= info.template
             this.title = info.title

@@ -39,6 +39,7 @@ const  tagList  = ()=>import('./views/admin/article/tagList')
 const  articleAdd = ()=>import('./views/admin/article/articleAdd')
 const  asset = ()=>import('./views/admin/assets/asset')
 const applyMech  = ()=>import('./views/admin/mechanism/applyMech')
+const editSuperiorOrg = ()=>import('./views/admin/mechanism/editSuperiorOrg')
 const permission = ()=>import('./views/admin/permission/permission')
 const assetImport =()=>import('./views/admin/assets/assetImport')
 const assetImportInfo =()=>import('./views/admin/assets/assetImportInfo')
@@ -97,6 +98,11 @@ export default new Router({
                     path:'/mechanism',
                     name:'mechanism',
                     component:mechanism,
+                },
+                {
+                    path:'/editSuperiorOrg',
+                    name:'editSuperiorOrg',
+                    component:editSuperiorOrg
                 },
 
                 {

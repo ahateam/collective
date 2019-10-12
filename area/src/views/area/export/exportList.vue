@@ -9,17 +9,33 @@
     </el-row>
 
     <el-row class="row-box1">
+      <el-row>
+        <el-form :inline="true" class="demo-form-inline">
+          <el-form-item label="搜索组织">
+            <el-input v-model="searchData" placeholder="请输入组织名称搜索" style="width:400px"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="searchBtn">搜索</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
       <template v-if="tableData.length>0">
         <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="name" label="机构名称" width="400"></el-table-column>
-          <el-table-column prop="code" label="组织机构代码"></el-table-column>
-          <el-table-column prop="address" label="机构具体层级"></el-table-column>
-          <el-table-column prop="examine" label="申请状态" :formatter="statusFliter"></el-table-column>
+          <el-table-column prop="title" label="机构名称" width="400"></el-table-column>
+          <el-table-column prop="createTime" label="执行时间" :formatter="timerFliter"></el-table-column>
+          <el-table-column prop="status" label="导出数据文件状态"  >
+              <template slot-scope="scope">
+                  <span style="color:#67c23a" v-if="scope.row.status == 1">{{statusFliter(scope.row.status)}}</span>
+                    <span style="color:#409EFF"  v-if="scope.row.status == 0">{{statusFliter(scope.row.status)}}</span>
+                      <span style="color:#F56C6C" v-if="scope.row.status == 3">{{statusFliter(scope.row.status)}}</span>
+              </template>
+           
+
+          </el-table-column>
 
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="infoBtn(scope.row)" type="text" size="small">详情</el-button>
-              <el-button type="text" size="small" @click="editStatusBtn(scope.row)">修改审核</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -69,17 +85,40 @@ export default {
   data() {
     return {
       tableData: [],
+      count: 10,
       page: 1,
-      pageOver: false,
+      pageOver: true,
       dialogFormVisible: false,
       checkOrgInfo: "",
-      checkIndex: 0,
+      checkIndex: "",
       orgList: [],
       orgPage: 1,
-      orgCount: 500
+      orgCount: 500,
+      searchData: ""
     };
   },
   methods: {
+    /** 过滤器 */
+    timerFliter(row, col, value) {
+      let dataTime = new Date(value);
+      let dataTime2 =
+        dataTime.toLocaleDateString() +
+        " " +
+        dataTime.toLocaleTimeString("chinese", { hour12: false });
+      return dataTime2;
+    },
+    /** 状态*/
+    statusFliter(value) {
+      if (value == 0) {
+        return "等待生成文件";
+      } else if (value == 1) {
+        return "数据已生成文件";
+      } else if (value == 2) {
+        return "数据正在生成文件，请等待...";
+      }
+    },
+
+    /** 获取所有的组织列表 */
     getOrgs() {
       let cnt = {
         count: 500,
@@ -87,45 +126,126 @@ export default {
         superiorId: localStorage.getItem("orgId")
       };
       this.$area.getORGs(cnt, res => {
-        console.log(res);
         let arr = [];
-        console.log(res.data.rc == this.$util.RC.SUCCESS);
         if (res.data.rc == this.$util.RC.SUCCESS) {
           arr = this.$util.tryParseJson(res.data.c);
-          console.log(arr);
         } else {
           arr = [];
         }
 
         this.orgList = this.orgList.concat(arr);
-        console.log(this.orgList);
+
         if (arr.length == this.orgCount) {
           this.orgPage = this.orgPage + 1;
           this.getOrgs();
         }
       });
     },
-
+    /**创建一个导出数据的任务 */
     addExport() {
       this.dialogFormVisible = true;
     },
+    /**选择一个组织进行导出 */
     checkItem() {
       this.checkOrgInfo = this.orgList[this.checkIndex];
     },
-
+    /** 创建导出任务的请求 */
     createExport() {
       let cnt = {
-          title: this.checkOrgInfo.name, // String 任务标题
-          orgId: this.checkOrgInfo.id, // Long 组织编号
-          userId: localStorage.getItem('userId') // Long 用户编号
+        areaId: localStorage.getItem("orgId"),
+        title: this.checkOrgInfo.name, // String 任务标题
+        orgId: this.checkOrgInfo.id, // Long 组织编号
+        userId: localStorage.getItem("userId") // Long 用户编号
+      };
+      this.$area.createExportTask(cnt, res => {
+        if (res.data.rc == this.$util.RC.SUCCESS) {
+          this.$message({
+            type: "success",
+            message: "已开始执行导出数据"
+          });
         }
-        this.$area.createExportTask(cnt,(res)=>{
-          console.log(res)
-        })
-    }
+      
+        this.dialogFormVisible = false
+        this.searchData = ''
+        this.checkIndex =''
+        this.changePage(1)
+      });
+    },
 
+    /**获取所有的导出列表 */
+    getExportTaskLikeTitle(cnt) {
+      this.$area.getExportTaskLikeTitle(cnt, res => {
+        if (res.data.rc == this.$util.RC.SUCCESS) {
+          this.tableData = this.$util.tryParseJson(res.data.c);
+        } else {
+          this.tableData = [];
+        }
+        if (this.tableData.length < this.count) {
+          this.pageOver = true;
+        } else {
+          this.pageOver = false;
+        }
+      });
+    },
+
+    /**分页 */
+    changePage(page) {
+      this.page = page;
+      let cnt = {}
+      if(this.searchData == ''){
+           cnt = {
+          areaId: localStorage.getItem("orgId"),
+          count: this.count,
+          offset: (this.page - 1) * this.count
+        }
+      }else{
+         cnt = {
+          areaId: localStorage.getItem("orgId"),
+          title:this.searchData,
+          count: this.count,
+          offset: (this.page - 1) * this.count
+         }
+      }
+      this.getExportTaskLikeTitle(cnt);
+    },
+
+    /** 导出详情 */
+    infoBtn(info) {
+      this.$router.push({
+        path: "/exportInfo",
+        name: "exportInfo",
+        params: {
+          info: info
+        }
+      });
+    },
+    searchBtn() {
+      let cnt = {};
+      if (this.searchData == "") {
+        cnt = {
+          areaId: localStorage.getItem("orgId"),
+          count: this.count,
+          offset: (this.page - 1) * this.count
+        }
+      }else{
+          cnt = {
+          areaId: localStorage.getItem("orgId"),
+          title:this.searchData,
+          count: this.count,
+          offset: (this.page - 1) * this.count
+        }
+      }
+          this.getExportTaskLikeTitle(cnt);
+    }
   },
   mounted() {
+    let cnt = {
+      areaId: localStorage.getItem("orgId"),
+      count: this.count,
+      offset: (this.page - 1) * this.count
+    };
+    this.getExportTaskLikeTitle(cnt);
+
     this.getOrgs();
   }
 };

@@ -68,7 +68,7 @@ const areaPrintViewInfo =()=> import('./views/area/print/printViewInfo')
 
 //批量打印数据导出
 const exportList = ()=>import('./views/area/export/exportList')
-
+const exportInfo =()=>import('./views/area/export/exportInfo')
 
 
 
@@ -355,6 +355,11 @@ export default new Router({
                 path:'/exportList',
                 name:'exportList',
                 component:exportList
+            },
+            {
+                path:'/exportInfo',
+                name:'exportInfo',
+                component:exportInfo
             }
 
         ]

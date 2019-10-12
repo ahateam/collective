@@ -12,9 +12,9 @@ let client = new OSS({
     accessKeyId: 'LTAIJ9mYIjuW54Cj',
     accessKeySecret: '89EMlXLsP13H8mWKIvdr4iM1OvdVxs',
     //测试服
-    bucket: 'jiti-img-test'
+    // bucket: 'jiti-img-test'
     // 正式服
-    // bucket: 'jitijingji-test1'
+    bucket: 'jitijingji-test1'
 });
 
 export default {
