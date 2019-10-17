@@ -90,6 +90,10 @@ api.getListImportTask = function (cnt,callback) {
 api.createImportTask = function (cnt,callback) {
     util.call(baseUrl+'/imp/createImportTask', cnt, callback)
 }
+//设置下级机构用户为该管理员
+api.editORGUser = function (cnt,callback) {
+    util.call(baseUrl+'/org/editORGUser', cnt, callback)
+}
 //创建成员导入任务
 api.createImportTask = function (cnt,callback) {
     util.call(baseUrl+'/imp/createImportTask', cnt, callback)
@@ -141,6 +145,18 @@ api.importAsset = function (cnt,callback) {
 
 api.getORGs = function (cnt,callback) {
     util.call(baseUrl+'/org/getORGs', cnt, callback)
+}
+//区级查询组织申请列表-搜索
+api.getExamineByORGNameDistrict = function (cnt,callback) {
+    util.call(baseUrl+'/org/getExamineByORGNameDistrict', cnt, callback)
+}
+//区级查询下级组织列表-搜索
+api.getSubORGByLikeORGName = function (cnt,callback) {
+    util.call(baseUrl+'/org/getSubORGByLikeORGName', cnt, callback)
+}
+//根据组织名称查询用户的组织申请列表-搜索
+api.getORGExamineByUserANDLikeORGName= function (cnt,callback) {
+    util.call(baseUrl+'/org/getORGExamineByUserANDLikeORGName', cnt, callback)
 }
 
 //下级机构成员列表

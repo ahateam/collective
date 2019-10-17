@@ -176,7 +176,7 @@
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="memberPostInfoModal = false">取 消</el-button>
-                <el-button type="primary" @click="memberPostInfoModal=false":disabled="editMember ==0">返回列表</el-button>
+                <el-button type="primary" @click="memberPostInfoModal=false" :disabled="editMember ==0">返回列表</el-button>
                 <el-button type="primary" @click="editORGUserBtn" v-if="editMember ==1">确认修改</el-button>
             </div>
         </el-dialog>

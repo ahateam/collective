@@ -15,7 +15,7 @@
                         登陆手机:
                     </div>
                     <div class="admin-text">
-                        <el-input type="text" v-model="mobile" placeholder="请输入管理员手机号"></el-input>
+                        <el-input type="text" v-model="mobile" placeholder="请输入手机号/身份证号"></el-input>
                     </div>
                 </div>
                 <div class="admin-pwd">

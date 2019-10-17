@@ -209,19 +209,19 @@
                 if(oldVal != ''){
                     this.city = ''
                     this.district = ''
-                    this.isEditpro = true
+         
                 }
 
             },
             city(val,oldVal){
                 if(oldVal != '') {
                     this.district = ''
-                    this.isEditpro = true
+                    
                 }
             },
             district(val,oldVal){
                 if(oldVal != ''){
-                    this.isEditpro = true
+                    console.log('oldval')
                 }
             }
         },
@@ -425,12 +425,12 @@
 
         },
         mounted(){
-
+  const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
 
             this.info = this.$route.params.info
             this.isMech = this.$route.params.isMech
-            console.log(this.info)
 
+            this.isEditpro = this.info.updateDistrict
 
             this.mechName = this.info.name
             this.level = this.info.level
@@ -474,7 +474,7 @@
                         this.province =  this.provinceList[0].id
                         this.city =  this.cityList[0].id
                         this.district = this.districtList[0].id
-                        this.isEditpro = false
+                    
                         console.log( this.provinceList[0].id)
                     }
                 })
@@ -490,12 +490,12 @@
                         this.province =  this.provinceList[0].id
                         this.city =  this.cityList[0].id
                         this.district = this.districtList[0].id
-                        this.isEditpro = false
+                 
                         console.log(  this.provinceList[0])
                     }
                 })
             }
-
+        loading.close()
         },
     }
 </script>

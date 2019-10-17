@@ -69,6 +69,7 @@ export default {
     getOrgList() {
       let cnt = {
         level: 4, // Byte 组织编号
+        superiorId:this.superiorORG.id,
         count: 500, // Integer
         offset: 0 // Integ
       };
@@ -82,10 +83,9 @@ export default {
       this.showModel = true;
     },
     setSuperior() {
-      console.log(this.info);
-      console.log("22222");
       let cnt = {
-        userId: localStorage.getItem("userId"),
+        userId: localStorage.getItem('userId'),
+        orgId:Number(localStorage.getItem('orgId')),
         name: this.info.name,
         code: this.info.code,
         province: this.address.province.id,
@@ -102,7 +102,6 @@ export default {
         superiorId:this.Superior,
         updateDistrict: true
       };
-
       this.$api.createORGApply(cnt, res => {
         if (res.data.rc == this.$util.RC.SUCCESS) {
           this.$message({
