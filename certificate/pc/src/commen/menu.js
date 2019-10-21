@@ -10,6 +10,12 @@ const  menu =[
         icon:'course_shouye',
         child:[]
     },
+	{
+	    path:'/listPage',
+	    title:'选择机构',
+	    icon:'course_shouye',
+	    child:[]
+	},
 ]
 
 
