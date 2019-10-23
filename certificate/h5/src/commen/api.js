@@ -10,19 +10,10 @@ console.log('开始调用ctrl');
 
 
 //机构列表
-api.getORGList = function (cnt,callback) {
-    util.call(baseUrl+'/scft/getORGList', cnt, callback)
-}
-//机构下的户列表
-api.getFamilyMasterList = function (cnt,callback) {
-    util.call(baseUrl+'/scft/getFamilyMasterList', cnt, callback)
-}
-    
-//获取家庭户详情
 api.getFamilyInfo = function (cnt,callback) {
     util.call(baseUrl+'/scft/getFamilyInfo', cnt, callback)
 }
-	
+
 
 
 

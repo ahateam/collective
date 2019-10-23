@@ -9,7 +9,6 @@
 * */
 const grade={teacher:'0',admin:'1',college:'2'}
 
-
 export default {
     grade
 }

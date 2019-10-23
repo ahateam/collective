@@ -3,9 +3,14 @@ import Router from 'vue-router'
 import home from './views/home'
 import login from './views/login'
 
-const dashboard = () => import('./views/dashboard')
-const listPage = () => import('./views/listPage/ORGListPage')
 
+import dashboard from './views/dashboard'
+import createCode from './views/code/createCode'
+import orgList from './views/code/orgList'
+import familyList from './views/code/familyList'
+import codeList from './views/code/codeList'
+import codeInfo from './views/code/codeInfo'
+import createRQ from './views/code/createRQ'
 
 Vue.use(Router)
 
@@ -29,10 +34,35 @@ export default new Router({
 					component: dashboard
 				},
 				{
-					path: '/listPage',
-					name: 'listPage',
-					component: listPage
+					path: '/createCode',
+					name: 'createCode',
+					component: createCode
 				},
+				{
+					path: '/orgList',
+					name: 'orgList',
+					component: orgList
+				},
+				{
+					path: '/familyList',
+					name: 'familyList',
+					component: familyList
+				},
+				{
+					path: '/codeList',
+					name: 'codeList',
+					component: codeList
+				},
+				{
+					path: '/codeInfo',
+					name: 'codeInfo',
+					component: codeInfo
+				},
+				{
+					path:'/createRQ',
+					name:'createRQ',
+					component:createRQ
+				}
 			]
 		},
 		{

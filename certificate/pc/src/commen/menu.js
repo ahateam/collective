@@ -11,11 +11,17 @@ const  menu =[
         child:[]
     },
 	{
-	    path:'/listPage',
-	    title:'选择机构',
+	    path:'/orgList',
+	    title:'生成股权证',
 	    icon:'course_shouye',
 	    child:[]
-	},
+    },
+    {
+        path:'/createCode',
+        title:'生成二维码',
+        icon:'course_shouye',
+        child:[]
+    }
 ]
 
 

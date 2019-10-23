@@ -9,9 +9,16 @@
   },
   "dependencies": {
     "ahaapi": "^3.0.1",
+    "ali-oss": "^6.1.1",
     "core-js": "^2.6.5",
     "element-ui": "^2.7.2",
+    "file-saver": "^2.0.2",
+    "html2canvas": "^1.0.0-rc.5",
+    "jszip": "^3.2.2",
+    "qrcanvas": "^3.0.4",
+    "qrcodejs2": "0.0.2",
     "vue": "^2.6.6",
+    "vue-qr": "^2.1.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
