@@ -9,7 +9,6 @@
               filterable
               placeholder="请选择或搜索一个组织"
               style="width:100%"
-              @change="getCode()"
             >
               <el-option
                 v-for="(item,index) in orgList"
@@ -76,7 +75,7 @@ export default {
 
   data() {
     return {
-      code:'',
+      
       familyNumber: "",
       start: "",
       end: "",
@@ -100,16 +99,16 @@ export default {
     FileSaver
   },
   methods: {
-    getCode(){
-      console.log(this.orgId)
-      this.orgList.forEach((item)=>{
-        if(item.id == this.orgId){
-          this.code = item.code
-          console.log(this.code)
-          return
-        }
-      })
-    },
+    // getCode(){
+    //   console.log(this.orgId)
+    //   this.orgList.forEach((item)=>{
+    //     if(item.id == this.orgId){
+    //       this.code = item.code
+    //       console.log(this.code)
+    //       return
+    //     }
+    //   })
+    // },
     //生成批量数据
     createBtn() {
       this.isShowData = true;
@@ -145,7 +144,7 @@ export default {
     //压缩图片
     handleBatchDownload() {
       const zip = new JSZip();
-      const zipName = this.code + ".zip";
+      const zipName =   "集体二维码.zip";
       this.dataUrls.forEach(item => {
         const fileName = item.fileName + ".jpg";
         let arrData = item.picData.split(",");
