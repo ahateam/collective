@@ -210,6 +210,7 @@
 
             setUserBtn(row){
                 console.log(row)
+				this.$store.state.nowPage = this.page
                 this.$router.push({
                     path:'/share',
                     name:'share',
@@ -237,13 +238,14 @@
             },
         },
         mounted(){
+			this.page =this.$store.state.nowPage 
             let cnt ={}
             // 请求职位列表
             this.getSysORGUserRoles(cnt)
             let cnt1 = {
                 orgId: localStorage.getItem('orgId'), // Long 组织编号
                 count: this.count, // Integer
-                offset: this.offset, // Integer
+                offset: (this.page-1)*this.count, // Integer
             };
             this.getORGUsers(cnt1)
         }

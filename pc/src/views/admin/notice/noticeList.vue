@@ -12,7 +12,14 @@
                     <el-button type="primary" >新建公告</el-button>
                 </router-link>
             </el-col>
-
+			
+			<el-row class="row-search" style="margin-top: 50px;">
+				<el-col :span="12">
+					<el-input placeholder="请输入公告标题查询" v-model="title">
+						<el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+					</el-input>
+				</el-col>
+			</el-row>
             <el-col :span="24" style="margin-top: 15px">
                 <template>
                     <el-table
@@ -66,6 +73,7 @@
                 count:10,
                 page:1,
                 pageOver:false,
+				title:''
             }
         },
         methods:{
@@ -123,6 +131,29 @@
                     this.getNotice(cnt)
                 })
             },
+			
+			//搜索公告名称
+			searchBtn() {
+				this.page = 1
+				let cnt = {}
+				if (this.title) {
+					cnt = {
+						orgId: localStorage.getItem('orgId'),
+						title: this.title,
+						count: this.count,
+						offset: (this.page - 1) * this.count,
+					}
+				} else {
+					cnt = {
+						orgId: localStorage.getItem('orgId'),
+						count: this.count,
+						offset: (this.page - 1) * this.count,
+					}
+				}
+				this.getNotice(cnt)
+			},
+			
+			
             changePage(page){
                 this.page = page
                 let cnt = {

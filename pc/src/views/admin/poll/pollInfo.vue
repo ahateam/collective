@@ -527,6 +527,7 @@
                             message: '修改投票成功',
                             type: 'success'
                         })
+						
                         this.isVote = 1
                     } else {
                         this.$message.error('修改失败,输入有误')

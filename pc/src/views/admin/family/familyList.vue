@@ -195,6 +195,7 @@
                 }
             },
             separateBtn(row) {
+				this.$store.state.nowPage = this.page
                 let routerPath = this.$route.params.routerPath
                 console.log(routerPath)
                 console.log(routerPath == this.$constData.familyType[2].val)
@@ -259,10 +260,11 @@
 
         },
         mounted() {
+			this.page = this.$store.state.nowPage
             let cnt = {
                 orgId: localStorage.getItem('orgId'),
                 count: this.count, // Integer <选填> 查询数
-                offset: this.offset, // Integer <选填> 开始位置
+                offset: (this.page-1)*this.count, // Integer <选填> 开始位置
             }
             this.getFamilyAll(cnt)
         }

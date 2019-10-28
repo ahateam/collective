@@ -61,7 +61,6 @@
                 page:1,
                 pageOver:false,
                 count:10,
-                offset:0,
             }
         },
         methods:{
@@ -105,7 +104,7 @@
                 let cnt = {
                     offset:(this.page-1)*this.count,
                     count:this.count,
-                    level:this.$constData.orgLevel[2].key,
+                    level:this.$constData.orgLevel[3].key,
                     userId:localStorage.getItem('userId')
                 }
                 this.getUserORGs(cnt)
@@ -119,7 +118,7 @@
                 this.$api.getORGDistrict(cnt,(res)=>{
                     console.log(res)
                 })
-
+				this.$store.state.nowPage = this.page
                 this.$router.push({
                     path:'/mechInfo',
                     name:'mechInfo',
@@ -127,6 +126,7 @@
                 })
             },
             infoMoney(info){
+				this.$store.state.nowPage = this.page
                 this.$router.push({
                     path:'/mechMoney',
                     name:'mechMoney',
@@ -137,9 +137,10 @@
             }
         },
         mounted(){
+			this.page = this.$store.state.nowPage
             const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let cnt = {
-                offset:this.offset,
+                offset:(this.page-1)*this.count,
                 count:this.count,
                 level:this.$constData.orgLevel[3].key,
                 userId:localStorage.getItem('userId')

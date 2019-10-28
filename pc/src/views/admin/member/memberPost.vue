@@ -79,8 +79,8 @@
 
                         <p>
                             当前第 {{page}} 页
-                            <el-button type="primary" size="mini"  :disabled="page==1"  @click="changePage(0)">上一页</el-button>
-                            <el-button type="primary" size="mini" :disabled="pageOver ==true"  @click="changePage(1)">下一页</el-button>
+                            <el-button type="primary" size="mini"  :disabled="page==1"  @click="changePage(page-1)">上一页</el-button>
+                            <el-button type="primary" size="mini" :disabled="pageOver ==true"  @click="changePage(page+1)">下一页</el-button>
                         </p>
                     </el-col>
 
@@ -318,7 +318,12 @@
                     }else{
                         this.$message.error('修改失败')
                     }
-                    this.$router.push('/page')
+					
+					this.memberInfoModal =false
+					this.changePage(this.page)
+					
+					
+                    // this.$router.push('/page')
                 })
             },
             //修改组织用户信息-职务修改
@@ -329,7 +334,8 @@
                     }else{
                         this.$message.error('修改失败')
                     }
-                    this.$router.push('/page')
+                this.memberPostInfoModal =false
+                this.changePage(this.page)
                 })
             },
             //修改成员的身份证号码
@@ -337,11 +343,11 @@
                 this.$api.editUserIdNumber(cnt,(res)=>{
                     if(res.data.rc == this.$util.RC.SUCCESS){
                         this.$message.success('修改成功')
-                        this.$router.push('/page')
                     }else{
                         this.$message.error('修改失败')
-                        this.$router.push('/page')
                     }
+					this.memberInfoModal = false
+					this.changePage(this.page)
                 })
             },
             //请求系统角色列表
@@ -604,16 +610,10 @@
 
             },
             //上一页下一页
-            changePage(key) {
+            changePage(page) {
 
-
-                if (key == 0) {   //上一页
-                    this.page = this.page - 1
-                } else {          //下一页
-                    this.page = this.page + 1
-                }
-
-                let offset = (this.page - 1) * this.count
+			this.page = page
+         
 
 
                 //请求所有的用户的分页
@@ -622,7 +622,7 @@
                         let cnt = {
                             orgId: localStorage.getItem('orgId'),
                             count: this.count,
-                            offset:offset
+                            offset:(this.page - 1) * this.count
                         }
                         this.getORGUsers(cnt)
                     }else{                          //没有选中的职务 有搜索值
@@ -630,7 +630,7 @@
                             orgId: localStorage.getItem('orgId'),
                             realName: this.searchData,
                             count: this.count, // Integer
-                            offset:offset, // Integer
+                            offset:(this.page - 1) * this.count, // Integer
                         };
                         this.getORGUsersLikeRealName(cnt)
                     }
@@ -642,7 +642,7 @@
                             orgId: localStorage.getItem('orgId'), // Long 组织编号
                             isOrgUser: false, // Boolean 内部为true,外部为false
                             count: this.count, // Integer
-                            offset: offset, // Integer
+                            offset: (this.page - 1) * this.count, // Integer
                         };
                         this.getOrgUserListByIsOrgUser(cnt,0)
 
@@ -651,7 +651,7 @@
                             orgId: localStorage.getItem('orgId'), // Long 组织编号
                             isOrgUser: true, // Boolean 内部为true,外部为false
                             count: this.count, // Integer
-                            offset: offset, // Integer
+                            offset: (this.page - 1) * this.count, // Integer
                         };
                         this.getOrgUserListByIsOrgUser(cnt,1)
 
@@ -661,7 +661,7 @@
                             orgId: localStorage.getItem('orgId'), // Long 组织编号
                             roles: roles, // JSONArray <选填> 角色权限列表,JSONArray格式
                             count: this.count, // Integer
-                            offset: offset, // Integer
+                            offset: (this.page - 1) * this.count, // Integer
                         };
                         let cnt1 = {
                             orgId: localStorage.getItem('orgId'), // Long 组织id
@@ -748,7 +748,7 @@
             },
             //修改用户基本信息
             editUserBtn(){
-                let that = this
+           
                 let cnt = {
                     userId: this.userIdInfo,
                     mobile:this.mobileInfo,
@@ -790,7 +790,6 @@
             },
             //修改用户身份证号
             editUserNumber(){
-                let that = this
                 let cnt = {
                     adminUsreId: localStorage.getItem('userId'),
                     userId: this.userIdInfo,

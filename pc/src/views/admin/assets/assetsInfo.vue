@@ -253,6 +253,10 @@
             </el-row>
 
         </el-row>
+		
+		<router-link to="/asset">
+		    <el-button  style="text-align: center;">返回列表</el-button>
+		</router-link>
         <el-row class="row-btn" v-if="isEdit == true">
             <el-button type="primary" @click="editBtn">确认修改</el-button>
         </el-row>
@@ -328,6 +332,11 @@
 </script>
 
 <style scoped lang="scss">
+	.row-btn-01{
+		float: right;
+		margin-right: 20px;
+		margin-top: 20px;
+	}
     .row-btn{
         padding-top: 2rem;
         padding-bottom: 2rem;

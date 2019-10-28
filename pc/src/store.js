@@ -14,7 +14,11 @@ export default new Vuex.Store({
           familyKey:0,
           moveFamilyNumber1:'',
           moveFamilyNumber2:'',
-      }
+      },
+	  //分页
+	  nowPage:1,
+	  nowType:1,
+	  nowStatus:0
   },
   mutations: {
 
