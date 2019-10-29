@@ -111,7 +111,7 @@
             },
             //详情跳转
             info(row,isMech){
-
+			this.$store.state.nowPage = this.page
                 let cnt={
                     orgId: row.id,
                 }
@@ -127,6 +127,7 @@
             }
         },
         mounted(){
+			this.page = this.$store.state.nowPage
             const loading = this.$loading({lock: true, text: '拼命加载中...', spinner: 'el-icon-loading'})
             let cnt = {
                 offset:this.offset,

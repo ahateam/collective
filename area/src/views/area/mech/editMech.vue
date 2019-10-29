@@ -386,6 +386,7 @@
                 this.doUpload(this.mechGrantImg,'grant')
             },
             editBtn(){
+				this.$store.state.nowPage = 1
                 if (this.mechName == '' || this.province == '' || this.mechAddress == '' || this.mechCode == '' || this.city == '' || this.district == '') {
                     this.$message({
                         showClose: true,
@@ -426,7 +427,7 @@
 
         },
         mounted(){
-
+			this.page = this.$store.state.nowPage
 
             this.info = this.$route.params.info
             this.isMech = this.$route.params.isMech

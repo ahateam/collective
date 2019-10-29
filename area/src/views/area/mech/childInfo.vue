@@ -101,6 +101,7 @@
         },
         methods: {
             edit() {
+				this.$store.state.nowPage = 1
                 this.$router.push({
                     path: '/areaEditMech',
                     name: 'areaEditMech',

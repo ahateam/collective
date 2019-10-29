@@ -177,11 +177,15 @@
             //一级菜单选中事件
             navActive(item,key) {
                 this.$store.state.navDefaultActive = ''+key
+				this.$store.state.nowExamine = 0
+				this.$store.state.nowPage = 1
                 this.$router.push(item.path)
             },
             //二级菜单选中事件
             navActive1(key,item1,key1) {
                 this.$store.state.navDefaultActive = key+'-'+key1
+				this.$store.state.nowExamine = 0
+				this.$store.state.nowPage = 1
                 this.$router.push(item1.path)
             },
 

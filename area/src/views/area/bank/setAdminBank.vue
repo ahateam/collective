@@ -9,6 +9,7 @@
         <el-row class="row-box1">
             <el-row>
                 <el-button type="primary" class="nav-btn" @click="addShowBtn">新增管理员</el-button>
+				<el-button type="primary" style="float:right" @click="goBack">返回上一页</el-button>
             </el-row>
 
             <el-row style="margin-top: 2rem">
@@ -117,6 +118,10 @@
             }
         },
         methods: {
+			
+				goBack() {
+					this.$router.go(-1)
+				},
             getORGUsers(){
                 this.page = 1
                 let cnt = {

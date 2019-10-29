@@ -9,6 +9,7 @@
         <el-row class="row-box1">
             <el-col :span="24">
                 <el-button type="primary" @click="addImportShow = true">新建导入任务</el-button>
+				<el-button type="primary" style="float:right" @click="goBack">返回上一页</el-button>
             </el-col>
 
             <el-col :span="24" style="margin-top: 15px">
@@ -105,6 +106,9 @@
             }
         },
         methods: {
+			goBack() {
+				this.$router.go(-1)
+			},
             getListImportTask(cnt) {
                 this.$area.getListImportTask(cnt, (res) => {
                     if (res.data.rc == this.$util.RC.SUCCESS) {
