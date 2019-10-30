@@ -217,6 +217,10 @@
             handleClose(done){
                 done();
             },
+			
+			
+			
+			
         },
         mounted(){
             let orgId = localStorage.getItem('orgId')
@@ -259,6 +263,7 @@
         margin-right: 2rem;
         font-size: 1.6rem;
         color: #555;
+		
     }
     .page-btn{
         margin-top: 2rem;
