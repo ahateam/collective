@@ -9,6 +9,8 @@
 		<el-row class="row-box1">
 			<el-row>
 				<el-button type="primary" class="nav-btn" @click="addShowBtn">新增管理员</el-button>
+				
+				<el-button style="float: right;" @click="goBack">返回上一页</el-button>
 			</el-row>
 
 			<el-row style="margin-top: 2rem">
@@ -95,6 +97,9 @@
 			}
 		},
 		methods: {
+            goBack(){
+                this.$router.go(-1)
+            },
 			getSubORGUser(cnt) {
 				this.$area.getSubORGUser(cnt, (res) => {
 					if (res.data.rc == this.$util.RC.SUCCESS) {

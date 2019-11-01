@@ -4,7 +4,13 @@
             <el-col :span="24">
                 <div class="col-title-box">
                     {{info.name}} 详细信息    <span style="float: right;font-size: 3rem;color: #409EFF;" @click="isEdit = true"> <i class="el-icon-edit-outline"></i></span>
+					
+					
+					<router-link to="/asset">
+					    <el-button  style="text-align: center;float: right;margin-right: 50px;">返回列表</el-button>
+					</router-link>
                 </div>
+				
 
             </el-col>
         </el-row>
@@ -253,10 +259,6 @@
             </el-row>
 
         </el-row>
-		
-		<router-link to="/asset">
-		    <el-button  style="text-align: center;">返回列表</el-button>
-		</router-link>
         <el-row class="row-btn" v-if="isEdit == true">
             <el-button type="primary" @click="editBtn">确认修改</el-button>
         </el-row>

@@ -86,6 +86,7 @@
 				}
 			},
 			set(info) {
+				this.$store.state.nowPage = this.page
 				this.$router.push({
 					path: "/areaSetChildUser",
 					name: "areaSetChildUser",

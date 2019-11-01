@@ -3,6 +3,7 @@
         <el-row class="row-box">
             <el-col :span="24">
                 <span class="title-box" style="line-height: 40px">家庭分户操作</span>
+                    <el-button type="primary" size="small" style="float: right;margin-right: 50px;" @click="changeFamilyBtn"> 更换家庭户</el-button>
 
             </el-col>
 
@@ -256,6 +257,18 @@
             }
         },
         methods:{
+			//跳转列表页-清除列表
+			changeFamilyBtn(){
+			    this.info = ''
+			    this.$router.push({
+			        path: '/familyList',
+			        name: 'familyList',
+			        params: {
+			            routerPath: 'moveFamily',
+			            family:''
+			        }
+			    })
+			},
             //获取户里面的所有成员列表
             getFamilyUserByFamilyNumber(cnt,index){
                 this.$api.getFamilyUserByFamilyNumber(cnt,(res)=>{
