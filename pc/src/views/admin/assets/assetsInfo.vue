@@ -81,7 +81,7 @@
                     </div>
                 </el-col>
                 <el-col :span="8">
-                    <el-input v-model="info.keeper" placeholder="请输入内容" :disabled=" isEdit == false" ></el-input>
+                    <el-input v-model="info.ownership" placeholder="请输入内容" :disabled=" isEdit == false" ></el-input>
                 </el-col>
                 <el-col :span="3" :offset="2">
                     <div class="title-label"  >
@@ -89,7 +89,7 @@
                     </div>
                 </el-col>
                 <el-col :span="8">
-                    <el-input v-model="info.location" placeholder="请输入内容" :disabled=" isEdit == false" id="show" style="color: #000 !important;"></el-input>
+                    <el-input v-model="info.keeper" placeholder="请输入内容" :disabled=" isEdit == false" id="show" style="color: #000 !important;"></el-input>
                 </el-col>
 
             </el-row>
@@ -282,6 +282,7 @@
         mounted(){
            let info = this.$route.params.info
             this.info = info
+            console.log(this.info)
             if(info.sn == undefined || info.sn == ''){
                 info.sn = '暂无'
             }

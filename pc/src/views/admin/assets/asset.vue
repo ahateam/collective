@@ -45,7 +45,7 @@
 						<el-button type="primary" size="mini" @click="addModal">移入资产</el-button>
 						<el-button type="primary" size="mini" @click="loadExcl">资产表模板下载</el-button>
 						<!--<el-button type="primary" size="mini" @click="importModal =true">批量导入</el-button>-->
-						<el-button type="warning" size="mini" @click="delMore">移除职位</el-button>
+						<el-button type="warning" size="mini" @click="createAsset">新增单个资产</el-button>
 					</p>
 				</el-row>
 				<el-row>
@@ -483,6 +483,9 @@
 				} else {
 					this.addMemberModal = true
 				}
+			},
+			createAsset(){
+				this.$router.push('/assetCreate')
 			},
 
 			//删除单个资产

@@ -291,6 +291,10 @@ api.getAssetImportTasks = function (cnt,callback) {
 api.createAssetImportTask = function (cnt,callback) {
     util.call(baseUrl+'/asset/createAssetImportTask', cnt, callback)
 }
+//单个资产创建
+api.createAsset = function (cnt,callback) {
+    util.call(baseUrl+'/asset/createAsset', cnt, callback)
+}
 //获取导入任务进度
 api.getImportTask = function (cnt,callback) {
     util.call(baseUrl+'/imp/getImportTask', cnt, callback)

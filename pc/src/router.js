@@ -45,6 +45,7 @@ const assetImport =()=>import('./views/admin/assets/assetImport')
 const assetImportInfo =()=>import('./views/admin/assets/assetImportInfo')
 const assetImportRes =()=>import('./views/admin/assets/assetImportRes')
 const assetErrorData =()=>import('./views/admin/assets/assetErrorData')
+const assetCreate =()=>import('./views/admin/assets/assetCreate')
 
 const examine =()=>import('./views/admin/examine/examine')
 const examineInfo=()=>import('./views/admin/examine/examineInfo')
@@ -276,6 +277,11 @@ export default new Router({
                     path:'/asset',
                     name:'asset',
                     component:asset
+                },
+                {
+                    path:'/assetCreate',
+                    name:'assetCreate',
+                    component:assetCreate
                 },
                 {
                     path:'/assetImport',
