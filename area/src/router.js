@@ -70,7 +70,8 @@ const areaPrintViewInfo =()=> import('./views/area/print/printViewInfo')
 const exportList = ()=>import('./views/area/export/exportList')
 const exportInfo =()=>import('./views/area/export/exportInfo')
 
-
+//省级平台操作批量操作数据库数据
+const batchDataList = ()=>import('./views/area/batchData/batchDataList')
 
 Vue.use(Router)
 
@@ -360,6 +361,12 @@ export default new Router({
                 path:'/exportInfo',
                 name:'exportInfo',
                 component:exportInfo
+            },
+            //批量操作数据库--省级
+            {
+                path:'/batchDataList',
+                name:'batchDataList',
+                component:batchDataList
             }
 
         ]
