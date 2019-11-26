@@ -8,6 +8,13 @@ import baseUrl from './url'
 let api = {};
 console.log('开始调用ctrl');
 
+
+//获取所有合作社
+api.getCooperativeList = function (cnt,callback) {
+    util.call(baseUrl+'/org/getCooperativeList', cnt, callback)
+}
+
+
 //账号注册
 api.registeUser = function (cnt,callback) {
     util.call(baseUrl+'/org/registeUser', cnt, callback)
