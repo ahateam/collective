@@ -1,7 +1,7 @@
 import util from 'ahaapi'
-import baseUrl from './url'
+import url from './url'
 
-
+let baseUrl = url.baseUrl
 let api = {};
 console.log(baseUrl)
 console.log('开始调用ctrl');

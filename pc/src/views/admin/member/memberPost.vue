@@ -417,12 +417,10 @@
                 this.getProgress(0)
                 let file = files
                 this.size = file[0].size
-                let tmpName = encodeURIComponent(file[0].name)
-                tmpName = this.importAddress + tmpName
-
-                console.log(tmpName)
-
-                this.multipartUpload(tmpName, file[0])
+                    let fileType = file.type.substr(file.type.indexOf('/')+1)
+                let tmpName = date.getTime()+'.'+fileType
+                tmpName =this.address+ tmpName
+                this.multipartUpload(tmpName, file,type)
             },
             //分片上传
             multipartUpload(upName, upFile) {

@@ -69,7 +69,7 @@
         </el-col>
         <el-col :span="18">
           <div class="image-box">
-            <img :src="info.imgOrg" alt />
+            <img :src="getOssFile(info.imgOrg)" alt />
           </div>
         </el-col>
       </el-col>
@@ -79,7 +79,7 @@
         </el-col>
         <el-col :span="18">
           <div class="image-box">
-            <img :src="info.imgAuth" alt />
+            <img :src="getOssFile(info.imgAuth)" alt />
           </div>
         </el-col>
       </el-col>
@@ -116,6 +116,9 @@ export default {
           isMech: this.isMech
         }
       });
+    },
+    getOssFile(url){
+        return this.$commen.getOssUrl(url)
     }
   },
   mounted() {

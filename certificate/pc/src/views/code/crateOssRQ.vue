@@ -40,7 +40,7 @@ export default {
       familyNumber: "",
       start: "",
       end: "",
-      url: "http://jiti.test.3ch.org.cn/h5/index.html#/?",
+      url: "http://test.zyyunxun.cn/h5/index.html#/?",
       num: 0,
       addressUrl: "/code/"
     };

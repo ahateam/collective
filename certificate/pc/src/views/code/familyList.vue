@@ -28,7 +28,7 @@
           <el-table-column prop="familyNumber" label="户序号"></el-table-column>
           <el-table-column prop="realName" label="户主姓名"></el-table-column>
           <el-table-column prop="idNumber" label="户主身份证"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作"><dl></dl>
             <template slot-scope="scope">
               <el-button @click="checkFamilyBtn(scope.row)" type="text" size="small">单户证书生成</el-button>
             </template>

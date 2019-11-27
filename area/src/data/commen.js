@@ -1,4 +1,5 @@
-
+import url from './api/url'
+let ossBaseUrl = url.ossUrl
  function getDateStr () {
     let date = new Date();
 
@@ -15,7 +16,15 @@
     return currentdate;
 }
 
+function getOssUrl(url){
+    let OssUrl = ossBaseUrl+url
+    return OssUrl
+}
+
+
+
 
 export default {
-    getDateStr
+    getDateStr,
+    getOssUrl
 }

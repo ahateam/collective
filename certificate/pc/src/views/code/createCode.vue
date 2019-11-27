@@ -79,7 +79,7 @@ export default {
       familyNumber: "",
       start: "",
       end: "",
-      url: "http://jiti.test.3ch.org.cn/h5/index.html#/?",
+      url: "http://online.zyyunxun.cn/h5/index.html#/?",
       num: 0,
       sum: 0,
       num1: 0,

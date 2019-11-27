@@ -1,3 +1,6 @@
+import url from './url'
+let ossUrl = url.ossUrl
+
 const commen = {}
 commen.getDateStr = ()=>{
     let date = new Date();
@@ -13,6 +16,9 @@ commen.getDateStr = ()=>{
     }
     let currentdate = year + '- ' + month + ' - ' + strDate+ ' -';
     return currentdate;
+}
+commen.getOssUrl = (url)=>{
+    return ossUrl+url
 }
 
 

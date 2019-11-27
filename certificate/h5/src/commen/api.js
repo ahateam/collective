@@ -1,5 +1,10 @@
 import util from 'ahaapi'
-import baseUrl from './url'
+import url from './url'
+
+// let appId = process.env.appID;//应用编号
+// let appId ='';
+
+let baseUrl = url.baseUrl
 
 // let appId = process.env.appID;//应用编号
 // let appId ='';

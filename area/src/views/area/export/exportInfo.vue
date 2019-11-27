@@ -93,7 +93,7 @@ export default {
     },
     //下载
     loadData() {
-      window.location.href = this.info.fileUrls;
+      window.location.href = this.$commen.getOssUrl(this.info.fileUrls);
     }
   },
   mounted() {

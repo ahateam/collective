@@ -12,6 +12,7 @@ import area from './data/api/area'
 import bank from './data/api/bank'
 import Print from 'vue-print-nb'
 import commen from './data/commen'
+import url from './data/api/url'
 
 Vue.use(ElementUI)
 Vue.use(VCharts)
@@ -23,7 +24,7 @@ Vue.prototype.$util = util
 Vue.prototype.$area = area
 Vue.prototype.$bank = bank
 Vue.prototype.$commen = commen
-
+Vue.prototype.$ossUrl = url.ossUrl
 
 new Vue({
     router,

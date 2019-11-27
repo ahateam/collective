@@ -8,6 +8,8 @@
 * @area 区级管理系统
 * */
 
+
+
 const grade = { demo: '0', bank: '1', area: '2' }
 
 /*
@@ -50,37 +52,37 @@ const printBookList = {
     huichuan: [
         {
             id: 'hc1',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/1.jpg',
+            src: 'http://online.file.zyyunxun.cn/template/1.jpg',
             seat: '右侧',
             info: '成员股权证首页'
         },
         {
             id: 'hc2',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/2.jpg',
+            src: 'http://online.file.zyyunxun.cn/template/2.jpg',
             seat: '右侧',
             info: '初始登记页'
         },
         {
             id: 'hc3',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/2.jpg',
+            src: 'http://online.file.zyyunxun.cn/template/2.jpg',
             seat: '右侧',
             info: '初始登记页（成员超10人）'
         },
         {
             id: 'hc4',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
+            src: 'http://online.file.zyyunxun.cn/template/3.jpg',
             seat: '左侧',
             info: '变更登记页1'
         },
         {
             id: 'hc5',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/3.jpg',
+            src: 'http://online.file.zyyunxun.cn/template/3.jpg',
             seat: '右侧',
             info: '变更登记页2'
         },
         {
             id: 'hc6',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/4.jpg',
+            src: 'http://online.file.zyyunxun.cn/template/4.jpg',
             seat: '左侧',
             info: '抵押情况登记页'
         }
@@ -88,31 +90,31 @@ const printBookList = {
     guizhou: [
         {
             id: 's1',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/s1.png',
+            src: 'http://online.file.zyyunxun.cn/template/s1.png',
             seat: '右侧',
             info: '股东基本信息登记页'
         },
         {
             id: 's2',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/s2.png',
+            src: 'http://online.file.zyyunxun.cn/template/s2.png',
             seat: '左侧',
             info: '股权登记页'
         },
         {
             id: 's3',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/s3.png',
+            src: 'http://online.file.zyyunxun.cn/template/s3.png',
             seat: '右侧',
             info: '变更登记页'
         },
         {
             id: 's4',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/s4.png',
+            src: 'http://online.file.zyyunxun.cn/template/s4.png',
             seat: '左侧',
             info: '收益分配领取记录页'
         },
         {
             id: 's5',
-            src: 'http://jitijingji-test1.oss-cn-hangzhou.aliyuncs.com/template/s4.png',
+            src: 'http://online.file.zyyunxun.cn/template/s4.png',
             seat: '右侧',
             info: '收益分配领取记录页'
         }

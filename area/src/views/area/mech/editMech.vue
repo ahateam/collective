@@ -121,7 +121,7 @@
                     </el-col>
                     <el-col :span="18">
                         <div class="image-box">
-                            <img :src="mechCodeImgUrl" alt=""  v-if="mechCodeImgUrl != ''">
+                            <img :src="getOssFile(mechCodeImgUrl)" alt=""  v-if="mechCodeImgUrl != ''">
                             <span v-if="mechCodeImgUrl == ''" style="font-size: 20px;color: #666;">暂无图片，请上传</span>
                         </div>
                         <div class="image-load">
@@ -142,7 +142,7 @@
                     </el-col>
                     <el-col :span="18">
                         <div class="image-box">
-                            <img :src="mechGrantImgUrl" alt=""  v-if="mechGrantImgUrl != ''">
+                            <img :src=" getOssFile(mechGrantImgUrl)" alt=""  v-if="mechGrantImgUrl != ''">
                             <span v-if="mechGrantImgUrl == ''" style="font-size: 20px;color: #666;">暂无图片，请上传</span>
                         </div>
                         <div class="image-load">
@@ -248,6 +248,10 @@
             },
 
             //普通事件层
+
+            getOssFile(url){
+                return this.$commen.getOssUrl(url)
+            },
             //进度条
             proListBtn(key){
                 console.log(key)
@@ -312,11 +316,9 @@
                 this.$emit('getProgress', 0)
                 let date = new Date()
                 this.size = file.size
-                let tmpName = date.getTime()+''+encodeURIComponent(file.name)
+                   let fileType = file.type.substr(file.type.indexOf('/')+1)
+                let tmpName = date.getTime()+'.'+fileType
                 tmpName =this.address+ tmpName
-
-                console.log(tmpName)
-
                 this.multipartUpload(tmpName, file,type)
             },
             //分片上传
@@ -339,24 +341,9 @@
                         //取出存好的url
 
                         if(type == 'code'){
-
-                            let address = res.res.requestUrls[0]
-                            console.log(address)
-                            let _index =address.indexOf('?')
-                            console.log(_index)
-                            if(_index == -1){
-                                _this.mechCodeImgUrl = address
-                            }else{
-                                _this.mechCodeImgUrl = address.substring(0,_index)
-                            }
+                            _this.mechCodeImgUrl = upName
                         }else if(type == 'grant'){
-                            let address = res.res.requestUrls[0]
-                            let _index =address.indexOf('?')
-                            if(_index == -1){
-                                _this.mechGrantImgUrl = address
-                            }else{
-                                _this.mechGrantImgUrl = address.substring(0,_index)
-                            }
+                            _this.mechGrantImgUrl = upName
                         }
 
                     }).catch(err => {
@@ -456,7 +443,8 @@
             //拼接oss地址前缀
             let date = new Date()
             let year =''+date.getFullYear()
-            let month =''+date.getMonth()+1
+            let month =date.getMonth()+1
+             month =''+month
             if(month.length<2){
                 month = '0'+month
             }
@@ -464,7 +452,7 @@
             if(day.length<2){
                 day ='0'+ day
             }
-            this.address = '/mechanism/'+year+month+day+'/'
+            this.address = 'mechanism/'+year+month+day+'/'
             this.levelList = this.$constData.orgLevel
 
             //请求对应的地址默认值展示

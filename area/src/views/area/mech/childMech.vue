@@ -109,7 +109,7 @@
 				</el-col>
 				<el-col :span="18">
 					<div class="image-box">
-						<img :src="info.imgOrg" alt />
+						<img :src="getOssFile(info.imgOrg) " alt />
 					</div>
 				</el-col>
 			</el-col>
@@ -119,7 +119,7 @@
 				</el-col>
 				<el-col :span="18">
 					<div class="image-box">
-						<img :src="info.imgAuth" alt />
+						<img :src="getOssFile(info.imgAuth)" alt />
 					</div>
 				</el-col>
 			</el-col>
@@ -194,6 +194,9 @@
 			};
 		},
 		methods: {
+			getOssFile(url){
+				return this.$commen.getOssUrl(url)
+			},
 			changePage(page) {
 				this.page = page;
 				let cnt = {};

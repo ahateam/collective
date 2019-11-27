@@ -204,8 +204,6 @@
                         arr.push(this.tableData[i].url)
                     }
 
-
-
                     let cnt = {
                         orgId: this.mechInfo.orgId, // Long 组织编号
                         userId: localStorage.getItem('userId'),
@@ -275,7 +273,7 @@
                 let file =files
                 this.size = file[0].size
                 let timer = new Date().getTime()
-                let tmpName =timer+ encodeURIComponent(file[0].name)
+                let tmpName =timer+file[0].name
                 tmpName =this.address+ tmpName
                 this.multipartUpload(tmpName, file[0])
             },
