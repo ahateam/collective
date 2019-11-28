@@ -11,9 +11,9 @@ let client = new OSS({
     accessKeyId: 'LTAI4FgJibdQgparTs4Nba8E',
     accessKeySecret: 'kDJX4Hicd8H00m16GCSdNN7TJRex9g',
     //测试服
-    // bucket: 'test-file-jiti'
+    bucket: 'test-file-jiti'
     // 正式服
-    bucket: 'production-file'
+    // bucket: 'production-file'
 });
 
 export default {
