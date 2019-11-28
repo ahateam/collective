@@ -26,10 +26,9 @@
 					<el-table-column label="操作">
 						<template slot-scope="scope">
 							<el-button @click="infoBtn(scope.row)" type="text" size="small">详情</el-button>
-							<el-button @click="open(scope.row)" type="text" size="small" style="color: #f44">删除合作社</el-button>
-							<el-button type="primary" size="mini" @click="showMemberList(scope.row)">查看成员</el-button>
-							<el-button type="primary" size="mini" @click="memberImport(scope.row)">导入成员</el-button>
-							<el-button type="primary" size="mini" @click="assetImport(scope.row)">导入资产</el-button>
+							<el-button type="danger" size="mini" @click="open(scope.row)">删除合作社</el-button>
+							<el-button type="danger" size="mini" @click="assetImport(scope.row)">删除成员</el-button>
+							<el-button type="danger" size="mini" @click="assetImport(scope.row)">删除资产</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
