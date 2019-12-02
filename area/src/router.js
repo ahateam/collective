@@ -73,7 +73,7 @@ const exportInfo =()=>import('./views/area/export/exportInfo')
 //省级平台操作批量操作数据库数据
 const batchDataList = ()=>import('./views/area/batchData/batchDataList')
 
-const test = ()=>import('./views/area/test/test')
+
 
 
 Vue.use(Router)
@@ -370,12 +370,7 @@ export default new Router({
                 path:'/batchDataList',
                 name:'batchDataList',
                 component:batchDataList
-            },
-			{
-				path:'/test',
-				name:'test',
-				component:test
-			}
+            }
         ]
     },
   ]

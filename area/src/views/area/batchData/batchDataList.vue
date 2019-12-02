@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-row class="row-box">
+		<!-- <el-row class="row-box">
 			<el-col :span="24">
 				<div class="tab-box">
 					<router-link to="/addChild">
@@ -8,7 +8,7 @@
 					</router-link>
 				</div>
 			</el-col>
-		</el-row>
+		</el-row> -->
 
 		<el-row class="row-box1">
 			<el-row class="row-search">
@@ -27,8 +27,8 @@
 						<template slot-scope="scope">
 							<el-button @click="infoBtn(scope.row)" type="text" size="small">详情</el-button>
 							<el-button type="danger" size="mini" @click="open(scope.row)">删除合作社</el-button>
-							<el-button type="danger" size="mini" @click="assetImport(scope.row)">删除成员</el-button>
-							<el-button type="danger" size="mini" @click="assetImport(scope.row)">删除资产</el-button>
+							<el-button type="danger" size="mini" @click="delMemberBtn(scope.row)">删除成员</el-button>
+							<el-button type="danger" size="mini" @click="delassets(scope.row)">删除资产</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -79,37 +79,54 @@
 					this.getCooperativeList(cnt);
 				}
 			},
-			open(row) {
-				this.$confirm("此操作将永久删除该合作社以及所有相关数据, 是否继续?", "提示", {
-						confirmButtonText: "确定",
-						cancelButtonText: "取消",
-						type: "warning"
-					})
-					.then(() => {
-						this.delOrg(row);
-						console.log("确定删除合作社！");
-					})
-					.catch(() => {
-						this.$message({
-							type: "info",
-							message: "已取消删除"
-						});
-					});
+			// 删除成员
+			delMemberBtn(row) {
+				this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.delOrg(row.id)
+				})
 			},
-			delOrg(row) {
+			//删除资产
+			delassets(row) {
+				this.$confirm('此操作将永久删除该资产, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.delOrg(row.id)
+				})
+			},
+			//删除合作社
+			open(row) {
+				// console.log(row)
+				this.$confirm('此操作将永久删除该合作社, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					// console.log(row)
+					// console.log('------')
+					this.delOrg(row.id)
+				})
+			},
+			delOrg(orgId) {
 				let cnt = {
-					orgId: row.id // Long 组织id
+					orgId: orgId // Long 组织id
 				};
-				this.$area.delOrg(cnt, res => {
-					this.$message({
-						type: "success",
-						message: "删除成功!"
-					});
-					let cnt = {
-						count: this.count,
-						offset: (this.page - 1) * this.count
-					};
-					this.getCooperativeList(cnt);
+				this.$area.delSubOrg(cnt, res => {
+
+					if (res.data.rc == this.$util.RC.SUCCESS) {
+						let size = JSON.parse(res.data.c)
+						this.$message({
+							type: "success",
+							message: "删除成功!删除用户数据：" + size.user + ' 资产数据：' + size.asset
+						});
+					}
+
+					this.changePage(this.page)
 				});
 			},
 			searchBtn() {
@@ -177,10 +194,10 @@
 		margin-left: 15px;
 	}
 
-	.row-box {
-		background: #fff;
-		padding: 15px 0;
-	}
+	// .row-box {
+	// 	background: #fff;
+	// 	padding: 15px 0;
+	// }
 
 	.row-box1 {
 		margin-top: 20px;
@@ -223,7 +240,7 @@
 		cursor: pointer;
 	}
 
-	.row-search {
-		padding: 10px 0
-	}
+	// .row-search {
+	// 	padding: 10px 0
+	// }
 </style>

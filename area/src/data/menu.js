@@ -239,12 +239,6 @@ const proMenu = [{
 		title: '批量数据',
 		icon: 'icon-nav_user',
 		child: []
-	},
-	{
-		path: '/test',
-			title: '测试页面',
-			icon: 'icon-nav_user',
-			child: []
 	}
 ]
 

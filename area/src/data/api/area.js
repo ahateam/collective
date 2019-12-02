@@ -397,9 +397,14 @@ api.getExportTaskById = function (cnt,callback) {
     util.call(baseUrl+'/export/getExportTaskById ', cnt, callback)
 }
 
-//获取导出任务详情
-api.getCooperativeList = function (cnt,callback) {
-    util.call(baseUrl+'/org/getCooperativeList ', cnt, callback)
+//获取删除资产详情
+api.delORGAsset = function (cnt,callback) {
+    util.call(baseUrl+'/org/delORGAsset ', cnt, callback)
+}
+
+//获取删除用户详情
+api.delORGUser = function (cnt,callback) {
+    util.call(baseUrl+'/org/delORGUser ', cnt, callback)
 }
 
 
