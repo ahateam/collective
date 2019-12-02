@@ -396,5 +396,12 @@ api.downLoadExcel = function (cnt,callback) {
 api.getExportTaskById = function (cnt,callback) {
     util.call(baseUrl+'/export/getExportTaskById ', cnt, callback)
 }
+
+//获取导出任务详情
+api.getCooperativeList = function (cnt,callback) {
+    util.call(baseUrl+'/org/getCooperativeList ', cnt, callback)
+}
+
+
 export default api
 
