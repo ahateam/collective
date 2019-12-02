@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ul v-if="list.length">
+		<ul v-if="list.length">dasdasdasd
 			<li v-for="(item,index) in list" :key="index">
 				{{item.name}}</li>
 		</ul>
