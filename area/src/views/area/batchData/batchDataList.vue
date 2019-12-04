@@ -86,7 +86,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.delOrg(row.id)
+					this.delOrgUser(row.id)
 				})
 			},
 			//删除资产
@@ -96,7 +96,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.delOrg(row.id)
+					this.delOrgAsset(row.id)
 				})
 			},
 			//删除合作社
@@ -123,6 +123,40 @@
 						this.$message({
 							type: "success",
 							message: "删除成功!删除用户数据：" + size.user + ' 资产数据：' + size.asset
+						});
+					}
+
+					this.changePage(this.page)
+				});
+			},
+			delOrgUser(orgId) {
+				let cnt = {
+					orgId: orgId // Long 组织id
+				};
+				this.$area.delORGUser(cnt, res => {
+
+					if (res.data.rc == this.$util.RC.SUCCESS) {
+						let size = res.data.c
+						this.$message({
+							type: "success",
+							message: "删除成功!删除用户数据：" + size
+						});
+					}
+
+					this.changePage(this.page)
+				});
+			},
+			delOrgAsset(orgId) {
+				let cnt = {
+					orgId: orgId // Long 组织id
+				};
+				this.$area.delORGAsset(cnt, res => {
+
+					if (res.data.rc == this.$util.RC.SUCCESS) {
+						let size = res.data.c
+						this.$message({
+							type: "success",
+							message: "删除成功!删除 资产数据：" + size
 						});
 					}
 
