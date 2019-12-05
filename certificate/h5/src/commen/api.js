@@ -19,6 +19,11 @@ api.getFamilyInfo = function (cnt,callback) {
     util.call(baseUrl+'/scft/getFamilyInfo', cnt, callback)
 }
 
+//客服信息查询
+api.getCustomer = function(cnt, callback) {
+	util.call(baseUrl + '/customer/getCustomer', cnt, callback)
+}
+
 
 
 
