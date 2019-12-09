@@ -77,7 +77,7 @@ export default {
           if (this.info.status != 1) {
               setTimeout(()=>{
                   this.getExportTaskById()
-              },1500)
+              },500)
           }
         }
       });

@@ -2,7 +2,7 @@
 	<div>
 		<el-row class="row-box">
 			<el-col :span="24">
-				机构组织详细信息
+				机构组织详细信息001
 			</el-col>
 		</el-row>
 		<el-row class="row-box1">
@@ -45,6 +45,14 @@
 					<div class="text-box">
 						{{info.code}}
 					</div>
+				</el-col>
+			</el-col>
+			<el-col :span="24">
+				<el-col :span="4">
+					<div class="title-box">组织创建时间:</div>
+				</el-col>
+				<el-col :span="18">
+					<div class="text-box">{{timeFilter(info.orgCreateTime)}}</div>
 				</el-col>
 			</el-col>
 			<el-col :span="24">
@@ -119,6 +127,10 @@
 			}
 		},
 		methods: {
+			timeFilter(timer) {
+				let dateTime = new Date(timer)
+				return dateTime.toLocaleDateString()
+			},
 			edit() {
 				this.$router.push({
 					path: '/areaEditMech',

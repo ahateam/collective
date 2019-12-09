@@ -116,6 +116,19 @@
                     </el-col>
                 </div>
             </el-col>
+			<el-col :span="24">
+			    <div class="row-box2">
+			        <el-col :span="4">
+			            <div class="title-box">组织创建时间:</div>
+			        </el-col>
+			        <el-col :span="18">
+			            <div class="text-box">
+			                <el-date-picker v-model="orgCreateTime" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="timestamp">
+			                </el-date-picker>
+			            </div>
+			        </el-col>
+			    </div>
+			</el-col>
 
             <el-col :span="24">
                 <div class="row-box2">
@@ -212,6 +225,7 @@
         name: "addMech",
         data() {
             return {
+				orgCreateTime:'',
                 mechName: '',
                 province: '',        //省份
                 city: '',            //市
@@ -431,6 +445,7 @@
                     }
                     let cnt = {
                         userId:localStorage.getItem('userId'),
+						orgCreateTime:this.orgCreateTime,
                         name: this.mechName,
                         code: this.mechCode,
                         province: this.province,

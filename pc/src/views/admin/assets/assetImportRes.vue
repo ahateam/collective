@@ -219,7 +219,7 @@
                 }
             })
 
-           this.timer = setInterval(this.getPropressData,5000)
+           this.timer = setInterval(this.getPropressData,1000)
 
         },
         beforeDestroy(){

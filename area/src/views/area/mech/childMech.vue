@@ -81,6 +81,14 @@
 			</el-col>
 			<el-col :span="24">
 				<el-col :span="6">
+					<div class="title-box">组织创建时间:</div>
+				</el-col>
+				<el-col :span="18">
+					<div class="text-box">{{timeFilter(info.orgCreateTime)}}</div>
+				</el-col>
+			</el-col>
+			<el-col :span="24">
+				<el-col :span="6">
 					<div class="title-box">总股份数:</div>
 				</el-col>
 				<el-col :span="18">
@@ -196,6 +204,10 @@
 		methods: {
 			getOssFile(url){
 				return this.$commen.getOssUrl(url)
+			},
+			timeFilter(timer) {
+				let dateTime = new Date(timer)
+				return dateTime.toLocaleDateString()
 			},
 			changePage(page) {
 				this.page = page;
