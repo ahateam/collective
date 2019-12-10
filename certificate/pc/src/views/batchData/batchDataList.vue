@@ -86,6 +86,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
+					console.log('-----------------------------------------------------');
 					this.delOrgUser(row.id)
 				})
 			},
@@ -116,7 +117,7 @@
 				let cnt = {
 					orgId: orgId // Long 组织id
 				};
-				this.$area.delSubOrg(cnt, res => {
+				this.$api.delSubOrg(cnt, res => {
 
 					if (res.data.rc == this.$util.RC.SUCCESS) {
 						let size = JSON.parse(res.data.c)
@@ -133,7 +134,7 @@
 				let cnt = {
 					orgId: orgId // Long 组织id
 				};
-				this.$area.delORGUser(cnt, res => {
+				this.$api.delORGUser(cnt, res => {
 
 					if (res.data.rc == this.$util.RC.SUCCESS) {
 						let size = res.data.c
@@ -150,7 +151,7 @@
 				let cnt = {
 					orgId: orgId // Long 组织id
 				};
-				this.$area.delORGAsset(cnt, res => {
+				this.$api.delORGAsset(cnt, res => {
 
 					if (res.data.rc == this.$util.RC.SUCCESS) {
 						let size = res.data.c
@@ -183,7 +184,7 @@
 				}
 			},
 			getCooperativeList(cnt) {
-				this.$area.getCooperativeList(cnt, res => {
+				this.$api.getCooperativeList(cnt, res => {
 					if (res.data.rc == this.$util.RC.SUCCESS) {
 						this.tableData = this.$util.tryParseJson(res.data.c);
 					} else {

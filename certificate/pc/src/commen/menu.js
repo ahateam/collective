@@ -10,12 +10,12 @@ const  menu =[
         icon:'course_shouye',
         child:[]
     },
-	// {
-	//     path:'/orgList',
-	//     title:'生成股权证',
-	//     icon:'course_shouye',
-	//     child:[]
-    // },
+	{
+	    path:'/batchDataList',
+	    title:'批量数据删除',
+	    icon:'course_shouye',
+	    child:[]
+    },
     {
         path:'/createCode',
         title:'生成二维码',

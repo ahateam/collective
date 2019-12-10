@@ -233,12 +233,6 @@ const proMenu = [{
 			},
 
 		]
-	},
-	{
-		path: '/batchDataList',
-		title: '批量数据',
-		icon: 'icon-nav_user',
-		child: []
 	}
 ]
 

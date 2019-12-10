@@ -11,6 +11,7 @@ import familyList from './views/code/familyList'
 import codeList from './views/code/codeList'
 import codeInfo from './views/code/codeInfo'
 import createRQ from './views/code/createRQ'
+import batchDataList from './views/batchData/batchDataList'
 
 Vue.use(Router)
 
@@ -62,6 +63,11 @@ export default new Router({
 					path:'/createRQ',
 					name:'createRQ',
 					component:createRQ
+				},
+				{
+					path:'/batchDataList',
+					name:'batchDataList',
+					component:batchDataList
 				}
 			]
 		},

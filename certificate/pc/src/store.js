@@ -5,7 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-      navDefaultActive : '0',
+  	navDefaultActive: '0',
+  	nowPage: 1,
+  	nowExamine:0,
+  	nowType : 1,
+  	nowStatus : 1,
   },
   mutations: {
 
