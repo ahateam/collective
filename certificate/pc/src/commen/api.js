@@ -23,7 +23,7 @@ api.delORGAsset = function (cnt,callback) {
 
 //获取删除用户详情
 api.delORGUser = function (cnt,callback) {
-    util.call(baseUrl+'/org/delORGUser ', cnt, callback)
+    util.call(baseUrl+'/org/delORGUsers ', cnt, callback)
 }
 
 //移除下级机构
